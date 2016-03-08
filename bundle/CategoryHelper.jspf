@@ -1,0 +1,234 @@
+<%@page import="com.google.common.collect.ComparisonChain" %>
+<%@page import="com.google.common.collect.Ordering" %>
+<%@page import="com.kineticdata.bundles.Text" %>
+
+<%!
+    public static class CategoryHelper {
+    
+        Set<BundleCategory> categories;
+        Map<String, BundleCategory> categoriesByName;
+        
+        public CategoryHelper() {
+            this.categories = null;
+            this.categoriesByName = null;
+        }
+        
+        /* *
+         * Gathers, maps and sorts all Kapp categories / subcategories
+         * and returns an arraylist of BundleCategories which methods can
+         * be used against. 
+         * This list can be itterated over to retrieve the root category objects.
+         *
+         * Requires - Kapp object
+         * Returns - ArrayList<BundleCategory>
+         * */
+        public List<BundleCategory> getCategories(Kapp kapp) {
+            if (this.categories != null){
+                return new ArrayList<BundleCategory>(categories);
+            }
+            // Create both categories list and categories by name map
+            this.categories = new TreeSet<BundleCategory>();
+            this.categoriesByName = new HashMap<String, BundleCategory>();
+            
+            // Create temp list for manipulation
+            List<BundleCategory> allCategories = new ArrayList<BundleCategory>();
+
+            // Loop through categories and add to lists / map
+            for (Category category : kapp.getCategories()){
+                // Create new category object
+                BundleCategory bundleCategory = new BundleCategory(category);
+                // Add object to category tree
+                allCategories.add(bundleCategory);
+                // Grab the category name and add object to map based on name
+                this.categoriesByName.put(category.getName(), bundleCategory);
+            }
+            // Pick each object off of the list and put map in order 
+            // by attribute "parent"
+            while (!allCategories.isEmpty()){
+                // Grab object off temp list
+                BundleCategory bundleCategory = allCategories.remove(0);
+                // Check if it's a subcategory - no parent means it's a root category
+                if (bundleCategory.hasAttribute("Parent")){
+                    String parentName = bundleCategory.getAttributeValue("Parent");
+                    // Put category object as subcategory to parent
+                    if (categoriesByName.get(parentName) != null){
+                        categoriesByName.get(parentName).setSubcategory(bundleCategory);
+                        bundleCategory.setParentCategory(categoriesByName.get(parentName));
+                        continue;
+                    }
+                }
+                this.categories.add(bundleCategory);
+            }
+            
+            return new ArrayList<BundleCategory>(categories);
+        }
+        
+        /* *
+         * Gets categories that are set to a form. 
+         *
+         * Requires - Form object
+         * Returns - ArrayList<BundleCategory>
+         * */
+        public List<BundleCategory> getCategories(Form form) {
+            if (this.categoriesByName == null){
+                this.getCategories(form.getKapp());
+            }
+            
+            Set<BundleCategory> formCategories = new TreeSet<BundleCategory>();
+            for (Category category : form.getCategories()){
+                formCategories.add(this.getCategory(category.getName()));
+            }
+            
+            return new ArrayList<BundleCategory>(formCategories);
+        }
+        
+        /* *
+         * Gets a single category object based on the name (not Display Name)
+         *
+         * Requires - Name string
+         * Returns - BundleCategory object
+         * */
+        public BundleCategory getCategory(String name){
+            return this.categoriesByName.get(name);
+        }
+        
+        /* *
+         * Inner class for combining all category methods to the BundleCategory object
+         * */
+        public static class BundleCategory implements Comparable<BundleCategory> {
+            Category category;
+            BundleCategory parentCategory;
+            Set<BundleCategory> subcategories;
+                        
+            public BundleCategory(Category category) { 
+                this.category = category; 
+                this.parentCategory = null;
+                this.subcategories = new TreeSet<BundleCategory>();
+            }
+            // Returns the current category object
+            public Category getCategory(){ return this.category; }
+            // Returns the name string of the current category object
+            public String getName() { return this.category.getName(); }
+            // Returns a list of attributes for the current category object
+            public List<Attribute> getAttributes() { return this.category.getAttributes(); }
+            /* *
+             * Returns the attribute object of the current category based on the name passed
+             *
+             * Requires - Name string
+             * Returns - Attribute Object
+             * */
+            public Attribute getAttribute(String name) { return this.category.getAttribute(name); }
+            /* *
+             * Returns a string value of the current category's attribute based on the attribute name passed
+             *
+             * Requires - Name string
+             * Returns - Value string
+             * */
+            public String getAttributeValue(String name) { return this.category.getAttributeValue(name); }
+            /* *
+             * Returns list of string values for an attribute based on the attribute name passed
+             *
+             * Requires - Name string
+             * Returns - List<String>
+             * */
+            public List<String> getAttributeValues(String name) { return this.category.getAttributeValues(name); }
+            /* *
+             * Returns true if the current category has the attribute (can be null) based on the attribute name passed
+             *
+             * Requires - Name string
+             * Returns - True / False
+             * */
+            public boolean hasAttribute(String name) { return this.category.hasAttribute(name); }
+            /* *
+             * Returns true if the current category has the passed name attribute with the value passed
+             *
+             * Requires - Attribute name string, attribute value string
+             * Returns - True / False
+             * */
+            public boolean hasAttributeValue(String name, String value) { return this.category.hasAttributeValue(name, value); }
+            // Returns form / kapp / catgegory relationship - looks like we don't need this - Marcin Review
+            public List<Categorization> getCategorizations() { return this.category.getCategorizations(); }
+            // Returns the current category Kapp object
+            public Kapp getKapp() { return this.category.getKapp(); }
+            // Returns a list of form objects for the current category
+            public List<Form> getForms() { return this.category.getForms(); }
+            // Returns the "Display Name" attribute value
+            public String getDisplayName() {
+                return Text.defaultIfBlank(this.getAttributeValue("Display Name"), this.getName());
+            }
+            // Returns the parent category object
+            public BundleCategory getParentCategory() {
+                return parentCategory;
+            }
+            // Sets the current category's parent category to the passed object
+            public void setParentCategory(BundleCategory parentCategory) {
+                this.parentCategory = parentCategory;
+            }
+            // Returns an array of parent category objects sorted from the root category to current category
+            public List<BundleCategory> getTrail() {
+                List<BundleCategory> trail = new ArrayList<BundleCategory>();
+                BundleCategory currentCategory = this;
+                do {
+                    trail.add(0, currentCategory);
+                    currentCategory = currentCategory.getParentCategory();
+                }
+                while (currentCategory != null);
+                return trail;
+            }
+            // Returns the subcategory objects for the current category
+            public List<BundleCategory> getSubcategories() {
+                return new ArrayList<BundleCategory>(this.subcategories);
+            }
+            // Adds the passed object as a subcategoryof the current category
+            public void setSubcategory(BundleCategory bundleCategory) {
+                this.subcategories.add(bundleCategory);
+            }
+            // Returns true if the current category has subcategories
+            public boolean hasSubcategories() {
+                return !this.getSubcategories().isEmpty();
+            }
+            // Returns true if the current category has subcategories that have active forms
+            public boolean hasNonEmptySubcategories() {
+                for (BundleCategory subcategory : this.subcategories){
+                    if (!subcategory.isEmpty()){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            // Returns true if the current category has active forms
+            public boolean hasForms() {
+                return !this.getForms().isEmpty();
+            }
+            // Returns true if the category and all subcategories do not have forms
+            public boolean isEmpty() {
+                return !this.hasNonEmptySubcategories() && !this.hasForms();
+            }
+            
+            public int compareTo(BundleCategory that) {
+                // Compare by Sort Order attribute, then by Display Name attribute, then by Name
+
+                // Regex for confirming sort order is an int
+                String regex = "[0-9]+";
+
+                // Null integers to compare
+                Integer thisInt = null;
+                Integer thatInt = null;
+
+                // Check for int otherwise keep null
+                if(this.getAttributeValue("Sort Order") != null && this.getAttributeValue("Sort Order").matches(regex)){
+                    thisInt = Integer.parseInt(this.getAttributeValue("Sort Order"));
+                }
+                if(that.getAttributeValue("Sort Order") != null && that.getAttributeValue("Sort Order").matches(regex)){
+                    thatInt = Integer.parseInt(that.getAttributeValue("Sort Order"));
+                }
+                // Order: Sort Order -> Display Name -> Name
+                return ComparisonChain.start()
+                        .compare(thisInt, thatInt, Ordering.natural().nullsLast())
+                        .compare(this.getAttributeValue("Display Name"), that.getAttributeValue("Display Name"), Ordering.natural().nullsLast())
+                        .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .result();
+            }
+        }
+    }
+%>

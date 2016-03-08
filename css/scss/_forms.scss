@@ -1,0 +1,62 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Forms
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+form {
+  margin-left: 0;
+  padding: 2.6rem 2.4rem 4.6rem;
+  font-weight: 400;
+  overflow: hidden;
+  background: $white;
+  -webkit-box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
+  box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
+  label {
+    /* Make the label a block */
+    color: rgba($black, 0.75);
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+}
+
+.form-group.required label:after {
+  content: '*';
+}
+
+form {
+  .radio label:first-child {
+    padding-left: 0;
+    font-weight: 600;
+  }
+  .checkbox label {
+    &:first-child {
+      padding-left: 0;
+      font-weight: 600;
+    }
+    + input {
+      padding-left: 2rem;
+    }
+  }
+  input {
+    &[type='text'], &[type='password'] {
+      border: 0.2rem solid rgba($black, 0.5);
+      outline: none;
+    }
+  }
+  textarea {
+    border: 0.2rem solid rgba($black, 0.5);
+    outline: none;
+  }
+  input[type='text']:focus, textarea:focus {
+    border-color: $primary-color;
+  }
+  select {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.6rem;
+    line-height: 1.42857143;
+    color: $black;
+    background-color: $white;
+    background-image: none;
+    border: 0.1rem solid #cccccc;
+    border-radius: 0.4rem;
+  }
+}

@@ -1,0 +1,53 @@
+<%-- Load Java libraries, Kinetic models & Identity --%>
+<%@page pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@page import="java.util.*" %>
+<%@page import="com.kineticdata.core.models.*" %>
+<%@page import="com.kineticdata.core.web.bundles.Bundle" %>
+<%@page import="com.kineticdata.core.web.bundles.BundleSubmissionComponent" %>
+<%@page import="com.kineticdata.core.authentication.Identity" %>
+<%@page import="org.slf4j.Logger" %>
+
+<%-- Bundle Java libraries --%>
+<%@page import="com.kineticdata.bundles.*" %>
+
+<%-- Load tag libraries (JSTL) used in most bundles --%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="app" uri="http://kineticdata.com/taglibs/core/app" %>
+<%@taglib prefix="bundle" uri="http://kineticdata.com/taglibs/bundle" %>
+<%@taglib prefix="json" uri="http://kineticdata.com/taglibs/json" %>
+
+<%@include file="/WEB-INF/app/includes/task4/task4.jspf" %>
+<%@include file="SubmissionHelper.jspf"%>
+<%@include file="SetupHelper.jspf"%>
+<%@include file="CategoryHelper.jspf"%>
+
+<%-- Get bundle, space, and kapp objects --%>
+<%
+    Bundle bundle = (Bundle)request.getAttribute("bundle"); 
+    Space space = (Space)request.getAttribute("space");
+    Kapp kapp = (Kapp)request.getAttribute("kapp");
+%>
+
+<%-- Define and initialize SetupAttribute helper --%>
+<%
+    SetupHelper setupHelper = new SetupHelper()
+        .addSetupAttribute("Task Server Url", 
+            "Task Server Url Description", 
+            true)
+        .addSetupAttribute("Task Source Name", 
+            "Task Source Name Description", 
+            true); 
+%>
+
+<%-- Load helper(s) --%>
+<%
+  request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
+  request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
+  request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
+  request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
+  request.setAttribute("CategoryHelper", new CategoryHelper());
+  request.setAttribute("SetupHelper", setupHelper);
+%>
+
