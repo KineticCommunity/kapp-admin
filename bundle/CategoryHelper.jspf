@@ -1,16 +1,16 @@
 <%@page import="com.google.common.collect.ComparisonChain" %>
 <%@page import="com.google.common.collect.Ordering" %>
-<%@page import="com.kineticdata.bundles.Text" %>
+<%@page import="com.google.common.primitives.Ints" %>
 
 <%!
     public static class CategoryHelper {
     
-        Set<BundleCategory> categories;
-        Map<String, BundleCategory> categoriesByName;
+        private Map<String, Set<BundleCategory>> categories;
+        private Map<String, Map<String, BundleCategory>> categoriesByName;
         
         public CategoryHelper() {
-            this.categories = null;
-            this.categoriesByName = null;
+            this.categories = new HashMap<String, Set<BundleCategory>>();
+            this.categoriesByName = new HashMap<String, Map<String, BundleCategory>>();
         }
         
         /* *
@@ -23,12 +23,12 @@
          * Returns - ArrayList<BundleCategory>
          * */
         public List<BundleCategory> getCategories(Kapp kapp) {
-            if (this.categories != null){
-                return new ArrayList<BundleCategory>(categories);
+            if (this.categories.get(kapp.getSlug()) != null){
+                return new ArrayList<BundleCategory>(this.categories.get(kapp.getSlug()));
             }
-            // Create both categories list and categories by name map
-            this.categories = new TreeSet<BundleCategory>();
-            this.categoriesByName = new HashMap<String, BundleCategory>();
+            // Create both categories list and categories by name map for current Kapp
+            this.categories.put(kapp.getSlug(), new TreeSet<BundleCategory>());
+            this.categoriesByName.put(kapp.getSlug(), new HashMap<String, BundleCategory>());
             
             // Create temp list for manipulation
             List<BundleCategory> allCategories = new ArrayList<BundleCategory>();
@@ -40,7 +40,7 @@
                 // Add object to category tree
                 allCategories.add(bundleCategory);
                 // Grab the category name and add object to map based on name
-                this.categoriesByName.put(category.getName(), bundleCategory);
+                this.categoriesByName.get(kapp.getSlug()).put(category.getName(), bundleCategory);
             }
             // Pick each object off of the list and put map in order 
             // by attribute "parent"
@@ -51,16 +51,16 @@
                 if (bundleCategory.hasAttribute("Parent")){
                     String parentName = bundleCategory.getAttributeValue("Parent");
                     // Put category object as subcategory to parent
-                    if (categoriesByName.get(parentName) != null){
-                        categoriesByName.get(parentName).setSubcategory(bundleCategory);
-                        bundleCategory.setParentCategory(categoriesByName.get(parentName));
+                    if (categoriesByName.get(kapp.getSlug()).get(parentName) != null){
+                        categoriesByName.get(kapp.getSlug()).get(parentName).setSubcategory(bundleCategory);
+                        bundleCategory.setParentCategory(categoriesByName.get(kapp.getSlug()).get(parentName));
                         continue;
                     }
                 }
-                this.categories.add(bundleCategory);
+                this.categories.get(kapp.getSlug()).add(bundleCategory);
             }
             
-            return new ArrayList<BundleCategory>(categories);
+            return new ArrayList<BundleCategory>(this.categories.get(kapp.getSlug()));
         }
         
         /* *
@@ -70,35 +70,55 @@
          * Returns - ArrayList<BundleCategory>
          * */
         public List<BundleCategory> getCategories(Form form) {
-            if (this.categoriesByName == null){
-                this.getCategories(form.getKapp());
+            Kapp formKapp = form.getKapp();
+            if (this.categories.get(formKapp.getSlug()) == null){
+                this.getCategories(formKapp);
             }
             
             Set<BundleCategory> formCategories = new TreeSet<BundleCategory>();
             for (Category category : form.getCategories()){
-                formCategories.add(this.getCategory(category.getName()));
+                formCategories.add(this.getCategory(category.getName(), formKapp));
             }
             
             return new ArrayList<BundleCategory>(formCategories);
         }
         
         /* *
-         * Gets a single category object based on the name (not Display Name)
+         * Gets a single category object based on the name (not Display Name) for a specific kapp
          *
          * Requires - Name string
+         * Requires - Kapp object
          * Returns - BundleCategory object
          * */
-        public BundleCategory getCategory(String name){
-            return this.categoriesByName.get(name);
+        public BundleCategory getCategory(String name, Kapp kapp){
+            if (this.categories.get(kapp.getSlug()) == null){
+                this.getCategories(kapp);
+            }
+            return this.categoriesByName.get(kapp.getSlug()).get(name);
+        }
+        
+        /* *
+         * Gets a single category object based on the name (not Display Name) for a specific kapp
+         *
+         * Requires - Name string
+         * Requires - Form object
+         * Returns - BundleCategory object
+         * */
+        public BundleCategory getCategory(String name, Form form){
+            Kapp formKapp = form.getKapp();
+            if (this.categories.get(formKapp.getSlug()) == null){
+                this.getCategories(formKapp);
+            }
+            return this.categoriesByName.get(formKapp.getSlug()).get(name);
         }
         
         /* *
          * Inner class for combining all category methods to the BundleCategory object
          * */
         public static class BundleCategory implements Comparable<BundleCategory> {
-            Category category;
-            BundleCategory parentCategory;
-            Set<BundleCategory> subcategories;
+            private Category category;
+            private BundleCategory parentCategory;
+            private Set<BundleCategory> subcategories;
                         
             public BundleCategory(Category category) { 
                 this.category = category; 
@@ -160,8 +180,8 @@
             public BundleCategory getParentCategory() {
                 return parentCategory;
             }
-            // Sets the current category's parent category to the passed object
-            public void setParentCategory(BundleCategory parentCategory) {
+            // Sets the current category's parent category to the passed object. Private method, used for initialization only.
+            private void setParentCategory(BundleCategory parentCategory) {
                 this.parentCategory = parentCategory;
             }
             // Returns an array of parent category objects sorted from the root category to current category
@@ -179,8 +199,8 @@
             public List<BundleCategory> getSubcategories() {
                 return new ArrayList<BundleCategory>(this.subcategories);
             }
-            // Adds the passed object as a subcategoryof the current category
-            public void setSubcategory(BundleCategory bundleCategory) {
+            // Adds the passed object as a subcategoryof the current category. Private method, used for initialization only.
+            private void setSubcategory(BundleCategory bundleCategory) {
                 this.subcategories.add(bundleCategory);
             }
             // Returns true if the current category has subcategories
@@ -207,24 +227,19 @@
             
             public int compareTo(BundleCategory that) {
                 // Compare by Sort Order attribute, then by Display Name attribute, then by Name
+                Integer thisSortOrder = null;
+                Integer thatSortOrder = null;
 
-                // Regex for confirming sort order is an int
-                String regex = "[0-9]+";
-
-                // Null integers to compare
-                Integer thisInt = null;
-                Integer thatInt = null;
-
-                // Check for int otherwise keep null
-                if(this.getAttributeValue("Sort Order") != null && this.getAttributeValue("Sort Order").matches(regex)){
-                    thisInt = Integer.parseInt(this.getAttributeValue("Sort Order"));
+                if (this.hasAttribute("Sort Order")){
+                    thisSortOrder = Ints.tryParse(this.getAttributeValue("Sort Order"));
                 }
-                if(that.getAttributeValue("Sort Order") != null && that.getAttributeValue("Sort Order").matches(regex)){
-                    thatInt = Integer.parseInt(that.getAttributeValue("Sort Order"));
+                if (that.hasAttribute("Sort Order")){
+                    thatSortOrder = Ints.tryParse(that.getAttributeValue("Sort Order"));
                 }
+
                 // Order: Sort Order -> Display Name -> Name
                 return ComparisonChain.start()
-                        .compare(thisInt, thatInt, Ordering.natural().nullsLast())
+                        .compare(thisSortOrder, thatSortOrder, Ordering.natural().nullsLast())
                         .compare(this.getAttributeValue("Display Name"), that.getAttributeValue("Display Name"), Ordering.natural().nullsLast())
                         .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
                         .result();

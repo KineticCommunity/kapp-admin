@@ -19,12 +19,15 @@
             <li role="presentation">
                 <a href="#tab-approvals" aria-controls="tab-approvals" role="tab" data-toggle="tab">My Approvals</a>
             </li>
+             <li role="presentation">
+                <a href="#tab-cat-admin" aria-controls="tab-cat-admin" role="tab" data-toggle="tab">Category Admin</a>
+            </li>
         </ul>
     </section>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="tab-home">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <h2>Service Items</h2>
                     <%-- For each of the categories --%>
                     <c:forEach items="${bundleCategories}" var="category">
@@ -46,33 +49,6 @@
                             </div>
                         </c:if>
                     </c:forEach>
-                    <c:set var="uncategorizedForms" value="${FormHelper.getUncategorizedForms(kapp)}"/>
-                    <c:if test="${not empty uncategorizedForms}">
-                        <div class="category uncategorized">
-                                                        <h3>
-                                    Uncategorized Forms
-                                </h3>
-                            <div class="row">
-
-                                <c:forEach items="${uncategorizedForms}" var="form">
-                                    <c:set scope="request" var="thisForm" value="${form}"/>
-                                    <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8" />
-                                </c:forEach>
-                            </div>
-                        </div>
-                    </c:if>
-                </div>
-                <div class="col-md-3 col-md-offset-1 hidden-xs" id="social-column" >
-                    <h2>Sidebar Items</h2>
-                    <c:choose>
-                        <c:when test="${not empty kapp.getAttributeValue('Sidebar Html')}">
-                            ${kapp.getAttributeValue('Sidebar Html')}
-                        </c:when>
-                        <c:otherwise>
-                            <a class="twitter-grid" href="https://twitter.com/_/timelines/672792909733842945">A Collection on Twitter</a>
-                            <script async src="https://platform.twitter.com/widgets.js"></script>
-                        </c:otherwise>
-                    </c:choose>
                 </div>
             </div>
         </div>
@@ -85,6 +61,11 @@
             <h3>My Approvals</h3>
             <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval')}"/>
             <c:import url="${bundle.path}/partials/submissions.jsp" charEncoding="UTF-8"/>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tab-cat-admin">
+            <h3>Category Admin</h3>
+            <c:set scope="request" var="bundleCategories" value="${CategoryHelper.getCategories(kapp)}"/>
+            <c:import url="${bundle.path}/partials/categoryAdmin.jsp" charEncoding="UTF-8"/>
         </div>
     </div>
 </bundle:layout>

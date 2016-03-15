@@ -1,0 +1,50 @@
+/* Edit Icon */
+i.edit{
+	margin-left: 5px;
+	cursor: pointer;
+}
+i.target {
+	height: 50px;
+	padding: 5px;
+	line-height: 35px;
+	color: #C0C0C0;
+}
+li strong {
+	height: 25px;
+	margin-bottom: 10px;
+}
+ul.sortable.top{
+	background-color: transparent;
+}
+.empty-ul{
+	height: 25px;
+}
+ul.sortable{
+	width: auto;
+	list-style-type: none;
+	min-height: 5px;
+}
+div.workarea ul li {
+	cursor: move;
+}
+i.add-root {
+	cursor:pointer;
+	margin-bottom: 5px;
+}
+div.workarea{
+	border: 1px solid #d3d3d3;
+	background-color: #f8f8f8;
+	margin-top: 20px;
+	padding: 10px;
+}
+div.tab-content{
+	margin-top: 20px;
+}
+ul.top {
+	padding-left: 10px;
+}
+.ui-sortable-placeholder {
+    border: 3px dashed #aaa;
+    height: 25px;
+    width: 300px;
+}

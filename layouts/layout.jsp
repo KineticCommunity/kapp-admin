@@ -17,6 +17,7 @@
             <bundle:style src="${bundle.location}/libraries/bootstrap/bootstrap.min.css" />
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css" />
             <bundle:style src="${bundle.location}/css/master.css "/>
+            <bundle:style src="${bundle.location}/css/categoryAdmin.css "/>
         </bundle:stylepack>
         <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <bundle:scriptpack>
@@ -24,14 +25,16 @@
             <bundle:script src="${bundle.location}/libraries/bootstrap/bootstrap.min.js" />
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js" />
             <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js" />
+            <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js" />
             <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.min.js" />
             <bundle:script src="${bundle.location}/js/catalog.js" />
             <bundle:script src="${bundle.location}/js/review.js" />
+            <bundle:script src="${bundle.location}/js/categoryAdmin.js" />
         </bundle:scriptpack>
         <bundle:yield name="head"/>
         <style>
-            <c:if test="${not empty kapp.getAttribute('logo-height-px')}">
-                .navbar-brand {height:${kapp.getAttribute('logo-height-px').value}px;}
+            <c:if test="${not empty kapp.getAttributeValue('Logo Height Px')}">
+                .navbar-brand {height:${kapp.getAttributeValue('Logo Height Px')}px;}
             </c:if>
         </style>
     </head>

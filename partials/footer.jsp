@@ -13,7 +13,7 @@
             <dt>Version:</dt>
             <dd>${buildVersion}</dd>
             <dt>Bundle:</dt>
-            <dd>Default <a href='https://github.com/kineticdata/request-ce-bundle-default' target="_blank">(Learn More)</a></dd>
+            <dd>Scaffold <a href='https://github.com/KineticCommunity/request-ce-bundle-scaffold' target="_blank">(Learn More)</a></dd>
           </dl>
         </div>
       </c:if>

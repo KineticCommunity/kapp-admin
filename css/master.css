@@ -695,8 +695,6 @@ footer {
 /* Missing Attributes
  *-------------------------------------- */
 .no-data {
-  color: #999;
-  text-align: center;
   border: 1px solid #999;
   border-radius: 3px;
   line-height: 140%;
@@ -709,6 +707,26 @@ footer {
     text-transform: none; }
   .no-data ul {
     text-align: left; }
+
+.success {
+  color: #00B900; }
+  .success .required,
+  .success .fa-check {
+    color: #46a546; }
+  .success .required {
+    font-weight: bold; }
+
+.danger,
+.warning {
+  color: #312F38; }
+  .danger .required,
+  .danger .fa-exclamation-triangle,
+  .warning .required,
+  .warning .fa-exclamation-triangle {
+    color: #8a6d3b; }
+  .danger .required,
+  .warning .required {
+    font-weight: bold; }
 
 /* Styles go here */
 .kd-modal-backdrop {
@@ -725,6 +743,7 @@ footer {
   position: relative;
   background-color: #fefefe;
   margin: auto;
+  margin-top: 20px;
   padding: 0;
   border: 1px solid #888;
   /* width: 80%; */
@@ -733,17 +752,27 @@ footer {
 /* Modal Header */
 .kd-modal-header {
   padding: 2px 16px;
-  background-color: lightgrey;
+  background-color: #EDE4A8;
   color: white; }
+  .kd-modal-header h4 {
+    text-transform: none; }
 
 /* Modal Body */
 .kd-modal-body {
-  padding: 2px 16px; }
+  padding: 8px 16px; }
+  .kd-modal-body table {
+    width: 100%; }
+    .kd-modal-body table th, .kd-modal-body table td {
+      padding: 0.5em; }
+    .kd-modal-body table tbody tr {
+      cursor: pointer; }
+      .kd-modal-body table tbody tr:hover {
+        background-color: #f2f2f4; }
 
 /* Modal Footer */
 .kd-modal-footer {
   padding: 2px 16px;
-  background-color: lightgrey;
+  background-color: #EDE4A8;
   color: white; }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

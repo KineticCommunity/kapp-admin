@@ -113,7 +113,7 @@ KD-Search CE
 //        var templateId = (configObj.bridgeConfig.templateId && configObj.bridgeConfig.templateId!="null") ? configObj.bridgeConfig.templateId : clientManager.templateId;
         //create the connector necessary to connect to the bridge
 //        var connector = new KD.bridges.BridgeConnector({templateId: templateId});
-		K('bridgedResource['+configObj.bridgeConfig.resource+']')	.load({
+		K('bridgedResource['+configObj.bridgeConfig.model+']')	.load({
 			attributes: configObj.bridgeConfig.attributes, 
 			values: parameters,
 			success: function(response) {
@@ -215,7 +215,7 @@ KD-Search CE
 //        var templateId = (configObj.bridgeConfig.templateId && configObj.bridgeConfig.templateId!="null") ? configObj.bridgeConfig.templateId : clientManager.templateId;
         //create the connector necessary to connect to the bridge
 //        var connector = new KD.bridges.BridgeConnector({templateId: templateId});
-		K('bridgedResource['+configObj.bridgeConfig.resource+']')	.load({
+		K('bridgedResource['+configObj.bridgeConfig.model+']')	.load({
 			attributes: configObj.bridgeConfig.attributes, 
 			values: parameters,
 			success: function(response) {
