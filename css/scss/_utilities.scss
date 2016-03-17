@@ -34,23 +34,82 @@ img.desaturate {
   opacity: 1;
 }
 
-/* Sticky Footer
+
+/* Padding
  *-------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
+@for $incrementer from 0 through $padding-count{
+  .p-a-#{$incrementer}{
+    padding: $incrementer * $padding-increment !important;
+  }
+  .p-t-#{$incrementer}{
+    padding-top: $incrementer * $padding-increment !important;
+  }
+  .p-b-#{$incrementer}{
+    padding-bottom: $incrementer * $padding-increment !important;
+  }
+  .p-r-#{$incrementer}{
+    padding-right: $incrementer * $padding-increment !important;
+  }
+  .p-l-#{$incrementer}{
+    padding-left: $incrementer * $padding-increment !important;
+  }
+  .p-x-#{$incrementer}{
+    padding-right: $incrementer * $padding-increment !important;
+    padding-left: $incrementer * $padding-increment !important;
+  }
+  .p-y-#{$incrementer}{
+    padding-top: $incrementer * $padding-increment !important;
+    padding-bottom: $incrementer * $padding-increment !important;
+  }
 }
 
+/* Margin
+ *-------------------------------------- */
+@for $incrementer from 0 through $margin-count{
+  .m-a-#{$incrementer}{
+    margin: $incrementer * $margin-increment !important;
+  };
+  .m-t-#{$incrementer}{
+    margin-top: $incrementer * $margin-increment !important;
+  }
+  .m-b-#{$incrementer}{
+    margin-bottom: $incrementer * $margin-increment !important;
+  }
+  .m-r-#{$incrementer}{
+    margin-right: $incrementer * $margin-increment !important;
+  }
+  .m-l-#{$incrementer}{
+    margin-left:  $incrementer * $margin-increment !important;
+  }
+  .m-x-#{$incrementer}{
+    margin-right:  $incrementer * $margin-increment !important;
+    margin-left:  $incrementer * $margin-increment !important;
+  }
+  .m-y-#{$incrementer}{
+    margin-top: $incrementer * $margin-increment !important;
+    margin-bottom: $incrementer * $margin-increment !important;
+  }
+}
 
+/* List unstyled
+ *-------------------------------------- */
+ul.unstyled {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Display
+ *-------------------------------------- */
+.display-none {
+  display: none;
+}
+.display-inline {
+  display: inline;
+}
+.display-block {
+  display: block;
+}
+.display-inline-block {
+  display: inline-block;
+}

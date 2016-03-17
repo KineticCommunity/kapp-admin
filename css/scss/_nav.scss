@@ -14,16 +14,16 @@
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: $primary-color;
+  color: $primary;
   background-color: transparent;
   border-color: transparent;
-  border-bottom: 0.4rem solid $primary-color;
+  border-bottom: 0.4rem solid $primary;
 }
 .nav-pills > li > a:hover {
   color: rgb(66, 139, 202);
   background-color: transparent;
   border-color: transparent;
-  border-bottom: 0.4rem solid rgba($primary-color, 0.5);  
+  border-bottom: 0.4rem solid rgba($primary, 0.5);  
 }
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,

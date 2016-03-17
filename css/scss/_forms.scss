@@ -1,62 +1,140 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-form {
-  margin-left: 0;
-  padding: 2.6rem 2.4rem 4.6rem;
-  font-weight: 400;
-  overflow: hidden;
-  background: $white;
-  -webkit-box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
-  box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
-  label {
-    /* Make the label a block */
-    color: rgba($black, 0.75);
-    display: block;
-    font-size: 1.6rem;
-    font-weight: 600;
+
+input[type='text'], input[type='password'], textarea, select {
+  @include border-radius();
+  padding: 0.2rem 0.6rem;
+  border: 0.1rem solid rgba($black, 0.4);
+  outline: none;
+  &:focus {
+    border-color: $primary;
   }
 }
 
-.form-group.required label:after {
-  content: '*';
+
+input[type='text'], input[type='password'], select {    
+  height: 2.6rem;
 }
 
-form {
-  .radio label:first-child {
-    padding-left: 0;
-    font-weight: 600;
-  }
-  .checkbox label {
-    &:first-child {
-      padding-left: 0;
+section.page {
+  form {
+    margin-left: 0;
+    padding: 2.4rem;
+    font-weight: 400;
+    overflow: hidden;
+    background: $white;
+    -webkit-box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
+    box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
+    
+    .form-group.required label:after {
+      content: '*';
+      color: red;
+    }
+    
+    label {
+      /* Make the label a block */
+      color: rgba($black, 0.75);
+      display: block;
+      @include font-size(1.4rem);
       font-weight: 600;
     }
-    + input {
-      padding-left: 2rem;
+    
+    .radio label:first-child,
+    .checkbox label:first-child {
+      padding-left: 0;
     }
-  }
-  input {
-    &[type='text'], &[type='password'] {
-      border: 0.2rem solid rgba($black, 0.5);
-      outline: none;
+    
+    button {
+      @extend .btn;
+      
+      &[data-button-type='previous-page']{
+        position: relative;
+        padding-left: 2.4rem;
+        background-color: $gray;
+        color: black;
+        &:hover {
+          background-color: tint($gray, 10%);
+        }
+      }
+      &[data-button-type='previous-page']:before {
+        font-family: 'FontAwesome';
+        font-weight: 400;
+        content: '\f053';
+        position: absolute;
+        top: 50%;
+        left: 0.8rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1;
+        margin-top: -0.7rem;
+      }
+      
+      &[data-button-type='save']{
+        position: relative;
+        padding-left: 2.8rem;
+        background-color: tint($lightgray, -10%);
+        color: black;
+        &:hover {
+          background-color: $lightgray;
+        }
+      }
+      &[data-button-type='save']:before {
+        font-family: 'FontAwesome';
+        font-weight: 400;
+        content: '\f0c7';
+        position: absolute;
+        top: 50%;
+        left: 1.2rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1;
+        margin-top: -0.7rem;
+      }
+      
+      &[data-button-type='custom']{
+        background-color: $white;
+        border-color: $lightgray;
+        color: black;
+        &:hover {
+          background-color: tint($white, 5%);
+        }
+      }
     }
-  }
-  textarea {
-    border: 0.2rem solid rgba($black, 0.5);
-    outline: none;
-  }
-  input[type='text']:focus, textarea:focus {
-    border-color: $primary-color;
-  }
-  select {
-    padding: 0.6rem 1.2rem;
-    font-size: 1.6rem;
-    line-height: 1.42857143;
-    color: $black;
-    background-color: $white;
-    background-image: none;
-    border: 0.1rem solid #cccccc;
-    border-radius: 0.4rem;
+    
+    /* Attachment files
+     *-------------------------------------- */
+    .file-table {
+      display: table;
+      margin: 0px;
+      padding: 0px;
+      
+      .file-header {
+        display: table-header-group;
+        span {
+          background-color: $lightestgray;
+        }
+      }
+      
+      .file-container {
+        display: table-row-group;
+      }
+    
+      .file-row {
+        display: table-row;
+        > span {
+          list-style:none;
+          display: table-cell;
+          border: 1px solid #000;
+          padding: 0.3rem 1.2rem;
+          &:not(:first-child) {
+            border-left: none;
+          }
+        }
+        &:not(:first-child) > span {
+          border-top: none;
+        }
+      }
+    }
   }
 }

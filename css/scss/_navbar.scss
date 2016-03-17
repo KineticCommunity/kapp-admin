@@ -5,7 +5,7 @@
 /* Navbar Brand color
  *-------------------------------------- */
 .navbar-default .navbar-brand {
-  color: $primary-color;
+  color: $primary;
 }
 
 /* Navbar Form
@@ -61,7 +61,7 @@
 
 .tt-suggestion.tt-cursor,.tt-suggestion:hover {
   color: #fff;
-  background-color: $primary-color;
+  background-color: $primary;
 }
 
 .tt-suggestion p {

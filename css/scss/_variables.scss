@@ -1,42 +1,63 @@
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//   Default Colors
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$primary-color: #428BCA; //Blue //rgb(66, 139, 202)
-$secondary-color: #EDE4A8; //Yellow //rgb(237, 228, 168)
-$tertiary-color: #24B166; //Green //rgb(36, 177, 102)
+// Colors
+// --------------------------------------
 
-$gray: #B3C1C4; //rgb(179, 193, 196)
-$black: #312F38; //rgb(49, 47, 56)
-$white: #ffffff; //rgb(255,255,255)
-$red: #9d261d;
-$green: #46a546;
-$yellow: #8a6d3b;
+$primary: #00427e;
+$primary-complement: #ffffff;
+$secondary: #ffb200;
+$secondary-complement: #000000;
+$tertiary: #7cb5ec;
+$tertiary-complement: #000000;
+$lightestgray: #F1F1F1;
+$lightgray: #BBC0C2;
+$gray: #8A9699;
+$darkgray: #6B7E83;
+$darkestgray: #4D686F;
+$black: #000000;
+$white: #ffffff;
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//   Scaffolding
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-$body-bg: #f1f1f1 !default; // Background color for `<body>`.
 $text-color: $black !default; // Global text color on `<body>`.
+$link-color: $primary !default; // Global textual link color.
+$body-bg-color: $lightestgray !default; // Background color for `<body>`.
 
-$link-color: $primary-color !default; // Global textual link color.
-$link-hover-color: darken($link-color, 15%) !default; // Link hover color set via `darken()` function.
-$link-hover-decoration: underline !default; // Link hover decoration.
+// Color Tint Function
+// --------------------------------------
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//   Typography
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// If average RGB value of $color is > 128, tint will darken $color by $percentage (or if $percentage is negative, lighten $color by abs($percentage))
+// If average RGB value of $color is <= 128, tint will lighten $color by $percentage (or if $percentage is negative, darken $color by abs($percentage))
+@function tint($color, $percentage){
+    @return if(
+        (red($color) + green($color) + blue($color)) / 3 > 128, 
+        if($percentage > 0, darken($color, abs($percentage)), lighten($color, abs($percentage))),
+        if($percentage > 0, lighten($color, abs($percentage)), darken($color, abs($percentage)))
+    );
+}
+
+
+// Scaffold
+// --------------------------------------
+
+$footer-height: 60px;
+
+
+// Typography
+// --------------------------------------
 
 $font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
-
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-base:        $font-family-sans-serif !default;
-$font-size-base:          14px !default;
-$line-height-base:        1.428571429 !default; // 20/14 // Unit-less `line-height` for use in components like buttons.
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//   Components
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$font-size-base:          1.4rem !default; // Default font size. Equal to 14px.
+$line-height-base:        2rem !default; // Default line height. Equal to 20px.
 
-$border-radius-base:        4px !default;
+
+// Components
+// --------------------------------------
+
+$enable-rounded:            true;
+$border-radius-base:        0.4rem !default;
+
+$margin-increment: 0.5rem;
+$margin-count: 5;
+$padding-increment: 0.5rem;
+$padding-count: 5;

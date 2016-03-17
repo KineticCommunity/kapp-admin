@@ -3,84 +3,201 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .card-panel {
-  padding: 2rem;
+  padding: 1rem;
   margin: 0.5rem 0 1rem 0;
-  border-radius: 0.2rem;
+  @include border-radius();
   background-color: $white;
 }
 
 .card {
   position: relative;
-  margin: 0 0.5rem 1rem 0;
-  background-color: $white;
-  border-radius: 0.2rem;
-  border: 0.1rem solid #e8e8e8;
-  .fa {
-    width: 100%; /* for clickability */
-    height: 100%; /* for clickability */
-    color: $primary-color;
-    font-size: 1.4em;
-  }
-  .card-title {
-    font-size: 2.4rem;
-    font-weight: 300;
-    display: block;
+  display: block;
+  float: left;
+  margin: 0 0 1rem 0;
+  padding: 0.5rem;
+  width: 100%;
+  
+  > * {
+    position: relative;
+    padding: 1rem;
+    margin: 0;
     &.activator {
       cursor: pointer;
     }
+    &:not(.alert) {
+      background-color: $white;
+      border-left: 0.1rem solid $lightgray;
+      border-right: 0.1rem solid $lightgray;
+    }
+    
   }
-  &.small, &.medium, &.large {
-    position: relative;
+  > :first-child {
+    @include border-top-radius();
+    &:not(.alert) {
+      border-top: 0.1rem solid $lightgray;
+    }
   }
-  &.small .card-content, &.medium .card-content, &.large .card-content {
-    max-height: 60%;
+  > :last-child {
+    @include border-bottom-radius();
+    &:not(.alert) {
+      border-bottom: 0.1rem solid $lightgray;
+    }
+  }
+  
+  > .card-title {
+    @include font-size-line-height(2.4rem, 2.4rem);
+    font-weight: bold;
+    border-bottom: 0.2rem solid rgba($lightgray, 0.5);
+    &.small {
+      @include font-size-line-height(1.8rem, 1.8rem);
+    }
+  }
+  
+  > .card-content {
     overflow: hidden;
-  }
-  &.small .card-action, &.medium .card-action, &.large .card-action {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    background-color: inherit;
-  }
-  &.small {
-    height: 20rem;
-  }
-  &.medium {
-    height: 30rem;
-  }
-  &.large {
-    height: 40rem;
-  }
-  .card-content {
-    padding: 2rem;
-    border-radius: 0 0 0.2rem 0.2rem;
-    border-top: 0.2rem solid rgba($primary-color, 0.5);
     p {
       margin: 0;
-      color: inherit;
     }
-    .card-title {
-      line-height: 1.2;
+    > .card-title {
+      @include font-size-line-height(2.4rem, 2.4rem);
+      font-weight: bold;
       margin-bottom: 0.4em;
-      a {
-        color: rgb(49, 47, 56);
+      &.small {
+        @include font-size-line-height(1.8rem, 1.8rem);
       }
+    }
+    &:not(:last-child):after {
+      content: attr(data-card-overflow-cover);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1rem;
+      background-color: $white;
     }
   }
-  .card-action {
-    border-top: 0.1rem solid rgba($gray, 0.2);
-    padding: 2rem;
-    a {
-      margin-right: 2rem;
-      text-transform: uppercase;
-      margin-right: 2rem;
-      text-transform: uppercase;
-      color: rgba($primary-color, 1);
-      &:hover {
-        color: rgba($primary-color, 0.8);
-      }
-    }
+  
+  > .card-action {
+    border-top: 0.1rem solid rgba($lightgray, 0.5);
+  }
+  
+  .fa {
+    padding-right: 0.5rem;
   }
 }
+
+.card-xxs {
+  @extend .card;
+  > .card-content {
+    height: 6rem;
+  }
+}
+
+.card-xs {
+  @extend .card;
+  > .card-content {
+    height: 10rem;
+  }
+}
+
+.card-sm {
+  @extend .card;
+  > .card-content {
+    height: 14rem;
+  }
+}
+
+.card-md {
+  @extend .card;
+  > .card-content {
+    height: 18rem;
+  }
+}
+
+.card-lg {
+  @extend .card;
+  > .card-content {
+    height: 22rem;
+  }
+}
+
+.card-xl {
+  @extend .card;
+  > .card-content {
+    height: 26rem;
+  }
+}
+
+
+.card-container, .card-container-xs, .card-container-xs-12 {
+  @include clearfix();
+  margin: -0.5rem;
+}
+.card-container-xs-11 { @extend .card-container-xs; > .card { width: 91.66666667%; } }
+.card-container-xs-10 { @extend .card-container-xs; > .card { width: 83.33333333%; } }
+.card-container-xs-9 { @extend .card-container-xs; > .card { width: 75%; } }
+.card-container-xs-8 { @extend .card-container-xs; > .card { width: 66.66666667%; } }
+.card-container-xs-7 { @extend .card-container-xs; > .card { width: 58.33333333%; } }
+.card-container-xs-6 { @extend .card-container-xs; > .card { width: 50%; } }
+.card-container-xs-5 { @extend .card-container-xs; > .card { width: 41.66666667%; } }
+.card-container-xs-4 { @extend .card-container-xs; > .card { width: 33.33333333%; } }
+.card-container-xs-3 { @extend .card-container-xs; > .card { width: 25%; } }
+.card-container-xs-2 { @extend .card-container-xs; > .card { width: 16.66666667%; } }
+.card-container-xs-1 { @extend .card-container-xs; > .card { width: 8.33333333%; } }
+
+@media (min-width: 768px) {
+  .card-container-sm, .card-container-sm-12 {
+    @include clearfix();
+    margin: -0.5rem;
+  }
+  .card-container-sm-11 { @extend .card-container-sm; > .card { width: 91.66666667%; } }
+  .card-container-sm-10 { @extend .card-container-sm; > .card { width: 83.33333333%; } }
+  .card-container-sm-9 { @extend .card-container-sm; > .card { width: 75%; } }
+  .card-container-sm-8 { @extend .card-container-sm; > .card { width: 66.66666667%; } }
+  .card-container-sm-7 { @extend .card-container-sm; > .card { width: 58.33333333%; } }
+  .card-container-sm-6 { @extend .card-container-sm; > .card { width: 50%; } }
+  .card-container-sm-5 { @extend .card-container-sm; > .card { width: 41.66666667%; } }
+  .card-container-sm-4 { @extend .card-container-sm; > .card { width: 33.33333333%; } }
+  .card-container-sm-3 { @extend .card-container-sm; > .card { width: 25%; } }
+  .card-container-sm-2 { @extend .card-container-sm; > .card { width: 16.66666667%; } }
+  .card-container-sm-1 { @extend .card-container-sm; > .card { width: 8.33333333%; } }
+}
+
+@media (min-width: 992px) {
+  .card-container-md, .card-container-md-12 {
+    @include clearfix();
+    margin: -0.5rem;
+  }
+  .card-container-md-11 { @extend .card-container-md; > .card { width: 91.66666667%; } }
+  .card-container-md-10 { @extend .card-container-md; > .card { width: 83.33333333%; } }
+  .card-container-md-9 { @extend .card-container-md; > .card { width: 75%; } }
+  .card-container-md-8 { @extend .card-container-md; > .card { width: 66.66666667%; } }
+  .card-container-md-7 { @extend .card-container-md; > .card { width: 58.33333333%; } }
+  .card-container-md-6 { @extend .card-container-md; > .card { width: 50%; } }
+  .card-container-md-5 { @extend .card-container-md; > .card { width: 41.66666667%; } }
+  .card-container-md-4 { @extend .card-container-md; > .card { width: 33.33333333%; } }
+  .card-container-md-3 { @extend .card-container-md; > .card { width: 25%; } }
+  .card-container-md-2 { @extend .card-container-md; > .card { width: 16.66666667%; } }
+  .card-container-md-1 { @extend .card-container-md; > .card { width: 8.33333333%; } }
+}
+
+@media (min-width: 1200px) {
+  .card-container-lg, .card-container-lg-12 {
+    @include clearfix();
+    margin: -0.5rem;
+  }
+  .card-container-lg-11 { @extend .card-container-lg; > .card { width: 91.66666667%; } }
+  .card-container-lg-10 { @extend .card-container-lg; > .card { width: 83.33333333%; } }
+  .card-container-lg-9 { @extend .card-container-lg; > .card { width: 75%; } }
+  .card-container-lg-8 { @extend .card-container-lg; > .card { width: 66.66666667%; } }
+  .card-container-lg-7 { @extend .card-container-lg; > .card { width: 58.33333333%; } }
+  .card-container-lg-6 { @extend .card-container-lg; > .card { width: 50%; } }
+  .card-container-lg-5 { @extend .card-container-lg; > .card { width: 41.66666667%; } }
+  .card-container-lg-4 { @extend .card-container-lg; > .card { width: 33.33333333%; } }
+  .card-container-lg-3 { @extend .card-container-lg; > .card { width: 25%; } }
+  .card-container-lg-2 { @extend .card-container-lg; > .card { width: 16.66666667%; } }
+  .card-container-lg-1 { @extend .card-container-lg; > .card { width: 8.33333333%; } }
+}
+
+
+

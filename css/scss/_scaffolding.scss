@@ -1,27 +1,25 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Global Elements
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+html{
+  position: relative;
+  min-height: 100%;
+  // DO NOT CHANGE FONT-SIZE HERE! 10px base allows for ease of use with rem: 1rem = 10px, 1.4rem = 14px, 3.2rem = 32px, etc.
+  font-size: 10px;
+}
 
 body {
   font-family: $font-family-base;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
+  @include font-size-line-height();
   color: $text-color;
-  background-color: $body-bg;
+  background-color: $body-bg-color;
+  // Sticky footer space
+  margin-bottom: $footer-height;
 }
 
-// Links
-
-a {
-  color: $link-color;
-  text-decoration: none;
-
-  &:hover,
-  &:focus {
-    color: $link-hover-color;
-    text-decoration: $link-hover-decoration;
-  }
-}
+/* Links
+ *-------------------------------------- */
+@include anchor();
 
 
 /* Section Elements
@@ -32,10 +30,11 @@ section{
   }
 
   > .page-header {
-    background: $secondary-color;
+    background: $secondary;
     padding: 2.4rem 2.4rem 1rem;
     margin: 0;
   }
+  
   > .content {
     padding: 2.4em;
   }

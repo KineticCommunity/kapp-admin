@@ -4,72 +4,105 @@
 
 /* Form Button Styles
  *-------------------------------------- */
-
-form {
-  button, .btn {
-    background-color: $tertiary-color;
-    color: $white;
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    margin-bottom: 0;
-    margin-right: 1.6rem;
-    font-size: 1.6rem;
-    font-weight: 700;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    border-radius: 0;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 0.1rem solid transparent;
-    -webkit-transition: all 0.15s ease-out;
-    transition: all 0.15s ease-out;
+ 
+form button, form input[type='submit'], form input[type='button'], .btn {
+  background-color: $lightgray;
+  color: $black;
+  display: inline-block;
+  padding: 0.2rem 1.2rem;
+  height: 2.6rem;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  @include font-size-line-height();
+  @include border-radius();
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 0.1rem solid transparent;
+  -webkit-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+  
+  &:hover {
+    background-color: tint($lightgray, 10%);
   }
-  button:hover, .btn:hover {
-    background-color: rgba($tertiary-color, 0.8);
-
+  
+  &.round {
+    height: 5rem;
+    width: 5rem;
+    font-weight: 400;
+    font-size: 3rem;
+    border-radius: 50%;
+    padding: 0;
   }
-  button {
-    &[data-button-type='previous-page'] {
-      /* Button Types */
-      position: relative;
-      padding-left: 2.6rem;
-      background-color: rgba($black, 0.5);
+}
 
-    }
-    &[data-button-type='custom'] {
-      background-color: #ffffff;
-      border-color: $tertiary-color;
-      color: $tertiary-color;
+.btn-primary {
+  @extend .btn;
+  
+  background-color: $primary;
+  color: $primary-complement;
+  
+  &:hover {
+    background-color: tint($primary, 10%);
+  }
+}
 
-    }
-    &[data-button-type='previous-page']:hover, &[data-button-type='custom']:hover {
-      background-color: rgba($tertiary-color, 0.8);
-      color: $white;
+.btn-primary-complement {
+  @extend .btn;
+  
+  background-color: $primary-complement;
+  color: $primary;
+  
+  &:hover {
+    background-color: tint($primary-complement, 10%);
+  }
+}
 
-    }
-    &[data-button-type='previous-page']:before {
-      font-family: 'FontAwesome';
-      content: '\f053';
-      position: absolute;
-      top: 50%;
-      left: 0.8rem;
-      width: 1.2rem;
-      height: 1.2rem;
-      line-height: 1;
-      font-size: 1.6rem;
-      margin-top: -0.7rem;
-      opacity: 0;
-      -webkit-transition: all 0.15s ease-out;
-      transition: all 0.15s ease-out;
-      opacity: 1;
-    }
+.btn-secondary {
+  @extend .btn;
+  
+  background-color: $secondary;
+  color: $secondary-complement;
+  
+  &:hover {
+    background-color: tint($secondary, 10%);
+  }
+}
+
+.btn-secondary-complement {
+  @extend .btn;
+  
+  background-color: $secondary-complement;
+  color: $secondary;
+  
+  &:hover {
+    background-color: tint($secondary-complement, 10%);
+  }
+}
+
+.btn-tertiary {
+  @extend .btn;
+  
+  background-color: $tertiary;
+  color: $tertiary-complement;
+  
+  &:hover {
+    background-color: tint($tertiary, 10%);
+  }
+}
+
+.btn-tertiary-complement {
+  @extend .btn;
+  
+  background-color: $tertiary-complement;
+  color: $tertiary;
+  
+  &:hover {
+    background-color: tint($tertiary-complement, 10%);
   }
 }
