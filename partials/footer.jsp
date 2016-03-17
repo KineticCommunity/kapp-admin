@@ -8,7 +8,7 @@
             ${text.escape(kapp.title)}
             
             <span class="pull-right">
-                Foo
+                v1.0.0dev
             </span>
         </p>
     </div>

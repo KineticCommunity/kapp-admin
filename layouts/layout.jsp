@@ -29,17 +29,63 @@
         <div class="task-wrapper">
             <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
             
-            <c:import url="${bundle.path}/partials/navbar.jsp" charEncoding="UTF-8"/>
+            <bundle:yield name="navbar"/>
             
             <section class="content">
                 <div class="container-fluid main-inner">
                     <div class="row">
-                        <div class="col-xs-2 sidebar">
-                            <bundle:yield name="sidebar"/>
-                        </div>
-                        <div class="col-xs-10 tab-content">
-                            <bundle:yield/>
-                        </div>
+                        <c:set var="sidebar"><bundle:yield name="sidebar"/></c:set>
+                        <c:set var="aside"><bundle:yield name="aside"/></c:set>
+                        <c:choose>
+                            <c:when test="${Text.isBlank(sidebar) && Text.isBlank(aside)}">
+                                <div class="col-xs-12 tab-content">
+                                    <div class="row">
+                                        <div class="col-xs-12 content-main">
+                                            <bundle:yield name="content"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:when test="${Text.isBlank(sidebar)}">
+                                <div class="col-xs-12 tab-content">
+                                    <div class="row">
+                                        <div class="col-xs-9 content-main">
+                                            <bundle:yield name="content"/>
+                                        </div>
+                                        <div class="col-xs-3 sidebar pull-right">
+                                            <bundle:yield name="aside"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:when test="${Text.isBlank(aside)}">
+                                <div class="col-xs-2 sidebar">
+                                    <bundle:yield name="sidebar"/>
+                                </div>
+                                <div class="col-xs-10 tab-content">
+                                    <div class="row">
+                                        <div class="col-xs-12 content-main">
+                                            <bundle:yield name="content"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="col-xs-2 sidebar">
+                                    <bundle:yield name="sidebar"/>
+                                </div>
+                                <div class="col-xs-10 tab-content">
+                                    <div class="row">
+                                        <div class="col-xs-9 content-main">
+                                            <bundle:yield name="content"/>
+                                        </div>
+                                        <div class="col-xs-3 sidebar pull-right">
+                                            <bundle:yield name="aside"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </section>

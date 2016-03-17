@@ -3,6 +3,15 @@
 <%@include file="../bundle/initialization.jspf" %>
 
 <nav class="navbar navbar-default" role="navigation">
+    
+    <div class="kapp-selector nav-title">
+        <div class="dropdown kapp-current">
+            <a data-toggle="dropdown" href="" class="dropdown-toggle">
+                <img src="console/assets/images/request.png" height="40px" width="150px">
+            </a>
+        </div>
+    </div>
+    
     <h2 class="kapp-title">${text.escape(kapp.name)}</h2>
     
     <ul class="nav navbar-nav navbar-right">
@@ -20,6 +29,21 @@
                     </ul>
                 </div>
             </a>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" aria-expanded="false">
+                Help
+                <span class="fa fa-caret-down fa-fw"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-header">Kinetic Community</li>
+                <li>
+                  <a href="http://community.kineticdata.com/Internal/Documentation_-_Kinetic_Core/40_Setup_Console/Kapp_Setup/10_Kapp_Setup_Details" target="_blank"
+                    >Kapp Setup Help</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="javascript:void(0);" target="_blank">About this Kapp</a></li>
+            </ul>
         </li>
     </ul>
 </nav>
