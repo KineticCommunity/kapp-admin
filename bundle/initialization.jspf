@@ -40,6 +40,12 @@
     request.setAttribute("CategoryHelper", new CategoryHelper());
 %>
 
+<%-- SearchHelper --%>
+<%@include file="SearchHelper.jspf"%>
+<%
+    request.setAttribute("SearchHelper", new SearchHelper());
+%>
+
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%

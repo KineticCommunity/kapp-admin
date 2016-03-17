@@ -6,22 +6,25 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
-        <link rel="shortcut icon" href="${bundle.location}/images/favicon.ico" type="image/x-icon"/>
         <link rel="apple-touch-icon" sizes="76x76" href="${bundle.location}/images/apple-touch-icon.png">
         <link rel="icon" type="image/png" href="${bundle.location}/images/android-chrome-96x96.png" sizes="96x96">
         <link rel="icon" type="image/png" href="${bundle.location}/images/favicon-16x16.png" sizes="16x16">
         <link rel="icon" type="image/png" href="${bundle.location}/images/favicon-32x32.png" sizes="32x32">
         <link rel="icon" type="image/png" href="${bundle.location}/images/favicon-96x96.png" sizes="96x96">
+        <link rel="shortcut icon" href="${bundle.location}/images/favicon.ico" type="image/x-icon"/>
         <app:headContent/>
+        <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
-            <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.css"/>
-            <bundle:style src="${bundle.location}/libraries/font-awesome/css/font-awesome.min.css"/>
+            <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.min.css"/>
+            <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
-        <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <bundle:scriptpack>
-            <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js" />
-            <bundle:script src="${bundle.location}/js/review.js" />
+            <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
+            <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.min.js"/>
+            <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
+            <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js"/>
+            <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
         <bundle:yield name="head"/>
     </head>
