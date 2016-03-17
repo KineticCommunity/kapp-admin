@@ -1,0 +1,411 @@
+.sort {
+  cursor: pointer;
+  &:after {
+    font-family: 'FontAwesome';
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    padding: .2em .25em .15em;
+    width: (18em / 14);
+    text-align: right;
+    color: #ccc;
+    content:"\f0dc";
+  }
+  &.sort-asc:after {
+    color: #000;
+    content:"\f0de";
+  }
+  &.sort-desc:after {
+    color: #000;
+    content:"\f0dd";
+  }
+}
+.btn-delete{
+  color:#FF0000;
+}
+
+.pagination a[disabled],
+.pagination a[disabled]:focus,
+.pagination a[disabled]:hover {
+  color: #999999;
+  background-color: white;
+  border-color: #dddddd;
+  cursor: not-allowed;
+}
+.pagination a.active {
+  background-color: #ede9e8;
+  border-color: #dddddd;
+  color: #00427e;
+  cursor: default;
+}
+
+.kapp-title {
+  display:inline-block;
+  margin:0.466666667em 0 0 0.466666667em;
+  color:#333;
+}
+#login-content {
+  background-color: #ede9e8;
+}
+
+#login-box {
+  background: white;
+  max-width: 450px;
+  min-width: 280px;
+  border: 1px solid #e1e1e1;
+  margin: 60px auto;
+  border-radius: 4px;
+}
+
+#login-box-inner {
+  padding: 15px 42px 42px 15px;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Drag and Drop
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+ul[dnd-list], ul[dnd-list] > li {
+  position: relative;
+}
+
+// Dropzone
+li.dndPlaceholder {
+  border: 2px dashed;
+  margin-bottom: 0.4em;
+}
+
+.dropzone {
+  min-height: 42px;
+  background-color: #fff;
+  border-width: 2px;
+  border-style: dashed;
+  li.dndPlaceholder {
+    border: none;
+  }
+}
+
+li.dropzone.dndDragover {
+  .content {
+    display: none;
+  }
+
+  li.dndPlaceholder {
+    border: 2px dashed;
+    background-color: lighten($green, 10%);
+    margin-bottom: 0.4em;
+  }
+}
+
+// Used to "collapse" the element being dragged.
+.dndDragging  {
+  opacity: 0.6;
+  div {
+    ul {
+      display: none;
+    }
+  }
+  li {
+    ul {
+      display: none;
+    }
+  }
+}
+
+.page-dragging {
+  display: none;
+}
+
+.dndPlaceholder {
+  background-color: #fff;
+  border-style: dashed;
+  border-width: 2px;
+  min-height: 42px;
+  display: block;
+  position: relative;
+}
+
+.table > tbody > tr.active td {
+  background-color: #e6e6e6;
+}
+
+.CodeMirror {
+  border: 1px dotted darkgrey;
+}
+
+.help-raw {
+  .CodeMirror {
+    height: auto;
+  }
+}
+
+// Override btn-default from our customization, specifically for ui-select.
+.ui-select-match {
+  .btn-default {
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #555;
+  }
+  .text-muted {
+    color: rgb(169, 169, 169);
+  }
+}
+
+// Adds padding so that form buttons don't touch the bottom of the screen.
+.form-buttons {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+// Pads the bottom of the sub-nav so that the tab content doesn't touch the sub-nav bar.
+.sub-nav {
+  margin-bottom: 2em;
+}
+
+.subnav-actions {
+  .btn-group {
+    margin-right: 0.5em;
+  }
+}
+
+// For page header word breaks.
+.page-header {
+  word-break: break-all;
+  .row h1,
+  .row h3 {margin-top: 0;}
+}
+// Page header detail lists
+.dl-small-label{
+ dt {width: 110px;}
+  dd {margin-left: 120px;}
+}
+// For the "More Actions" chevron used in tables.
+.dropdown.more-actions {
+  cursor: pointer;
+  span.fa {
+    color: #ccc;
+  }
+  span.fa:hover{
+    color: #333;
+  }
+}
+
+// Added Cursor to time-ago and tooltip
+.time-ago { cursor: default; }
+.tooltip { cursor: default; }
+
+.expression-helper {
+  position: relative;
+}
+.expression-helper .variable-search, .expression-helper .decorator-dialog {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  display: none;
+  position: absolute;
+  margin-top: 10px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+}
+.expression-helper .variable-search .form-group, .expression-helper .decorator-dialog .form-group {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ccc;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  padding: 10px;
+  margin: 0;
+}
+.expression-helper .variable-search .variable-search-result {
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.expression-helper .variable-search li.list-group-item { cursor: pointer; }
+.expression-helper .variable-search li.list-group-item:hover { background-color: #f5f5f5; }
+.expression-helper .variable-search li.list-group-item.active:hover { background-color: #337ab7; }
+.expression-helper .variable-search .highlight { background-color: yellow; }
+
+.wrapper {
+  min-height:100%;
+  width:100%;
+  position:relative;
+  background-color:#D6D3D2;
+  display:inline-block;
+}
+
+.content-main {
+  min-height:400px;
+  position:relative;
+  // float:right;
+}
+.content-view-wrapper{
+  min-height: 400px;
+}
+
+.form-selector {
+  width: 240px;
+  .ellipsis {
+    width: 95%;
+  }
+}
+.navigation-divider{
+  margin: 1.2em 0;
+}
+
+.filter-menu {
+  padding: 1em;
+  width:560px;
+}
+
+.filter-labels {
+  border-bottom: 1px solid #eee;
+  padding: 0.636363636em .545454545em;
+  display: block;
+  line-height: 1;
+  background-color: #f7f7f7;
+  margin-top: -0.636363636em; // 7/11px = .636363636em
+  font-size: 11px;
+  list-style: none;
+  > * {
+    margin: 0.5em;
+  }
+  li{
+    float: left;
+  }
+  .label{
+    padding: 0.2em 0.6em 0.3em 0;
+    font-size: 10.5px;
+  }
+  .fa{
+    margin:0 .3em;
+  }
+  .label-default{
+    background-color: $gray;
+  }
+}
+
+
+
+
+// Example of what the root view slide transition would look like.
+
+//.root-view.ng-enter {
+//  top: 30px;
+//  opacity: 0;
+//  -ms-transform: translate(-100%,0); /* IE 9 */
+//  -webkit-transform: translate(-100%,0); /* Safari */
+//  transform: translate(-100%, 0);
+//}
+//
+//.root-view.ng-enter.ng-enter-active {
+//  opacity: 1;
+//  -ms-transform: translate(0, 0); /* IE 9 */
+//  -webkit-transform: translate(0, 0); /* Safari */
+//  transform: translate(0, 0);
+//}
+//
+//.root-view.ng-leave {
+//  position: absolute;
+//  top: 0;
+//  opacity: 1;
+//  -ms-transform: translate(0, 0); /* IE 9 */
+//  -webkit-transform: translate(0, 0); /* Safari */
+//  transform: translate(0, 0);
+//}
+//
+//.root-view.ng-leave.ng-leave-active {
+//  opacity: 0;
+//  -ms-transform: translate(-100%, 0); /* IE 9 */
+//  -webkit-transform: translate(-100%, 0); /* Safari */
+//  transform: translate(-100%, 0);
+//}
+//
+//.root-view.ng-enter,
+//.root-view.ng-leave {
+//-webkit-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+//   -moz-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+//     -o-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+//        transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
+//
+//-webkit-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+//   -moz-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+//     -o-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+//        transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
+//}
+
+// Added "main-view" class to all ui-view's that contain the main content.
+// Enable the classes below to animate those. This example fades the content in
+// and out.
+
+//.main-view.ng-enter, #main-view.ng-leave {
+//  transition: opacity 0.2s ease;
+//  -moz-transition: opacity 0.2s ease;
+//  -webkit-transition: opacity 0.2s ease;
+//  -o-transition: opacity 0.2s ease;
+//}
+//
+//.main-view.ng-enter {
+//  background-color: white;
+//  opacity: 0;
+//}
+//
+//.main-view.ng-enter.ng-enter-active {
+//  opacity: 1;
+//}
+//
+//.main-view.ng-leave {
+//  opacity: 1;
+//}
+//
+//.main-view.ng-leave.ng-leave-active {
+//  opacity: 0;
+//}
+
+// sortable tables disguised as a list.
+  .sortable-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    li:first-child div{
+      border-top: none;
+    }
+    li.header div{
+      vertical-align: bottom;
+      border-bottom: 1px solid #ddd;
+      border-top: none;
+      font-weight: bold;
+      cursor:default;
+    }
+    li{
+      &:nth-of-type(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #f5f5f5;
+      }
+    }
+    li.header {
+      background-color: #fff;
+    }
+    li > div{
+      display:block;
+      float:left;
+      line-height: 1.42857143;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+      padding:8px;
+    }
+    li.footer:hover{
+      background-color: #f5f5f5;
+    }
+  }
+
+  // Pads the search input in the kapp dropdown.
+  .input-dropdown-item {
+    padding-left: 8px;
+    padding-right: 8px;
+  }

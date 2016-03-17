@@ -19,10 +19,6 @@
 <%@taglib prefix="json" uri="http://kineticdata.com/taglibs/json" %>
 
 <%@include file="/WEB-INF/app/includes/task4/task4.jspf" %>
-<%@include file="SubmissionHelper.jspf"%>
-<%@include file="SetupHelper.jspf"%>
-<%@include file="FormHelper.jspf"%>
-<%@include file="CategoryHelper.jspf"%>
 
 <%-- Get bundle, space, and kapp objects --%>
 <%
@@ -31,25 +27,28 @@
     Kapp kapp = (Kapp)request.getAttribute("kapp");
 %>
 
-<%-- Define and initialize SetupAttribute helper --%>
-<%
-    SetupHelper setupHelper = new SetupHelper()
-        .addSetupAttribute("Task Server Url", 
-            "Your Kinetic Task Server Url", 
-            false)
-        .addSetupAttribute("Task Source Name", 
-            "The Kinetic Task Source Name", 
-            false); 
-%>
-
 <%-- Load helper(s) --%>
 <%
   request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
   request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
   request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
-  request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
-  request.setAttribute("CategoryHelper", new CategoryHelper());
-  request.setAttribute("SetupHelper", setupHelper);
-  request.setAttribute("FormHelper", new FormHelper());
 %>
 
+<%-- CategoryHelper --%>
+<%@include file="CategoryHelper.jspf"%>
+<%
+    request.setAttribute("CategoryHelper", new CategoryHelper());
+%>
+
+<%-- SetupHelper --%>
+<%@include file="SetupHelper.jspf"%>
+<%
+    SetupHelper setupHelper = new SetupHelper();
+    request.setAttribute("SetupHelper", setupHelper);
+%>
+
+<%-- SubmissionHelper --%>
+<%@include file="SubmissionHelper.jspf"%>
+<%
+    request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
+%>

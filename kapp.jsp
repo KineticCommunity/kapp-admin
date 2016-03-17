@@ -7,65 +7,44 @@
     <bundle:variable name="head">
         <title>Kinetic Data ${text.escape(kapp.name)}</title>
     </bundle:variable>
-    <section class="menu">
-        <ul class="nav nav-pills">
-            <c:set var="pageHome" value="${kapp.getForm('home')}" scope="page"/>
-            <li role="presentation" class="active">
-                <a href="#tab-home" aria-controls="tab-home" role="tab" data-toggle="tab">Home</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab-requests" aria-controls="tab-requests" role="tab" data-toggle="tab">My Requests</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab-approvals" aria-controls="tab-approvals" role="tab" data-toggle="tab">My Approvals</a>
-            </li>
-             <li role="presentation">
-                <a href="#tab-cat-admin" aria-controls="tab-cat-admin" role="tab" data-toggle="tab">Category Admin</a>
-            </li>
-        </ul>
-    </section>
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="tab-home">
+        
+    <bundle:variable name="sidebar">
+        <c:import url="${bundle.path}/partials/sidebars/topnav1.jsp" charEncoding="UTF-8"/>
+    </bundle:variable>
+        
+    <div class="row">
+        <div class="col-xs-9 content-main">
+            <div class="page-header">
+                <h3>Title</h3>
+            </div>
+
             <div class="row">
-                <div class="col-md-12">
-                    <h2>Service Items</h2>
-                    <%-- For each of the categories --%>
-                    <c:forEach items="${bundleCategories}" var="category">
-                        <%-- If the category is not hidden, and it contains at least 1 form --%>
-                        <c:if test="${!category.hasAttributeValue('Hidden',true)}">
-                            <div class="category">
-                                <h3>${text.escape(category.getDisplayName())}</h3>
-                                <div class="row">
-                                    <%-- Show the first x number of forms of the category --%>
-                                    <c:forEach items="${category.getForms()}" var="categoryForm" begin="0" end="8">
-                                    <%-- Only show New or Active forms --%>
-                                    <c:if test="${categoryForm.status eq 'New' || categoryForm.status eq 'Active'}">
-                                    <%-- Render the form panel --%>
-                                    <c:set scope="request" var="thisForm" value="${categoryForm}"/>
-                                    <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8" />
-                                    </c:if>
-                                    </c:forEach>
-                                </div>
-                            </div>
-                        </c:if>
-                    </c:forEach>
+                <div class="col-xs-12">
+                    <div class="content-tabs">
+                        <ul class="nav nav-pills sub-nav">
+                            <li class="active">
+                                <a href="javascript:void(0);">Tab 1</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);">Tab 2</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);">Tab 3</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div role="tabpanel" class="tab-pane" id="tab-requests">
-            <h3>My Requests</h3>
-            <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service')}"/>
-            <c:import url="${bundle.path}/partials/submissions.jsp" charEncoding="UTF-8"/>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="tab-approvals">
-            <h3>My Approvals</h3>
-            <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval')}"/>
-            <c:import url="${bundle.path}/partials/submissions.jsp" charEncoding="UTF-8"/>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="tab-cat-admin">
-            <h3>Category Admin</h3>
-            <c:set scope="request" var="bundleCategories" value="${CategoryHelper.getCategories(kapp)}"/>
-            <c:import url="${bundle.path}/partials/categoryAdmin.jsp" charEncoding="UTF-8"/>
+        <div class="col-xs-3 sidebar pull-right">
+            <h3>TITLE</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute 
+                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
+                pariatur.
+            </p>
         </div>
     </div>
 </bundle:layout>

@@ -1,82 +1,25 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-<nav class="navbar navbar-default" id="bundle-header">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle dropdown" data-toggle="collapse"
-            data-target="#navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <c:if test="${kapp != null}">
-                <a class="navbar-brand" href="${bundle.kappLocation}">
-                    <c:if test="${not empty kapp.getAttribute('Logo Url')}">
-                        <img src="${kapp.getAttributeValue('Logo Url')}" alt="logo">
-                    </c:if>
-                    <c:if test="${empty kapp.getAttribute('Logo Url')}">
-                        <i class="fa fa-home"></i> ${text.escape(kapp.name)}
-                    </c:if>
-                </a>
-            </c:if>
-        </div>
 
-        <div class="collapse navbar-collapse" id="navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                        <c:choose>
-                            <c:when test="${identity.anonymous}">
-                                <a href="${bundle.spaceLocation}/app/login" class="hidden-xs"><i class="fa fa-sign-in fa-fw"></i> Login</a>
-                            </c:when>
-                            <c:otherwise>
-                            <a id="drop1" href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-user fa-fw"></i> ${text.escape(identity.username)} <span class="fa fa-caret-down fa-fw"></span>
-                            </c:otherwise>
-                        </c:choose>
-                    </a>
-                    <ul class="dropdown-menu show-xs priority" aria-labelledby="drop1">
-                        <c:choose>
-                            <c:when test="${identity.anonymous}">
-                                <li class="priority"><a href="${bundle.spaceLocation}/app/login"><i class="fa fa-sign-in fa-fw"></i> Login</a></li>
-                            </c:when>
-                            <c:otherwise>
-                                <c:if test="${kapp == null}">
-                                    <li  class="hidden-xs"><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
-                                    <li  class="priority hidden-lg hidden-md hidden-sm"><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-user fa-fw"></i> ${text.escape(identity.username)}</a></li>
-                                </c:if>
-                                <c:if test="${kapp != null}">
-                                    <li class="hidden-xs"><a href="${bundle.spaceLocation}/${kapp.slug}?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
-                                    <li class="hidden-lg hidden-md hidden-sm"><a href="${bundle.spaceLocation}/${kapp.slug}?page=profile"><i class="fa fa-user fa-fw"></i> Account</a></li>
-                                </c:if>
-                                <li class="divider hidden-xs"></li>
-                                <li class="hidden-xs"><a href="${bundle.spaceLocation}/app/"><i class="fa fa-dashboard fa-fw"></i> Management Console</a></li>
-                                <li class="divider hidden-xs"></li>
-                                <li><a href="${bundle.spaceLocation}/app/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-                            </c:otherwise>
-                        </c:choose>
+<nav class="navbar navbar-default" role="navigation">
+    <h2 class="kapp-title">${text.escape(kapp.name)}</h2>
+    
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">
+                <div class="avatar">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHBvaW50ZXItZXZlbnRzPSJub25lIiB3aWR0aD0iMzBweCIgaGVpZ2h0PSIzMHB4IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjogcmdiKDIyLCAxNjAsIDEzMyk7Ij48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB5PSI1MCUiIHg9IjUwJSIgZHk9IjAuMzVlbSIgcG9pbnRlci1ldmVudHM9ImF1dG8iIGZpbGw9IiNmZmZmZmYiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2FOZXVlLUxpZ2h0LEhlbHZldGljYSBOZXVlIExpZ2h0LEhlbHZldGljYSBOZXVlLEhlbHZldGljYSwgQXJpYWwsTHVjaWRhIEdyYW5kZSwgc2Fucy1zZXJpZiIgc3R5bGU9ImZvbnQtd2VpZ2h0OiA0MDA7IGZvbnQtc2l6ZTogMTRweDsiPkI8L3RleHQ+PC9zdmc+" style="border-radius:30px;">
+                </div>
+                <div class="account">
+                    <span>${text.escape(identity.username)}</span>
+                    <span class="fa fa-caret-down"></span>
+                    <ul class="dropdown-menu">
+                        <li>Profile</li>
+                        <li>Logout</li>
                     </ul>
-                </li>
-                <li class="dropdown">
-                    <a id="drop2" href="#" class="dropdown-toggle  hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hidden-lg hidden-md">Kapps <span class="fa fa-caret-down fa-fw"></span></span><span class="hidden-sm hidden-xs fa fa-th fa-fw"></span></a>
-                    <ul class="dropdown-menu show-xs" aria-labelledby="drop2">
-                        <c:forEach items="${space.kapps}" var="kapp" begin="0" end="8">
-                            <li><a href="/kinetic/${space.slug}/${kapp.slug}/">${kapp.name}</a></li>
-                        </c:forEach>
-                    </ul>
-                </li>
-            </ul>
-        <c:if test="${kapp != null}">
-            <div class="navbar-form " id="" role="search" style='margin-right:1em;'>
-                <form action="${bundle.kappLocation}" method="GET" role="form">
-                    <div class="form-group">
-                            <input type="hidden" value="search" name="page">
-                            <input  type="text" class="states form-control predictiveText x" name="q" placeholder="Search Forms…" autocomplete="off" autofocus="autofocus">
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </c:if>
-        </div>
-    </div>
+                </div>
+            </a>
+        </li>
+    </ul>
 </nav>
