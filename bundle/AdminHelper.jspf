@@ -1,0 +1,106 @@
+<%@page import="com.google.common.collect.ComparisonChain" %>
+<%!
+    public static class AdminHelper {
+
+        private List<AdminConsole> adminConsoles = new ArrayList<AdminConsole>();
+
+        public AdminHelper(){}
+
+        /**
+         * Adds a new setup attribute
+         */
+        public AdminHelper addAdminConsole(String name, String description, String slug, String page){
+            this.adminConsoles.add(new AdminConsole(name, description, slug, page));
+            return this;
+        }
+        
+        public List<AdminConsole> getAdminConsoles(){
+            return this.adminConsoles;
+        }
+        
+        public List<AdminConsole> getActiveAdminConsoles(Kapp kapp){
+            List<AdminConsole> activeAdminConsoles = new ArrayList<AdminConsole>();
+            for (AdminConsole adminConsole : this.adminConsoles){
+                if (!kapp.hasAttributeValue("Exclude Console", adminConsole.getName())){
+                    activeAdminConsoles.add(adminConsole);
+                }
+            }
+            return activeAdminConsoles;
+        }
+        
+        public AdminConsole getCurrentAdminConsole(String pageParam){
+            String slug = getSlug(pageParam);
+            for (AdminConsole adminConsole : this.adminConsoles){
+                if (Text.equals(adminConsole.getSlug(), slug)){
+                    return adminConsole;
+                }
+            }
+            return new AdminConsole(Text.titlelize(slug), "", slug, getPage(pageParam));
+        }
+        
+        public String getAdminConsolesAsString(){
+            String adminConsolesString = "";
+            for (AdminConsole adminConsole : this.adminConsoles){
+                if (adminConsolesString.length() > 0){
+                    adminConsolesString += ", ";
+                }
+                adminConsolesString += adminConsole.getName();
+            }
+            return adminConsolesString;
+        }
+        
+        public String getSlug(String pageParam){
+            List<String> parts = Text.split(pageParam, "/", 2);
+            if (!parts.isEmpty()){
+                return parts.get(0);
+            }
+            return "";
+        }
+        
+        public String getPage(String pageParam){
+            List<String> parts = Text.split(pageParam, "/", 2);
+            if (parts.size() > 1){
+                return parts.get(1);
+            }
+            return "";
+        }
+
+        /**
+         * Object for storing available Admin Consoles
+         * 
+         * name: Display name for the console
+         * description: Description of the functionality the console offers
+         * slug: Folder name which contains all files for this console inside the pages, partials, js, css, and images folders 
+         * page: Name of the home page file
+         */
+        public static class AdminConsole {
+            private String name;
+            private String description;
+            private String slug;
+            private String page;
+
+            public AdminConsole(String name, String description, String slug, String page){
+                this.name = name;
+                this.description = description;
+                this.slug = slug;
+                this.page = page;
+            }
+
+            public String getName(){
+                return this.name;
+            }
+
+            public String getSlug(){
+                return this.slug;
+            }
+
+            public String getPage(){
+                return this.page;
+            }
+
+            public String getDescription(){
+                return this.description;
+            }
+        }
+    }
+%>

@@ -19,10 +19,6 @@
 <%@taglib prefix="json" uri="http://kineticdata.com/taglibs/json" %>
 
 <%@include file="/WEB-INF/app/includes/task4/task4.jspf" %>
-<%@include file="SubmissionHelper.jspf"%>
-<%@include file="SetupHelper.jspf"%>
-<%@include file="FormHelper.jspf"%>
-<%@include file="CategoryHelper.jspf"%>
 
 <%-- Get bundle, space, and kapp objects --%>
 <%
@@ -31,25 +27,53 @@
     Kapp kapp = (Kapp)request.getAttribute("kapp");
 %>
 
-<%-- Define and initialize SetupAttribute helper --%>
-<%
-    SetupHelper setupHelper = new SetupHelper()
-        .addSetupAttribute("Task Server Url", 
-            "Your Kinetic Task Server Url", 
-            false)
-        .addSetupAttribute("Task Source Name", 
-            "The Kinetic Task Source Name", 
-            false); 
-%>
-
 <%-- Load helper(s) --%>
 <%
   request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
   request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
   request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
-  request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
-  request.setAttribute("CategoryHelper", new CategoryHelper());
-  request.setAttribute("SetupHelper", setupHelper);
-  request.setAttribute("FormHelper", new FormHelper());
 %>
 
+<%-- AdminHelper --%>
+<%@include file="AdminHelper.jspf"%>
+<%
+    AdminHelper adminHelper = new AdminHelper()
+        .addAdminConsole("Categories", 
+            "Interface for managing categories and subcategories.",
+            "categories", 
+            "console")
+        // The Template Console will be removed. It's in here for now to serve as an example.
+        .addAdminConsole("Templates", // Name of console.
+            "Template console description.", // Description of console.
+            "templates", // Slug: Folder name which contains all files for this console inside the pages, partials, js, css, and images folders
+            "console"); // Page: File name of the initial page to load when this console is selected from the menu.
+    request.setAttribute("AdminHelper", adminHelper);
+%>
+
+<%-- CategoryHelper --%>
+<%@include file="CategoryHelper.jspf"%>
+<%
+    request.setAttribute("CategoryHelper", new CategoryHelper());
+%>
+
+<%-- SearchHelper --%>
+<%@include file="SearchHelper.jspf"%>
+<%
+    request.setAttribute("SearchHelper", new SearchHelper());
+%>
+
+<%-- SetupHelper --%>
+<%@include file="SetupHelper.jspf"%>
+<%
+    SetupHelper setupHelper = new SetupHelper()
+        .addSetupAttribute("Exclude Console", 
+            "Specify which admin consoles should not be available.<br><b>Available values:</b> " + adminHelper.getAdminConsolesAsString(), 
+            false);
+    request.setAttribute("SetupHelper", setupHelper);
+%>
+
+<%-- SubmissionHelper --%>
+<%@include file="SubmissionHelper.jspf"%>
+<%
+    request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
+%>
