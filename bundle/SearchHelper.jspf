@@ -29,7 +29,7 @@
             // Breaks query parameter into individual words
             List<String> queryParts = Arrays.asList(query.trim().toLowerCase().split(" "));
             // Create a TreeSet of WeightedForms to store results. It will be automatically sorted by weight.
-            Set<WeightedForm> results = new TreeSet<WeightedForm>();
+            List<WeightedForm> results = new ArrayList<WeightedForm>();
             // Iterate through the forms
             for (Form form : forms) {
                 // Calculate weight of the form
@@ -50,25 +50,25 @@
                 }
                 // If weight is 0, at least one query part wasn't matched anywhere, so we ignore the form
             }
-            // Turns results Set into a list
-            List<WeightedForm> resultsList = new ArrayList<WeightedForm>(results);
+            // Sort results
+            Collections.sort(results);
             
             // If offset is invalid, set to zero
             if (offset < 0){
                 offset = 0;
             }
             // If offset is after the last result, return empty list
-            if (offset >= resultsList.size()){
+            if (offset >= results.size()){
                 return new ArrayList<WeightedForm>();
             }
             // Set pageEnd initially to end of list
-            int pageEnd = resultsList.size();
+            int pageEnd = results.size();
             // If pageSize is valid and offset + pageSize <= size of results list, set new pageEnd
-            if (pageSize > 0 && (offset + pageSize) <= resultsList.size()){
+            if (pageSize > 0 && (offset + pageSize) <= results.size()){
                 pageEnd = offset + pageSize;
             }
             // Return a sublist of WeightedForm objects stored in resultsList
-            return resultsList.subList(offset, pageEnd);
+            return results.subList(offset, pageEnd);
         }
         
         /**
@@ -120,15 +120,15 @@
             public double getWeight() {
                 return this.weight;
             }
-    
+            
             public int compareTo(WeightedForm that) {
                 return ComparisonChain.start()
                         // Compare by weight, highest first
                         .compare(that.weight, this.weight, Ordering.natural().nullsLast())
                         // Compare by form name second, alphabetically
-                        .compare(this.getForm().getName(), that.getForm().getName(), Ordering.natural().nullsLast())
+                        .compare(this.getForm().getName().toLowerCase(), that.getForm().getName().toLowerCase(), Ordering.natural().nullsLast())
                         // Compare by form slug third, alphabetically
-                        .compare(this.getForm().getSlug(), that.getForm().getSlug(), Ordering.natural().nullsLast())
+                        .compare(this.getForm().getSlug().toLowerCase(), that.getForm().getSlug().toLowerCase(), Ordering.natural().nullsLast())
                         .result();
             }
         }
@@ -140,9 +140,10 @@
             
             // Base weights assigned to matched terms in order of importance by where they're found first
             public static final int[] WEIGHT_LEVEL = {13, 8, 5, 3, 2, 1};
-            // Modifier for increasing the weight of a matched term if it is matched mutliple times
+            // Modifiers for increasing the weight of a matched term if it is matched mutliple times
             public static final double MULTI_MATCH_MODIFIER = 1.03;
-            
+            public static final double MULTI_MATCH_LOWER_MODIFIER = 1.003;
+                    
             /**
              * Returns the calculated weight, or 0 if not all search terms are matched
              *
@@ -159,9 +160,10 @@
              */
             public static double weigh(List<String> terms, List<String>... searchable){
                 // Create a double array for keeping track of which terms are found where, and how many times
-                // matchCount[termIter][0] = level found
+                // matchCount[termIter][0] = level where term is first found
                 // matchCount[termIter][1] = matches found in above level
-                int[][] matchCount = new int[terms.size()][2];
+                // matchCount[termIter][2] = matches found in all remaining levels
+                int[][] matchCount = new int[terms.size()][3];
                 
                 // Iterate through all terms
                 for (int termIter = 0; termIter < terms.size(); termIter++){
@@ -172,21 +174,24 @@
                         if (searchable[level] == null){ continue; }
                         // Iterate through each String in the current level
                         for (String phrase: searchable[level]){
-                            // Count and store the number of matches
+                            // Count and store the number of matches in current level
                             matches += countMatches(phrase, terms.get(termIter));
                         }
-                        // If this term has been matched in the current level
-                        if (matches > 0){
-                            // Store the level it was found in and the number of times it was matched
+                        // If this term has been matched in the current level for the first time, set level and matches count at that level
+                        if (matchCount[termIter][1] <= 0 && matches > 0){
                             matchCount[termIter][0] = level;
                             matchCount[termIter][1] = matches;
-                            // We don't need to check any further levels because we already foudn this term, so break and go to next term
-                            break;
+                            // Reset matches to keep track of lower level matches
+                            matches = 0;
                         }
                     }
                     // If no matches were found for any single term, return a weight of 0 since this record doesn't match the search query
-                    if (matches == 0){
+                    if (matchCount[termIter][1] <= 0){
                         return 0;
+                    }
+                    // Set number of matches at lower levels
+                    else {
+                        matchCount[termIter][2] = matches;
                     }
                 }
                 
@@ -197,10 +202,11 @@
                 for (int i = 0; i < matchCount.length; i++){
                     // Get the base weight for the term from the WEIGHT_LEVEL array based on which level the term was first found in
                     int baseWeight = matchCount[i][0] < WEIGHT_LEVEL.length ? WEIGHT_LEVEL[matchCount[i][0]] : WEIGHT_LEVEL[WEIGHT_LEVEL.length-1];
-                    // Calculate the modifier for the base weight based on the number of times the term was matched
+                    // Calculate the modifiers for the base weight based on the number of times the term was matched
                     double modifier = Math.pow(MULTI_MATCH_MODIFIER, (double)(matchCount[i][1] - 1));
-                    // Multiple base weight by the modifier, and add the result to the weight
-                    weight += baseWeight * modifier;
+                    double lowerModifier = Math.pow(MULTI_MATCH_LOWER_MODIFIER, (double)(matchCount[i][2]));
+                    // Multiple base weight by the modifiers, and add the result to the weight
+                    weight += baseWeight * modifier * lowerModifier;
                 }
                 
                 // Return the weight

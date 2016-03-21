@@ -1,4 +1,3 @@
-
 $(function() {    
     // Make list sortable
     $( ".sortable" ).sortable({
@@ -11,14 +10,14 @@ $(function() {
         dropOnEmpty: true,
         placeholder: "ui-sortable-placeholder",
         receive: function( event, ui ) {
-            var kapp = $('ul.kapp-select li.active').attr('data-slug');
+            var kapp = $('div.manage-categories').attr('data-slug');
             if(lastUpdated != undefined && lastUpdated.length == 0){
                 lastUpdated = $(ui.item).attr('name');
                 updateCategory(kapp,ui.item);
             }
         },
         update: function( event, ui ) {
-            var kapp = $('ul.kapp-select li.active').attr('data-slug');
+            var kapp = $('div.manage-categories').attr('data-slug');
             if(lastUpdated != undefined && lastUpdated.length == 0){
                 lastUpdated = $(ui.item).attr('name');
                 updateCategory(kapp,ui.item);
@@ -53,7 +52,7 @@ $(function() {
     // Add click event to submit edit
     $('button#update-category').on('click', function(){
         // Get the kapp name
-        var kapp = $('ul.kapp-select li.active').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $(this).closest('li').attr('data-id');
+        var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $(this).closest('li').attr('data-id');
         // Check for special characters in name
         if(/^[a-zA-Z0-9- ]*$/.test(name) == false) {
             alert('Your search string contains illegal characters.');
@@ -91,7 +90,7 @@ $(function() {
 
     // Add button event to add root cats
     $('div.add-root button').on('click', function(){
-        var kapp = $('ul.kapp-select li.active').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val();
+        var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val();
         // Check for special characters in name
         if(/^[a-zA-Z0-9- ]*$/.test(name) == false) {
             alert('Your search string contains illegal characters.');

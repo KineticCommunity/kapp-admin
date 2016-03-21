@@ -34,6 +34,22 @@
   request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
 %>
 
+<%-- AdminHelper --%>
+<%@include file="AdminHelper.jspf"%>
+<%
+    AdminHelper adminHelper = new AdminHelper()
+        .addAdminConsole("Categories", 
+            "Interface for managing categories and subcategories.",
+            "categories", 
+            "console")
+        // The Template Console will be removed. It's in here for now to serve as an example.
+        .addAdminConsole("Templates", // Name of console.
+            "Template console description.", // Description of console.
+            "templates", // Slug: Folder name which contains all files for this console inside the pages, partials, js, css, and images folders
+            "console"); // Page: File name of the initial page to load when this console is selected from the menu.
+    request.setAttribute("AdminHelper", adminHelper);
+%>
+
 <%-- CategoryHelper --%>
 <%@include file="CategoryHelper.jspf"%>
 <%
@@ -49,7 +65,10 @@
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%
-    SetupHelper setupHelper = new SetupHelper();
+    SetupHelper setupHelper = new SetupHelper()
+        .addSetupAttribute("Exclude Console", 
+            "Specify which admin consoles should not be available.<br><b>Available values:</b> " + adminHelper.getAdminConsolesAsString(), 
+            false);
     request.setAttribute("SetupHelper", setupHelper);
 %>
 

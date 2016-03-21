@@ -24,6 +24,7 @@
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.min.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js"/>
+            <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
         <bundle:yield name="head"/>
@@ -44,7 +45,7 @@
                                 <div class="col-xs-12 tab-content">
                                     <div class="row">
                                         <div class="col-xs-12 content-main">
-                                            <bundle:yield name="content"/>
+                                            <bundle:yield/>
                                         </div>
                                     </div>
                                 </div>
@@ -68,7 +69,7 @@
                                 <div class="col-xs-10 tab-content">
                                     <div class="row">
                                         <div class="col-xs-12 content-main">
-                                            <bundle:yield name="content"/>
+                                            <bundle:yield/>
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +81,7 @@
                                 <div class="col-xs-10 tab-content">
                                     <div class="row">
                                         <div class="col-xs-9 content-main">
-                                            <bundle:yield name="content"/>
+                                            <bundle:yield/>
                                         </div>
                                         <div class="col-xs-3 sidebar pull-right">
                                             <bundle:yield name="aside"/>
