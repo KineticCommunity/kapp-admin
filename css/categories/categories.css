@@ -1,50 +1,73 @@
-/* Edit Icon */
-i.edit{
-    margin-left: 5px;
-    cursor: pointer;
-}
-i.target {
-    height: 50px;
-    padding: 5px;
-    line-height: 35px;
-    color: #C0C0C0;
-}
-li strong {
-    height: 25px;
-    margin-bottom: 10px;
+
+button.btn.btn-xs.edit {
+    margin-left: 10px;
 }
 ul.sortable.top{
     background-color: transparent;
 }
-.empty-ul{
-    height: 25px;
-}
+
 ul.sortable{
     width: auto;
     list-style-type: none;
     min-height: 5px;
+    padding: 5px 0 0 25px;
 }
 div.workarea ul li {
     cursor: move;
+    padding: 5px 0 2px;
 }
 i.add-root {
     cursor:pointer;
     margin-bottom: 5px;
 }
 div.workarea{
-    border: 1px solid #d3d3d3;
-    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    background-color: #f4f4f6;
     margin-top: 20px;
     padding: 10px;
-}
-div.tab-content{
-    margin-top: 20px;
 }
 ul.top {
     padding-left: 10px;
 }
+span.category{
+    border: 1px solid #ddd;
+    padding: 10px 10px 12px;
+    background-color: white;
+}
+ul.subcategories.sortable.ui-sortable {
+    margin-top: 10px;
+}
+ul.subcategories.sortable.ui-sortable li {
+    border-left: 1px solid #ddd;
+    z-index: 4000;
+}
+
+ul.subcategories.sortable.ui-sortable li:before {
+    content: "--";
+    color: #ddd;
+}
+ul.subcategories.sortable.ui-sortable li:last-child{
+    border-left: none;
+    position: relative;
+}
+ul.subcategories.sortable.ui-sortable li:last-child:after{
+    content:""; 
+    background: #ddd; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 15px; 
+    width: 1px;
+}
 .ui-sortable-placeholder {
-    border: 3px dashed #aaa;
-    height: 25px;
+    border: 2px dashed #aaa!important;
+    height: 35px;
     width: 300px;
+}
+div.change-form {
+    margin-top: 10px;
+    overflow: hidden;
+}
+button#update-category {
+    margin-top: 5px;
 }

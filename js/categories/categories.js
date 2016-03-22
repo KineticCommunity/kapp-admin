@@ -1,24 +1,28 @@
 $(function() {    
-    // Make list sortable
+
+    /* Using jQuery ui sortable widget */
     $( ".sortable" ).sortable({
         connectWith: ".sortable",
         items: "li",
         cursor: "move",
         forceHelperSize: true,
         scroll: true,
-        tolerance: "intersect",
         dropOnEmpty: true,
         placeholder: "ui-sortable-placeholder",
         receive: function( event, ui ) {
+            // Get kapp slug
             var kapp = $('div.manage-categories').attr('data-slug');
-            if(lastUpdated != undefined && lastUpdated.length == 0){
+            // The call can be made multiple times (receive and change) so check if we aren't already submitting a change
+            if(lastUpdated != undefined && lastUpdated.length === 0){
                 lastUpdated = $(ui.item).attr('name');
                 updateCategory(kapp,ui.item);
             }
         },
         update: function( event, ui ) {
+            // Get kapp slug
             var kapp = $('div.manage-categories').attr('data-slug');
-            if(lastUpdated != undefined && lastUpdated.length == 0){
+            // The call can be made multiple times (receive and change) so check if we aren't already submitting a change
+            if(lastUpdated != undefined && lastUpdated.length === 0){
                 lastUpdated = $(ui.item).attr('name');
                 updateCategory(kapp,ui.item);
             }
@@ -39,14 +43,23 @@ $(function() {
     });
 
     // Add click event to edit category
-    $('i.edit').on('click', function(){
-        $(this).toggleClass('fa-pencil fa-close');
-        if($(this).hasClass('fa-close')){
+    $('button.edit').on('click', function(){
+        // "Close" all currently open except for this one
+        $('div.workarea i.fa-close').not($(this).children('i')).toggleClass('fa-pencil fa-close').parent().toggleClass('btn-success btn-danger');
+        // Do we have the edit icon?
+        if($(this).children('i').hasClass('fa-pencil')){
             // Add the update form into the li
             $('div.change-form').insertAfter($(this).parent());
+            // Update form to hold the current values
+            $('#change-name').val($(this).closest('li').attr('data-id')); 
+            $('#change-display').val($(this).closest('li').attr('data-display'));
         } else {
+            // Move form back to hidden div
             $('div.change-form').appendTo('div.change-name');
         }
+        // Update button
+        $(this).children('i').toggleClass('fa-pencil fa-close');
+        $(this).toggleClass('btn-success btn-danger');
     });
 
     // Add click event to submit edit
@@ -54,12 +67,12 @@ $(function() {
         // Get the kapp name
         var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $(this).closest('li').attr('data-id');
         // Check for special characters in name
-        if(/^[a-zA-Z0-9- ]*$/.test(name) == false) {
+        if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
             alert('Your search string contains illegal characters.');
             return false;
         }
         // check if category already exists
-        if($(this).closest('li').attr('data-id') != name && $('li[data-id="' + name + '"]').length > 0){
+        if($(this).closest('li').attr('data-id') !== name && $('li[data-id="' + name + '"]').length > 0){
             alert('A catagory with that name already exists.');
             return false;
         }
@@ -69,21 +82,19 @@ $(function() {
             "data-display":displayName
         });
         // Update the display
-        $(this).parent().siblings('strong').text(displayName != '' ? displayName : name).append(" ").append( 
-                    $('<i>').addClass('fa fa-pencil edit').on('click', function(){
-                        $(this).toggleClass('fa-pencil fa-close');
-                        if($(this).hasClass('fa-close')){
-                            // Add the update form into the li
-                            $('div.change-form').insertAfter($(this).parent());
-                        } else {
-                            $('div.change-form').appendTo('div.change-name');
-                        }
-                    })
-                );
+        $(this).parent().siblings('strong').text(displayName !== '' ? displayName : name).append(" ").append( 
+            $('<i>').addClass('fa fa-pencil edit').on('click', function(){
+                $(this).toggleClass('fa-pencil fa-close');
+                if($(this).hasClass('fa-close')){
+                    // Add the update form into the li
+                    $('div.change-form').insertAfter($(this).parent());
+                } else {
+                    $('div.change-form').appendTo('div.change-name');
+                }
+            })
+        );
+        // Update the category via API
         updateCategory(kapp,li,undefined,undefined,originalCat);
-        // Empty out the form fields
-        $('#change-name').val(''); 
-        $('#change-display').val('');
         // Move form back to hidden div
         $(this).closest('div').appendTo('div.change-name');
     });
@@ -92,7 +103,7 @@ $(function() {
     $('div.add-root button').on('click', function(){
         var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val();
         // Check for special characters in name
-        if(/^[a-zA-Z0-9- ]*$/.test(name) == false) {
+        if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
             alert('Your search string contains illegal characters.');
             return false;
         }
@@ -115,6 +126,9 @@ $(function() {
         if(displayName.length > 0){
             $('li[data-id="'+name+'"]').attr('data-display',displayName);
         }
+        // Empty out the form fields
+        $('#category-name').val(''); 
+        $('#display-nam').val('');
     });
 
  });
@@ -134,7 +148,7 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
     else {
         payload = '{"name": "' + categoryName + '"}';
     }
-
+    // Ajax call to api
     $.ajax({
         method: 'POST',
         url: url,
@@ -142,7 +156,7 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
         data: payload,
         contentType: "application/json",
         error: function(jqXHR){
-
+            alert('There was an error creating the category.');
         }
     });
 }
@@ -191,23 +205,34 @@ function updateCategory(kapp,obj,siblings,stopSiblings, originalCategory) {
         data: payload,
         contentType: "application/json"
     }).done(function(){
-        // clear our the lastUpdated
+        // clear our the lastUpdated so we know we are done and can do the next
         lastUpdated = '';
         // Check if we need to skip siblings
         if(!stopSiblings){
             // Update siblings to correct duplicate sort numbers
             if(siblings != undefined){
+                // We have a siblings array so set stop to false
                 var stop = false;
+                // Grab the first item which is the sibling we are going to update
                 var item = siblings[0];
+                // If this is the last sibling set the stop
                 if(siblings.length === 1) {stop = true;}
+                // Remove the sibling we are using
                 siblings.splice(0,1);
+                // Pass current sibling remaining siblings or stop if last one
                 updateCategory(kapp,$(item),siblings,stop);
             }
             else {
+                // We don't have siblings yet, so try for siblings
                 var item = $(obj).siblings()[0];
                 $(obj).siblings().splice(0,1);
-                updateCategory(kapp,$(item),$(obj).siblings());
+                if(item != "undefined"){
+                    updateCategory(kapp,$(item),$(obj).siblings());
+                }
             }
         }
     });
+    // Empty out the form fields
+    $('#change-name').val(''); 
+    $('#change-display').val('');
 }

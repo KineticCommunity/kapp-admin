@@ -20,9 +20,9 @@
     </bundle:variable>
     
     <!-- Includes the top tabbed navigation. Remove if not needed. -->
-    <bundle:variable name="navbar">
-        <c:import url="${bundle.path}/partials/templates/navbar.jsp" charEncoding="UTF-8"/>
-    </bundle:variable>
+    <!--bundle:variable name="navbar"-->
+        <!--c:import url="${bundle.path}/partials/templates/navbar.jsp" charEncoding="UTF-8"/-->
+    <!--/bundle:variable-->
     
     <!-- Includes the sidebar navigation (Kapp navigation by default). Remove if not needed. -->
     <bundle:variable name="sidebar">
