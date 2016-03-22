@@ -11,9 +11,6 @@
             <li class="${text.equals(param.page, 'templates/console') ? 'active' : ''}">
                 <a href="${bundle.kappLocation}?page=templates/console">Home</a>
             </li>
-            <li class="${text.equals(param.page, 'templates/pagetwo') ? 'active' : ''}">
-                <a href="${bundle.kappLocation}?page=templates/pagetwo">Page Two</a>
-            </li>
         </ul>
     </div>
 </section>

@@ -16,13 +16,13 @@
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
         <title>Admin Console<c:if test="${text.isNotEmpty(currentConsole.name)}"> | ${currentConsole.name}</c:if></title>
-        <c:import url="${bundle.path}/partials/templates/head.jsp" charEncoding="UTF-8"/>
+        <c:import url="${bundle.path}/partials/${currentConsole.slug}/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
     
     <!-- Includes the top tabbed navigation. Remove if not needed. -->
-    <!--bundle:variable name="navbar"-->
-        <!--c:import url="${bundle.path}/partials/templates/navbar.jsp" charEncoding="UTF-8"/-->
-    <!--/bundle:variable-->
+    <bundle:variable name="navbar">
+        <c:import url="${bundle.path}/partials/${currentConsole.slug}/navbar.jsp" charEncoding="UTF-8"/>
+    </bundle:variable>
     
     <!-- Includes the sidebar navigation (Kapp navigation by default). Remove if not needed. -->
     <bundle:variable name="sidebar">
