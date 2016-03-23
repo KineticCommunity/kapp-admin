@@ -25,13 +25,14 @@
     Bundle bundle = (Bundle)request.getAttribute("bundle"); 
     Space space = (Space)request.getAttribute("space");
     Kapp kapp = (Kapp)request.getAttribute("kapp");
+    Identity identity = (Identity)request.getAttribute("identity");
 %>
 
 <%-- Load helper(s) --%>
 <%
-  request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
-  request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
-  request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
+    request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
+    request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
+    request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
 %>
 
 <%-- SetupHelper --%>
