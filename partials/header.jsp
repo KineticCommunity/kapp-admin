@@ -11,18 +11,18 @@
                 <span class="fa fa-caret-down"></span>
             </a>
             <ul class="kapp-list dropdown-menu"> 
-                <li class="dropdown-header">Admin Consoles</li>
-                <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles(kapp)}">
-                    <li><a href="${bundle.kappLocation}?page=${console.slug}/${console.page}">${console.name}</a></li>
-                </c:forEach>
-                <li class="divider "></li>
                 <li><a href="${bundle.kappLocation}"><span class="fa fa-home"></span> Home</a></li>
+                <li class="divider "></li>
+                <c:forEach var="kapp" items="${space.kapps}">
+                    <li><a href="${bundle.kappLocation}?page=${currentConsole.slug}/${currentConsole.page}&kapp=${kapp.slug}">${kapp.name}</a></li>
+                </c:forEach>
             </ul> 
         </div>
     </div>
     
-    <c:set var="currentConsole" value="${AdminHelper.getCurrentAdminConsole(param.page)}" scope="request"/>
-    <h2 class="kapp-title">Admin Console<c:if test="${text.isNotEmpty(currentConsole.name)}"> | ${currentConsole.name}</c:if></h2>
+    <h2 class="kapp-title">
+        Admin Console <if test="${not empty currentKapp}"><small> ${currentKapp.name}</small></if>
+    </h2>
     
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">

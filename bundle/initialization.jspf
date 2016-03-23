@@ -34,10 +34,17 @@
   request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
 %>
 
+<%-- SetupHelper --%>
+<%@include file="SetupHelper.jspf"%>
+<%
+    SetupHelper setupHelper = new SetupHelper();
+    request.setAttribute("SetupHelper", setupHelper);
+%>
+
 <%-- AdminHelper --%>
 <%@include file="AdminHelper.jspf"%>
 <%
-    AdminHelper adminHelper = new AdminHelper()
+    AdminHelper adminHelper = new AdminHelper(kapp)
         .addAdminConsole("Categories", 
             "Interface for managing categories and subcategories.",
             "categories", 
@@ -48,6 +55,11 @@
             "templates", // Slug: Folder name which contains all files for this console inside the pages, partials, js, css, and images folders
             "console"); // Page: File name of the initial page to load when this console is selected from the menu.
     request.setAttribute("AdminHelper", adminHelper);
+
+    // Add Setup Attributes used by the AdminHelper
+    setupHelper.addSetupAttribute("Exclude Console", 
+            "Specify which admin consoles should not be available.<br><b>Available values:</b> " + adminHelper.getAdminConsolesAsString(), 
+            false);
 %>
 
 <%-- CategoryHelper --%>
@@ -60,16 +72,6 @@
 <%@include file="SearchHelper.jspf"%>
 <%
     request.setAttribute("SearchHelper", new SearchHelper());
-%>
-
-<%-- SetupHelper --%>
-<%@include file="SetupHelper.jspf"%>
-<%
-    SetupHelper setupHelper = new SetupHelper()
-        .addSetupAttribute("Exclude Console", 
-            "Specify which admin consoles should not be available.<br><b>Available values:</b> " + adminHelper.getAdminConsolesAsString(), 
-            false);
-    request.setAttribute("SetupHelper", setupHelper);
 %>
 
 <%-- SubmissionHelper --%>

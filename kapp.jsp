@@ -9,7 +9,7 @@
     
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1">
-            <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles(kapp)}">
+            <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles()}">
                 <div class="col-xs-12">
                     <div class="bs-callout bs-callout-info">
                         <h4><a href="${bundle.kappLocation}?page=${console.slug}/${console.page}">${console.name}</a></h4>

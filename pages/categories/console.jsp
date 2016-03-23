@@ -2,16 +2,8 @@
 <%@include file="../../bundle/initialization.jspf" %>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <!-- Set currentConsole (AdminConsole) and currentKapp (Kapp) for later use in building the page. -->
+    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
     <c:set var="currentConsole" value="${AdminHelper.getCurrentAdminConsole(param.page)}" scope="request"/>
-    <c:choose>
-        <c:when test="${empty space.getKapp(param.kapp) && not empty space.kapps}">
-            <c:set var="currentKapp" value="${space.kapps[0]}" scope="request"/>
-        </c:when>
-        <c:otherwise>
-            <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
-        </c:otherwise>
-    </c:choose>
     
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
@@ -19,15 +11,10 @@
         <c:import url="${bundle.path}/partials/${currentConsole.slug}/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
     
-    <!-- Includes the sidebar navigation (Kapp navigation by default). Remove if not needed. -->
-    <bundle:variable name="sidebar">
-        <c:import url="${bundle.path}/partials/sidebarKapps.jsp" charEncoding="UTF-8"/>
-    </bundle:variable>
-    
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>${currentKapp.name}</h3>
+        <h3>${currentConsole.name}</h3>
     </div>
     
     <div class="manage-categories" data-slug="${currentKapp.slug}">            

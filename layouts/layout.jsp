@@ -31,65 +31,48 @@
     </head>
     <body>
         <div class="task-wrapper">
+            <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
+            <c:set var="currentConsole" value="${AdminHelper.getCurrentAdminConsole(param.page)}" scope="request"/>
+            <c:set var="aside"><bundle:yield name="aside"/></c:set>
             <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
-            
-            <bundle:yield name="navbar"/>
             
             <section class="content">
                 <div class="container-fluid main-inner">
                     <div class="row">
-                        <c:set var="sidebar"><bundle:yield name="sidebar"/></c:set>
-                        <c:set var="aside"><bundle:yield name="aside"/></c:set>
-                        <c:choose>
-                            <c:when test="${Text.isBlank(sidebar) && Text.isBlank(aside)}">
+                        <c:if test="${Text.isNotBlank(param.kapp)}">
+                            <div class="col-xs-2 sidebar">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles()}">
+                                        <li class="${console.slug eq currentConsole.slug ? 'active' : ''}">
+                                            <a href="${bundle.kappLocation}?page=${console.slug}/${console.page}&kapp=${currentKapp.slug}">${console.name}</a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                        </c:if>
+                        <div class="${Text.isBlank(param.kapp) ? 'col-xs-12' : 'col-xs-10'} tab-content">
+                            <div class="row">
                                 <div class="col-xs-12 tab-content">
                                     <div class="row">
-                                        <div class="col-xs-12 content-main">
-                                            <bundle:yield/>
-                                        </div>
+                                        <c:choose>
+                                            <c:when test="${Text.isNotBlank(aside)}">
+                                                <div class="col-xs-9 content-main">
+                                                    <bundle:yield/>
+                                                </div>
+                                                <div class="col-xs-3 sidebar pull-right">
+                                                    <bundle:yield name="aside"/>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="col-xs-12 content-main">
+                                                    <bundle:yield/>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
-                            </c:when>
-                            <c:when test="${Text.isBlank(sidebar)}">
-                                <div class="col-xs-12 tab-content">
-                                    <div class="row">
-                                        <div class="col-xs-9 content-main">
-                                            <bundle:yield name="content"/>
-                                        </div>
-                                        <div class="col-xs-3 sidebar pull-right">
-                                            <bundle:yield name="aside"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:when test="${Text.isBlank(aside)}">
-                                <div class="col-xs-2 sidebar">
-                                    <bundle:yield name="sidebar"/>
-                                </div>
-                                <div class="col-xs-10 tab-content">
-                                    <div class="row">
-                                        <div class="col-xs-12 content-main">
-                                            <bundle:yield/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="col-xs-2 sidebar">
-                                    <bundle:yield name="sidebar"/>
-                                </div>
-                                <div class="col-xs-10 tab-content">
-                                    <div class="row">
-                                        <div class="col-xs-9 content-main">
-                                            <bundle:yield/>
-                                        </div>
-                                        <div class="col-xs-3 sidebar pull-right">
-                                            <bundle:yield name="aside"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -2,9 +2,12 @@
 <%!
     public static class AdminHelper {
 
+        private Kapp kapp;
         private List<AdminConsole> adminConsoles = new ArrayList<AdminConsole>();
 
-        public AdminHelper(){}
+        public AdminHelper(Kapp kapp){
+            this.kapp = kapp;
+        }
 
         /**
          * Adds a new setup attribute
@@ -18,10 +21,10 @@
             return this.adminConsoles;
         }
         
-        public List<AdminConsole> getActiveAdminConsoles(Kapp kapp){
+        public List<AdminConsole> getActiveAdminConsoles(){
             List<AdminConsole> activeAdminConsoles = new ArrayList<AdminConsole>();
             for (AdminConsole adminConsole : this.adminConsoles){
-                if (!kapp.hasAttributeValue("Exclude Console", adminConsole.getName())){
+                if (!this.kapp.hasAttributeValue("Exclude Console", adminConsole.getName())){
                     activeAdminConsoles.add(adminConsole);
                 }
             }
@@ -29,13 +32,14 @@
         }
         
         public AdminConsole getCurrentAdminConsole(String pageParam){
+            List<AdminConsole> activeAdminConsoles = getActiveAdminConsoles();
             String slug = getSlug(pageParam);
-            for (AdminConsole adminConsole : this.adminConsoles){
+            for (AdminConsole adminConsole : adminConsoles){
                 if (Text.equals(adminConsole.getSlug(), slug)){
                     return adminConsole;
                 }
             }
-            return new AdminConsole(Text.titlelize(slug), "", slug, getPage(pageParam));
+            return !activeAdminConsoles.isEmpty() ? activeAdminConsoles.get(0) : null;
         }
         
         public String getAdminConsolesAsString(){
