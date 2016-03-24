@@ -7,13 +7,22 @@
         <title>Admin Console</title>
     </bundle:variable>
     
+    <br/>
+    
     <div class="row">
-        <div class="col-xs-10 col-xs-offset-1">
+        <div class="col-xs-8 col-xs-offset-2">
             <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles()}">
-                <div class="col-xs-12">
-                    <div class="bs-callout bs-callout-info">
-                        <h4><a href="${bundle.kappLocation}?page=${console.slug}/${console.page}">${console.name}</a></h4>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>${console.name}</h3>
+                    </div>
+                    <div class="panel-body">
                         <p>${console.description}</p>
+                    </div>
+                    <div class="panel-footer">
+                        <c:forEach var="kapp" items="${space.kapps}">
+                            <a href="${bundle.kappLocation}?page=${console.slug}/${console.page}&kapp=${kapp.slug}"><input type="button" class="btn btn-primary" value="${kapp.name}"></a>
+                        </c:forEach>
                     </div>
                 </div>
             </c:forEach>
