@@ -1,21 +1,15 @@
 ## Overview
 This bundle implements various Admin Consoles which offer functionality for maintaining data not available (or is more difficult) in the Request Management Console.
 
-It includes the following Admin Console:
+It includes the following Admin Consoles:
 
-* Attributes: Manage attributes, including the ability to add complex JSON attributes.
 * Categories: Manage categories and subcategories.
-* Message Templates: Manage email templates.
-* Translations: Manage multi-lingual translations.
 
 ## Personalization
 This bundle easily allows for minor personalization by including optional attributes in your KAPP, Form and/or Categories.
 
-#### Setup Initialization
-This base bundle has _Required Attributes_ that utilizes Kinetic Task. To edit or add Required Attributes, you define and initialize attribute's in the intilialization.jspf. You can view this Kapp configuration by viewing the passing the parameter in the url, i.e. (http://localhost:8080/kinetic/kappName?partial=setup).
-
 #### KAPP Attributes
-* _Exclude Console_ : Specify consoles that should not be available.
+* _Exclude Console_ : Specify consoles that should not be available. Value must be the console name.
 
 ## Customization
 When you customize this bundle it is a good idea to fork it on your own git server to track your customizations and merge in any code changes we make to the default.
@@ -27,8 +21,7 @@ To add a new console, complete the following steps. In the examples, we will be 
 
 #####1. Define the new console in `/bundle/initialization.jspf`
 ```
-AdminHelper adminHelper = new AdminHelper() // This line will already exist
-    .addAdminConsole("Categories", // Name
+adminHelper.addAdminConsole("Categories", // Name
         "Manages categories and subcategories.", // Description
         "categories", // Slug 
         "console"); // Home Page 
@@ -56,28 +49,11 @@ The **Home Page** is the name of a file inside the _slug_ subfolder of the _page
   /*partials*
     /*categories*: Create this folder.
       /*head.jsp*: Create a copy of _/partials/templates/head.jsp_
-      /*navbar.jsp*: Create a copy of _/partials/templates/navbar.jsp_
 ```
 
 #####3. Update the newly created _head.jsp_ file to point to the correct CSS and JavaScript files for your new console.
 
-#####4. Update the newly created _navbar.jsp_ file to point to the correct pages for your new console.
-```
-<li class="${text.equals(param.page, 'templates/console') ? 'active' : ''}">
-    <a href="${bundle.kappLocation}?page=templates/console">Home</a>
-</li>
-```
-######_should be changed to:_
-```
-<li class="${text.equals(param.page, 'categories/console') ? 'active' : ''}">
-    <a href="${bundle.kappLocation}?page=categories/console">Home</a>
-</li>
-```
-
-#####5. The _console.jsp_ file also uses the _/partials/sidebarKapps.jsp_ file to build a list of links for each Kapp in the left sidebar. 
-######You can customize this sidebar by creating a _sidebar.jsp_ file in your _/partials_ folder and updating _console.jsp_ to point to the new file instead.
-
-#####6. You are done! You can modify _console.jsp_ to change the content of your console page and include/delete code necessary to show/remove the different levels of navigation. 
+#####4. You are done! You can modify _console.jsp_ to change the content of your console page and include/delete code necessary to show/remove the different levels of navigation. 
 ###### Go to your Admin Console and open your new console from the dropdown menu in the top left!
 
 ## Structure
@@ -98,7 +74,6 @@ This default bundle uses our standard directory structure.  Bundles are complete
     /*console-slug*: Individual page content views specific to the console with slug _console-slug_ go here.
   /*partials*: These are view snippets that get used in the top-layer JSP views.
     /*console-slug*: View snippets specific to the console with slug _console-slug_ go here.
-    /*sidebarKapps.jsp*: Partial which loads links to all Kapps into the lefthand sidebar when used.
   /*confirmation.jsp*: The default confirmation page on form submits.
   /*form.jsp*: The default form JSP wrapper.
   /*kapp.jsp*: This is the Admin Console home page. It lists all available consoles with their descriptions.
