@@ -1,47 +1,32 @@
-
-button.btn.btn-xs.edit {
-    margin-left: 10px;
+/* Work Area */
+div.workarea{
+    border: 1px solid #ddd;
+    background-color: #f4f4f6;
+    padding: 10px;
 }
-ul.sortable.top{
-    background-color: transparent;
-}
 
+/* Sortable Lists */
 ul.sortable{
+    background-color: transparent;
     width: auto;
     list-style-type: none;
     min-height: 5px;
-    padding: 5px 0 0 25px;
+    padding: 0 0 0 30px;
 }
+
+/* List Items (Category Display) */
 div.workarea ul li {
     cursor: move;
     padding: 5px 0 2px;
 }
-i.add-root {
-    cursor:pointer;
-    margin-bottom: 5px;
-}
-div.workarea{
-    border: 1px solid #ddd;
-    background-color: #f4f4f6;
-    margin-top: 20px;
-    padding: 10px;
-}
-ul.top {
-    padding-left: 10px;
-}
-span.category{
-    border: 1px solid #ddd;
-    padding: 10px 10px 12px;
-    background-color: white;
-}
-ul.subcategories.sortable.ui-sortable {
-    margin-top: 10px;
+div.category-action {
+    display: none;
+    float: right;
 }
 ul.subcategories.sortable.ui-sortable li {
     border-left: 1px solid #ddd;
     z-index: 4000;
 }
-
 ul.subcategories.sortable.ui-sortable li:before {
     content: "--";
     color: #ddd;
@@ -56,14 +41,26 @@ ul.subcategories.sortable.ui-sortable li:last-child:after{
     position: absolute; 
     top: 0; 
     left: 0; 
-    height: 15px; 
+    height: 30px; 
     width: 1px;
 }
-.ui-sortable-placeholder {
-    border: 2px dashed #aaa!important;
-    height: 35px;
-    width: 300px;
+div.category{
+    border: 1px solid #ddd;
+    padding: 10px 10px 12px;
+    background-color: white;
+    width: 200px;
+    display: inline-block;
 }
+
+div.category div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 150px;
+    display: inline-block;
+}
+
+/* New and Update forms */
 div.change-form {
     margin-top: 10px;
     overflow: hidden;
@@ -71,3 +68,20 @@ div.change-form {
 button#update-category {
     margin-top: 5px;
 }
+
+
+/* jQuery Sortable Overrides */
+.ui-sortable-placeholder {
+    border: 2px dashed #aaa!important;
+    height: 35px;
+    width: 300px;
+}
+
+
+ul.top {
+    padding-left: 5px;
+}
+
+
+
+

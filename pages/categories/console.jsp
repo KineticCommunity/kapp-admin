@@ -17,79 +17,82 @@
         <h3>${currentConsole.name}</h3>
     </div>
     
-    <div class="manage-categories" data-slug="${currentKapp.slug}">            
-        <i class="fa fa-plus add-root"> Add a category</i>
+    <div class="manage-categories col-sm-8" data-slug="${currentKapp.slug}">            
         <div class="workarea content-view-wrapper">
             <div class="pages-panel">
                 <%-- For each of the categories --%>
                 <ul class="sortable top">
-                <!--li class="untrack">&nbsp;</li-->
                 <c:forEach items="${CategoryHelper.getCategories(currentKapp)}" var="category">
-                    <%-- If the category is not hidden, and it contains at least 1 form --%>
-                    <c:if test="${fn:toLowerCase(category.getAttribute('Hidden').value) ne 'true'}">
-                        <li data-id="${category.getName()}" data-display="${category.getDisplayName()}">
-                            <span class="category">
-                                ${text.escape(category.getDisplayName())}
-                                <button class="btn btn-xs btn-default edit">
-                                    <i class="fa fa-inverse fa-pencil"></i>
-                                </button>
-                            </span>
-                            
-                            <ul class="subcategories sortable">
-                                <!--i class="target">Drop here to add a sub-category</i-->
-                                <%-- Recursive Subcatgegories --%>
-                                <c:set scope="request" var="thisCat" value="${category}"/>
-                                <c:import url="${bundle.path}/partials/categories/subCategoryLi.jsp" charEncoding="UTF-8" />
-                            </ul>
-                        </li>
-                    </c:if>
+                    <li data-id="${category.getName()}" data-display="${category.getDisplayName()}">
+                        <div class="category">
+                            ${text.escape(category.getDisplayName())}
+                            <button class="btn btn-xs btn-danger delete pull-right" style="display: none;">
+                                <i class="fa fa-inverse fa-close"></i>
+                            </button>
+                        </div>
+                        <ul class="subcategories sortable">
+                            <%-- Recursive Subcatgegories --%>
+                            <c:set scope="request" var="thisCat" value="${category}"/>
+                            <c:import url="${bundle.path}/partials/categories/subCategoryLi.jsp" charEncoding="UTF-8" />
+                        </ul>
+                    </li>
                 </c:forEach>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="add-root row" style="display: none">
-        <div class="form-group">
-            <div class="col-sm-4">
-                <label class="">Category Name/Slug</label>
-                <input name="category-name" placeholder="Category Name" id="category-name" class="form-control"> 
+    <div class="col-sm-4">
+        <form>
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default" heading="Add Category" id="panel-add-cat">
+                    <div class="panel-heading">
+                        <div class="panel-title add-category">
+                            Add Category
+                        </div>
+                        <div class="" id="add-category">
+                            <div class="panel-body">
+                                <div>
+                                    <div class="form-group add-root"> 
+                                        <div class="form-group">
+                                            <input type='hidden' id='parent-name'>
+                                            <label for="category-name" class="control-label">Category Name/Slug</label>
+                                            <input name="category-name" placeholder="Category Name" id="category-name" class="form-control"> 
+                                            <label for="display-name" class="control-label">Display Name</label>
+                                            <input placeholder="Display Name" id="display-name"  class="form-control"> 
+                                            <button class="btn btn-success btn-sm add-category">Add Category</button>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" heading="Edit Category" id="panel-edit-cat" style="display: none;">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            Edit Category
+                        </div>
+                        <div class="panel-collapse collapse" id="edit-category">
+                            <div class="panel-body">
+                                <div>
+                                    <div class="form-group add-root"> 
+                                        <div class="form-group">
+                                            <label for="category-name" class="control-label">Category Name/Slug</label>
+                                            <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
+                                            <label for="display-name" class="control-label">Display Name</label>
+                                            <input placeholder="Display Name" id="change-display"  class="form-control"> 
+                                            <button class="btn btn-success btn-sm edit-category">Save</button>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <label class="">Display Name</label>
-                <input placeholder="Display Name" id="display-name"  class="form-control"> 
-            </div>
-            <div class="col-sm-4">
-                <button class="btn btn-success btn-sm">Add Category</button>
-            </div>
-        </div>
+        </form>
     </div>
-    <div class="change-name" style="display: none">
-        <div class="change-form">
-            <div class="col-sm-6">
-                <label class="">Category Name</label>
-                <input name="change-name" placeholder="Category Name" id="change-name" class="form-control">
-            </div>
-            <div class="col-sm-6">
-                <label class="">Display Name</label>
-                <input placeholder="Display Name" id="change-display" class="form-control">
-            </div>
-            <div class="col-sm-12">
-                <button class="btn btn-success" id="update-category">Update Category</button>
-            </div>
-        </div>
-    </div>
-
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
     <!-- Includes right sidebar. Remove if not needed. -->
-    <bundle:variable name="aside">
-        <h3>TITLE</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute 
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
-            pariatur.
-        </p>
-    </bundle:variable>
-    
+
 </bundle:layout>

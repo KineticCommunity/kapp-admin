@@ -29,69 +29,71 @@ $(function() {
         }
     }).disableSelection();
 
-
-    // Add click event to add categories
-    $('i.add-root').on('click', function(){
-        //toggle plus minus
-        $(this).toggleClass('fa-plus fa-minus');
-        if($('div.add-root').is(":visible")){
-            $('div.add-root').slideUp('slow')
+    /* Add click event to edit category */
+    $('div.category, div.category>div').on('click', function(){
+        // hide all delete buttons
+        $('button.delete').hide();
+        // show this delete button
+        $(this).find('button.delete').show();
+        // Update edit form to hold the current values
+        $('input#change-name').val($(this).parent().attr('data-id')); 
+        $('input#change-display').val($(this).parent().attr('data-display'));
+        // Show Edit form
+        $('div[heading="Edit Category"]').show();
+        // Close edit accordion
+        if($('#edit-category').is(':visible')){
+            // It's open so close it
+            $('#edit-category').hide();
         }
-        else{
-            $('div.add-root').insertAfter($(this)).slideDown('slow');
+        $('#edit-category').slideDown('fast');
+        // Change title on Add Category to Add Sub Category
+        $('div.panel-title.add-category').text('Add Subcategory');
+        // Add parent
+        $('input#parent-name').val($(this).parent().attr('data-id'));
+    });
+
+    /* Close edit if click outside the category */
+    $(document).mouseup(function (event){
+        var container = $("div.category, #accordion");
+        if (!container.is(event.target) // if the target of the click isn't the container...
+            && container.has(event.target).length === 0) // ... nor a descendant of the container
+        {
+            // Hide edit category form
+            $('div[heading="Edit Category"]').hide();
+            // hide all delete buttons
+            $('button.delete').hide();
+            // Change title to Add Category 
+            $('div.panel-title.add-category').text('Add Category');
         }
     });
 
-    // Add click event to edit category
-    $('button.edit').on('click', function(){
-        // "Close" all currently open except for this one
-        $('div.workarea i.fa-close').not($(this).children('i')).toggleClass('fa-pencil fa-close').parent().toggleClass('btn-success btn-danger');
-        // Do we have the edit icon?
-        if($(this).children('i').hasClass('fa-pencil')){
-            // Add the update form into the li
-            $('div.change-form').insertAfter($(this).parent());
-            // Update form to hold the current values
-            $('#change-name').val($(this).closest('li').attr('data-id')); 
-            $('#change-display').val($(this).closest('li').attr('data-display'));
-        } else {
-            // Move form back to hidden div
-            $('div.change-form').appendTo('div.change-name');
-        }
-        // Update button
-        $(this).children('i').toggleClass('fa-pencil fa-close');
-        $(this).toggleClass('btn-success btn-danger');
-    });
-
-    // Add click event to submit edit
-    $('button#update-category').on('click', function(){
+    /* Add click event to submit edit */
+    $('button.edit-category').on('click', function(){
+        event.preventDefault();
         // Get the kapp name
-        var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $(this).closest('li').attr('data-id');
+        var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $('input#parent-name').val();
         // Check for special characters in name
         if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
             alert('Your search string contains illegal characters.');
             return false;
         }
         // check if category already exists
-        if($(this).closest('li').attr('data-id') !== name && $('li[data-id="' + name + '"]').length > 0){
+        if($('li[data-id="' + name + '"]').length > 0 && $('input#parent-name').val() !== name){
             alert('A catagory with that name already exists.');
             return false;
         }
         // Update the li
-        var li = $(this).closest('li').attr({
+        var li = $('li[data-id="'+originalCat+'"]').attr({
             "data-id": name,
             "data-display":displayName
         });
         // Update the display
-        $(this).parent().siblings('strong').text(displayName !== '' ? displayName : name).append(" ").append( 
-            $('<i>').addClass('fa fa-pencil edit').on('click', function(){
-                $(this).toggleClass('fa-pencil fa-close');
-                if($(this).hasClass('fa-close')){
-                    // Add the update form into the li
-                    $('div.change-form').insertAfter($(this).parent());
-                } else {
-                    $('div.change-form').appendTo('div.change-name');
-                }
-            })
+        $('li[data-id="'+name+'"] div.category').text(displayName !== '' ? displayName : name).append(" ").append( 
+            $('<button>').addClass('btn btn-xs btn-danger delete pull-right').on('click', function(){
+                deleteCategory(name);
+            }).append(
+                $('<i>').addClass('fa fa-inverse fa-close')
+            )
         );
         // Update the category via API
         updateCategory(kapp,li,undefined,undefined,originalCat);
@@ -99,36 +101,22 @@ $(function() {
         $(this).closest('div').appendTo('div.change-name');
     });
 
-    // Add button event to add root cats
-    $('div.add-root button').on('click', function(){
-        var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val();
+    /* Add button event to add cats */
+    $('button.add-category').on('click', function(event){
+        event.preventDefault();
+        var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val(), parent = $('input#parent-name').val();
         // Check for special characters in name
         if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
             alert('Your search string contains illegal characters.');
             return false;
         }
-        // check if category already exists
+        // check if category already exists and is not this item
         if( $('li[data-id="' + name + '"]').length > 0){
             alert('A catagory with that name already exists.');
             return false;
         }
-        // If it's new create the category
-        createCategory(kapp,name,displayName);
-        // Update display
-        $('div.workarea ul.top').append(
-            $('<li>').attr('data-id',name).append(
-                $('<strong>').text(displayName != '' ? displayName : name).append(
-                    $('<i>').addClass('fa fa-pencil')
-                ),
-                $('<ul>').addClass('subcategories sortable')
-            )
-        );
-        if(displayName.length > 0){
-            $('li[data-id="'+name+'"]').attr('data-display',displayName);
-        }
-        // Empty out the form fields
-        $('#category-name').val(''); 
-        $('#display-nam').val('');
+        // Create the category
+        createCategory(kapp,name,displayName,undefined, parent);
     });
 
  });
@@ -140,9 +128,17 @@ var lastUpdated = '';
 function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
     // URL for api
     var url = bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categories', payload;
-    // Check for display name if so, add attributes
-    if(displayName.length > 0){
-        payload = '{"attributes": [{ "name":"Display Name","values":["' + displayName + '"]}], "name": "' + categoryName + '"}';
+    // Check for display name or parent if so, add attributes
+    if(displayName.length > 0 || parent.length > 0){
+        var attributes = "";
+        if(displayName != undefined && displayName.length > 0) { 
+            attributes = attributes + '{"name":"Display Name","values": ["' + displayName + '"]},';
+        }
+        if(parent != undefined && parent.length > 0) { 
+            attributes = attributes + '{"name":"Parent","values": ["' + parent + '"]},';
+        }
+
+        payload = '{"attributes": [' + attributes.substring(0,attributes.length-1) + '], "name": "' + categoryName + '"}';
         url = url + '?include=attributes';
     }
     else {
@@ -155,6 +151,41 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
         dataType: "json",
         data: payload,
         contentType: "application/json",
+        success: function(){
+            // Update display
+            // hide all delete buttons
+            $('button.delete').hide();
+            // Build up category li
+            var cat = $('<li>').attr({
+                    'data-id':categoryName,
+                    'display-name': displayName
+                    }).append(
+                        $('<div>').addClass('category').append(
+                            $('<button>').addClass("btn btn-xs btn-danger delete pull-right").append(
+                                $('<i>').addClass("fa fa-inverse fa-close")
+                            )
+                        ).prepend(displayName != '' ? displayName : categoryName)
+                    );
+            var subcatUl = $('<ul>').addClass('subcategories sortable')
+            // Add new category to workspace
+            // Is this a subcategory?
+            if(parent.length > 0){
+                $('li[data-id="'+parent+'"] ul').append(cat,subcatUl);
+            }
+            else {
+                $('div.workarea ul.top').append(cat,subcatUl);
+                cat.focus();
+            }
+            // Empty out the form fields
+            $('#category-name').val(''); 
+            $('#display-name').val('');
+            $('#parent-name').val('');
+            // Update the sort order and siblings
+            var kapp = $('div.manage-categories').attr('data-slug');
+            var li = $('li[data-id="'+categoryName+'"]');
+            var siblings = li.siblings();
+            updateCategory(kapp,li,siblings);
+        },
         error: function(jqXHR){
             alert('There was an error creating the category.');
         }
