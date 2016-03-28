@@ -90,13 +90,13 @@ $(function() {
         // Update the display
         $('li[data-id="'+name+'"] div.category').text(displayName !== '' ? displayName : name).append(" ").append( 
             $('<button>').addClass('btn btn-xs btn-danger delete pull-right').on('click', function(){
-                deleteCategory(name);
+                deleteCategory($('div.manage-categories').attr('data-slug'),name);
             }).append(
                 $('<i>').addClass('fa fa-inverse fa-close')
             )
         );
         // Update the category via API
-        updateCategory(kapp,li,undefined,undefined,originalCat);
+        updateCategory(kapp,li,undefined,originalCat);
         // Move form back to hidden div
         $(this).closest('div').appendTo('div.change-name');
     });
@@ -119,11 +119,16 @@ $(function() {
         createCategory(kapp,name,displayName,undefined, parent);
     });
 
+    /* Add click event to submit edit */
+    $('button.delete').on('click', function(){
+        var name = $(this).closest('li').attr('data-id');
+        deleteCategory($('div.manage-categories').attr('data-slug'),name);
+    });
+
  });
 
 // Global variable to check so we don't send the same api call multiple times
 var lastUpdated = '';
-
 // Create a new category with api call
 function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
     // URL for api
@@ -156,7 +161,7 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
             // hide all delete buttons
             $('button.delete').hide();
             // Build up category li
-            var cat = $('<li>').attr({
+            var cat = $('<li>').addClass('ui-sortable-handle').attr({
                     'data-id':categoryName,
                     'display-name': displayName
                     }).append(
@@ -164,18 +169,19 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
                             $('<button>').addClass("btn btn-xs btn-danger delete pull-right").append(
                                 $('<i>').addClass("fa fa-inverse fa-close")
                             )
-                        ).prepend(displayName != '' ? displayName : categoryName)
+                        ).prepend(displayName != '' ? displayName : categoryName),
+                        $('<ul>').addClass('subcategories sortable ui-sortable')
                     );
-            var subcatUl = $('<ul>').addClass('subcategories sortable')
             // Add new category to workspace
             // Is this a subcategory?
             if(parent.length > 0){
-                $('li[data-id="'+parent+'"] ul').append(cat,subcatUl);
+                $('li[data-id="'+parent+'"]>ul').append(cat);
             }
             else {
-                $('div.workarea ul.top').append(cat,subcatUl);
+                $('div.workarea ul.top').append(cat);
                 cat.focus();
             }
+            $('ul.sortable').sortable();
             // Empty out the form fields
             $('#category-name').val(''); 
             $('#display-name').val('');
@@ -183,8 +189,7 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
             // Update the sort order and siblings
             var kapp = $('div.manage-categories').attr('data-slug');
             var li = $('li[data-id="'+categoryName+'"]');
-            var siblings = li.siblings();
-            updateCategory(kapp,li,siblings);
+            updateCategory(kapp,li);
         },
         error: function(jqXHR){
             alert('There was an error creating the category.');
@@ -192,8 +197,13 @@ function createCategory(kapp, categoryName, displayName, sortOrder, parent) {
     });
 }
 
+// Create siblings array
+var siblingsArray = [];
 // Update a current category
-function updateCategory(kapp,obj,siblings,stopSiblings, originalCategory) {
+function updateCategory(kapp,obj,stopSiblings, originalCategory) {
+    if(siblingsArray.length === 0){
+        siblingsArray = $(obj).siblings();
+    }
     var category, categoryName = $(obj).attr('data-id');
     // Check if originalCategory is defined. This will contain the 
     // category name to update because we can update the category name.
@@ -238,32 +248,58 @@ function updateCategory(kapp,obj,siblings,stopSiblings, originalCategory) {
     }).done(function(){
         // clear our the lastUpdated so we know we are done and can do the next
         lastUpdated = '';
-        // Check if we need to skip siblings
+        // Check if we shoudl update siblings
         if(!stopSiblings){
-            // Update siblings to correct duplicate sort numbers
-            if(siblings != undefined){
-                // We have a siblings array so set stop to false
-                var stop = false;
-                // Grab the first item which is the sibling we are going to update
-                var item = siblings[0];
-                // If this is the last sibling set the stop
-                if(siblings.length === 1) {stop = true;}
-                // Remove the sibling we are using
-                siblings.splice(0,1);
-                // Pass current sibling remaining siblings or stop if last one
-                updateCategory(kapp,$(item),siblings,stop);
-            }
-            else {
-                // We don't have siblings yet, so try for siblings
-                var item = $(obj).siblings()[0];
-                $(obj).siblings().splice(0,1);
-                if(item != "undefined"){
-                    updateCategory(kapp,$(item),$(obj).siblings());
-                }
-            }
+            // If this is the last sibling set the stop
+            if(siblingsArray.length === 1) {stopSiblings = true;}
+            var item = siblingsArray[0];
+            siblingsArray.splice(0,1);
+            updateCategory(kapp,$(item),stopSiblings);
         }
     });
+    $('ul.sortable').sortable();
     // Empty out the form fields
     $('#change-name').val(''); 
     $('#change-display').val('');
 }
+
+// Create an array for storing all items to delete
+var deleleteArray = [];
+// Delete category
+function deleteCategory(kapp,categoryName,noConfirm) {
+    if(deleleteArray.length === 0){
+        deleleteArray = $('li[data-id="' + categoryName + '"').find('li');
+    }
+    if(noConfirm){
+        deleteCat(kapp,categoryName);
+    }
+    else {
+        if(confirm('Do you want to delete this category? It will also delete all children.')){
+            deleteCat(kapp,categoryName);
+        }
+    }
+    function deleteCat(kapp,categoryName){
+        payload = '{"name": "' + categoryName + '"}';
+        // URL for api
+        var url = bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categories/' + categoryName, payload;
+        // Update via api
+        $.ajax({
+            method: 'DELETE',
+            url: url,
+            dataType: "json",
+            data: payload,
+            contentType: "application/json"
+        }).done(function(){
+            $('li[data-id="' + categoryName + '"]').remove();
+            // Delete children
+            if(deleleteArray.length > 0){
+                deleteCategory(kapp,$(deleleteArray[0]).attr('data-id'),true);
+                deleleteArray.splice(0,1);
+            }
+        })
+    }
+}
+
+
+
+
