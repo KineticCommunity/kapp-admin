@@ -31,6 +31,10 @@ $(function() {
 
     /* Add click event to edit category */
     $('div.category, div.category>div').on('click', function(){
+        // Remove selected class from others
+        $('div.category.selected').removeClass('selected');
+        // Add selected class
+        $(this).closest('div.category').addClass('selected');
         // hide all delete buttons
         $('button.delete').hide();
         // show this delete button
@@ -58,6 +62,8 @@ $(function() {
         if (!container.is(event.target) // if the target of the click isn't the container...
             && container.has(event.target).length === 0) // ... nor a descendant of the container
         {
+            // Remove selected class
+            $('div.category.selected').removeClass('selected');
             // Hide edit category form
             $('div[heading="Edit Category"]').hide();
             // hide all delete buttons

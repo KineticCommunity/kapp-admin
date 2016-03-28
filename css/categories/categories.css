@@ -52,6 +52,11 @@ div.category{
     display: inline-block;
 }
 
+div.category.selected {
+    border: 1px solid #00427e;
+    background-color: #e4f2ff;
+}
+
 div.category div {
     overflow: hidden;
     text-overflow: ellipsis;
