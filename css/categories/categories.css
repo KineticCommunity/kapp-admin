@@ -46,10 +46,11 @@ ul.subcategories.sortable.ui-sortable li:last-child:after{
 }
 div.category{
     border: 1px solid #ddd;
-    padding: 10px 10px 12px;
+    padding: 8px 9px;
     background-color: white;
     width: 200px;
     display: inline-block;
+    height: 40px;
 }
 
 div.category.selected {
@@ -87,6 +88,18 @@ ul.top {
     padding-left: 5px;
 }
 
+/* modal z-index fix*/
+div.kd-modal-content {
+    z-index: 4500;
+    width: 300px !important;
+}
+div.kd-modal-backdrop {
+    z-index: 4200;
+}
+div.kd-modal-footer {
+    overflow: hidden;
+    min-height: 200px;
+}
 
 
 

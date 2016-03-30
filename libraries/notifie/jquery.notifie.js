@@ -220,7 +220,7 @@ jQuery.fn.extend({
             }
 
             // Build notification close button and attach exit event function on click
-            $("<button>").addClass('fa fa-times close').on('click', function(e){
+            $("<button>", {type: 'button'}).addClass('fa fa-times close').on('click', function(e){
                 // Close popup and call appropriate onConfirm/onReject function (which is handled by the exit event)
                 $(this).closest('.notifie').trigger('exit', false);
             }).appendTo(notification);
@@ -232,7 +232,7 @@ jQuery.fn.extend({
                 var buttons = $("<div>").addClass("notifie-buttons alert-" + options.severity).appendTo(notification);
                 
                 // Create button
-                var rejectBtn = $("<button>").addClass("btn btn-danger btn-sm pull-right reject").appendTo(buttons);
+                var rejectBtn = $("<button>", {type: 'button'}).addClass("btn btn-danger btn-sm pull-right reject").appendTo(buttons);
                 // Add dismiss/cancel button text or icon
                 if (options.textButtons) rejectBtn.addClass("text").text(options.rejectText); 
                 else rejectBtn.addClass("fa fa-times");
@@ -243,7 +243,7 @@ jQuery.fn.extend({
                 });
                 
                 // Create button
-                var confirmBtn = $("<button>").addClass("btn btn-success btn-sm pull-right confirm").appendTo(buttons);
+                var confirmBtn = $("<button>", {type: 'button'}).addClass("btn btn-success btn-sm pull-right confirm").appendTo(buttons);
                 // Add ok button text or icon
                 if (options.textButtons) confirmBtn.addClass("text").text(options.confirmText); 
                 else confirmBtn.addClass("fa fa-check");
