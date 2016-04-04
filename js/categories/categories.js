@@ -34,7 +34,7 @@
         }).disableSelection();
 
         /* Add click event to edit category */
-        $('div.category, div.category>div').on('click', function(){
+        $('div.workarea').on('click', 'div.category, div.category>div', function(){
             // Remove selected class from others
             $('div.category.selected').removeClass('selected');
             // Add selected class
@@ -74,6 +74,10 @@
                 $('button.delete').hide();
                 // Change title to Add Category 
                 $('div.panel-title.add-category').text('Add Category');
+                // Empty out the form fields
+                $('#category-name').val(''); 
+                $('#display-name').val('');
+                $('#parent-name').val('');
             }
         });
 
@@ -99,9 +103,7 @@
             });
             // Update the display
             $('div.category.selected').text(displayName !== '' ? displayName : name).append(" ").append( 
-                $('<button>').addClass('btn btn-xs btn-danger delete pull-right').on('click', function(){
-                    deleteCategory($('div.manage-categories').attr('data-slug'),name);
-                }).append(
+                $('<button>').addClass('btn btn-xs btn-danger delete pull-right').append(
                     $('<i>').addClass('fa fa-inverse fa-close')
                 )
             );
@@ -129,8 +131,8 @@
             createCategory(kapp,name,displayName,undefined, parent);
         });
 
-        /* Add click event to submit edit */
-        $('button.delete').on('click', function(event){
+        /* Add click event to delte category */
+        $('div.workarea').on('click', 'button.delete', function(event){
             event.stopImmediatePropagation();
             var name = $(this).closest('li').attr('data-id');
             deleteCategory($('div.manage-categories').attr('data-slug'),name);
@@ -306,7 +308,6 @@
                                 actions.dismiss();
                             })
                         );
-                        console.log(element);
                     },
                     backdrop: true,
                     backdropclose: true,
@@ -328,6 +329,7 @@
                 data: payload,
                 contentType: "application/json"
             }).done(function(){
+                $('#parent-name').val('');
                 $('li[data-id="' + categoryName + '"]').remove();
                 // Delete children
                 if(deleleteArray.length > 0){
