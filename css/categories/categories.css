@@ -16,7 +16,6 @@ ul.sortable{
 
 /* List Items (Category Display) */
 div.workarea ul li {
-    cursor: move;
     padding: 5px 0 2px;
 }
 div.category-action {
@@ -51,6 +50,7 @@ div.category{
     width: 200px;
     display: inline-block;
     height: 40px;
+    cursor: move;
 }
 
 div.category.selected {

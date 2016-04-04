@@ -12,6 +12,8 @@
             forceHelperSize: true,
             scroll: true,
             dropOnEmpty: true,
+            handle: "div.category",
+            cursor: "move",
             placeholder: "ui-sortable-placeholder",
             receive: function( event, ui ) {
                 // Get kapp slug
@@ -19,7 +21,7 @@
                 // The call can be made multiple times (receive and change) so check if we aren't already submitting a change
                 if(lastUpdated != undefined && lastUpdated.length === 0){
                     lastUpdated = $(ui.item).attr('name');
-                    updateCategory(kapp,ui.item);
+                    updateCategory(kapp,ui.item,undefined,undefined,false);
                 }
             },
             update: function( event, ui ) {
@@ -28,13 +30,13 @@
                 // The call can be made multiple times (receive and change) so check if we aren't already submitting a change
                 if(lastUpdated != undefined && lastUpdated.length === 0){
                     lastUpdated = $(ui.item).attr('name');
-                    updateCategory(kapp,ui.item);
+                    updateCategory(kapp,ui.item,undefined,undefined,false);
                 }
             }
         }).disableSelection();
 
         /* Add click event to edit category */
-        $('div.workarea').on('click', 'div.category, div.category>div', function(){
+        $('div.workarea').on('click', 'div.category:not(".selected"), div.category>div:not(".selected")', function(){
             // Remove selected class from others
             $('div.category.selected').removeClass('selected');
             // Add selected class
@@ -66,26 +68,24 @@
             if (!container.is(event.target) // if the target of the click isn't the container...
                 && container.has(event.target).length === 0) // ... nor a descendant of the container
             {
-                // Remove selected class
-                $('div.category.selected').removeClass('selected');
-                // Hide edit category form
-                $('div[heading="Edit Category"]').hide();
-                // hide all delete buttons
-                $('button.delete').hide();
-                // Change title to Add Category 
-                $('div.panel-title.add-category').text('Add Category');
-                // Empty out the form fields
-                $('#category-name').val(''); 
-                $('#display-name').val('');
-                $('#parent-name').val('');
+                if($('div.category.selected').length > 0){
+                    clearSelectedCategory();
+                }
             }
         });
 
         /* Add click event to submit edit */
         $('button.edit-category').on('click', function(){
+            $('div.workarea').notifie({ exit: true });
+            $('button.add-category').notifie({ exit: true });
             event.preventDefault();
             // Get the kapp name
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $('input#parent-name').val();
+            // Check if both fields are empty
+            if(name.length < 1 && displayName.length < 1) {
+                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.' });
+                return false;
+            }
             // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
                 $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.' });
@@ -108,13 +108,14 @@
                 )
             );
             // Update the category via API
-            updateCategory(kapp,li,undefined,originalCat);
-            // Move form back to hidden div
-            $(this).closest('div').appendTo('div.change-name');
+            updateCategory(kapp,li,undefined,originalCat,true);
+            clearSelectedCategory();
         });
 
         /* Add button event to add cats */
         $('button.add-category').on('click', function(event){
+            $('div.workarea').notifie({ exit: true });
+            $('button.add-category').notifie({ exit: true });
             event.preventDefault();
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val(), parent = $('input#parent-name').val();
             // Check for special characters in name
@@ -133,6 +134,8 @@
 
         /* Add click event to delte category */
         $('div.workarea').on('click', 'button.delete', function(event){
+            $('div.workarea').notifie({ exit: true });
+            $('button.add-category').notifie({ exit: true });
             event.stopImmediatePropagation();
             var name = $(this).closest('li').attr('data-id');
             deleteCategory($('div.manage-categories').attr('data-slug'),name);
@@ -206,7 +209,7 @@
                 // Update the sort order and siblings
                 var kapp = $('div.manage-categories').attr('data-slug');
                 var li = $('li[data-id="'+categoryName+'"]');
-                updateCategory(kapp,li);
+                updateCategory(kapp,li,undefined,undefined,true);
             },
             error: function(jqXHR){
                 $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error creating the category.' });
@@ -217,7 +220,7 @@
     // Create siblings array
     var siblingsArray = [];
     // Update a current category
-    function updateCategory(kapp,obj,stopSiblings, originalCategory) {
+    function updateCategory(kapp,obj,stopSiblings, originalCategory, deselectCategory) {
         if(siblingsArray.length === 0){
             siblingsArray = $(obj).siblings();
         }
@@ -271,13 +274,13 @@
                 if(siblingsArray.length === 1) {stopSiblings = true;}
                 var item = siblingsArray[0];
                 siblingsArray.splice(0,1);
-                updateCategory(kapp,$(item),stopSiblings);
+                updateCategory(kapp,$(item),stopSiblings,undefined,false);
             }
         });
         $('ul.sortable').sortable();
-        // Empty out the form fields
-        $('#change-name').val(''); 
-        $('#change-display').val('');
+        if(deselectCategory){
+            clearSelectedCategory();
+        }
     }
 
     // Create an array for storing all items to delete
@@ -340,6 +343,22 @@
         }
     }
 
+    function clearSelectedCategory(){
+        // Remove selected class
+        $('div.category.selected').removeClass('selected');
+        // Hide edit category form
+        $('div[heading="Edit Category"]').hide();
+        // hide all delete buttons
+        $('button.delete').hide();
+        // Change title to Add Category 
+        $('div.panel-title.add-category').text('Add Category');
+        // Empty out the form fields
+        $('#category-name').val(''); 
+        $('#display-name').val('');
+        $('#parent-name').val('');
+        $('#change-display').val('');
+        $('#change-name').val('');
+    }
 })(jQuery, _);
 
 
