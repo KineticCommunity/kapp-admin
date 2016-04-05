@@ -4,6 +4,58 @@
      *   This section is executed on page load to register events and otherwise manipulate the DOM.
      *--------------------------------------------------------------------------------------------*/  
     $(function() {    
+        /* Create Attribute Definitions if they don't exist */
+        // Get kapp name
+        var kapp = $('div.manage-categories').attr('data-slug');
+        // Grab attribute definitions
+        $.ajax({
+            method: 'GET',
+            url: bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categoryAttributeDefinitions',
+            dataType: "json",
+            contentType: "application/json",
+            success: function( data ){
+                // Create array to work against
+                var attributes = ['Display Name','Parent','Sort Order'];
+                // Remove each item if the definition already exists
+                $.each(data.categoryAttributeDefinitions,function(index,val){
+                    attributes = jQuery.grep(attributes, function(value) {
+                      return value != val.name;
+                    });
+                });
+                // If we have items that means definitions are needed
+                if(attributes.length > 0){
+                    // Create definitions per attribute needed
+                    createDefinition();
+                    // self calling functions if there are attributes left
+                    function createDefinition(){
+                        // Grab first definition name
+                        var definition = attributes[0];
+                        // Remove it from the 
+                        attributes.splice(0,1);
+                        // Ajax call to api to add definition
+                        $.ajax({
+                            method: 'POST',
+                            url: bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categoryAttributeDefinitions',
+                            dataType: "json",
+                            data: '{"allowsMultiple": false,"name": "'+ definition +'"}',
+                            contentType: "application/json",
+                            success: function(){
+                                // Are there more left?
+                                if(attributes.length > 0){
+                                    createDefinition();
+                                }
+                            },
+                            error: function(jqXHR){
+                                $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error creating the attribute definition.', disable: false});
+                            }
+                        });
+                    }
+                }
+            },
+            error: function(){
+                $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error checking attribute definitions.', disable: false});
+            }
+        });
         /* Using jQuery ui sortable widget */
         $( ".sortable" ).sortable({
             connectWith: ".sortable",
@@ -37,8 +89,9 @@
 
         /* Add click event to edit category */
         $('div.workarea').on('click', 'div.category:not(".selected"), div.category>div:not(".selected")', function(){
-            // Remove selected class from others
-            $('div.category.selected').removeClass('selected');
+
+            // Deselect selected
+            clearSelectedCategory();
             // Add selected class
             $(this).closest('div.category').addClass('selected');
             // hide all delete buttons
@@ -83,17 +136,17 @@
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $('input#parent-name').val();
             // Check if both fields are empty
             if(name.length < 1 && displayName.length < 1) {
-                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.' });
+                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.', disable: false });
                 return false;
             }
             // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
-                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.' });
+                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
                 return false;
             }
             // check if category already exists
             if($('li[data-id="' + name + '"]').length > 0 && $('input#parent-name').val() !== name){
-                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.' });
+                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
                 return false;
             }
             // Update the li
@@ -118,14 +171,19 @@
             $('button.add-category').notifie({ exit: true });
             event.preventDefault();
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val(), parent = $('input#parent-name').val();
+            // Check if both fields are empty
+            if(name.length < 1 && displayName.length < 1) {
+                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.', disable: false });
+                return false;
+            }
             // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
-                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.' });
+                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
                 return false;
             }
             // check if category already exists and is not this item
             if( $('li[data-id="' + name + '"]').length > 0){
-                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.' });
+                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
                 return false;
             }
             // Create the category
@@ -183,7 +241,7 @@
                 // Build up category li
                 var cat = $('<li>').addClass('ui-sortable-handle').attr({
                         'data-id':categoryName,
-                        'display-name': displayName
+                        'data-display': displayName
                         }).append(
                             $('<div>').addClass('category').append(
                                 $('<button>').addClass("btn btn-xs btn-danger delete pull-right").append(
@@ -212,7 +270,7 @@
                 updateCategory(kapp,li,undefined,undefined,true);
             },
             error: function(jqXHR){
-                $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error creating the category.' });
+                $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error creating the category.', disable: false});
             }
         });
     }
@@ -298,7 +356,7 @@
             if(confirm('Do you want to delete this category? It will also delete all children.')){
                 deleteCat(kapp,categoryName);
             }
-            // Build the modal.
+            // Build the modal. - Waiting on updated core code.
             /*modal = new KD.Modal({
                     header: '<h3>Confirm Delete</h3>',
                     body: 'Do you want to delete this category? It will also delete all children.',
