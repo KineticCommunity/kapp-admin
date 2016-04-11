@@ -73,10 +73,10 @@ section.page {
       &[data-button-type='save']{
         position: relative;
         padding-left: 2.8rem;
-        background-color: tint($grayLight, -10%);
+        background-color: tint($gray, -10%);
         color: black;
         &:hover {
-          background-color: $grayLight;
+          background-color: $gray;
         }
       }
       &[data-button-type='save']:before {
@@ -93,11 +93,11 @@ section.page {
       }
       
       &[data-button-type='custom']{
-        background-color: $white;
-        border-color: $grayLight;
+        background-color: $gray;
+        border-color: $gray;
         color: black;
         &:hover {
-          background-color: tint($white, 5%);
+          background-color: tint($gray, 5%);
         }
       }
     }
