@@ -7,7 +7,7 @@
     </bundle:variable>
     <section class="page" data-page="${page.name}">
         <div class="page-header">
-            <h1>${text.escape(form.name)} Blah</h1>
+            <h3>${text.escape(form.name)}</h3>
         </div>
         <c:if test="${param.review != null && pages.size() > 1}">
             <c:import url="partials/review.jsp" charEncoding="UTF-8"></c:import>
