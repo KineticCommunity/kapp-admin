@@ -47,6 +47,24 @@ section.page {
     
     button {
       @extend .btn;
+
+      display: inline-block;
+      padding: 0.2rem 1.2rem;
+      height: 2.6rem;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      @include border-radius();
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      border: 0.1rem solid transparent;
+      -webkit-transition: all 0.15s ease-out;
+      transition: all 0.15s ease-out;
       
       &[data-button-type='previous-page']{
         position: relative;
@@ -56,6 +74,7 @@ section.page {
         &:hover {
           background-color: tint($gray, 10%);
         }
+
       }
       &[data-button-type='previous-page']:before {
         font-family: 'FontAwesome';
