@@ -166,11 +166,11 @@ section.page form button[data-button-type='previous-page']:before {
 section.page form button[data-button-type='save'] {
   position: relative;
   padding-left: 2.8rem;
-  background-color: tint(#f2f2f2, -10%);
+  background-color: tint(#b3b3b3, -10%);
   color: black;
 }
 section.page form button[data-button-type='save']:hover {
-  background-color: #f2f2f2;
+  background-color: #b3b3b3;
 }
 section.page form button[data-button-type='save']:before {
   font-family: 'FontAwesome';
@@ -185,12 +185,12 @@ section.page form button[data-button-type='save']:before {
   margin-top: -0.7rem;
 }
 section.page form button[data-button-type='custom'] {
-  background-color: #fff;
-  border-color: #f2f2f2;
+  background-color: #b3b3b3;
+  border-color: #b3b3b3;
   color: black;
 }
 section.page form button[data-button-type='custom']:hover {
-  background-color: tint(#fff, 5%);
+  background-color: tint(#b3b3b3, 5%);
 }
 section.page form .file-table {
   display: table;
