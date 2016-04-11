@@ -1,0 +1,41 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Buttons
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/* Form Button Styles
+ *-------------------------------------- */
+ 
+form button, form input[type='submit'], form input[type='button'], .btn {
+  background-color: $gray;
+  color: $black;
+  display: inline-block;
+  padding: 0.2rem 1.2rem;
+  height: 2.6rem;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  @include border-radius();
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 0.1rem solid transparent;
+  -webkit-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+  
+  &:hover {
+    background-color: tint($grayLight, 10%);
+  }
+  
+  &.round {
+    height: 5rem;
+    width: 5rem;
+    font-weight: 400;
+    font-size: 3rem;
+    border-radius: 50%;
+    padding: 0;
+  }
+}
