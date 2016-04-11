@@ -13,8 +13,14 @@
             <ul class="kapp-list dropdown-menu"> 
                 <li><a href="${bundle.kappLocation}"><span class="fa fa-home"></span> Home</a></li>
                 <li class="divider "></li>
-                <c:forEach var="kapp" items="${space.kapps}">
-                    <li><a href="${bundle.kappLocation}?page=${currentConsole.slug}/${currentConsole.page}&kapp=${kapp.slug}">${kapp.name}</a></li>
+                <c:forEach var="consoleKapp" items="${space.kapps}">
+                    <c:set var="skipKapp" value="false" />
+                    <c:forEach var="form" items="${kapp.forms}">
+                        <c:if test="${form.hasAttributeValue('Kapp Slug',consoleKapp.slug) && not skipKapp}">
+                            <li><a href="${bundle.kappLocation}?kapp=${consoleKapp.slug}">${consoleKapp.name}</a></li>
+                            <c:set var="skipKapp" value="true" />
+                        </c:if>
+                    </c:forEach>
                 </c:forEach>
             </ul> 
         </div>

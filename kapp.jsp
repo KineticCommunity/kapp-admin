@@ -10,21 +10,39 @@
     <br/>
     
     <div class="row">
-        <div class="col-xs-8 col-xs-offset-2">
-            <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles()}">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>${console.name}</h3>
+        <div class="col-xs-8 ${empty param.kapp ? 'col-xs-offset-2' : ''} ">
+            <c:set var="currentKapp" value="${empty param.kapp ? kapp : space.getKapp(param.kapp)}" />
+            <c:forEach var="form" items="${kapp.forms}">
+                <c:if test="${text.equals(form.type.name, 'Console') && form.hasAttributeValue('Kapp Slug',currentKapp.slug) }">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>${form.name}</strong>
+                        </div>
+                        <div class="panel-body">
+                            <p>${form.description}</p>
+                            <c:if test="${empty param.kapp}">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Kapp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="kapp" items="${space.kapps}">
+                                            <c:if test="${form.hasAttributeValue('Kapp Slug',kapp.slug) && empty param.kapp}">
+                                                <tr>
+                                                    <td>
+                                                        <a href="${bundle.kappLocation}/${form.slug}?kapp=${kapp.slug}">${kapp.name}</a>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:if>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <p>${console.description}</p>
-                    </div>
-                    <div class="panel-footer">
-                        <c:forEach var="kapp" items="${space.kapps}">
-                            <a href="${bundle.kappLocation}?page=${console.slug}/${console.page}&kapp=${kapp.slug}"><input type="button" class="btn btn-primary" value="${kapp.name}"></a>
-                        </c:forEach>
-                    </div>
-                </div>
+                </c:if>
             </c:forEach>
         </div>
     </div>

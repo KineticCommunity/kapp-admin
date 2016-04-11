@@ -32,30 +32,33 @@
     <body>
         <div class="task-wrapper">
             <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
-            <c:set var="currentConsole" value="${AdminHelper.getCurrentAdminConsole(param.page)}" scope="request"/>
+            <c:if test="${not empty param.page}">
+                <c:set var="currentConsole" value="${AdminHelper.getCurrentAdminConsole(param.page)}" scope="request"/>
+            </c:if>
             <c:set var="aside"><bundle:yield name="aside"/></c:set>
             <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
-            
             <section class="content">
                 <div class="container-fluid main-inner">
                     <div class="row">
-                        <c:if test="${Text.isNotBlank(param.kapp)}">
+                        <c:if test="${not empty param.kapp}">
                             <div class="col-xs-2 sidebar">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <c:forEach var="console" items="${AdminHelper.getActiveAdminConsoles()}">
-                                        <li class="${console.slug eq currentConsole.slug ? 'active' : ''}">
-                                            <a href="${bundle.kappLocation}?page=${console.slug}/${console.page}&kapp=${currentKapp.slug}">${console.name}</a>
-                                        </li>
+                                    <c:forEach var="form" items="${kapp.forms}">
+                                        <c:if test="${text.equals(form.type.name, 'Console') && form.hasAttributeValue('Kapp Slug', currentKapp.slug)}">
+                                            <li class="${form.name == page.name ? 'active' : ''}">
+                                                <a href="${bundle.kappLocation}/${form.slug}?kapp=${kapp.slug}">${form.name}</a>
+                                            </li>
+                                        </c:if>
                                     </c:forEach>
                                 </ul>
                             </div>
                         </c:if>
-                        <div class="${Text.isBlank(param.kapp) ? 'col-xs-12' : 'col-xs-10'} tab-content">
+                        <div class="${empty param.kapp ? 'col-xs-12' : 'col-xs-10'} tab-content">
                             <div class="row">
                                 <div class="col-xs-12 tab-content">
                                     <div class="row">
                                         <c:choose>
-                                            <c:when test="${Text.isNotBlank(aside)}">
+                                            <c:when test="${not empty aside}">
                                                 <div class="col-xs-9 content-main">
                                                     <bundle:yield/>
                                                 </div>

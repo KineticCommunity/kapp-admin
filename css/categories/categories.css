@@ -3,6 +3,7 @@ div.workarea{
     border: 1px solid #ddd;
     background-color: #f4f4f6;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 /* Sortable Lists */
