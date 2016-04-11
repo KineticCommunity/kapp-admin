@@ -23,43 +23,6 @@
   clear: both;
 }
 
-/* Form Button Styles
- *-------------------------------------- */
-form button, form input[type='submit'], form input[type='button'], .btn, section.page form button {
-  background-color: #b3b3b3;
-  color: #333;
-  display: inline-block;
-  padding: 0.2rem 1.2rem;
-  height: 2.6rem;
-  font-weight: 700;
-  text-align: center;
-  white-space: nowrap;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 0.1rem solid transparent;
-  -webkit-transition: all 0.15s ease-out;
-  transition: all 0.15s ease-out;
-}
-form button:hover, form input[type='submit']:hover, form input[type='button']:hover, .btn:hover, section.page form button:hover {
-  background-color: tint(#f2f2f2, 10%);
-}
-form button.round, form input[type='submit'].round, form input[type='button'].round, .btn.round, section.page form button.round {
-  height: 5rem;
-  width: 5rem;
-  font-weight: 400;
-  font-size: 3rem;
-  border-radius: 50%;
-  padding: 0;
-}
-
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -170,6 +133,15 @@ section.page form button[data-button-type='save'] {
   color: black;
 }
 section.page form button[data-button-type='save']:hover {
+  background-color: #b3b3b3;
+}
+section.page form button[data-button-type='submit-page'] {
+  position: relative;
+  padding-left: 2.8rem;
+  background-color: tint(#b3b3b3, -10%);
+  color: black;
+}
+section.page form button[data-button-type='submit-page']:hover {
   background-color: #b3b3b3;
 }
 section.page form button[data-button-type='save']:before {

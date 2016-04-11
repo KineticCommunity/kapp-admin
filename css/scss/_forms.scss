@@ -79,6 +79,15 @@ section.page {
           background-color: $gray;
         }
       }
+      &[data-button-type='submit-page']{
+        position: relative;
+        padding-left: 2.8rem;
+        background-color: tint($gray, -10%);
+        color: black;
+        &:hover {
+          background-color: $gray;
+        }
+      }
       &[data-button-type='save']:before {
         font-family: 'FontAwesome';
         font-weight: 400;
