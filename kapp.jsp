@@ -13,7 +13,7 @@
         <div class="col-xs-8 ${empty param.kapp ? 'col-xs-offset-2' : ''} ">
             <c:set var="currentKapp" value="${empty param.kapp ? kapp : space.getKapp(param.kapp)}" />
             <c:forEach var="form" items="${kapp.forms}">
-                <c:if test="${text.equals(form.type.name, 'Console') && form.hasAttributeValue('Kapp Slug',currentKapp.slug) }">
+                <c:if test="${text.equals(form.type.name, 'Console') && (not empty param.kapp  && form.hasAttributeValue('Kapp Slug',currentKapp.slug) || (empty param.kapp && form.hasAttribute('Kapp Slug')))}">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <strong>${form.name}</strong>

@@ -46,7 +46,7 @@
                                     <c:forEach var="form" items="${kapp.forms}">
                                         <c:if test="${text.equals(form.type.name, 'Console') && form.hasAttributeValue('Kapp Slug', currentKapp.slug)}">
                                             <li class="${form.name == page.name ? 'active' : ''}">
-                                                <a href="${bundle.kappLocation}/${form.slug}?kapp=${kapp.slug}">${form.name}</a>
+                                                <a href="${bundle.kappLocation}/${form.slug}?kapp=${currentKapp.slug}">${form.name}</a>
                                             </li>
                                         </c:if>
                                     </c:forEach>
