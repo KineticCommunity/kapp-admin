@@ -14,6 +14,9 @@ ul.sortable{
     min-height: 5px;
     padding: 0 0 0 30px;
 }
+div.table.no-data:not(:only-child) {
+    display: none;
+}
 
 /* List Items (Category Display) */
 div.workarea ul li {
@@ -72,7 +75,7 @@ div.change-form {
     margin-top: 10px;
     overflow: hidden;
 }
-button.add-category, button.edit-category {
+button.add-category, button.edit-category, button.add-subcategory {
     margin-top: 10px;
 }
 

@@ -56,6 +56,7 @@
                 $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error checking attribute definitions.', disable: false});
             }
         });
+    
         /* Using jQuery ui sortable widget */
         $( ".sortable" ).sortable({
             connectWith: ".sortable",
@@ -88,9 +89,7 @@
         }).disableSelection();
 
         /* Add click event to edit category */
-        $('div.workarea').on('click', 'div.category:not(".selected"), div.category>div:not(".selected")', function(){
-
-            // Deselect selected
+        $('div.workarea').on('click', 'div.category:not(".selected"), div.category>div:not(".selected")', function(event){
             clearSelectedCategory();
             // Add selected class
             $(this).closest('div.category').addClass('selected');
@@ -109,21 +108,32 @@
                 $('#edit-category').hide();
             }
             $('#edit-category').slideDown('fast');
-            // Change title on Add Category to Add Sub Category
-            $('div.panel-title.add-category').text('Add Subcategory');
             // Add parent
             $('input#parent-name').val($(this).parent().attr('data-id'));
         });
 
+        /* Click event for subcategory */
+        $('button.add-subcategory').on('click',function(){
+            event.preventDefault();
+            // Change title on Add Category to Add Sub Category
+            $('div.panel-title.add-category').text('Add Subcategory');
+            // Show Edit form
+            $('div[heading="Add Category"]').show();
+            // Close edit accordion
+            if($('#add-category').is(':visible')){
+                // It's open so close it
+                $('#add-category').hide();
+            }
+            $('#add-category').slideDown('fast');
+        })
+
         /* Close edit if click outside the category */
         $(document).mouseup(function (event){
-            var container = $("div.category, #accordion");
+            var container = $("div.category, #accordion, div.table.no-data");
             if (!container.is(event.target) // if the target of the click isn't the container...
                 && container.has(event.target).length === 0) // ... nor a descendant of the container
             {
-                if($('div.category.selected').length > 0){
-                    clearSelectedCategory();
-                }
+                clearSelectedCategory();
             }
         });
 
@@ -136,17 +146,17 @@
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $('input#parent-name').val();
             // Check if both fields are empty
             if(name.length < 1 && displayName.length < 1) {
-                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.', disable: false });
                 return false;
             }
             // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
-                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
                 return false;
             }
             // check if category already exists
             if($('li[data-id="' + name + '"]').length > 0 && $('input#parent-name').val() !== name){
-                $('button.edit-category').notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
                 return false;
             }
             // Update the li
@@ -165,32 +175,41 @@
             clearSelectedCategory();
         });
 
+        /* Click event to show add category from blank item or header button */
+        $('div.page-header button.add-category, a.add-category').on('click',function(){
+            // Deselect selected
+            clearSelectedCategory();
+            // Show Edit form
+            $('div[heading="Add Category"]').show();
+            $('#add-category').slideDown('fast');
+        });
+
         /* Add button event to add cats */
-        $('button.add-category').on('click', function(event){
+        $('div#panel-add-cat button.add-category').on('click', function(event){
             $('div.workarea').notifie({ exit: true });
             $('button.add-category').notifie({ exit: true });
             event.preventDefault();
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val(), parent = $('input#parent-name').val();
             // Check if both fields are empty
             if(name.length < 1 && displayName.length < 1) {
-                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Both fields cannot be empty.', disable: false });
                 return false;
             }
             // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
-                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
                 return false;
             }
             // check if category already exists and is not this item
             if( $('li[data-id="' + name + '"]').length > 0){
-                $('button.add-category').notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
                 return false;
             }
             // Create the category
             createCategory(kapp,name,displayName,undefined, parent);
         });
 
-        /* Add click event to delte category */
+        /* Add click event to delete category */
         $('div.workarea').on('click', 'button.delete', function(event){
             $('div.workarea').notifie({ exit: true });
             $('button.add-category').notifie({ exit: true });
@@ -268,6 +287,7 @@
                 var kapp = $('div.manage-categories').attr('data-slug');
                 var li = $('li[data-id="'+categoryName+'"]');
                 updateCategory(kapp,li,undefined,undefined,true);
+                clearSelectedCategory();
             },
             error: function(jqXHR){
                 $('div.workarea').notifie({ type: 'alert', severity: 'danger', message: 'There was an error creating the category.', disable: false});
@@ -355,6 +375,8 @@
             // Temp Confirm
             if(confirm('Do you want to delete this category? It will also delete all children.')){
                 deleteCat(kapp,categoryName);
+                // Deselect selected
+                clearSelectedCategory();
             }
             // Build the modal. - Waiting on updated core code.
             /*modal = new KD.Modal({
@@ -404,18 +426,12 @@
     function clearSelectedCategory(){
         // Remove selected class
         $('div.category.selected').removeClass('selected');
-        // Hide edit category form
-        $('div[heading="Edit Category"]').hide();
-        // hide all delete buttons
-        $('button.delete').hide();
+        // Hide edit forms, messages, and delete buttons
+        $('div[heading="Edit Category"], div[heading="Add Category"], button.delete').hide();
         // Change title to Add Category 
         $('div.panel-title.add-category').text('Add Category');
         // Empty out the form fields
-        $('#category-name').val(''); 
-        $('#display-name').val('');
-        $('#parent-name').val('');
-        $('#change-display').val('');
-        $('#change-name').val('');
+        $('#category-name, #display-name, #parent-name, #change-display, #change-name').val(''); 
     }
 })(jQuery, _);
 
