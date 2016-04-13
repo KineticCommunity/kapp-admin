@@ -32,28 +32,23 @@
     <body>
         <div class="task-wrapper">
             <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
-            <c:if test="${not empty param.page}">
-                <c:set var="currentConsole" value="${AdminHelper.getCurrentAdminConsole(param.page)}" scope="request"/>
-            </c:if>
             <c:set var="aside"><bundle:yield name="aside"/></c:set>
             <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
             <section class="content">
                 <div class="container-fluid main-inner">
                     <div class="row">
-                        <c:if test="${not empty param.kapp}">
+                        <c:if test="${not empty currentKapp}">
                             <div class="col-xs-2 sidebar">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <c:forEach var="form" items="${kapp.forms}">
-                                        <c:if test="${text.equals(form.type.name, 'Console') && form.hasAttributeValue('Kapp Slug', currentKapp.slug)}">
-                                            <li class="${form.name == page.name ? 'active' : ''}">
-                                                <a href="${bundle.kappLocation}/${form.slug}?kapp=${currentKapp.slug}">${form.name}</a>
-                                            </li>
-                                        </c:if>
+                                    <c:forEach var="console" items="${AdminHelper.getActiveConsolesForKapp(currentKapp)}">
+                                        <li class="${form.slug eq console.slug ? 'active' : ''}">
+                                            <a href="${bundle.kappLocation}/${console.slug}?kapp=${currentKapp.slug}">${console.name}</a>
+                                        </li>
                                     </c:forEach>
                                 </ul>
                             </div>
                         </c:if>
-                        <div class="${empty param.kapp ? 'col-xs-12' : 'col-xs-10'} tab-content">
+                        <div class="${empty currentKapp ? 'col-xs-12' : 'col-xs-10'} tab-content">
                             <div class="row">
                                 <div class="col-xs-12 tab-content">
                                     <div class="row">

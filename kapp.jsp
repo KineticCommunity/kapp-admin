@@ -8,42 +8,57 @@
     </bundle:variable>
     
     <br/>
+
+    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
+    <c:set var="consoles" value="${AdminHelper.getActiveConsoles()}" scope="request" />
     
     <div class="row">
-        <div class="col-xs-8 ${empty param.kapp ? 'col-xs-offset-2' : ''} ">
-            <c:set var="currentKapp" value="${empty param.kapp ? kapp : space.getKapp(param.kapp)}" />
-            <c:forEach var="form" items="${kapp.forms}">
-                <c:if test="${text.equals(form.type.name, 'Console') && (not empty param.kapp  && form.hasAttributeValue('Kapp Slug',currentKapp.slug) || (empty param.kapp && form.hasAttribute('Kapp Slug')))}">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <strong>${form.name}</strong>
-                        </div>
-                        <div class="panel-body">
-                            <p>${form.description}</p>
-                            <c:if test="${empty param.kapp}">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Kapp</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="kapp" items="${space.kapps}">
-                                            <c:if test="${form.hasAttributeValue('Kapp Slug',kapp.slug) && empty param.kapp}">
+        <div class="${empty currentKapp ? 'col-xs-8 col-xs-offset-2' : 'col-xs-10'} ">
+            <c:choose>
+                <c:when test="${empty consoles}">
+                    <div class="alert alert-info">
+                        <h4>There are no configured admin consoles<c:if test="${not empty currentKapp}"> for the ${currentKapp.name} Kapp</c:if>.</h4>
+                        <c:choose>
+                            <c:when test="${!identity.spaceAdmin}">
+                                <p>Please contact your administrator.</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>TODO: Instructions for setting up the consoles.</p>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="console" items="${AdminHelper.getActiveConsoles()}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <strong>${console.name}</strong>
+                            </div>
+                            <div class="panel-body">
+                                <p>${console.description}</p>
+                                <c:if test="${empty currentKapp}">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Kapp</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="activeKapp" items="${AdminHelper.getActiveKappsForConsole(console)}">
                                                 <tr>
                                                     <td>
-                                                        <a href="${bundle.kappLocation}/${form.slug}?kapp=${kapp.slug}">${kapp.name}</a>
+                                                        <a href="${bundle.kappLocation}/${console.slug}?kapp=${activeKapp.slug}">${activeKapp.name}</a>
                                                     </td>
                                                 </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:if>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:if>
+                            </div>
                         </div>
-                    </div>
-                </c:if>
-            </c:forEach>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </bundle:layout>

@@ -2,8 +2,8 @@
 <%@include file="../../bundle/initialization.jspf" %>
 
 <bundle:stylepack>
-    <bundle:style src="${bundle.location}/css/${currentConsole.slug}/templates.css"/>
+    <bundle:style src="${bundle.location}/css/${not empty form ? form.slug : ''}/templates.css"/>
 </bundle:stylepack>
 <bundle:scriptpack>
-    <bundle:script src="${bundle.location}/js/${currentConsole.slug}/templates.js" />
+    <bundle:script src="${bundle.location}/js/${not empty form ? form.slug : ''}/templates.js" />
 </bundle:scriptpack>

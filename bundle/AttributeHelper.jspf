@@ -1,0 +1,438 @@
+<%@page import="com.google.common.collect.ComparisonChain" %>
+<%@page import="com.google.common.collect.Ordering" %>
+<%@page import="com.google.common.primitives.Ints" %>
+<%@page import="com.kineticdata.core.models.base.ModelWithAttributes" %>
+
+<%!
+    public static class AttributeHelper {
+    
+        public AttributeHelper() {}
+        
+        /**
+         * Returns a list of all attributes (wrapped in the BundleAttribute class) for the given parent object.
+         * 
+         * @param parent Parent object from which to retrieve attributes
+         *               Accepts: Space, Kapp, Form, Category, Identity, User
+         * @return List of all attributes of the parent, as BundleAttribute objects
+         */
+        public static List<BundleAttribute> getAttributes(ModelWithAttributes parent) {
+            return Lists.transform(parent.getAttributes(), new AttributeConvertFunction());
+        }
+        
+        /**
+         * Returns the single attribute that matches the given attribute definition name.
+         *
+         * @param parent Parent object.  Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @return BundleAttribute object
+         */
+        public static BundleAttribute getAttribute(ModelWithAttributes parent, String name) {
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return new BundleAttribute(attribute);
+            }
+            return null;
+        }
+        
+        /**
+         * Returns the String value of the attribute that matches the given attribute definition name.
+         * If multiple values are found, returns the first value.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute 
+         * @return String value
+         */
+        public static String getAttributeValue(ModelWithAttributes parent, String name) {
+            return parent.getAttributeValue(name);
+        }
+        
+        /**
+         * Returns a list of String values of the attribute that matches the given attribute definition name.
+         * If attribut is singular, returns a list with a single value.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @return List<String> of values
+         */
+        public static List<String> getAttributeValues(ModelWithAttributes parent, String name) {
+            return parent.getAttributeValues(name);
+        }
+        
+        /**
+         * Returns the attribute object-value (LinkedHashMap) of the attribute that matches the given attribute definition name.
+         * If multiple values are found, returns the first value.
+         * If none are found, returns null.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute 
+         * @return LinkedHashMap value
+         */
+        public static LinkedHashMap getAttributeObjectValue(ModelWithAttributes parent, String name) {
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return (new BundleAttribute(attribute)).getObjectValue();
+            }
+            return null;
+        }
+        
+        /**
+         * Returns the attribute object-value (LinkedHashMap) of the attribute that matches the given attribute definition name and all the key-value pairs.
+         * If multiple values are found, returns the first value.
+         * If none are found, returns null.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute 
+         * @param keyValuePairs One or more KeyValuePair objects to match within the attribute object-value
+         * @return LinkedHashMap value
+         */
+        public static LinkedHashMap getAttributeObjectValue(ModelWithAttributes parent, String name, KeyValuePair... keyValuePairs) {
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return (new BundleAttribute(attribute)).getObjectValue(keyValuePairs);
+            }
+            return null;
+        }
+        
+        /**
+         * Returns a list of attribute object-values (LinkedHashMap) of the attribute that matches the given attribute definition name.
+         * If attribute is singular, returns a list with a single value.
+         * If none are found, returns an empty list.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @return List<LinkedHashMap> of values
+         */
+        public static List<LinkedHashMap> getAttributeObjectValues(ModelWithAttributes parent, String name) {
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return (new BundleAttribute(attribute)).getObjectValues();
+            }
+            return new ArrayList<LinkedHashMap>();
+        }
+        
+        /**
+         * Returns a list of attribute object-values (LinkedHashMap) of the attribute that matches the given attribute definition name and all the key-value pairs.
+         * If attribute is singular, returns a list with a single value.
+         * If none are found, returns an empty list.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @param keyValuePairs One or more KeyValuePair objects to match within the attribute object-value
+         * @return List<LinkedHashMap> of values
+         */
+        public static List<LinkedHashMap> getAttributeObjectValues(ModelWithAttributes parent, String name, KeyValuePair... keyValuePairs) {
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return (new BundleAttribute(attribute)).getObjectValues(keyValuePairs);
+            }
+            return new ArrayList<LinkedHashMap>();
+        }
+        
+        /**
+         * Returns true if (at least one) attribute value exists for the given attribute definition name.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @return true if (at least one) attribute value exists, otherwise false
+         */
+        public static boolean hasAttribute(ModelWithAttributes parent, String name){
+            return parent.hasAttribute(name);
+        }
+
+        /**
+         * Returns true if (at least one) attribute value matches the given value for the given attribute definition name.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @param value String value to check for
+         * @return true if attribute value exists with the given value, otherwise false
+         */
+        public static boolean hasAttributeValue(ModelWithAttributes parent, String name, String value){
+            return parent.hasAttributeValue(name, value);
+        }
+
+        /**
+         * Returns true if at least one attribute object-value exists.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @return true if at least one attribute object-value exists, otherwise false
+         */
+        public static boolean hasAttributeObjectValues(ModelWithAttributes parent, String name){
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return (new BundleAttribute(attribute)).hasObjectValues();
+            }
+            return false;
+        }
+
+        /**
+         * Returns true if (at least one) attribute object-value contains the key-value pair given by key and value.
+         *
+         * @param parent Parent object. Accepts: Space, Kapp, Form, Category, Identity, User
+         * @param name Definition name of the attribute
+         * @param keyValuePairs One or more KeyValuePair objects to match within the attribute object-value
+         * @return true if (at least one) attribute object-value contains all of the given key-value pairs, otherwise false
+         */
+        public static boolean hasAttributeObjectValues(ModelWithAttributes parent, String name, KeyValuePair... keyValuePairs){
+            Attribute attribute = parent.getAttribute(name);
+            if (attribute != null){
+                return (new BundleAttribute(attribute)).hasObjectValues(keyValuePairs);
+            }
+            return false;
+        }
+        
+        
+        /**
+         * Class for storing key value pairs.
+         */
+        private static class KeyValuePair {
+            private String key;
+            private Object value;
+            
+            public KeyValuePair(String key, Object value){
+                this.key = key;
+                this.value = value;
+            }
+            
+            public String getKey(){
+                return this.key;
+            }
+            
+            public Object getValue(){
+                return this.value;
+            }
+        }
+        
+        /**
+         * Helper functions that return a new KeyValuePair object with the passed in key and value params (where value is optional).
+         * To be used in JSTL calls where we can't instantiate new objects.
+         *
+         * @param key
+         * @param value 
+         */
+        public static KeyValuePair kvp(String key){ return new KeyValuePair(key, null); }
+        public static KeyValuePair kvp(String key, Object value){ return new KeyValuePair(key, value); }
+
+        /**
+         * Wrapper for the core Attribute object.
+         * Allows for JSON to be stored in attributes, and add functions to retrieve the parsed JSON as a LinkedHashMap.
+         */
+        public static class BundleAttribute implements Comparable<BundleAttribute> {
+            // Store the instance of the core Attribute object
+            private Attribute attribute;
+            // Flag to state whether this Attribute has any JSON values
+            private boolean hasObjectValues = false;
+            // List of parsed JSON values
+            private List<LinkedHashMap> objectValues = new ArrayList<>();
+
+            /**
+             * Wraps the core Attribute object and parses any JSON values it might have
+             *
+             * @param attribute Core Attribut object.
+             */
+            public BundleAttribute(Attribute attribute) { 
+                this.attribute = attribute;
+                // Parse all values into JSON
+                List<Object> jsonValues = Lists.transform(attribute.getValues(), new JsonParseFunction());
+                // If JSON values exist, add them to objectValues list
+                if (jsonValues != null && !jsonValues.isEmpty()){
+                    // Iterate through the values
+                    for (Object o : jsonValues){
+                        // If the value is of type LinkedHashMap, than it's a JSON Object
+                        if (o instanceof LinkedHashMap){
+                            // Add to objectValues list and set hasObjectValues flag to true
+                            objectValues.add((LinkedHashMap)o);
+                            this.hasObjectValues = true;
+                        }
+                    }
+                }
+            }
+            
+            // Returns the current attribute object
+            public Attribute getAttribute(){ return this.attribute; }
+            // Redefine core Attribute functions 
+            public String getName() { return this.attribute.getName(); }
+            public String getValue() { return this.attribute.getValue(); }
+            public List<String> getValues() { return this.attribute.getValues(); }
+            public boolean isMultiple() { return this.attribute.isMultiple(); }
+            public boolean isSingular() { return this.attribute.isSingular(); }
+            
+            /**
+             * Returns true if this attribute has at least one object-value
+             *
+             * @return true if object-values exist, otherwise false
+             */
+            public boolean hasObjectValues() {
+                return this.hasObjectValues;
+            }
+            
+            /**
+             * Returns true if this attribute has at least one object-value that contains all of the given key-value pairs.
+             * If value of KeyValuePair is null, checks that key exists with any value.
+             * Compares the values using the equals method of the Object's class.
+             * If no parameters passed, returns true if any object-values exist.
+             *
+             * @param keyValuePairs One or more key-value pairs to match, with the value being optional
+             * @return true if at least one object-value with all given key-value pairs exists, otherwise false
+             */
+            public boolean hasObjectValues(KeyValuePair... keyValuePairs) {
+                // If no key-values pairs passed in, return true if any object values exist, otherwise return false 
+                if (keyValuePairs == null || keyValuePairs.length == 0){
+                    return this.hasObjectValues;
+                }
+                // Name the outer loop so we can continue it from the inner loop
+                valuesLoop: 
+                // Iterate through all object-values
+                for (LinkedHashMap map : this.objectValues){
+                    // Iterate through all key-value pairs
+                    for (KeyValuePair kvp : keyValuePairs){
+                        // If value exists
+                        if (kvp.getValue() != null){
+                            // Get class value
+                            Class c = kvp.getValue().getClass();
+                            // If object-value doesn't contain key or doesn't match the key-value-pair, continue outer loop of object-values 
+                            if (map.get(kvp.getKey()) == null 
+                                    || !map.get(kvp.getKey()).getClass().equals(c) 
+                                    || !c.cast(map.get(kvp.getKey())).equals(c.cast(kvp.getValue()))){
+                                continue valuesLoop; // Match not found, skip to next object-value
+                            }
+                        }
+                        // If value doesn't exist and object-value doesn't contain the key, continue outer loop of object-values 
+                        else if (map.get(kvp.getKey()) == null) {
+                            continue valuesLoop; // Match not found, skip to next object-value
+                        }
+                    }
+                    // If all key-value pairs were matched, return true
+                    return true;
+                }
+                // Return false if all matches were not found
+                return false;
+            }
+            
+            /**
+             * Returns this attribute's object-value (LinkedHashMap).
+             * If multiple object-values found, returns the first one.
+             * If none are found, returns null.
+             *
+             * @return This attribute's object-value
+             */
+            public LinkedHashMap getObjectValue() {
+                if (this.hasObjectValues) {
+                    return this.objectValues.get(0);
+                }
+                return null;
+            }
+            
+            /**
+             * Returns this attribute's object-value (LinkedHashMap) that contains all of the given key-value pairs.
+             * If multiple object-values match, returns the first one.
+             * If none match, returns null.
+             *
+             * @param keyValuePairs One or more key-value pairs to match, with the value being optional
+             * @return This attribute's object-value
+             */
+            public LinkedHashMap getObjectValue(KeyValuePair... keyValuePairs) {
+                List<LinkedHashMap> matched = getObjectValues(keyValuePairs);
+                if (!matched.isEmpty()){
+                    return matched.get(0);
+                }
+                return null;
+            }
+            
+            /**
+             * Returns all of this attribute's object-values (LinkedHashMap).
+             * If attribute is singular, returns a list with a single object-value.
+             * If none are found, returns an empty list.
+             *
+             * @return This attribute's object-value
+             */
+            public List<LinkedHashMap> getObjectValues() {
+                if (this.hasObjectValues) {
+                    return this.objectValues;
+                }
+                return new ArrayList<LinkedHashMap>();
+            }
+            
+            /**
+             * Returns all of this attribute's object-values (LinkedHashMap) that contains all of the given key-value pairs.
+             * If none match, returns empty list.
+             *
+             * @param keyValuePairs One or more key-value pairs to match, with the value being optional
+             * @return This attribute's object-value
+             */
+            public List<LinkedHashMap> getObjectValues(KeyValuePair... keyValuePairs) {
+                ArrayList<LinkedHashMap> matched = new ArrayList<>();
+                // If no key-values pairs passed in, return all object-values if any exists, otherwise return empty list 
+                if (keyValuePairs == null || keyValuePairs.length == 0){
+                    if (this.hasObjectValues) {
+                        return this.objectValues;
+                    }
+                    return matched;
+                }
+                // Name the outer loop so we can continue it from the inner loop
+                valuesLoop: 
+                // Iterate through all object-values
+                for (LinkedHashMap map : this.objectValues){
+                    // Iterate through all key-value pairs
+                    for (KeyValuePair kvp : keyValuePairs){
+                        // If value exists
+                        if (kvp.getValue() != null){
+                            // Get class value
+                            Class c = kvp.getValue().getClass();
+                            // If object-value doesn't contain key or doesn't match the key-value-pair, continue outer loop of object-values 
+                            if (map.get(kvp.getKey()) == null 
+                                    || !map.get(kvp.getKey()).getClass().equals(c) 
+                                    || !c.cast(map.get(kvp.getKey())).equals(c.cast(kvp.getValue()))){
+                                continue valuesLoop; // Match not found, skip to next object-value
+                            }
+                        }
+                        // If value doesn't exist and object-value doesn't contain the key, continue outer loop of object-values 
+                        else if (map.get(kvp.getKey()) == null) {
+                            continue valuesLoop; // Match not found, skip to next object-value
+                        }
+                    }
+                    // If all key-value pairs were matched, add object-value to matched list
+                    matched.add(map);
+                }
+                // Return all object-values that matched
+                return matched;
+            }
+            
+            /**
+             * Compares this BundleAttribute to that BundleAttribute by name
+             */
+            public int compareTo(BundleAttribute that) {
+                // Order: Name
+                return ComparisonChain.start()
+                        .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .result();
+            }
+            
+            /**
+             * Implementation of Function interface that parses a JSON String and returns the resulting object, or null if string was not valid JSON
+             */
+            private static class JsonParseFunction implements Function<String, Object> {
+                @Override
+                public Object apply(String value) {
+                    try {
+                        return Json.parse(value);
+                    }
+                    catch (Exception e){
+                        return null;
+                    }
+                }
+            }
+        }
+        
+        /**
+         * Implementation of Function interface that maps a list of Attribute objects to a list of BundleAttribute objects
+         */
+        private static class AttributeConvertFunction implements Function<Attribute, BundleAttribute> {
+            @Override
+            public BundleAttribute apply(Attribute attribute) {
+                return new BundleAttribute(attribute);
+            }
+        }
+    }
+%>

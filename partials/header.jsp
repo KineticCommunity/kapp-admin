@@ -4,6 +4,8 @@
 
 <nav class="navbar navbar-default" role="navigation">
     
+    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
+    
     <div class="kapp-selector nav-title">
         <div class="kapp-current dropdown">
             <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
@@ -13,21 +15,15 @@
             <ul class="kapp-list dropdown-menu"> 
                 <li><a href="${bundle.kappLocation}"><span class="fa fa-home"></span> Home</a></li>
                 <li class="divider "></li>
-                <c:forEach var="consoleKapp" items="${space.kapps}">
-                    <c:set var="skipKapp" value="false" />
-                    <c:forEach var="form" items="${kapp.forms}">
-                        <c:if test="${form.hasAttributeValue('Kapp Slug',consoleKapp.slug) && not skipKapp}">
-                            <li><a href="${bundle.kappLocation}?kapp=${consoleKapp.slug}">${consoleKapp.name}</a></li>
-                            <c:set var="skipKapp" value="true" />
-                        </c:if>
-                    </c:forEach>
+                <c:forEach var="consoleKapp" items="${AdminHelper.getActiveKapps()}">
+                    <li><a href="${bundle.kappLocation}?kapp=${consoleKapp.slug}">${consoleKapp.name}</a></li>
                 </c:forEach>
             </ul> 
         </div>
     </div>
     
     <h2 class="kapp-title">
-        Admin Console <if test="${not empty currentKapp}"><small> ${currentKapp.name}</small></if>
+        Admin Console <if test="${not empty currentKapp}"><a href="${bundle.spaceLocation}/${currentKapp.slug}" target="_blank"><small> ${currentKapp.name}</small></a></if>
     </h2>
     
     <ul class="nav navbar-nav navbar-right">

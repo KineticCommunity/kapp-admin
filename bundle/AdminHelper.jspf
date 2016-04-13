@@ -1,110 +1,62 @@
 <%@page import="com.google.common.collect.ComparisonChain" %>
 <%!
     public static class AdminHelper {
-
-        private Kapp kapp;
-        private List<AdminConsole> adminConsoles = new ArrayList<AdminConsole>();
-
+    
+        private Kapp adminKapp;
+        
         public AdminHelper(Kapp kapp){
-            this.kapp = kapp;
-        }
-
-        /**
-         * Adds a new setup attribute
-         */
-        public AdminHelper addAdminConsole(String name, String description, String slug, String page){
-            this.adminConsoles.add(new AdminConsole(name, description, slug, page));
-            return this;
+            this.adminKapp = kapp;
         }
         
-        public List<AdminConsole> getAdminConsoles(){
-            return this.adminConsoles;
-        }
-        
-        public List<AdminConsole> getActiveAdminConsoles(){
-            List<AdminConsole> activeAdminConsoles = new ArrayList<AdminConsole>();
-            for (AdminConsole adminConsole : this.adminConsoles){
-                if (!this.kapp.hasAttributeValue("Exclude Console", adminConsole.getName())){
-                    activeAdminConsoles.add(adminConsole);
+        public List<Kapp> getActiveKapps(){
+            // Get all Admin Consoles
+            List<Form> consoles = adminKapp.getFormsByType("Console");
+            // Create a set of slugs for all Kapps which have at least 1 associated Sonsole
+            Set<String> activeKappSlugs = new HashSet<>();
+            for (Form console : consoles){
+                activeKappSlugs.addAll(console.getAttributeValues("Kapp Slug"));
+            }
+            // Creat and return a list of Kapps for each slug found above
+            List<Kapp> activeKapps = new ArrayList<>();
+            for (Kapp kapp : this.adminKapp.getSpace().getKapps()){
+                if (activeKappSlugs.contains(kapp.getSlug())){
+                    activeKapps.add(kapp);
                 }
             }
-            return activeAdminConsoles;
+            return activeKapps;
         }
         
-        public AdminConsole getCurrentAdminConsole(String pageParam){
-            List<AdminConsole> activeAdminConsoles = getActiveAdminConsoles();
-            String slug = getSlug(pageParam);
-            for (AdminConsole adminConsole : adminConsoles){
-                if (Text.equals(adminConsole.getSlug(), slug)){
-                    return adminConsole;
+        public List<Kapp> getActiveKappsForConsole(Form console){
+            // Get all Kapps that are associated to the given Sonsole
+            List<Kapp> activeKapps = new ArrayList<>();
+            for (Kapp kapp : this.adminKapp.getSpace().getKapps()){
+                if (console.hasAttributeValue("Kapp Slug", kapp.getSlug())){
+                    activeKapps.add(kapp);
                 }
             }
-            return !activeAdminConsoles.isEmpty() ? activeAdminConsoles.get(0) : null;
+            return activeKapps;
         }
-        
-        public String getAdminConsolesAsString(){
-            String adminConsolesString = "";
-            for (AdminConsole adminConsole : this.adminConsoles){
-                if (adminConsolesString.length() > 0){
-                    adminConsolesString += ", ";
+    
+        public List<Form> getActiveConsoles(){
+            // Filter Sonsoles to only those have are active for at least 1 Kapp
+            List<Form> activeConsoles = new ArrayList<>();
+            for (Form console : adminKapp.getFormsByType("Console")){
+                if (console.hasAttribute("Kapp Slug")){
+                    activeConsoles.add(console);
                 }
-                adminConsolesString += adminConsole.getName();
             }
-            return adminConsolesString;
+            return activeConsoles;
         }
         
-        public String getSlug(String pageParam){
-            List<String> parts = Text.split(pageParam, "/", 2);
-            if (!parts.isEmpty()){
-                return parts.get(0);
+        public List<Form> getActiveConsolesForKapp(Kapp kapp){
+            // Get all Admin Consoles that are associated to the given Kapp
+            List<Form> activeConsoles = new ArrayList<>();
+            for (Form console : adminKapp.getFormsByType("Console")){
+                if (console.hasAttributeValue("Kapp Slug", kapp.getSlug())){
+                    activeConsoles.add(console);
+                }
             }
-            return "";
-        }
-        
-        public String getPage(String pageParam){
-            List<String> parts = Text.split(pageParam, "/", 2);
-            if (parts.size() > 1){
-                return parts.get(1);
-            }
-            return "";
-        }
-
-        /**
-         * Object for storing available Admin Consoles
-         * 
-         * name: Display name for the console
-         * description: Description of the functionality the console offers
-         * slug: Folder name which contains all files for this console inside the pages, partials, js, css, and images folders 
-         * page: Name of the home page file
-         */
-        public static class AdminConsole {
-            private String name;
-            private String description;
-            private String slug;
-            private String page;
-
-            public AdminConsole(String name, String description, String slug, String page){
-                this.name = name;
-                this.description = description;
-                this.slug = slug;
-                this.page = page;
-            }
-
-            public String getName(){
-                return this.name;
-            }
-
-            public String getSlug(){
-                return this.slug;
-            }
-
-            public String getPage(){
-                return this.page;
-            }
-
-            public String getDescription(){
-                return this.description;
-            }
+            return activeConsoles;
         }
     }
 %>
