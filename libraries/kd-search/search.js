@@ -44,10 +44,31 @@ KD-Search CE
             }
 		},
     };
+	
+	var defaultsJSONDataTable = {
+        execute: performJSONDataTable,
+		resultsContainer : '<table cellspacing="0" class="table dataTable table-striped table-bordered nowrap dtr-inline">',
+		JSON: [],
+		// Properties specific to DataTables
+		paging: true,
+        info: true,
+        searching: true,
+		responsive: {
+            details: {
+                type: 'column',
+            }
+		},
+    };
     
     /* Define default properties for defaultsBridgeList object. */
     var defaultsBridgeList = {
         execute: performBridgeRequestList,
+		resultsContainer : '<div>',
+    };
+	 
+	 /* Define default properties for defaultsJSONList object. */
+    var defaultsJSONList = {
+        execute: performJSONList,
 		resultsContainer : '<div>',
     };
    
@@ -80,6 +101,18 @@ KD-Search CE
             else if(obj.type=="BridgeList"){
                 // Entend defaults into the configuration
                 obj=$.extend( {}, defaultsBridgeList, obj );
+                // Create a results element for Datatables and add to DOM
+				obj=initializeResultsContainer(obj); 
+            }
+			else if(obj.type=="JSONDataTable"){
+                // Entend defaults into the configuration
+                obj=$.extend( {}, defaultsJSONDataTable, obj );
+                // Create a results element for Datatables and add to DOM
+				obj=initializeResultsContainer(obj); 
+            }
+			else if(obj.type=="JSONList"){
+                // Entend defaults into the configuration
+                obj=$.extend( {}, defaultsJSONList, obj );
                 // Create a results element for Datatables and add to DOM
 				obj=initializeResultsContainer(obj); 
             }
@@ -257,7 +290,7 @@ KD-Search CE
 										if (attributeObject["date"] == true && typeof attributeObject["moment"] != "undefined") {
 	                                        var attributeValue = moment(record[attribute]).format(attributeObject["moment"]);
 	                                    } else {
-											var $value = $('<div/>').addClass(attributeObject['className']).html(attributeValue);
+											var $value = $('<div/>').addClass(attributeObject['className']).html(record[attribute]);
 											self.$singleResult.append($value); 
 											self.$singleResult.data(attribute,record[attribute])
 	                                    }
@@ -288,7 +321,148 @@ KD-Search CE
             }); 
     }
  
-    
+    	
+    /**
+     * Used to execute objects configured as JSONDataTable
+     */
+     function performJSONDataTable(){
+		var configObj = this;
+		if(configObj.before){configObj.before();};
+		convertDataToColumns(configObj);
+
+		configObj.dataArray = [];
+		configObj.response=configObj.JSON;
+		if($(configObj.response).size() > 0 || !configObj.success_empty){
+			// Execute success callback
+			if(configObj.success){configObj.success();}
+			// Only one record returned
+			if(typeof configObj.processSingleResult != "undefined" && configObj.processSingleResult && $(configObj.response).size() == 1){
+				var resultsObj = {};
+				// Iterate through the data configuration of the search object
+				$.each(configObj.data, function( k, v ){
+					// Check for Bridge Search response that correlates to the key
+					if (configObj.response.constructor == Object){  // result from single Bridge
+						var objVal = configObj.response[k];
+					}
+					else if (configObj.response.constructor == Array){  // result from multiple Bridge
+						var objVal = configObj.response[0][k];
+					}
+					else{
+						var objVal = '';
+					}
+					resultsObj[k] = objVal;
+				});
+				setValuesFromResults(configObj.data, resultsObj);
+				if(configObj.clickCallback){configObj.clickCallback(resultsObj);}
+			}
+			// More than 1 record returned
+			else if(typeof configObj.processSingleResult == "undefined" || !configObj.processSingleResult || $(configObj.response).size() > 1){    
+				//Iterate through row results to retrieve data
+				$.each(configObj.response, function(i,record){
+					var obj = {};
+					//Iterate through the configured columns to match with data returned from bridge
+					$.each(configObj.data, function(attribute, attributeObject){
+						if (typeof record[attribute] != "undefined"){
+							if (attributeObject["date"] == true && typeof attributeObject["moment"] != "undefined") {
+								var attributeValue = moment(record[attribute]).format(attributeObject["moment"]);
+							} else {
+								var attributeValue = record[attribute];
+							}
+						}
+						else{
+							var attributeValue = '';
+						}
+						obj[attribute] = attributeValue;
+					});
+					configObj.dataArray.push(obj);
+				});
+				// Append Column to beginning of table contain row expansion for responsive Plugin
+				if(configObj.responsive){
+					configObj.columns.unshift({
+						defaultContent: '',
+						className: 'control',
+						orderable: false,
+					});
+				}
+				// Create DataTable Object.
+				createDataTable(configObj);
+			}
+		}				
+		// No records returned
+		else{
+			if(configObj.success_empty){configObj.success_empty();}
+		}
+		if(configObj.complete){configObj.complete();}
+													
+    }	
+
+	
+    /**
+     * Used to execute objects configured as defaultBridgeList
+     */
+    function performJSONList(){
+        var configObj = this;
+		if(configObj.before){configObj.before();};
+        
+			configObj.response=configObj.JSON;
+			if($(configObj.response).size() > 0 || !configObj.success_empty){
+				// Execute success callback
+				if(configObj.success){configObj.success();}
+				// Only one record returned
+				if(typeof configObj.processSingleResult != "undefined" && configObj.processSingleResult && $(configObj.response).size() == 1 && configObj.response != null){
+					if (configObj.response.constructor == Object){  // result from single Bridge
+						var objVal = configObj.response;
+					}
+					else if (configObj.response.constructor == Array){  // result from multiple Bridge
+						var objVal = configObj.response[0];
+					}
+					setValuesFromResults(configObj.data, objVal);
+				}
+				// More than one record returned
+				else if(typeof configObj.processSingleResult == "undefined" || !configObj.processSingleResult || ($(configObj.response).size() > 1 && configObj.response != null)){    
+					this.$resultsList = $('<ul/>').attr('id','resultList');
+					var self = this; // reference to this in current scope
+					//Iterate through row results to retrieve data
+					$.each(configObj.response, function(i,record){
+						self.$singleResult = $('<li/>').attr('id', 'result');
+						//Iterate through the configured columns to match with data returned from bridge
+						$.each(configObj.data, function(attribute, attributeObject){
+							if (typeof record[attribute] != "undefined"){
+								var title ="";
+								if(attributeObject["title"]){
+									var $title = $('<div/>').addClass("title " + attributeObject['className']).html(attributeObject["title"]);
+									self.$singleResult.append($title);
+								}
+								if (attributeObject["date"] == true && typeof attributeObject["moment"] != "undefined") {
+									var attributeValue = moment(record[attribute]).format(attributeObject["moment"]);
+								} else {
+									var $value = $('<div/>').addClass(attributeObject['className']).html(record[attribute]);
+									self.$singleResult.append($value); 
+									self.$singleResult.data(attribute,record[attribute])
+								}
+							}
+
+						});
+						self.$resultsList.append(self.$singleResult);
+					});
+					$("#"+configObj.resultsContainerId).empty().append(this.$resultsList);
+					$("#"+configObj.resultsContainerId).off().on( "click", 'li', function(event){
+						setValuesFromResults(configObj.data, $(this).data());
+						if(configObj.clickCallback){configObj.clickCallback($(this).data());};
+						if(configObj.clearOnClick || typeof configObj.clearOnClick == "undefined"){
+							$("#"+configObj.resultsContainerId).empty();
+						}
+					});
+				}
+			}
+			else{
+				if(configObj.success_empty){configObj.success_empty();}
+			} 
+			if(configObj.complete){configObj.complete();}
+
+    }
+	
+	
     /**
      * Code in kd_client.js is preventing the backspace from working on $('.dataTables_filter input'). stopPropigation allows backspace to work.  
      */
