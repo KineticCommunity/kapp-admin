@@ -45,7 +45,7 @@
 <%-- AdminHelper --%>
 <%@include file="AdminHelper.jspf"%>
 <%
-    AdminHelper adminHelper = new AdminHelper(kapp);
+    AdminHelper adminHelper = new AdminHelper(kapp,bundle);
     request.setAttribute("AdminHelper", adminHelper);
 %>
 

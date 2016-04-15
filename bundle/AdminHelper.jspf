@@ -2,10 +2,12 @@
 <%!
     public static class AdminHelper {
     
+        private Bundle adminBundle;
         private Kapp adminKapp;
         
-        public AdminHelper(Kapp kapp){
+        public AdminHelper(Kapp kapp, Bundle bundle){
             this.adminKapp = kapp;
+            this.adminBundle = bundle;
         }
         
         public List<Kapp> getActiveKapps(){
@@ -58,5 +60,54 @@
             }
             return activeConsoles;
         }
+
+        public List<HelpLink> getCommunityLinks(Form form){
+            // Create container to hold links
+            List<HelpLink> communityLinks = new ArrayList<>();
+            // Loop over the form's community link attributes
+            for ( String json : form.getAttributeValues("Community Link") ){
+                // Get value of attribute and parse into JSON
+                LinkedHashMap communityLink = (LinkedHashMap)Json.parse(json);
+                // Add link to result list
+                communityLinks.add(new HelpLink((String)communityLink.get("name"), (String)communityLink.get("url")));
+            }
+            return communityLinks;
+        }
+
+        public List<HelpLink> getFormHelpLinks(Kapp kapp, String consoleSlug){
+            // Create container to hold links
+            List<HelpLink> formHelpLinks = new ArrayList<>();
+            // Loop over the kapp's form
+            for ( Form form : this.adminKapp.getFormsByType("Help") ){
+                if( form.hasAttributeValue("Kapp Slug",kapp.getSlug()) && form.hasAttributeValue("Console Slug", consoleSlug) ){
+                    String path = this.adminBundle.getKappLocation() + "/" + form.getSlug();
+                    String name = form.hasAttribute("Display Name") ? form.getAttributeValue("Display Name") : form.getName();
+                    formHelpLinks.add(new HelpLink(name, path));
+                }
+            }
+            return formHelpLinks;
+        }
+
+        /**
+         * Helper class which defines an instance of a help link.
+         */
+        public class HelpLink {
+            private String name;
+            private String href;
+            
+            public HelpLink(String name, String href){
+                this.name = name;
+                this.href = href;
+            }
+            
+            public String getName(){
+                return this.name;
+            }
+            
+            public String getHref(){
+                return this.href;
+            }
+        }
+
     }
 %>

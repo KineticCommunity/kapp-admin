@@ -64,9 +64,19 @@
             </a>
             <ul class="dropdown-menu">
                 <li class="dropdown-header">Kinetic Community</li>
-                <li><a href="http://community.kineticdata.com/Internal/Documentation_-_Kinetic_Core/40_Setup_Console/Kapp_Setup/10_Kapp_Setup_Details" target="_blank">Kapp Setup Help</a></li>
+                <c:if test="${not empty form}">
+                    <c:forEach var="link" items="${AdminHelper.getCommunityLinks(form)}">
+                        <li><a href="${link.href}" target="_blank">${link.name}</a></li>
+                    </c:forEach>
+                </c:if>
+                <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">${kapp.name} Setup Help</a></li>
                 <li class="divider"></li>
-                <li><a href="javascript:void(0);" target="_blank">About this Kapp</a></li>
+                <c:if test="${not empty currentKapp && not empty form}">
+                    <c:forEach var="link" items="${AdminHelper.getFormHelpLinks(currentKapp,form.slug)}">
+                        <li><a href="${link.href}" target="_blank">${link.name}</a></li>
+                    </c:forEach>
+                </c:if>
+                <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">About ${kapp.name}</a></li>
             </ul>
         </li>
     </ul>

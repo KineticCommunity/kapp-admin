@@ -20,7 +20,7 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
             <div class="page-header clearfix">
-                <h3>${currentConsole.name} <button class="btn btn-primary pull-right add-category btn-sm"><span class="fa fa-plus-circle"></span> Add Category</button></h3>
+                <h3>${form.name} <button class="btn btn-primary pull-right add-category btn-sm"><span class="fa fa-plus-circle"></span> Add Category</button></h3>
             </div>
             
             <div class="manage-categories col-sm-8" data-slug="${currentKapp.slug}">            
