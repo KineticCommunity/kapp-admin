@@ -15,7 +15,7 @@
             contentType: "application/json",
             success: function( data ){
                 // Create array to work against
-                var attributes = ['Display Name','Parent','Sort Order'];
+                var attributes = ['Parent','Sort Order'];
                 // Remove each item if the definition already exists
                 $.each(data.categoryAttributeDefinitions,function(index,val){
                     attributes = jQuery.grep(attributes, function(value) {
@@ -231,20 +231,17 @@
         // URL for api
         var url = bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categories', payload;
         // Check for display name or parent if so, add attributes
-        if(displayName.length > 0 || parent.length > 0){
+        if(parent.length > 0){
             var attributes = "";
-            if(displayName != undefined && displayName.length > 0) { 
-                attributes = attributes + '{"name":"Display Name","values": ["' + displayName + '"]},';
-            }
             if(parent != undefined && parent.length > 0) { 
                 attributes = attributes + '{"name":"Parent","values": ["' + parent + '"]},';
             }
 
-            payload = '{"attributes": [' + attributes.substring(0,attributes.length-1) + '], "name": "' + categoryName + '"}';
+            payload = '{"attributes": [' + attributes.substring(0,attributes.length-1) + '], "slug": "' + categoryName + '","name": "' + displayName + '"}';
             url = url + '?include=attributes';
         }
         else {
-            payload = '{"name": "' + categoryName + '"}';
+            payload = '{"slug": "' + categoryName + '","name": "' + displayName + '"}';
         }
         // Ajax call to api
         $.ajax({
@@ -319,13 +316,10 @@
         var url = bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categories/' + category + '?include=attributes';
 
         // Create the payload by what is defined
-        var payload = '{"name": "' + categoryName + '",';
+        var payload = '{"slug": "' + categoryName + '","name": "' + displayName + '",';
         // These are attributes 
-        if( sortOrder != undefined || displayName != undefined || parent != undefined){
+        if( sortOrder != undefined ||  parent != undefined){
             payload = payload + '"attributes": [';
-            if(displayName != undefined){
-                payload = payload + '{ "name":"Display Name","values":["' + displayName + '"]},';
-            }
             if(sortOrder != undefined){
                 payload = payload + '{ "name":"Sort Order","values":["' + sortOrder + '"]},';
             }   
@@ -373,19 +367,20 @@
         }
         else {
             // Temp Confirm
-            if(confirm('Do you want to delete this category? It will also delete all children.')){
+            /*if(confirm('Do you want to delete this category? It will also delete all children.')){
                 deleteCat(kapp,categoryName);
                 // Deselect selected
                 clearSelectedCategory();
-            }
+            }*/
             // Build the modal. - Waiting on updated core code.
-            /*modal = new KD.Modal({
+            modal = new KD.Modal({
                     header: '<h3>Confirm Delete</h3>',
                     body: 'Do you want to delete this category? It will also delete all children.',
                     footer: function(element, actions) {
                         element.append(
                             $('<button>').addClass('btn btn-success').text('OK').on('click',function(){
-                                actions.accept(deleteCat(kapp,categoryName));
+                                deleteCat(kapp,categoryName);
+                                actions.dismiss();
                             }),
                             $('<button>').addClass('btn btn-link').text('Dismiss').on('click',function(){
                                 actions.dismiss();
@@ -397,11 +392,11 @@
                     keyboardclose: true,
                     renderCallback: false
                 });
-            modal.show();*/
+            modal.show();
         }
 
         function deleteCat(kapp,categoryName){
-            payload = '{"name": "' + categoryName + '"}';
+            payload = '{"slug": "' + categoryName + '"}';
             // URL for api
             var url = bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categories/' + categoryName, payload;
             // Update via api

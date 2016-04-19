@@ -40,7 +40,7 @@
                 // Add object to category tree
                 allCategories.add(bundleCategory);
                 // Grab the category name and add object to map based on name
-                this.categoriesByName.get(kapp.getSlug()).put(category.getName(), bundleCategory);
+                this.categoriesByName.get(kapp.getSlug()).put(category.getSlug(), bundleCategory);
             }
             // Pick each object off of the list and put map in order 
             // by attribute "parent"
@@ -77,7 +77,7 @@
             
             Set<BundleCategory> formCategories = new TreeSet<BundleCategory>();
             for (Category category : form.getCategories()){
-                formCategories.add(this.getCategory(category.getName(), formKapp));
+                formCategories.add(this.getCategory(category.getSlug(), formKapp));
             }
             
             return new ArrayList<BundleCategory>(formCategories);
@@ -128,7 +128,7 @@
             // Returns the current category object
             public Category getCategory(){ return this.category; }
             // Returns the name string of the current category object
-            public String getName() { return this.category.getName(); }
+            public String getSlug() { return this.category.getSlug(); }
             // Returns a list of attributes for the current category object
             public List<Attribute> getAttributes() { return this.category.getAttributes(); }
             /* *
@@ -172,9 +172,9 @@
             public Kapp getKapp() { return this.category.getKapp(); }
             // Returns a list of form objects for the current category
             public List<Form> getForms() { return this.category.getForms(); }
-            // Returns the "Display Name" attribute value
-            public String getDisplayName() {
-                return Text.defaultIfBlank(this.getAttributeValue("Display Name"), this.getName());
+            // Returns the Name value
+            public String getName() {
+                return this.category.getName();
             }
             // Returns the parent category object
             public BundleCategory getParentCategory() {

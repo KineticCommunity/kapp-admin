@@ -34,9 +34,9 @@
                             </div>
         
                             <c:forEach var="category" items="${CategoryHelper.getCategories(currentKapp)}">
-                                <li data-id="${category.getName()}" data-display="${category.getDisplayName()}">
+                                <li data-id="${category.getSlug()}" data-display="${category.getName()}">
                                     <div class="category">
-                                        ${text.escape(category.getDisplayName())}
+                                        ${text.escape(category.getName())}
                                         <button class="btn btn-xs btn-danger delete pull-right" style="display: none;">
                                             <i class="fa fa-inverse fa-close"></i>
                                         </button>
@@ -66,9 +66,9 @@
                                     <div>
                                         <div class="form-group add-root"> 
                                             <div class="form-group">
-                                                <label for="category-name" class="control-label">Category Name/Slug</label>
+                                                <label for="category-name" class="control-label">Category Slug</label>
                                                 <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
-                                                <label for="display-name" class="control-label">Display Name</label>
+                                                <label for="display-name" class="control-label">Category Name</label>
                                                 <input placeholder="Display Name" id="change-display"  class="form-control"> 
                                                 <button class="btn btn-success btn-sm edit-category">Save</button>
                                                 <button class="btn btn-primary add-subcategory btn-sm pull-right"><span class="fa fa-plus-circle"></span> Add Subcategory</button>
