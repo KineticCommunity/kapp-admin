@@ -548,7 +548,6 @@ KD-Search CE
 	*/
 	function createDataTable(configObj){
 		// Set property to destroy any DataTable which may already exist.
-		configObj.destroy = true;
 		configObj.tableObj = $('#'+configObj.resultsContainerId).DataTable( configObj );
 		configObj.tableObj.rows.add(configObj.dataArray).draw();
 		// Bind Click Event based on where the select attribute extists ie:<tr> or <td>
@@ -565,9 +564,10 @@ KD-Search CE
 				// Set results based on Search config
 				setValuesFromResults(configObj.data, resultsObj);
 				if(configObj.clickCallback){configObj.clickCallback(resultsObj);}
-				// Destroy DataTable and empty container in case columns change.
-				configObj.tableObj.destroy();
 				if(configObj.clearOnClick || typeof configObj.clearOnClick == "undefined"){
+				    configObj.destroy = true;
+					// Destroy DataTable and empty container in case columns change.
+					configObj.tableObj.destroy();
 					$('#'+configObj.resultsContainerId).empty();
 				}
 			}
