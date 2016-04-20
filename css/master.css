@@ -11,14 +11,17 @@
  *   Base
  *   Variables and mixins
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 106, scss/_base.scss */
 .clearfix {
   zoom: 1;
 }
+/* line 96, scss/_base.scss */
 .clearfix:before, .clearfix:after {
   display: table;
   content: "";
   zoom: 1;
 }
+/* line 102, scss/_base.scss */
 .clearfix:after {
   clear: both;
 }
@@ -62,6 +65,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 5, scss/_forms.scss */
 input[type='text'], input[type='password'], textarea, select {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -70,14 +74,17 @@ input[type='text'], input[type='password'], textarea, select {
   border: 0.1rem solid rgba(51, 51, 51, 0.4);
   outline: none;
 }
+/* line 10, scss/_forms.scss */
 input[type='text']:focus, input[type='password']:focus, textarea:focus, select:focus {
   border-color: #b3b3b3;
 }
 
+/* line 16, scss/_forms.scss */
 input[type='text'], input[type='password'], select {
   height: 2.6rem;
 }
 
+/* line 21, scss/_forms.scss */
 section.page form {
   margin-left: 0;
   padding: 2.4rem;
@@ -89,10 +96,12 @@ section.page form {
   /* Attachment files
    *-------------------------------------- */
 }
+/* line 30, scss/_forms.scss */
 section.page form .form-group.required label:after {
   content: '*';
   color: red;
 }
+/* line 35, scss/_forms.scss */
 section.page form label {
   /* Make the label a block */
   color: rgba(51, 51, 51, 0.75);
@@ -101,36 +110,45 @@ section.page form label {
   font-size: 1.4remrem;
   font-weight: 600;
 }
+/* line 43, scss/_forms.scss */
 section.page form .radio label:first-child,
 section.page form .checkbox label:first-child {
   padding-left: 0;
 }
+/* line 54, scss/_forms.scss */
 section.page form .file-table {
   display: table;
   margin: 0px;
   padding: 0px;
 }
+/* line 59, scss/_forms.scss */
 section.page form .file-table .file-header {
   display: table-header-group;
 }
+/* line 61, scss/_forms.scss */
 section.page form .file-table .file-header span {
   background-color: white;
 }
+/* line 66, scss/_forms.scss */
 section.page form .file-table .file-container {
   display: table-row-group;
 }
+/* line 70, scss/_forms.scss */
 section.page form .file-table .file-row {
   display: table-row;
 }
+/* line 72, scss/_forms.scss */
 section.page form .file-table .file-row > span {
   list-style: none;
   display: table-cell;
   border: 1px solid #000;
   padding: 0.3rem 1.2rem;
 }
+/* line 77, scss/_forms.scss */
 section.page form .file-table .file-row > span:not(:first-child) {
   border-left: none;
 }
+/* line 81, scss/_forms.scss */
 section.page form .file-table .file-row:not(:first-child) > span {
   border-top: none;
 }
@@ -143,14 +161,17 @@ section.page form .file-table .file-row:not(:first-child) > span {
  *   Base
  *   Variables and mixins
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 106, scss/_base.scss */
 .clearfix {
   zoom: 1;
 }
+/* line 96, scss/_base.scss */
 .clearfix:before, .clearfix:after {
   display: table;
   content: "";
   zoom: 1;
 }
+/* line 102, scss/_base.scss */
 .clearfix:after {
   clear: both;
 }
@@ -158,15 +179,18 @@ section.page form .file-table .file-row:not(:first-child) > span {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Global Elements
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 13, scss/_kinetic.scss */
 html {
   background-color: #ede9e8 repeat;
 }
 
+/* line 18, scss/_kinetic.scss */
 body {
   background: #ede9e8;
   font-family: 'Open Sans', sans-serif;
 }
 
+/* line 24, scss/_kinetic.scss */
 a {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -178,30 +202,37 @@ a {
   text-decoration: none;
   line-height: inherit;
 }
+/* line 30, scss/_kinetic.scss */
 a:hover, a:focus {
   color: #D95900;
   text-decoration: underline;
 }
+/* line 34, scss/_kinetic.scss */
 a:focus {
   outline: 5px auto #D95900;
 }
 
+/* line 39, scss/_kinetic.scss */
 .container {
   width: 940px !important;
 }
 
+/* line 43, scss/_kinetic.scss */
 li {
   line-height: 20px;
 }
 
+/* line 47, scss/_kinetic.scss */
 pre {
   word-wrap: normal;
 }
 
+/* line 51, scss/_kinetic.scss */
 .fwn {
   font-weight: normal !important;
 }
 
+/* line 56, scss/_kinetic.scss */
 noscript .container .row {
   margin: 2em 0;
   background-color: #fff;
@@ -215,6 +246,7 @@ noscript .container .row {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Navbar & Subnav
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 69, scss/_kinetic.scss */
 .navbar {
   z-index: 1000;
   display: block;
@@ -224,16 +256,19 @@ noscript .container .row {
   border-radius: 0;
   background-color: #ffb200;
 }
+/* line 77, scss/_kinetic.scss */
 .author_blank .navbar, .author_edit .navbar {
   background-color: #ffb200;
   border-radius: 0;
 }
+/* line 84, scss/_kinetic.scss */
 .author_blank .navbar .kapp-current, .author_edit .navbar .kapp-current {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
 }
 
+/* line 90, scss/_kinetic.scss */
 .kapp-current {
   float: left;
   line-height: 60px;
@@ -243,42 +278,51 @@ noscript .container .row {
   -webkit-border-radius: 4px 0 0 0;
   border-radius: 4px 0 0 0;
 }
+/* line 96, scss/_kinetic.scss */
 .kapp-current:hover {
   background-color: #444;
   background-color: rgba(255, 255, 255, 0.5);
   color: #fff;
   text-decoration: none;
 }
+/* line 102, scss/_kinetic.scss */
 .kapp-current a {
   max-width: 180px;
   text-decoration: none;
 }
+/* line 105, scss/_kinetic.scss */
 .kapp-current a img {
   margin-right: 0 !important;
   float: none !important;
   padding: 0 18px 0 0;
 }
 
+/* line 112, scss/_kinetic.scss */
 .return-index {
   line-height: 48px;
   background-color: rgba(237, 233, 232, 0.5);
   margin: 0 -15px;
 }
+/* line 115, scss/_kinetic.scss */
 .return-index:hover {
   background-color: #ede9e8;
 }
+/* line 117, scss/_kinetic.scss */
 .return-index a {
   padding: 0 15px;
 }
 
+/* line 122, scss/_kinetic.scss */
 .nav-title {
   float: left;
 }
+/* line 124, scss/_kinetic.scss */
 .nav-title h2 {
   margin: 7px 10px 0;
   float: left;
 }
 
+/* line 130, scss/_kinetic.scss */
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
   background-color: #444;
   background-color: rgba(55, 55, 55, 0.5);
@@ -287,6 +331,7 @@ noscript .container .row {
   position: relative;
 }
 
+/* line 138, scss/_kinetic.scss */
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
@@ -295,9 +340,11 @@ noscript .container .row {
   color: #fff;
 }
 
+/* line 146, scss/_kinetic.scss */
 .navbar-default .navbar-nav > li > a {
   color: #333;
 }
+/* line 148, scss/_kinetic.scss */
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   transition: all 0.29s ease-in-out 0s;
   position: relative;
@@ -306,14 +353,17 @@ noscript .container .row {
   color: #fff;
 }
 
+/* line 159, scss/_kinetic.scss */
 .navbar-nav .menu-dropdown, .navbar-nav .dropdown-menu, .kapp-current .menu-dropdown, .kapp-current .dropdown-menu {
   border: none;
   background-color: #333;
 }
+/* line 162, scss/_kinetic.scss */
 .navbar-nav .menu-dropdown li a, .navbar-nav .dropdown-menu li a, .kapp-current .menu-dropdown li a, .kapp-current .dropdown-menu li a {
   color: #f2f2f2;
   text-align: left;
 }
+/* line 165, scss/_kinetic.scss */
 .navbar-nav .menu-dropdown li a:hover, .navbar-nav .dropdown-menu li a:hover, .kapp-current .menu-dropdown li a:hover, .kapp-current .dropdown-menu li a:hover {
   background-color: #191919;
   background-repeat: repeat-x;
@@ -327,46 +377,56 @@ noscript .container .row {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#292929', endColorstr='#191919', GradientType=0);
   color: #fff;
 }
+/* line 170, scss/_kinetic.scss */
 .navbar-nav .menu-dropdown .active a, .navbar-nav .menu-dropdown a.menu, .navbar-nav .menu-dropdown .dropdown-toggle, .navbar-nav .dropdown-menu .active a, .navbar-nav .dropdown-menu a.menu, .navbar-nav .dropdown-menu .dropdown-toggle, .kapp-current .menu-dropdown .active a, .kapp-current .menu-dropdown a.menu, .kapp-current .menu-dropdown .dropdown-toggle, .kapp-current .dropdown-menu .active a, .kapp-current .dropdown-menu a.menu, .kapp-current .dropdown-menu .dropdown-toggle {
   color: #fff;
 }
+/* line 173, scss/_kinetic.scss */
 .navbar-nav .menu-dropdown .divider, .navbar-nav .dropdown-menu .divider, .kapp-current .menu-dropdown .divider, .kapp-current .dropdown-menu .divider {
   border-color: #444;
   background-color: #222;
 }
+/* line 177, scss/_kinetic.scss */
 .navbar-nav .menu-dropdown a.menu.open, .navbar-nav .menu-dropdown .dropdown-toggle.open, .navbar-nav .dropdown-menu a.menu.open, .navbar-nav .dropdown-menu .dropdown-toggle.open, .kapp-current .menu-dropdown a.menu.open, .kapp-current .menu-dropdown .dropdown-toggle.open, .kapp-current .dropdown-menu a.menu.open, .kapp-current .dropdown-menu .dropdown-toggle.open {
   background: #444;
   background: rgba(255, 255, 255, 0.05);
 }
+/* line 182, scss/_kinetic.scss */
 .navbar-nav a.dropdown-toggle, .kapp-current a.dropdown-toggle {
   color: #333;
 }
 
+/* line 186, scss/_kinetic.scss */
 .kapp-current > .dropdown-menu {
   margin-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
 
+/* line 192, scss/_kinetic.scss */
 .nav-pills > li > a {
   border-radius: 0;
 }
 
+/* line 196, scss/_kinetic.scss */
 .navbar-right {
   float: right !important;
   font-size: .875em;
   margin-right: 0;
 }
 
+/* line 202, scss/_kinetic.scss */
 .navbar-nav > li {
   float: left;
   line-height: 60px;
 }
+/* line 205, scss/_kinetic.scss */
 .navbar-nav > li > a {
   padding-top: 0;
   padding-bottom: 0;
   line-height: inherit;
 }
+/* line 209, scss/_kinetic.scss */
 .navbar-nav > li > a .account {
   font-weight: bold;
   display: inline-block;
@@ -379,19 +439,23 @@ noscript .container .row {
   margin: 0;
   padding: 0 6px 0 0;
 }
+/* line 221, scss/_kinetic.scss */
 .navbar-nav > li > a .avatar {
   display: inline-block;
 }
+/* line 223, scss/_kinetic.scss */
 .navbar-nav > li > a .avatar img {
   border-radius: 30px;
 }
 
+/* line 231, scss/_kinetic.scss */
 .nav-pills.sub-nav > li > a {
   border-radius: 0;
   color: #808080;
   padding: 10px 1em;
 }
 
+/* line 237, scss/_kinetic.scss */
 .nav-pills.sub-nav > li.active > a,
 .nav-pills.sub-nav > li.active > a:hover,
 .nav-pills.sub-nav > li.active > a:focus {
@@ -401,6 +465,7 @@ noscript .container .row {
   border-bottom: 4px solid #FFB200;
 }
 
+/* line 245, scss/_kinetic.scss */
 .nav-pills.sub-nav > li > a:hover {
   color: #D95900;
   background-color: transparent;
@@ -408,12 +473,14 @@ noscript .container .row {
   border-bottom: 4px solid #D95900;
 }
 
+/* line 252, scss/_kinetic.scss */
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
   background-color: #00427E;
 }
 
+/* line 258, scss/_kinetic.scss */
 .navbar-nav > li > a .account span.fa.fa-caret-down {
   padding-left: 6px;
 }
@@ -421,18 +488,21 @@ noscript .container .row {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Content
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 267, scss/_kinetic.scss */
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
   outline: 5px auto #D95900;
 }
 
+/* line 273, scss/_kinetic.scss */
 .form-control:focus {
   outline: 0;
   border-color: #ede9e8;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(217, 89, 0, 0.6);
 }
 
+/* line 280, scss/_kinetic.scss */
 .dl-stripe dd:nth-of-type(even) {
   background-color: rgba(237, 233, 232, 0.5);
 }
@@ -440,58 +510,69 @@ input[type="checkbox"]:focus {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Buttons
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 287, scss/_kinetic.scss */
 .btn-primary {
-  border-color: #c55100;
+  border-color: #c55000;
   background-color: #D95900;
   color: #fff;
 }
+/* line 291, scss/_kinetic.scss */
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
   border-color: #D95900;
-  background-color: #c55100;
+  background-color: #c55000;
   color: #fff;
 }
 
+/* line 298, scss/_kinetic.scss */
 .btn-full {
   margin-top: 25px;
   margin-bottom: 10px;
   width: 100%;
 }
 
+/* line 304, scss/_kinetic.scss */
 .btn-default {
-  border-color: #003c73;
+  border-color: #003b72;
   background-color: #00427E;
   color: #fff;
 }
+/* line 308, scss/_kinetic.scss */
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
   border-color: #00427E;
-  background-color: #003c73;
+  background-color: #003b72;
   color: #fff;
 }
+/* line 313, scss/_kinetic.scss */
 .datepicker .btn-default {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
 }
+/* line 317, scss/_kinetic.scss */
 .datepicker .btn-default:hover, .datepicker .btn-default:focus, .datepicker .btn-default:active, .datepicker .btn-default.active {
   border-color: #00427E;
-  background-color: #003c73;
+  background-color: #003b72;
   color: #fff;
 }
 
+/* line 326, scss/_kinetic.scss */
 .btn:focus, section.page form button:focus, .btn:active:focus, section.page form button:active:focus, .btn.active:focus, section.page form button.active:focus {
   outline: 5px auto #D95900;
 }
 
+/* line 330, scss/_kinetic.scss */
 .glyphicon-arrow-right {
   color: #D95900;
 }
 
+/* line 334, scss/_kinetic.scss */
 .btn-subtle {
   color: #333333;
   background-color: #E9E9E9;
   border-color: #CCCCCC;
 }
 
+/* line 340, scss/_kinetic.scss */
 .btn-subtle:hover,
 .btn-subtle:focus,
 .btn-subtle:active,
@@ -502,12 +583,14 @@ input[type="checkbox"]:focus {
   border-color: #CCCCCC;
 }
 
+/* line 350, scss/_kinetic.scss */
 .btn-subtle:active,
 .btn-subtle.active,
 .open .dropdown-toggle.btn-subtle {
   background-image: none;
 }
 
+/* line 356, scss/_kinetic.scss */
 .btn-subtle.disabled,
 .btn-subtle[disabled],
 fieldset[disabled] .btn-subtle,
@@ -527,6 +610,7 @@ fieldset[disabled] .btn-subtle.active {
   border-color: #CCCCCC;
 }
 
+/* line 375, scss/_kinetic.scss */
 .btn-subtle .badge {
   color: #E9E9E9;
   background-color: #333333;
@@ -535,6 +619,7 @@ fieldset[disabled] .btn-subtle.active {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Footer
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 384, scss/_kinetic.scss */
 footer {
   margin-top: 1em;
   padding-top: 1em;
@@ -543,6 +628,7 @@ footer {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Elements
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 393, scss/_kinetic.scss */
 .graph {
   padding: 20px;
   min-height: 240px;
@@ -550,10 +636,12 @@ footer {
   height: 240px;
 }
 
+/* line 400, scss/_kinetic.scss */
 .panel-heading {
   font-weight: 700;
 }
 
+/* line 404, scss/_kinetic.scss */
 table {
   max-width: 100%;
   border-spacing: 0;
@@ -561,10 +649,12 @@ table {
   background-color: transparent;
 }
 
+/* line 411, scss/_kinetic.scss */
 .table {
   margin-bottom: 20px;
   width: 100%;
 }
+/* line 414, scss/_kinetic.scss */
 .table a {
   color: #D95900;
   -ms-word-break: break-all;
@@ -576,29 +666,37 @@ table {
   -moz-hyphens: auto;
   hyphens: auto;
 }
+/* line 417, scss/_kinetic.scss */
 .table a.btn {
   color: #fff;
 }
+/* line 421, scss/_kinetic.scss */
 .table .sorting {
   background: url("sort_both.png") no-repeat center right;
 }
+/* line 424, scss/_kinetic.scss */
 .table .sorting_asc {
   background: url("sort_asc.png") no-repeat center right;
 }
+/* line 427, scss/_kinetic.scss */
 .table .sorting_desc {
   background: url("sort_desc.png") no-repeat center right;
 }
+/* line 430, scss/_kinetic.scss */
 .table .sorting_asc_disabled {
   background: url("sort_asc_disabled.png") no-repeat center right;
 }
+/* line 433, scss/_kinetic.scss */
 .table .sorting_desc_disabled {
   background: url("sort_desc_disabled.png") no-repeat center right;
 }
 
+/* line 438, scss/_kinetic.scss */
 tr.description {
   color: #b3b3b3;
 }
 
+/* line 443, scss/_kinetic.scss */
 dl a {
   color: #D95900;
   text-decoration: underline;
@@ -607,6 +705,7 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Wrappers
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 452, scss/_kinetic.scss */
 .task-wrapper {
   -webkit-transition: margin-top 0.1s ease;
   -moz-transition: margin-top 0.1s ease;
@@ -618,17 +717,21 @@ dl a {
   max-width: 1300px;
 }
 
+/* line 459, scss/_kinetic.scss */
 .configbar {
   background-color: #ede9e8;
 }
+/* line 461, scss/_kinetic.scss */
 .configbar .nav-tabs {
   padding-top: 10px;
   border-color: #ede9e8;
 }
+/* line 465, scss/_kinetic.scss */
 .configbar .nav-tabs > li > a:hover, .configbar .nav-tabs > li > a:focus {
   border-color: transparent;
   background-color: transparent;
 }
+/* line 470, scss/_kinetic.scss */
 .configbar .nav-tabs > li.active > a, .configbar .nav-tabs > li.active > a:hover, .configbar .nav-tabs > li.active > a:focus {
   border-color: #ede9e8;
   border-bottom-color: transparent;
@@ -639,10 +742,12 @@ dl a {
  *  Large Montior Window
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (min-width: 1301px) {
+  /* line 484, scss/_kinetic.scss */
   body {
-    background: #c6c2c1;
+    background: #c5c2c1;
   }
 
+  /* line 487, scss/_kinetic.scss */
   .task-wrapper {
     margin-top: 30px;
     margin-bottom: 30px;
@@ -654,12 +759,14 @@ dl a {
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.03);
   }
 
+  /* line 493, scss/_kinetic.scss */
   .navbar {
     -moz-border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     border-radius: 4px 4px 0 0;
   }
 
+  /* line 496, scss/_kinetic.scss */
   footer {
     margin-top: 0;
     -moz-border-radius: 0 0 4px 4px;
@@ -668,19 +775,23 @@ dl a {
     background-color: #ede9e8;
   }
 }
+/* line 503, scss/_kinetic.scss */
 .content-view-wrapper {
   padding-left: 1em;
   border-left: 1px solid #ddd;
 }
 
+/* line 508, scss/_kinetic.scss */
 .content,
 .content-main {
   background-color: #fff;
 }
 
+/* line 514, scss/_kinetic.scss */
 .tab-content {
-  background-color: #d7d4d3;
+  background-color: #d7d3d2;
 }
+/* line 516, scss/_kinetic.scss */
 .tab-content.content-main {
   background-color: #fff;
 }
@@ -688,21 +799,26 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Sidebars
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 524, scss/_kinetic.scss */
 .sidebar.pull-right {
   padding-top: 1em;
 }
+/* line 529, scss/_kinetic.scss */
 .sidebar .nav {
   margin: 1em 0;
 }
+/* line 532, scss/_kinetic.scss */
 .sidebar h3 {
   margin-top: 1em;
   text-transform: uppercase;
   font-size: 1em;
   color: #808080;
 }
+/* line 538, scss/_kinetic.scss */
 .sidebar h4 {
-  color: #777574;
+  color: #767474;
 }
+/* line 541, scss/_kinetic.scss */
 .sidebar h6 {
   display: block;
   margin: 0 -15px 2px;
@@ -714,10 +830,12 @@ dl a {
   line-height: 1.2;
   line-height: 20px;
 }
+/* line 554, scss/_kinetic.scss */
 .sidebar #forms .nav-stacked li {
   border-bottom: 1px solid #e8e8e8;
   margin: 0;
 }
+/* line 557, scss/_kinetic.scss */
 .sidebar #forms .nav-stacked li a {
   padding: 6px 10px;
   -ms-word-break: break-all;
@@ -730,6 +848,7 @@ dl a {
   hyphens: auto;
 }
 
+/* line 563, scss/_kinetic.scss */
 .sidebar-search {
   margin-bottom: 40px;
 }
@@ -737,10 +856,12 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Executions Header
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 570, scss/_kinetic.scss */
 .page-header {
   margin-top: 1em;
   margin-bottom: .5em;
 }
+/* line 573, scss/_kinetic.scss */
 .page-header dl {
   margin-bottom: 10px;
 }
@@ -748,17 +869,21 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Breadcrumb
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 581, scss/_kinetic.scss */
 .breadcrumb {
   margin: 0;
   padding: 1em 0 0;
   background-color: transparent;
 }
+/* line 586, scss/_kinetic.scss */
 .breadcrumb li a {
   display: inline-block;
 }
+/* line 590, scss/_kinetic.scss */
 .author_blank .breadcrumb, .author_edit .breadcrumb {
   padding: 0;
 }
+/* line 594, scss/_kinetic.scss */
 .breadcrumb.breadcrumb-tree > li.active + li:before {
   padding: 0 5px;
   color: #cccccc;
@@ -768,6 +893,7 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Flash Message
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 604, scss/_kinetic.scss */
 .message {
   top: 0px;
   left: 0px;
@@ -778,19 +904,23 @@ dl a {
   width: 100%;
   text-align: center;
 }
+/* line 614, scss/_kinetic.scss */
 .message .warning {
   padding: 10px 0;
   background: #D95900 url("../../console/assets/images/mode.png") repeat 50% 50%;
 }
+/* line 617, scss/_kinetic.scss */
 .message .warning h3 {
   margin: 0;
   padding: 0;
 }
+/* line 621, scss/_kinetic.scss */
 .message .warning p {
   margin-bottom: 0;
   color: #fff;
   font-size: 1em;
 }
+/* line 626, scss/_kinetic.scss */
 .message .warning a {
   color: #fff;
   text-decoration: underline;
@@ -799,48 +929,57 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Table Callouts
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 637, scss/_kinetic.scss */
 .table-callout {
   margin: 0 0 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
+/* line 643, scss/_kinetic.scss */
 .table-callout h4 {
   margin-top: 0;
 }
 
+/* line 647, scss/_kinetic.scss */
 .table-callout p:last-child {
   margin-bottom: 0;
 }
 
+/* line 651, scss/_kinetic.scss */
 .table-callout dl {
   margin-bottom: 0;
 }
 
+/* line 655, scss/_kinetic.scss */
 .table-callout code,
 .table-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
+/* line 661, scss/_kinetic.scss */
 .table-callout-danger {
   border-color: #dFb5b4;
   background-color: #fcf2f2;
 }
 
+/* line 666, scss/_kinetic.scss */
 .table-callout-warning {
   border-color: #f1e7bc;
   background-color: #fefbed;
 }
 
+/* line 671, scss/_kinetic.scss */
 .table-callout-info {
-  border-color: #003c73;
+  border-color: #003b72;
   background-color: #b1daff;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Executions Header
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 680, scss/_kinetic.scss */
 #search-trees .form-group {
   margin-bottom: 0;
 }
@@ -848,21 +987,25 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Twitter Typeahead - Dropdown Menu
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 689, scss/_kinetic.scss */
 .typeahead {
   width: 300px;
   background-color: #fff;
 }
 
+/* line 694, scss/_kinetic.scss */
 .tt-query {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
+/* line 700, scss/_kinetic.scss */
 .tt-hint {
   color: #999999;
 }
 
+/* line 704, scss/_kinetic.scss */
 .tt-dropdown-menu {
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -874,15 +1017,18 @@ dl a {
   background-color: #fff;
 }
 
+/* line 713, scss/_kinetic.scss */
 .tt-suggestion {
   padding: 3px 20px;
   font-size: 18px;
   line-height: 24px;
 }
+/* line 717, scss/_kinetic.scss */
 .tt-suggestion.tt-cursor {
   background-color: #D95900;
   color: #fff;
 }
+/* line 721, scss/_kinetic.scss */
 .tt-suggestion p {
   margin: 0;
 }
@@ -890,6 +1036,7 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Login
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 729, scss/_kinetic.scss */
 #login-box {
   background: #fff;
   max-width: 450px;
@@ -901,10 +1048,12 @@ dl a {
   border-radius: 4px;
 }
 
+/* line 737, scss/_kinetic.scss */
 #login-box-inner {
   padding: 25px 42px;
 }
 
+/* line 740, scss/_kinetic.scss */
 #login-logo {
   display: block;
   margin: 30px auto 60px;
@@ -916,38 +1065,48 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Help
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 751, scss/_kinetic.scss */
 .help-content {
   background-color: #737373;
   color: #f2f2f2;
 }
+/* line 754, scss/_kinetic.scss */
 .help-content h3 {
   color: #fff;
 }
+/* line 758, scss/_kinetic.scss */
 .help-content h4,
 .help-content button {
   margin-top: 1em;
 }
+/* line 762, scss/_kinetic.scss */
 .help-content p {
   color: #b3b3b3;
 }
+/* line 764, scss/_kinetic.scss */
 .help-content p.overview {
   font-size: 120%;
 }
+/* line 768, scss/_kinetic.scss */
 .help-content .breadcrumb .active {
   color: #f2f2f2;
 }
 
+/* line 772, scss/_kinetic.scss */
 .help-link {
   color: #b3b3b3;
 }
+/* line 774, scss/_kinetic.scss */
 .help-link:hover {
   color: #737373;
 }
 
+/* line 778, scss/_kinetic.scss */
 .tooltip-inner {
   white-space: pre-wrap;
 }
 
+/* line 782, scss/_kinetic.scss */
 .help-tip {
   border: 1px solid white;
   color: white;
@@ -961,15 +1120,18 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Space Admin
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 796, scss/_kinetic.scss */
 .spaceAdmin.navbar {
   color: #fff;
   background-color: #444;
 }
+/* line 800, scss/_kinetic.scss */
 .spaceAdmin .navbar-nav > li > a,
 .spaceAdmin .kapp-title,
 .spaceAdmin a.dropdown-toggle {
   color: #fff;
 }
+/* line 805, scss/_kinetic.scss */
 .spaceAdmin.sidebar {
   top: 0px;
   left: 0px;
@@ -980,64 +1142,77 @@ dl a {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Setup Styles
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 817, scss/_kinetic.scss */
 .bs-callout {
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
+/* line 822, scss/_kinetic.scss */
 .bs-callout h4 {
   margin-top: 0;
 }
 
+/* line 826, scss/_kinetic.scss */
 .bs-callout p:last-child {
   margin-bottom: 0;
 }
 
+/* line 830, scss/_kinetic.scss */
 .bs-callout code,
 .bs-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
+/* line 836, scss/_kinetic.scss */
 .bs-callout-danger {
   background-color: #fdf7f7;
   border-color: #d9534f;
 }
 
+/* line 841, scss/_kinetic.scss */
 .bs-callout-warning {
   background-color: #fefbed;
   border-color: #f1e7bc;
 }
 
+/* line 846, scss/_kinetic.scss */
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
 }
 
+/* line 851, scss/_kinetic.scss */
 .bs-callout-danger h4,
 .bs-callout-danger a.alert-link {
   color: #B94A48;
 }
 
+/* line 856, scss/_kinetic.scss */
 .bs-callout-warning h4,
 .bs-callout-warning a.alert-link {
   color: #C09853;
 }
 
+/* line 861, scss/_kinetic.scss */
 .bs-callout-info h4,
 .bs-callout-info a.alert-link {
   color: #3A87AD;
 }
 
+/* line 866, scss/_kinetic.scss */
 .bs-callout a.alert-link {
   font-weight: bold;
 }
 
+/* line 870, scss/_kinetic.scss */
 label abbr {
   color: #c00;
 }
 
+/* line 874, scss/_kinetic.scss */
 td .label {
   display: inline-block;
   margin-right: .4em;
@@ -1046,6 +1221,7 @@ td .label {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Empty States outside of tables
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 882, scss/_kinetic.scss */
 .no-data {
   color: #999999;
   text-align: center;
@@ -1058,23 +1234,29 @@ td .label {
   position: relative;
   border: 1px solid transparent;
 }
+/* line 893, scss/_kinetic.scss */
 .no-data h3 {
   color: #666;
 }
+/* line 894, scss/_kinetic.scss */
 .no-data.form-control-static {
   padding: 7px 1em;
 }
+/* line 897, scss/_kinetic.scss */
 .no-data a {
   color: #D95900;
 }
 
+/* line 902, scss/_kinetic.scss */
 .form-control-static a {
   color: #D95900;
 }
 
+/* line 1, scss/_temp.scss */
 .sort {
   cursor: pointer;
 }
+/* line 3, scss/_temp.scss */
 .sort:after {
   font-family: 'FontAwesome';
   font-weight: normal;
@@ -1087,19 +1269,23 @@ td .label {
   color: #ccc;
   content: "\f0dc";
 }
+/* line 15, scss/_temp.scss */
 .sort.sort-asc:after {
   color: #000;
   content: "\f0de";
 }
+/* line 19, scss/_temp.scss */
 .sort.sort-desc:after {
   color: #000;
   content: "\f0dd";
 }
 
+/* line 24, scss/_temp.scss */
 .btn-delete {
   color: #FF0000;
 }
 
+/* line 28, scss/_temp.scss */
 .pagination a[disabled],
 .pagination a[disabled]:focus,
 .pagination a[disabled]:hover {
@@ -1109,6 +1295,7 @@ td .label {
   cursor: not-allowed;
 }
 
+/* line 36, scss/_temp.scss */
 .pagination a.active {
   background-color: #ede9e8;
   border-color: #dddddd;
@@ -1116,19 +1303,23 @@ td .label {
   cursor: default;
 }
 
+/* line 43, scss/_temp.scss */
 .kapp-title {
   display: inline-block;
   margin: 0.466666667em 0 0 0.466666667em;
   color: #333;
 }
+/* line 47, scss/_temp.scss */
 .kapp-title small {
   text-transform: uppercase;
 }
 
+/* line 51, scss/_temp.scss */
 #login-content {
   background-color: #ede9e8;
 }
 
+/* line 55, scss/_temp.scss */
 #login-box {
   background: white;
   max-width: 450px;
@@ -1138,6 +1329,7 @@ td .label {
   border-radius: 4px;
 }
 
+/* line 64, scss/_temp.scss */
 #login-box-inner {
   padding: 15px 42px 42px 15px;
 }
@@ -1145,48 +1337,59 @@ td .label {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Drag and Drop
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* line 72, scss/_temp.scss */
 ul[dnd-list], ul[dnd-list] > li {
   position: relative;
 }
 
+/* line 77, scss/_temp.scss */
 li.dndPlaceholder {
   border: 2px dashed;
   margin-bottom: 0.4em;
 }
 
+/* line 82, scss/_temp.scss */
 .dropzone {
   min-height: 42px;
   background-color: #fff;
   border-width: 2px;
   border-style: dashed;
 }
+/* line 87, scss/_temp.scss */
 .dropzone li.dndPlaceholder {
   border: none;
 }
 
+/* line 93, scss/_temp.scss */
 li.dropzone.dndDragover .content {
   display: none;
 }
+/* line 97, scss/_temp.scss */
 li.dropzone.dndDragover li.dndPlaceholder {
   border: 2px dashed;
   background-color: #62bc62;
   margin-bottom: 0.4em;
 }
 
+/* line 105, scss/_temp.scss */
 .dndDragging {
   opacity: 0.6;
 }
+/* line 108, scss/_temp.scss */
 .dndDragging div ul {
   display: none;
 }
+/* line 113, scss/_temp.scss */
 .dndDragging li ul {
   display: none;
 }
 
+/* line 119, scss/_temp.scss */
 .page-dragging {
   display: none;
 }
 
+/* line 123, scss/_temp.scss */
 .dndPlaceholder {
   background-color: #fff;
   border-style: dashed;
@@ -1196,77 +1399,96 @@ li.dropzone.dndDragover li.dndPlaceholder {
   position: relative;
 }
 
+/* line 132, scss/_temp.scss */
 .table > tbody > tr.active td {
   background-color: #e6e6e6;
 }
 
+/* line 136, scss/_temp.scss */
 .CodeMirror {
   border: 1px dotted darkgrey;
 }
 
+/* line 141, scss/_temp.scss */
 .help-raw .CodeMirror {
   height: auto;
 }
 
+/* line 148, scss/_temp.scss */
 .ui-select-match .btn-default {
   border: 1px solid #ccc;
   background-color: white;
   color: #555;
 }
+/* line 153, scss/_temp.scss */
 .ui-select-match .text-muted {
   color: darkgray;
 }
 
+/* line 159, scss/_temp.scss */
 .form-buttons {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
+/* line 165, scss/_temp.scss */
 .sub-nav {
   margin-bottom: 2em;
 }
 
+/* line 170, scss/_temp.scss */
 .subnav-actions .btn-group {
   margin-right: 0.5em;
 }
 
+/* line 176, scss/_temp.scss */
 .page-header {
   word-break: break-all;
 }
+/* line 178, scss/_temp.scss */
 .page-header .row h1,
 .page-header .row h3 {
   margin-top: 0;
 }
 
+/* line 183, scss/_temp.scss */
 .dl-small-label dt {
   width: 110px;
 }
+/* line 184, scss/_temp.scss */
 .dl-small-label dd {
   margin-left: 120px;
 }
 
+/* line 187, scss/_temp.scss */
 .dropdown.more-actions {
   cursor: pointer;
 }
+/* line 189, scss/_temp.scss */
 .dropdown.more-actions span.fa {
   color: #ccc;
 }
+/* line 192, scss/_temp.scss */
 .dropdown.more-actions span.fa:hover {
   color: #333;
 }
 
+/* line 198, scss/_temp.scss */
 .time-ago {
   cursor: default;
 }
 
+/* line 199, scss/_temp.scss */
 .tooltip {
   cursor: default;
 }
 
+/* line 201, scss/_temp.scss */
 .expression-helper {
   position: relative;
 }
 
+/* line 204, scss/_temp.scss */
 .expression-helper .variable-search, .expression-helper .decorator-dialog {
   background-color: white;
   border: 1px solid #ccc;
@@ -1281,6 +1503,7 @@ li.dropzone.dndDragover li.dndPlaceholder {
   z-index: 2000;
 }
 
+/* line 217, scss/_temp.scss */
 .expression-helper .variable-search .form-group, .expression-helper .decorator-dialog .form-group {
   background-color: #f5f5f5;
   border-bottom: 1px solid #ccc;
@@ -1290,28 +1513,34 @@ li.dropzone.dndDragover li.dndPlaceholder {
   margin: 0;
 }
 
+/* line 225, scss/_temp.scss */
 .expression-helper .variable-search .variable-search-result {
   padding: 10px;
   max-height: 300px;
   overflow-y: auto;
 }
 
+/* line 230, scss/_temp.scss */
 .expression-helper .variable-search li.list-group-item {
   cursor: pointer;
 }
 
+/* line 231, scss/_temp.scss */
 .expression-helper .variable-search li.list-group-item:hover {
   background-color: #f5f5f5;
 }
 
+/* line 232, scss/_temp.scss */
 .expression-helper .variable-search li.list-group-item.active:hover {
   background-color: #337ab7;
 }
 
+/* line 233, scss/_temp.scss */
 .expression-helper .variable-search .highlight {
   background-color: yellow;
 }
 
+/* line 235, scss/_temp.scss */
 .wrapper {
   min-height: 100%;
   width: 100%;
@@ -1320,31 +1549,38 @@ li.dropzone.dndDragover li.dndPlaceholder {
   display: inline-block;
 }
 
+/* line 243, scss/_temp.scss */
 .content-main {
   min-height: 400px;
   position: relative;
 }
 
+/* line 248, scss/_temp.scss */
 .content-view-wrapper {
   min-height: 400px;
 }
 
+/* line 252, scss/_temp.scss */
 .form-selector {
   width: 240px;
 }
+/* line 254, scss/_temp.scss */
 .form-selector .ellipsis {
   width: 95%;
 }
 
+/* line 258, scss/_temp.scss */
 .navigation-divider {
   margin: 1.2em 0;
 }
 
+/* line 262, scss/_temp.scss */
 .filter-menu {
   padding: 1em;
   width: 560px;
 }
 
+/* line 267, scss/_temp.scss */
 .filter-labels {
   border-bottom: 1px solid #eee;
   padding: 0.636363636em .545454545em;
@@ -1355,31 +1591,39 @@ li.dropzone.dndDragover li.dndPlaceholder {
   font-size: 11px;
   list-style: none;
 }
+/* line 276, scss/_temp.scss */
 .filter-labels > * {
   margin: 0.5em;
 }
+/* line 279, scss/_temp.scss */
 .filter-labels li {
   float: left;
 }
+/* line 282, scss/_temp.scss */
 .filter-labels .label {
   padding: 0.2em 0.6em 0.3em 0;
   font-size: 10.5px;
 }
+/* line 286, scss/_temp.scss */
 .filter-labels .fa {
   margin: 0 .3em;
 }
+/* line 289, scss/_temp.scss */
 .filter-labels .label-default {
   background-color: #b3b3b3;
 }
 
+/* line 372, scss/_temp.scss */
 .sortable-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+/* line 376, scss/_temp.scss */
 .sortable-list li:first-child div {
   border-top: none;
 }
+/* line 379, scss/_temp.scss */
 .sortable-list li.header div {
   vertical-align: bottom;
   border-bottom: 1px solid #ddd;
@@ -1387,15 +1631,19 @@ li.dropzone.dndDragover li.dndPlaceholder {
   font-weight: bold;
   cursor: default;
 }
+/* line 387, scss/_temp.scss */
 .sortable-list li:nth-of-type(even) {
   background-color: #f9f9f9;
 }
+/* line 390, scss/_temp.scss */
 .sortable-list li:hover {
   background-color: #f5f5f5;
 }
+/* line 394, scss/_temp.scss */
 .sortable-list li.header {
   background-color: #fff;
 }
+/* line 397, scss/_temp.scss */
 .sortable-list li > div {
   display: block;
   float: left;
@@ -1404,32 +1652,36 @@ li.dropzone.dndDragover li.dndPlaceholder {
   border-top: 1px solid #ddd;
   padding: 8px;
 }
+/* line 405, scss/_temp.scss */
 .sortable-list li.footer:hover {
   background-color: #f5f5f5;
 }
 
+/* line 411, scss/_temp.scss */
 .input-dropdown-item {
   padding-left: 8px;
   padding-right: 8px;
 }
 
 /* Styles go here */
+/* line 2, scss/_modal.scss */
 .kd-modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 10;
+  z-index: 2000;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Modal Content */
+/* line 13, scss/_modal.scss */
 .kd-modal-content {
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 50px;
   padding: 0;
   border: 1px solid #888;
   -moz-border-radius: 6px;
@@ -1439,36 +1691,44 @@ li.dropzone.dndDragover li.dndPlaceholder {
 }
 
 /* Modal Header */
+/* line 25, scss/_modal.scss */
 .kd-modal-header {
   padding: 2px 16px;
   background-color: transparent;
   color: #333;
   border-bottom: 1px solid #e5e5e5;
 }
+/* line 30, scss/_modal.scss */
 .kd-modal-header h4 {
   text-transform: none;
 }
 
 /* Modal Body */
+/* line 36, scss/_modal.scss */
 .kd-modal-body {
   padding: 8px 16px;
 }
+/* line 39, scss/_modal.scss */
 .kd-modal-body table {
   width: 100%;
 }
+/* line 41, scss/_modal.scss */
 .kd-modal-body table th, .kd-modal-body table td {
   padding: 0.5em;
 }
+/* line 44, scss/_modal.scss */
 .kd-modal-body table tbody tr {
   cursor: pointer;
 }
+/* line 46, scss/_modal.scss */
 .kd-modal-body table tbody tr:hover {
   background-color: #f2f2f2;
 }
 
 /* Modal Footer */
+/* line 54, scss/_modal.scss */
 .kd-modal-footer {
-  padding: 2px 16px;
+  padding: 8px 16px;
   background-color: transparent;
   color: #333;
   border-top: 1px solid #e5e5e5;

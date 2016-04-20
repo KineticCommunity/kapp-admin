@@ -10,7 +10,7 @@
 
     <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 
-    <!-- Show page content only if Kapp exists. Otherwise show error. -->
+    <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
     <c:choose>
         <c:when test="${empty currentKapp}">
             <c:redirect url="${bundle.kappPath}"/>

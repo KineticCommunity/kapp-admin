@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
+
 <bundle:layout page="layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
@@ -8,7 +9,7 @@
 
     <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
     
-    <!-- Show page content only if Kapp exists. Otherwise show error. -->
+    <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
     <c:choose>
         <c:when test="${empty currentKapp}">
             <c:redirect url="${bundle.kappPath}"/>
