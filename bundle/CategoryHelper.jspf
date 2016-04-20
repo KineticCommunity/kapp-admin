@@ -127,7 +127,7 @@
             }
             // Returns the current category object
             public Category getCategory(){ return this.category; }
-            // Returns the name string of the current category object
+            // Returns the slug string of the current category object
             public String getSlug() { return this.category.getSlug(); }
             // Returns a list of attributes for the current category object
             public List<Attribute> getAttributes() { return this.category.getAttributes(); }
@@ -173,9 +173,7 @@
             // Returns a list of form objects for the current category
             public List<Form> getForms() { return this.category.getForms(); }
             // Returns the Name value
-            public String getName() {
-                return this.category.getName();
-            }
+            public String getName() { return this.category.getName(); }
             // Returns the parent category object
             public BundleCategory getParentCategory() {
                 return parentCategory;

@@ -95,7 +95,6 @@ ul.top {
 /* modal z-index fix*/
 div.kd-modal-content {
     z-index: 4500;
-    width: 300px !important;
 }
 div.kd-modal-backdrop {
     z-index: 4200;

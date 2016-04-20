@@ -150,8 +150,14 @@
                 return false;
             }
             // Check for special characters in name
+            if(/^[^A-Z]+$/.test(name) === false) {
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your slug must be lowercase.', disable: false });
+                return false;
+            }
+            
+            // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
-                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your slug contains illegal characters.', disable: false });
                 return false;
             }
             // check if category already exists
@@ -196,8 +202,13 @@
                 return false;
             }
             // Check for special characters in name
+            if(/^[^A-Z]+$/.test(name) === false) {
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your slug must be lowercase.', disable: false });
+                return false;
+            }
+            // Check for special characters in name
             if(/^[a-zA-Z0-9- ]*$/.test(name) === false) {
-                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your search string contains illegal characters.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'Your slug contains illegal characters.', disable: false });
                 return false;
             }
             // check if category already exists and is not this item
@@ -216,6 +227,18 @@
             event.stopImmediatePropagation();
             var name = $(this).closest('li').attr('data-id');
             deleteCategory($('div.manage-categories').attr('data-slug'),name);
+        });
+
+        // Copy slug from name same as is done in the builder
+        $("input#change-display").on("keyup", function(){
+            $("input#change-name").val($(this).val().trim().toLowerCase().replace(/[^a-z\s-]/g, "").replace(/\s+/g, '-'));
+        }).one("keyup", "input#change-name", function(){
+            $("input#change-display").off("keyup");
+        });
+        $("input#display-name").on("keyup", function(){
+            $("input#category-name").val($(this).val().trim().toLowerCase().replace(/[^a-z\s-]/g, "").replace(/\s+/g, '-'));
+        }).one("keyup", "input#category-name", function(){
+            $("input#display-name").off("keyup");
         });
 
      });
@@ -390,7 +413,8 @@
                     backdrop: true,
                     backdropclose: true,
                     keyboardclose: true,
-                    renderCallback: false
+                    renderCallback: false,
+                    size: "sm"
                 });
             modal.show();
         }

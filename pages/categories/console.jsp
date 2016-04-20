@@ -66,10 +66,10 @@
                                     <div>
                                         <div class="form-group add-root"> 
                                             <div class="form-group">
-                                                <label for="category-name" class="control-label">Category Slug</label>
-                                                <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
                                                 <label for="display-name" class="control-label">Category Name</label>
                                                 <input placeholder="Display Name" id="change-display"  class="form-control"> 
+                                                <label for="category-name" class="control-label">Category Slug</label>
+                                                <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
                                                 <button class="btn btn-success btn-sm edit-category">Save</button>
                                                 <button class="btn btn-primary add-subcategory btn-sm pull-right"><span class="fa fa-plus-circle"></span> Add Subcategory</button>
                                             </div>
@@ -90,10 +90,10 @@
                                         <div class="form-group add-root"> 
                                             <div class="form-group">
                                                 <input type='hidden' id='parent-name'>
-                                                <label for="category-name" class="control-label">Category Name/Slug</label>
-                                                <input name="category-name" placeholder="Category Name" id="category-name" class="form-control"> 
-                                                <label for="display-name" class="control-label">Display Name</label>
+                                                <label for="display-name" class="control-label">Category Name</label>
                                                 <input placeholder="Display Name" id="display-name"  class="form-control"> 
+                                                <label for="category-name" class="control-label">Category Slug</label>
+                                                <input name="category-name" placeholder="Category Name" id="category-name" class="form-control"> 
                                                 <button class="btn btn-success btn-sm add-category">Save</button>
                                             </div>
                                         </div> 

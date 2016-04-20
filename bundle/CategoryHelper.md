@@ -16,7 +16,7 @@ request.setAttribute("CategoryHelper", new CategoryHelper());
 **Use the CategoryHelper in pages or partials:**
 ```jsp
 <c:forEach items="${CategoryHelper.getCategories(kapp)}" var="bundleCategory">
-    <h3>${text.escape(bundleCategory.getDisplayName())}</h3>
+    <h3>${text.escape(bundleCategory.getName())}</h3>
     <c:forEach items="${bundleCategory.getForms()}" var="categoryForm">
         <span class="label label-default">${text.escape(categoryForm.name)}</span>
     </c:forEach>
@@ -57,7 +57,6 @@ Decorative methods are additional methods created to extend the Category model.
 | Signature                                              | Description                                                                                                                                       |
 | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `Category getCategory()`                               | Returns the original Category object.                                                                                                             |
-| `String getDisplayName()`                              | Returns the "Display Name" attribute value if not null, otherwise returns _name_.                                                                 |
 | `String getParentCategory()`                           | Returns the parent BundleCategory object.                                                                                                         |
 | `List<BundleCategory> getSubcategories()`              | Returns a list of all the subcategory objects.                                                                                                    |
 | `List<BundleCategory> getTrail()`                      | Returns a list of parent category objects sorted from the root category to current category.                                                      |
@@ -80,6 +79,7 @@ Delegate methods are methods that call the core Category model methods.
 | `List<Form> getForms()`                                | Returns a list of Form objects associated to the category.                                                                                        |
 | `Kapp getKapp()`                                       | Returns the Kapp the category belongs to.                                                                                                         |
 | `String getName()`                                     | Returns the name of the category.                                                                                                                 |
+| `String getSlug()`                                     | Returns the slug of the category.                                                                                                                 |
 | `Boolean hasAttribute(String name)`                    | Returns true if an attribute identified by the `name` parameter exists.                                                                           |
 | `Boolean hasAttributeValue(String name, String value)` | Returns true if an attribute identified by the `name` parameter exists and has the value identified by the `value` parameter.                     |
 
