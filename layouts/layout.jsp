@@ -16,15 +16,17 @@
         <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
             <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.min.css"/>
+            <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
         <bundle:scriptpack>
-            <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.min.js"/>
-            <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
-            <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js"/>
+            <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
+            <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
+            <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
+            <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
         <bundle:yield name="head"/>
@@ -41,7 +43,7 @@
                             <div class="col-xs-2 sidebar">
                                 <ul class="nav nav-pills nav-stacked">
                                     <c:forEach var="console" items="${AdminHelper.getActiveConsolesForKapp(currentKapp)}">
-                                        <li class="${form.slug eq console.slug ? 'active' : ''}">
+                                        <li class="${form.slug eq console.slug || form.getAttributeValue('Console Slug') eq console.slug ? 'active' : ''}">
                                             <a href="${bundle.kappLocation}/${console.slug}?kapp=${currentKapp.slug}">${console.name}</a>
                                         </li>
                                     </c:forEach>

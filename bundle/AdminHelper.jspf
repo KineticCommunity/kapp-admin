@@ -1,13 +1,17 @@
-<%@page import="com.google.common.collect.ComparisonChain" %>
 <%!
     public static class AdminHelper {
     
         private Bundle adminBundle;
         private Kapp adminKapp;
+        private BundleSubmissionComponent submissionComponent;
         
-        public AdminHelper(Kapp kapp, Bundle bundle){
+        // Map for storing datastore records
+        private Map<String, List<Submission>> datastoreRecords = new HashMap<>();
+        
+        public AdminHelper(HttpServletRequest request, Kapp kapp, Bundle bundle){
             this.adminKapp = kapp;
             this.adminBundle = bundle;
+            this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
         }
         
         public List<Kapp> getActiveKapps(){
@@ -107,6 +111,88 @@
             public String getHref(){
                 return this.href;
             }
+        }
+        
+        public static List<LinkedHashMap> getDatastoreColumns(Form datastore){
+            LinkedHashMap<String, Field> fields = new LinkedHashMap<>();
+            for (Page page : datastore.getPages()){
+                for (Field field : page.getFields()){
+                    fields.put(field.getName(), field);
+                }
+            }
+            
+            List<LinkedHashMap> configuration = new ArrayList<>();
+            try {
+                configuration.addAll((List<LinkedHashMap>)Json.parse(datastore.getAttributeValue("Datastore Configuration")));
+            }
+            catch (Exception e){/*Ignore bad Json*/}
+            
+            List<LinkedHashMap> columns = new ArrayList<>();
+            for (LinkedHashMap config : configuration){
+                if (fields.containsKey(config.get("data"))){
+                    fields.remove(config.get("data"));
+                    columns.add(config);
+                }
+            }
+            for (Field field : fields.values()){
+                LinkedHashMap<String, Object> newColumn = new LinkedHashMap<>();
+                newColumn.put("data", field.getName());
+                newColumn.put("title", field.getName());
+                newColumn.put("visible", true);
+                newColumn.put("searchable", true);
+                newColumn.put("orderable", true);
+                columns.add(newColumn);
+            }
+            return columns;
+        }
+        
+        public List<Submission> getDatastoreRecords(Form datastore){
+            return getDatastoreRecords(datastore, 0, 0, true);
+        }
+        
+        public List<Submission> getDatastoreRecords(Form datastore, boolean refresh){
+            return getDatastoreRecords(datastore, 0, 0, refresh);
+        }
+        
+        public List<Submission> getDatastoreRecords(Form datastore, int pageSize, int offset){
+            return getDatastoreRecords(datastore, pageSize, offset, false);
+        }
+        
+        public List<Submission> getDatastoreRecords(Form datastore, int pageSize, int offset, boolean refresh){
+            // If get from database is requested, or data wasn't previously fetched, get/reload data
+            if (refresh || !this.datastoreRecords.containsKey(datastore.getSlug())){
+                // Clear current data so we only store records for one datastore at a time
+                this.datastoreRecords.clear();
+                List<Submission> submissions = new ArrayList<>();
+                submissions.addAll(this.submissionComponent.searchByForm(datastore, maxLimitQueryParameters()));
+                this.datastoreRecords.put(datastore.getSlug(), submissions);
+            }
+            
+            // Get records from Map
+            List<Submission> submissions = this.datastoreRecords.get(datastore.getSlug());
+            
+            // If offset is invalid, set to zero
+            if (offset < 0){
+                offset = 0;
+            }
+            // If offset is after the last result, return empty list
+            if (offset >= submissions.size()){
+                return new ArrayList<Submission>();
+            }
+            // Set pageEnd initially to end of list
+            int pageEnd = submissions.size();
+            // If pageSize is valid and offset + pageSize <= size of results list, set new pageEnd
+            if (pageSize > 0 && (offset + pageSize) <= submissions.size()){
+                pageEnd = offset + pageSize;
+            }
+            // Return a sublist of Submissions objects stored in submissions List
+            return submissions.subList(offset, pageEnd);
+        }
+        
+        private Map<String, String[]> maxLimitQueryParameters() {
+            Map<String, String[]> searchOptions = new HashMap<>();
+            searchOptions.put("limit", new String[] {"1000"});
+            return searchOptions;
         }
 
     }

@@ -45,14 +45,8 @@
 <%-- AdminHelper --%>
 <%@include file="AdminHelper.jspf"%>
 <%
-    AdminHelper adminHelper = new AdminHelper(kapp,bundle);
+    AdminHelper adminHelper = new AdminHelper(request, kapp, bundle);
     request.setAttribute("AdminHelper", adminHelper);
-%>
-
-<%-- AttributeHelper --%>
-<%@include file="AttributeHelper.jspf"%>
-<%
-    request.setAttribute("AttributeHelper", new AttributeHelper());
 %>
 
 <%-- CategoryHelper --%>
@@ -65,12 +59,6 @@
 <%@include file="SearchHelper.jspf"%>
 <%
     request.setAttribute("SearchHelper", new SearchHelper());
-%>
-
-<%-- SortHelper --%>
-<%@include file="SortHelper.jspf"%>
-<%
-    request.setAttribute("SortHelper", new SortHelper());
 %>
 
 <%-- SubmissionHelper --%>
