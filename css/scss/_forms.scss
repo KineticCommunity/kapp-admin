@@ -24,8 +24,6 @@ section.page {
     font-weight: 400;
     overflow: hidden;
     background: $white;
-    -webkit-box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
-    box-shadow: 0 0.1rem 0.3rem rgba($black, 0.13);
     
     .form-group.required label:after {
       content: '*';

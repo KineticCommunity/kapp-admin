@@ -9,7 +9,8 @@ table.dataTable thead th {
 }
 table.dataTable thead th.all,
 table.dataTable tbody td.all {
-    width: 80px; 
+    min-width: 82px; 
+    width: 82px; 
     text-align: center;
 }
 table.dataTable thead th.sorting:after,

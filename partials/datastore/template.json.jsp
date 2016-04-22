@@ -23,7 +23,7 @@
           "defaultResourceName": null,
           "visible": true,
           "enabled": true,
-          "required": false,
+          "required": true,
           "requiredMessage": null,
           "omitWhenHidden": null,
           "pattern": null,
@@ -69,25 +69,29 @@
           "type": "button",
           "label": "Save",
           "name": "Save",
-          "visible": true,
+          "visible": "bundle.adminDatastore != null",
           "enabled": true,
           "renderType": "submit-page",
-          "renderAttributes": {}
+          "renderAttributes": {
+            "class": "btn btn-primary"
+          }
         },
         {
           "type": "button",
           "label": "Cancel",
           "name": "Cancel",
-          "visible": true,
+          "visible": "bundle.adminDatastore != null",
           "enabled": true,
           "renderType": "custom",
-          "renderAttributes": {},
+          "renderAttributes": {
+            "class": "btn btn-link"
+          },
           "events": [
             {
               "name": "Return to Datastore",
               "type": "Click",
               "action": "Custom",
-              "code": "location.replace($('a.return-to-store').attr('href'));"
+              "code": "location.href=$('a.return-to-store').attr('href');"
             }
           ]
         }
@@ -97,7 +101,7 @@
           "name": "Return to Datastore on Success",
           "type": "Submit",
           "action": "Custom",
-          "code": "if ($.isEmptyObject(event.constraints)){\n\tlocation.replace($('a.return-to-store').attr('href'));\n}"
+          "code": "if ($.isEmptyObject(event.constraints)){\n\tlocation.href=$('a.return-to-store').attr('href');\n}"
         }
       ],
       "name": "Datastore",

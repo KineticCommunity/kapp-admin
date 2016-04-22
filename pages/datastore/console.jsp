@@ -1,14 +1,13 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
 <%@include file="../../bundle/router.jspf" %>
+<c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
         <c:import url="${bundle.path}/partials/${form.slug}/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
-
-    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 
     <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
     <c:choose>
@@ -80,9 +79,9 @@
             <bundle:variable name="aside">
                 <h3>Kinetic Datastore</h3>
                 <p>
-                    The following objects have been configured in the Datastore Console. 
-                    Objects are Kinetic Request forms that can be used to store data for use in other applications or on other forms. 
-                    To add a new datastore object, click the "Create Datastore" button.
+                    The listed datastores have been configured in the Datastore Console. 
+                    Datastores are Kinetic Request forms that can be used to store data for use in other applications or on other forms. 
+                    To add a new datastore, click the "Create Datastore" button.
                 </p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->

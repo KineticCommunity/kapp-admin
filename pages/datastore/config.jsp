@@ -39,6 +39,9 @@
                             <a class="btn btn-sm btn-primary" href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${currentStore.slug}/builder" target="_blank">
                                 <span class="fa fa-mouse-pointer fa-fw"></span>Builder
                             </a>
+                            <a class="btn btn-sm btn-primary" href="javascript:location.reload(true);">
+                                <span class="fa fa-refresh fa-fw"></span>
+                            </a>
                         </div>
                     </c:if>
                 </h3>
@@ -80,10 +83,11 @@
                     <table class="table table-hover" id="column-table"> 
                         <thead>
                             <tr>
-                                <th style="width:55%;">Field Name</th>
+                                <th style="width:40%;">Field Name</th>
                                 <th style="width:15%;">Visible</th>
                                 <th style="width:15%;">Searchable</th>
                                 <th style="width:15%;">Sortable</th>
+                                <th style="width:15%;">Unique</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,6 +97,7 @@
                                     <td class="column-visible"><input type="checkbox" ${column.visible ? 'checked' : ''}/></td>
                                     <td class="column-searchable"><input type="checkbox" ${column.searchable ? 'checked' : ''}/></td>
                                     <td class="column-orderable"><input type="checkbox" ${column.orderable ? 'checked' : ''}/></td>
+                                    <td class="column-unique"><input type="checkbox" ${column.unique ? 'checked' : ''}/></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -115,13 +120,9 @@
     
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
-                <h3>TITLE</h3>
+                <h3>${currentStore.name}</h3>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute 
-                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
-                    pariatur.
+                    ${currentStore.description}
                 </p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->

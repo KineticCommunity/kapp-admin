@@ -30,37 +30,37 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 300;
-  src: local("Open Sans Light"), local("OpenSans-Light"), url(../libraries/google-fonts/fonts/OpenSans-Light.ttf) format("truetype");
+  src: local("Open Sans Light"), local("OpenSans-Light"), url(../libraries/fonts/OpenSans-Light.ttf) format("truetype");
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(../libraries/google-fonts/fonts/OpenSans-Regular.ttf) format("truetype");
+  src: local("Open Sans"), local("OpenSans"), url(../libraries/fonts/OpenSans-Regular.ttf) format("truetype");
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(../libraries/google-fonts/fonts/OpenSans-Semibold.ttf) format("truetype");
+  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(../libraries/fonts/OpenSans-Semibold.ttf) format("truetype");
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(../libraries/google-fonts/fonts/OpenSans-Bold.ttf) format("truetype");
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(../libraries/fonts/OpenSans-Bold.ttf) format("truetype");
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 800;
-  src: local("Open Sans Extrabold"), local("OpenSans-Extrabold"), url(../libraries/google-fonts/fonts/OpenSans-Extrabold.ttf) format("truetype");
+  src: local("Open Sans Extrabold"), local("OpenSans-Extrabold"), url(../libraries/fonts/OpenSans-Extrabold.ttf) format("truetype");
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 400;
-  src: local("Open Sans Italic"), local("OpenSans-Italic"), url(../libraries/google-fonts/fonts/OpenSans-Italic.ttf) format("truetype");
+  src: local("Open Sans Italic"), local("OpenSans-Italic"), url(../libraries/fonts/OpenSans-Italic.ttf) format("truetype");
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
@@ -91,17 +91,15 @@ section.page form {
   font-weight: 400;
   overflow: hidden;
   background: #fff;
-  -webkit-box-shadow: 0 0.1rem 0.3rem rgba(51, 51, 51, 0.13);
-  box-shadow: 0 0.1rem 0.3rem rgba(51, 51, 51, 0.13);
   /* Attachment files
    *-------------------------------------- */
 }
-/* line 30, scss/_forms.scss */
+/* line 28, scss/_forms.scss */
 section.page form .form-group.required label:after {
   content: '*';
   color: red;
 }
-/* line 35, scss/_forms.scss */
+/* line 33, scss/_forms.scss */
 section.page form label {
   /* Make the label a block */
   color: rgba(51, 51, 51, 0.75);
@@ -110,45 +108,45 @@ section.page form label {
   font-size: 1.4remrem;
   font-weight: 600;
 }
-/* line 43, scss/_forms.scss */
+/* line 41, scss/_forms.scss */
 section.page form .radio label:first-child,
 section.page form .checkbox label:first-child {
   padding-left: 0;
 }
-/* line 54, scss/_forms.scss */
+/* line 52, scss/_forms.scss */
 section.page form .file-table {
   display: table;
   margin: 0px;
   padding: 0px;
 }
-/* line 59, scss/_forms.scss */
+/* line 57, scss/_forms.scss */
 section.page form .file-table .file-header {
   display: table-header-group;
 }
-/* line 61, scss/_forms.scss */
+/* line 59, scss/_forms.scss */
 section.page form .file-table .file-header span {
   background-color: white;
 }
-/* line 66, scss/_forms.scss */
+/* line 64, scss/_forms.scss */
 section.page form .file-table .file-container {
   display: table-row-group;
 }
-/* line 70, scss/_forms.scss */
+/* line 68, scss/_forms.scss */
 section.page form .file-table .file-row {
   display: table-row;
 }
-/* line 72, scss/_forms.scss */
+/* line 70, scss/_forms.scss */
 section.page form .file-table .file-row > span {
   list-style: none;
   display: table-cell;
   border: 1px solid #000;
   padding: 0.3rem 1.2rem;
 }
-/* line 77, scss/_forms.scss */
+/* line 75, scss/_forms.scss */
 section.page form .file-table .file-row > span:not(:first-child) {
   border-left: none;
 }
-/* line 81, scss/_forms.scss */
+/* line 79, scss/_forms.scss */
 section.page form .file-table .file-row:not(:first-child) > span {
   border-top: none;
 }
@@ -1441,54 +1439,50 @@ li.dropzone.dndDragover li.dndPlaceholder {
   margin-right: 0.5em;
 }
 
-/* line 176, scss/_temp.scss */
-.page-header {
-  word-break: break-all;
-}
-/* line 178, scss/_temp.scss */
+/* line 177, scss/_temp.scss */
 .page-header .row h1,
 .page-header .row h3 {
   margin-top: 0;
 }
 
-/* line 183, scss/_temp.scss */
+/* line 182, scss/_temp.scss */
 .dl-small-label dt {
   width: 110px;
 }
-/* line 184, scss/_temp.scss */
+/* line 183, scss/_temp.scss */
 .dl-small-label dd {
   margin-left: 120px;
 }
 
-/* line 187, scss/_temp.scss */
+/* line 186, scss/_temp.scss */
 .dropdown.more-actions {
   cursor: pointer;
 }
-/* line 189, scss/_temp.scss */
+/* line 188, scss/_temp.scss */
 .dropdown.more-actions span.fa {
   color: #ccc;
 }
-/* line 192, scss/_temp.scss */
+/* line 191, scss/_temp.scss */
 .dropdown.more-actions span.fa:hover {
   color: #333;
 }
 
-/* line 198, scss/_temp.scss */
+/* line 197, scss/_temp.scss */
 .time-ago {
   cursor: default;
 }
 
-/* line 199, scss/_temp.scss */
+/* line 198, scss/_temp.scss */
 .tooltip {
   cursor: default;
 }
 
-/* line 201, scss/_temp.scss */
+/* line 200, scss/_temp.scss */
 .expression-helper {
   position: relative;
 }
 
-/* line 204, scss/_temp.scss */
+/* line 203, scss/_temp.scss */
 .expression-helper .variable-search, .expression-helper .decorator-dialog {
   background-color: white;
   border: 1px solid #ccc;
@@ -1503,7 +1497,7 @@ li.dropzone.dndDragover li.dndPlaceholder {
   z-index: 2000;
 }
 
-/* line 217, scss/_temp.scss */
+/* line 216, scss/_temp.scss */
 .expression-helper .variable-search .form-group, .expression-helper .decorator-dialog .form-group {
   background-color: #f5f5f5;
   border-bottom: 1px solid #ccc;
@@ -1513,34 +1507,34 @@ li.dropzone.dndDragover li.dndPlaceholder {
   margin: 0;
 }
 
-/* line 225, scss/_temp.scss */
+/* line 224, scss/_temp.scss */
 .expression-helper .variable-search .variable-search-result {
   padding: 10px;
   max-height: 300px;
   overflow-y: auto;
 }
 
-/* line 230, scss/_temp.scss */
+/* line 229, scss/_temp.scss */
 .expression-helper .variable-search li.list-group-item {
   cursor: pointer;
 }
 
-/* line 231, scss/_temp.scss */
+/* line 230, scss/_temp.scss */
 .expression-helper .variable-search li.list-group-item:hover {
   background-color: #f5f5f5;
 }
 
-/* line 232, scss/_temp.scss */
+/* line 231, scss/_temp.scss */
 .expression-helper .variable-search li.list-group-item.active:hover {
   background-color: #337ab7;
 }
 
-/* line 233, scss/_temp.scss */
+/* line 232, scss/_temp.scss */
 .expression-helper .variable-search .highlight {
   background-color: yellow;
 }
 
-/* line 235, scss/_temp.scss */
+/* line 234, scss/_temp.scss */
 .wrapper {
   min-height: 100%;
   width: 100%;
@@ -1549,38 +1543,38 @@ li.dropzone.dndDragover li.dndPlaceholder {
   display: inline-block;
 }
 
-/* line 243, scss/_temp.scss */
+/* line 242, scss/_temp.scss */
 .content-main {
   min-height: 400px;
   position: relative;
 }
 
-/* line 248, scss/_temp.scss */
+/* line 247, scss/_temp.scss */
 .content-view-wrapper {
   min-height: 400px;
 }
 
-/* line 252, scss/_temp.scss */
+/* line 251, scss/_temp.scss */
 .form-selector {
   width: 240px;
 }
-/* line 254, scss/_temp.scss */
+/* line 253, scss/_temp.scss */
 .form-selector .ellipsis {
   width: 95%;
 }
 
-/* line 258, scss/_temp.scss */
+/* line 257, scss/_temp.scss */
 .navigation-divider {
   margin: 1.2em 0;
 }
 
-/* line 262, scss/_temp.scss */
+/* line 261, scss/_temp.scss */
 .filter-menu {
   padding: 1em;
   width: 560px;
 }
 
-/* line 267, scss/_temp.scss */
+/* line 266, scss/_temp.scss */
 .filter-labels {
   border-bottom: 1px solid #eee;
   padding: 0.636363636em .545454545em;
@@ -1591,39 +1585,39 @@ li.dropzone.dndDragover li.dndPlaceholder {
   font-size: 11px;
   list-style: none;
 }
-/* line 276, scss/_temp.scss */
+/* line 275, scss/_temp.scss */
 .filter-labels > * {
   margin: 0.5em;
 }
-/* line 279, scss/_temp.scss */
+/* line 278, scss/_temp.scss */
 .filter-labels li {
   float: left;
 }
-/* line 282, scss/_temp.scss */
+/* line 281, scss/_temp.scss */
 .filter-labels .label {
   padding: 0.2em 0.6em 0.3em 0;
   font-size: 10.5px;
 }
-/* line 286, scss/_temp.scss */
+/* line 285, scss/_temp.scss */
 .filter-labels .fa {
   margin: 0 .3em;
 }
-/* line 289, scss/_temp.scss */
+/* line 288, scss/_temp.scss */
 .filter-labels .label-default {
   background-color: #b3b3b3;
 }
 
-/* line 372, scss/_temp.scss */
+/* line 371, scss/_temp.scss */
 .sortable-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-/* line 376, scss/_temp.scss */
+/* line 375, scss/_temp.scss */
 .sortable-list li:first-child div {
   border-top: none;
 }
-/* line 379, scss/_temp.scss */
+/* line 378, scss/_temp.scss */
 .sortable-list li.header div {
   vertical-align: bottom;
   border-bottom: 1px solid #ddd;
@@ -1631,19 +1625,19 @@ li.dropzone.dndDragover li.dndPlaceholder {
   font-weight: bold;
   cursor: default;
 }
-/* line 387, scss/_temp.scss */
+/* line 386, scss/_temp.scss */
 .sortable-list li:nth-of-type(even) {
   background-color: #f9f9f9;
 }
-/* line 390, scss/_temp.scss */
+/* line 389, scss/_temp.scss */
 .sortable-list li:hover {
   background-color: #f5f5f5;
 }
-/* line 394, scss/_temp.scss */
+/* line 393, scss/_temp.scss */
 .sortable-list li.header {
   background-color: #fff;
 }
-/* line 397, scss/_temp.scss */
+/* line 396, scss/_temp.scss */
 .sortable-list li > div {
   display: block;
   float: left;
@@ -1652,12 +1646,12 @@ li.dropzone.dndDragover li.dndPlaceholder {
   border-top: 1px solid #ddd;
   padding: 8px;
 }
-/* line 405, scss/_temp.scss */
+/* line 404, scss/_temp.scss */
 .sortable-list li.footer:hover {
   background-color: #f5f5f5;
 }
 
-/* line 411, scss/_temp.scss */
+/* line 410, scss/_temp.scss */
 .input-dropdown-item {
   padding-left: 8px;
   padding-right: 8px;

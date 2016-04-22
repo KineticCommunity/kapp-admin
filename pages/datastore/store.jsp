@@ -1,5 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
+<c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
+<c:set var="currentStore" value="${kapp.getForm(param.store)}" scope="request" />
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
@@ -7,9 +9,6 @@
         <title>Admin Console<c:if test="${not empty form}"> | ${form.name}</c:if></title>
         <c:import url="${bundle.path}/partials/${form.slug}/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
-
-    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-    <c:set var="currentStore" value="${kapp.getForm(param.store)}" scope="request" />
 
     <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
     <c:choose>
@@ -44,9 +43,10 @@
                 <div class="col-xs-12">
                     
                     <table style="width:100%" class="table table-hover table-striped table-bordered dt-responsive nowrap" id="datastore-records-table" 
-                            data-console-slug="${form.slug}" data-datastore-slug="${currentStore.slug}" data-kapp-slug="${currentKapp.slug}">
+                            data-datastore-name="${currentStore.name}" data-datastore-slug="${currentStore.slug}" 
+                            data-console-slug="${form.slug}" data-kapp-slug="${currentKapp.slug}">
                         <tr>
-                            <td>
+                            <td class="alert alert-info">
                                 <span class="fa fa-spinner fa-spin"></span>
                                 Loading
                             </td>
