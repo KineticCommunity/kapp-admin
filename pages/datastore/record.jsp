@@ -14,9 +14,6 @@
         <c:when test="${empty currentKapp}">
             <c:redirect url="${bundle.kappPath}"/>
         </c:when>
-        <c:when test="${!identity.spaceAdmin}">
-            <c:import url="${bundle.path}/partials/${form.slug}/adminError.jsp" charEncoding="UTF-8"/>
-        </c:when>
         <c:otherwise>
             
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
@@ -32,52 +29,9 @@
             </div>
             
             <div class="row">
-                <div class="col-xs-12 datastore-record-container" data-datastore-slug="${currentStore.slug}"
-                        data-record-id="${param.id}" data-clone-id="${param.clone}">
-                    <script>
-                        $(function(){
-                            if ("${param.id}"){
-                                K.load({
-                                    path: "${bundle.spaceLocation}/submissions/${param.id}", 
-                                    container: $('div.datastore-record-container')
-                                });
-                            }
-                            else if ("${param.clone}"){
-                                $.ajax({
-                                    mathod: "GET",
-                                    url: "${bundle.apiLocation}/submissions/${param.clone}?include=values,form",
-                                    dataType: "json",
-                                    contentType: "application/json",
-                                    success: function(clone, textStatus, jqXHR){
-                                        K.load({
-                                            path: "${bundle.kappLocation}/${currentStore.slug}", 
-                                            container: $('div.datastore-record-container'),
-                                            loaded: function(form){
-                                                console.log("clone", clone);
-                                                console.log("form", form);
-                                                if (clone.submission.form.name === form.name){
-                                                    _.each(clone.submission.values, function(value, key){
-                                                        if (form.fields[key]){
-                                                            form.fields[key].value(value);
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        }); 
-                                    },
-                                    error: function(jqXHR, textStatus, errorThrown){
-                                        console.log("ERROR"); // TODO
-                                    }
-                                });
-                            }
-                            else {
-                                K.load({
-                                    path: "${bundle.kappLocation}/${currentStore.slug}", 
-                                    container: $('div.datastore-record-container')
-                                });                                
-                            }
-                        });
-                    </script>
+                <div class="col-xs-12">
+                    <div class="datastore-record-container" data-datastore-slug="${currentStore.slug}"
+                            data-record-id="${param.id}" data-clone-id="${param.clone}"></div>
                 </div>
             </div>
             

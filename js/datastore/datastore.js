@@ -227,6 +227,63 @@
                 //$(confirmDelete.content()).find("button.btn-link").focus();
             });
         }
+        
+        if ($("div.datastore-record-container").length){
+            var recordContainer = $("div.datastore-record-container");
+            recordContainer.on("click", "button.cancel-record", redirectToDatastore);
+            
+            var datastoreSlug = recordContainer.data("datastore-slug");
+            var recordId = recordContainer.data("record-id");
+            var cloneId = recordContainer.data("clone-id");
+            
+            if (recordId){
+                K.load({
+                    path: bundle.spaceLocation() + "/submissions/" + recordId, 
+                    container: recordContainer,
+                    updated: redirectToDatastore
+                });
+            }
+            else if (cloneId){
+                $.ajax({
+                    mathod: "GET",
+                    url: bundle.apiLocation() + "/submissions/" + cloneId + "?include=values,form",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(clone, textStatus, jqXHR){
+                        K.load({
+                            path: bundle.kappLocation() + "/" + datastoreSlug, 
+                            container: recordContainer,
+                            loaded: function(form){
+                                console.log("clone", clone);
+                                console.log("form", form);
+                                if (form.submission.id == null){
+                                    if (clone.submission.form.name === form.name){
+                                        _.each(clone.submission.values, function(value, key){
+                                            if (form.fields[key]){
+                                                form.fields[key].value(value);
+                                            }
+                                        });
+                                    }
+                                }
+                            },
+                            created: redirectToDatastore
+                        }); 
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        recordContainer.notifie({
+                            message: "Failed to initializa clone of the record: " + errorThrown
+                        });
+                    }
+                });
+            }
+            else {
+                K.load({
+                    path: bundle.kappLocation() + "/" + datastoreSlug, 
+                    container: recordContainer,
+                    created: redirectToDatastore
+                });                                
+            }
+        }
     });
 
     /*----------------------------------------------------------------------------------------------
@@ -285,7 +342,9 @@
                 });
             },
             error: function(jqXHR, textStatus, errorThrown){
-                console.log("ERROR"); // TODO
+                $("table#datastore-records-table").empty().notifie({
+                    message: "Failed to load records for the datastore.<br>" + errorThrown
+                });
             }
         });
     }
@@ -544,6 +603,10 @@
             });
             loadDatastoreRecords(datastoreSlug);
         }
+    }
+    
+    function redirectToDatastore(){
+        location.href = $('a.return-to-store').attr('href');
     }
      
 })($, _);

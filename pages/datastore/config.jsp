@@ -15,9 +15,6 @@
         <c:when test="${empty currentKapp}">
             <c:redirect url="${bundle.kappPath}"/>
         </c:when>
-        <c:when test="${!identity.spaceAdmin}">
-            <c:import url="${bundle.path}/partials/${form.slug}/adminError.jsp" charEncoding="UTF-8"/>
-        </c:when>
         <c:otherwise>
             
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->

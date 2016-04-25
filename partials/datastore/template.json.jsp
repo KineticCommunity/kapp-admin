@@ -84,26 +84,12 @@
           "enabled": true,
           "renderType": "custom",
           "renderAttributes": {
-            "class": "btn btn-link"
+            "class": "btn btn-link cancel-record"
           },
-          "events": [
-            {
-              "name": "Return to Datastore",
-              "type": "Click",
-              "action": "Custom",
-              "code": "location.href=$('a.return-to-store').attr('href');"
-            }
-          ]
+          "events": []
         }
       ],
-      "events": [
-        {
-          "name": "Return to Datastore on Success",
-          "type": "Submit",
-          "action": "Custom",
-          "code": "if ($.isEmptyObject(event.constraints)){\n\tlocation.href=$('a.return-to-store').attr('href');\n}"
-        }
-      ],
+      "events": [],
       "name": "Datastore",
       "renderType": "submittable",
       "type": "page"
