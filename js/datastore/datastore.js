@@ -254,13 +254,11 @@
                             path: bundle.kappLocation() + "/" + datastoreSlug, 
                             container: recordContainer,
                             loaded: function(form){
-                                console.log("clone", clone);
-                                console.log("form", form);
-                                if (form.submission.id == null){
-                                    if (clone.submission.form.name === form.name){
+                                if (form.submission().id() == null){
+                                    if (clone.submission.form.name === form.name()){
                                         _.each(clone.submission.values, function(value, key){
-                                            if (form.fields[key]){
-                                                form.fields[key].value(value);
+                                            if (form.getFieldByName(key)){
+                                                form.getFieldByName(key).value(value);
                                             }
                                         });
                                     }
@@ -598,7 +596,7 @@
                 anchor: "h3",
                 message: msg,
                 onShow: function(){
-                    $(".export-failures").trigger("click");
+                    
                 }
             });
             loadDatastoreRecords(datastoreSlug);
