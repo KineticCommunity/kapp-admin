@@ -1,3 +1,4 @@
+<%@page import="com.kineticdata.core.web.bundles.PaginatedList" %>
 <%!
     public static class AdminHelper {
     
@@ -165,7 +166,14 @@
                 // Clear current data so we only store records for one datastore at a time
                 this.datastoreRecords.clear();
                 List<Submission> submissions = new ArrayList<>();
-                submissions.addAll(this.submissionComponent.searchByForm(datastore, maxLimitQueryParameters()));
+                Map<String, String[]> parameters = maxLimitQueryParameters();
+                PaginatedList<Submission> page;
+                do {
+                    page = this.submissionComponent.searchByForm(datastore, parameters);
+                    submissions.addAll(page);
+                    parameters.put("pageToken", new String[]{page.getNextPageToken()});
+                } 
+                while (Text.isNotBlank(page.getNextPageToken()));
                 this.datastoreRecords.put(datastore.getSlug(), submissions);
             }
             
@@ -192,7 +200,7 @@
         
         private Map<String, String[]> maxLimitQueryParameters() {
             Map<String, String[]> searchOptions = new HashMap<>();
-            searchOptions.put("limit", new String[] {"1000"});
+            searchOptions.put("limit", new String[]{"1000"});
             return searchOptions;
         }
         

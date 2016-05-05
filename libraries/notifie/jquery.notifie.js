@@ -125,7 +125,6 @@ jQuery.fn.extend({
             exit: false,
             recurseExit: false
         }, options || {});
-        console.log("OPTIONS", options);
         
         // Get owner of notification
         var owner = self.closest(options.anchor).length ? self.closest(options.anchor) : self;
