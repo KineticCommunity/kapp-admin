@@ -1,6 +1,6 @@
 /**
  * Notifie JS
- * Version 0.3
+ * Version 0.3.2
  * 
  * Library that extends jQuery to add a .notifie(options) function for displaying alerts and confirmations.
  * Requires jQuery, Bootstrap, FontAwesome
@@ -17,7 +17,7 @@
  *              Finds the closest element matching this selector to use as anchor of the notifications.
  *              Examples: 'div' or 'li.main'
  *           
- *  -type:      String -> 'alert' or 'confirm
+ *  -type:      String -> 'alert' or 'confirm'
  *              Default: 'alert'
  *              Defines the type of notification to display.
  * 
@@ -40,16 +40,16 @@
  *                          (ie. If the anchor's margin-bottom is 5px, the notification will get a margin-bottom of -5px)
  * 
  *  -onShow:    Function
- *              Default: function(){}
+ *              Default: function(notification){}
  *              Function to call when the notification is shown. Context is the calling element.
  * 
  *  -onConfirm: Function
- *              Default: function(){}
- *              Function to call when alert is closed or confirm button is pressed in confirmation notification.
+ *              Default: function(notification){}
+ *              Function to call when alert is closed or confirm button is pressed in confirmation notification. Context is the calling element.
  *           
  *  -onReject:  Function
- *              Default: function(){}
- *              Function to call when confirmation notification is closed or reject button is pressed in confirmation notification.
+ *              Default: function(notification){}
+ *              Function to call when confirmation notification is closed or reject button is pressed in confirmation notification. Context is the calling element.
  * 
  *  -clearExisting: Boolean
  *                  Default: true
@@ -84,7 +84,7 @@
  *              Applies only if type is alert. Amount of milliseconds that the alert will stay on screen before automatically disappearing.
  * 
  *  -disable:   Boolean
- *              Default: true
+ *              Default: false for alerts, true for confirmations
  *              If true, the calling element will be disabled when the notification is shown, and enabled when the notification is closed.
  * 
  *  -toggle:    Boolean
@@ -120,11 +120,12 @@ jQuery.fn.extend({
             rejectText: "Cancel",
             duration: 100,
             expire: null,
-            disable: true,
+            disable: options && options.type === "confirm" ? true : false,
             toggle: false,
             exit: false,
             recurseExit: false
         }, options || {});
+        console.log("OPTIONS", options);
         
         // Get owner of notification
         var owner = self.closest(options.anchor).length ? self.closest(options.anchor) : self;
@@ -200,8 +201,8 @@ jQuery.fn.extend({
                     // If confirm is not undefined, call a callback function
                     if (confirm !== undefined){
                         // If confirm is true or notification is alert, call onConfirm, else call onReject
-                        if (confirm || isAlert) options.onConfirm.call(self);
-                        else options.onReject.call(self);
+                        if (confirm || isAlert) options.onConfirm.call(self, notification);
+                        else options.onReject.call(self, notification);
                     }
                     // Remove the notification
                     $(this).remove();
@@ -260,7 +261,7 @@ jQuery.fn.extend({
             // Add as sibling immediately before owner and show notification
             notification.insertBefore(owner).slideDown(options.duration, function(){
                 // Call onShow function
-                options.onShow.call(self);
+                options.onShow.call(self, notification);
                 // Disable self if necessary
                 if (options.disable){
                     self.prop('disabled', true);
@@ -282,6 +283,11 @@ jQuery.fn.extend({
 /**
  * Change Log
  * 
+ * v0.3.2 2016-04-29
+ *  - Callbacks now receive the notification element as the first parameter.
+ *  - Disable option is changed to by default be false for alerts and true for confirmations.
+ * v0.3.1 2016-04-14
+ *  - Added type="button" to buttons in order to prevent form submission on button click.
  * v0.3 2015-10-02
  *  - The message can now contain html.
  *  - Added toggle option, which when set to true, will only close any existing notifications, and if no existing notifications then will open new notification. 

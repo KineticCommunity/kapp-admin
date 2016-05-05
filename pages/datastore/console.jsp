@@ -3,19 +3,19 @@
 <%@include file="../../bundle/router.jspf" %>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 
-<bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <!-- Sets title and imports js and css specific to this console. -->
-    <bundle:variable name="head">
-        <c:import url="${bundle.path}/partials/${form.slug}/head.jsp" charEncoding="UTF-8"/>
-    </bundle:variable>
+<!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
+<c:choose>
+    <c:when test="${empty currentKapp}">
+        <script>window.location.replace("${bundle.kappLocation}");</script>
+    </c:when>
+    <c:otherwise>
 
-    <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
-    <c:choose>
-        <c:when test="${empty currentKapp}">
-            <c:redirect url="${bundle.kappPath}"/>
-        </c:when>
-        <c:otherwise>
-            
+        <bundle:layout page="${bundle.path}/layouts/layout.jsp">
+            <!-- Sets title and imports js and css specific to this console. -->
+            <bundle:variable name="head">
+                <c:import url="${bundle.path}/partials/datastore/head.jsp" charEncoding="UTF-8"/>
+            </bundle:variable>
+
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
                         
             <div class="page-header">
@@ -57,7 +57,7 @@
                                             <td>
                                                 <div class="btn-group pull-right">
                                                     <a class="btn btn-xs btn-default" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=datastore/config&store=${datastore.slug}">
-                                                        <span class="fa fa-pencil fa-fw"></span>
+                                                        <span class="fa fa-cog fa-fw"></span>
                                                     </a>
                                                 </div>
                                             </td>
@@ -76,13 +76,20 @@
             <bundle:variable name="aside">
                 <h3>Kinetic Datastore</h3>
                 <p>
-                    The listed datastores have been configured in the Datastore Console. 
                     Datastores are Kinetic Request forms that can be used to store data for use in other applications or on other forms. 
-                    To add a new datastore, click the "Create Datastore" button.
+                    The listed datastores have been configured in the Datastore Console. 
+                </p>
+                <p>
+                    To add a new datastore, click the <b>Create Datastore</b> button.
+                </p>
+                <hr />
+                <p>
+                    <span class="fa fa-exclamation-circle"></span> Datastore forms can not contain more than 1 page.
                 </p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
-        </c:otherwise>
-    </c:choose>
-</bundle:layout>
+        </bundle:layout>
+        
+    </c:otherwise>
+</c:choose>

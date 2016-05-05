@@ -141,6 +141,7 @@
                 newColumn.put("visible", true);
                 newColumn.put("searchable", true);
                 newColumn.put("orderable", true);
+                //newColumn.put("unique", false);
                 columns.add(newColumn);
             }
             return columns;
@@ -194,6 +195,20 @@
             searchOptions.put("limit", new String[] {"1000"});
             return searchOptions;
         }
+        
+//         TODO Disallow duplicate submissions        
+//         public List<String> getUniqueFields(Form datastore){
+//             List<String> uniqueFields = new ArrayList<>();
+            
+//             List<LinkedHashMap> configuration = getDatastoreColumns(datastore);
+//             for (LinkedHashMap config : configuration){
+//                 if ((Boolean)config.get("unique")){
+//                     uniqueFields.add((String)config.get("data"));
+//                 }
+//             }
+            
+//             return uniqueFields;
+//         }
 
     }
 %>

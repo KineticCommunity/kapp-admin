@@ -1,15 +1,20 @@
 /* JS Specific to the Datastore Console */
 (function($, _) {
-    /**********************************************************************************************
-     * DOM MANIPULATION AND EVENT REGISTRATION
+    /*----------------------------------------------------------------------------------------------
+     * DOM MANIPULATION AND EVENT REGISTRATION 
      *   This section is executed on page load to register events and otherwise manipulate the DOM.
-     **********************************************************************************************/
+     *--------------------------------------------------------------------------------------------*/
     $(function() {
+        
+        /******************************************************************************************
+         ** START *** DATASTORE/CONFIG PAGE *** DOCUMENT READY CODE
+         ** Allows for creating of new datastore forms and updating those forms.
+         ******************************************************************************************/
         
         /**
          * Event handler for creating a new datastore.
          */
-        $("button#create_datastore").on("click", function(){
+        $("button#create-datastore").on("click", function(){
             // Store instance to this button and form
             var self = $(this);
             var form = self.closest("form");
@@ -25,11 +30,12 @@
             }
             // Get field data
             var fieldData = {
-                name: form.find("input#datastore_name").val(),
-                slug: form.find("input#datastore_slug").val(),
-                description: form.find("textarea#datastore_description").val()
+                name: form.find("input#datastore-name").val(),
+                slug: form.find("input#datastore-slug").val(),
+                description: form.find("textarea#datastore-description").val()
             };
-            // Make ajax call to get json template for creating a new datastore form
+            
+            /** Make ajax call to get json template for creating a new datastore form **/
             $.ajax({
                 url: bundle.kappLocation() + "?partial=datastore/template.json",
                 beforeSend: function(jqXHR, settings){
@@ -37,22 +43,93 @@
                 },
                 success: function(data, textStatus, jqXHR){
                     try {
-                        // Make ajax call to create new form using json from above ajax call and form fields from the screen
+                        /** Make ajax call to create new form using json from above ajax call and form fields from the screen **/
                         $.ajax({
                             method: "POST",
-                            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms",
+                            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms?include=fields",
                             dataType: "json",
                             data: JSON.stringify($.extend(true, JSON.parse(data), fieldData)),
                             contentType: "application/json",
                             success: function(data, textStatus, jqXHR){
-                                // Redirect to update datastore page on success
-                                location.href = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
+                                // Define url to redirect to
+                                var redirectUrl = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
                                         + "&page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
+                                // Get bridge dropdown
+                                var bridgeSelect = form.find("select#datastore-bridge");
+                                
+                                /** If bridge is selected, create/update bridge model and mapping **/
+                                if (bridgeSelect.val().length > 0){
+                                    // Build model ajax options with data
+                                    var bridgeModelAjaxOptions = buildAttributeModelAjaxOptions("Datastore - " + data.form.name, 
+                                            bridgeSelect, 
+                                            form.find("table#qualification-table"), 
+                                            data.form);
+                                    // Build mapping ajax options with data
+                                    var bridgeMappingAjaxOptions = buildAttributeMappingAjaxOptions("Datastore - " + data.form.name, 
+                                            bridgeSelect, 
+                                            form.find("table#qualification-table"), 
+                                            data.form);
+                                    
+                                    /** Perform ajax call to create/update bridge model **/
+                                    $.ajax($.extend(true, bridgeModelAjaxOptions, {
+                                            success: function(data, textStatus, jqXHR){
+                                                /** Perform ajax call to update bridge mapping **/
+                                                $.ajax($.extend(true, bridgeMappingAjaxOptions, {
+                                                        success: function(data, textStatus, jqXHR){
+                                                            // Redirect to update datastore page on success
+                                                            location.href = redirectUrl;
+                                                        },
+                                                        error: function(jqXHR, textStatus, errorThrown){
+                                                            (new KD.Modal({
+                                                                header: "<h3>Error</h3>",
+                                                                body: "There was an error building the bridge mapping: " + errorThrown,
+                                                                footer: function(element, actions) {
+                                                                    element.addClass("text-right").append(
+                                                                        $("<button>", {class: "btn btn-default"}).text("OK").on("click", actions.dismiss)
+                                                                    );
+                                                                },
+                                                                size: "sm",
+                                                                backdrop: true,
+                                                                backdropclose: true,
+                                                                keyboardclose: true,
+                                                                renderCallback: false,
+                                                                dismiss: function(){
+                                                                    // Redirect to update datastore page on success
+                                                                    location.href = redirectUrl;
+                                                                }
+                                                            })).show();
+                                                        }
+                                                    }));
+                                            },
+                                            error: function(jqXHR, textStatus, errorThrown){
+                                                (new KD.Modal({
+                                                    header: "<h3>Error</h3>",
+                                                    body: "There was an error building the bridge model: " + errorThrown,
+                                                    footer: function(element, actions) {
+                                                        element.addClass("text-right").append(
+                                                            $("<button>", {class: "btn btn-default"}).text("OK").on("click", actions.dismiss)
+                                                        );
+                                                    },
+                                                    size: "sm",
+                                                    backdrop: true,
+                                                    backdropclose: true,
+                                                    keyboardclose: true,
+                                                    renderCallback: false,
+                                                    dismiss: function(){
+                                                        // Redirect to update datastore page on success
+                                                        location.href = redirectUrl;
+                                                    }
+                                                })).show();
+                                            }
+                                        }));
+                                }
+                                else {
+                                    // Redirect to update datastore page on success
+                                    location.href = redirectUrl;
+                                }
                             },
                             error: function(jqXHR, textStatus, errorThrown){
                                 createError(JSON.parse(jqXHR.responseText).error);
-                            },
-                            complete: function(jqXHR, textStatus){
                                 self.prop("disabled", false);
                             }
                         });
@@ -70,31 +147,31 @@
         /**
          * Event handlers for mirroring name field input into slug when creating datastore.
          */
-        $("form#create_datastore_form").on("keyup", "input#datastore_name", function(){
-            $("input#datastore_slug").val($(this).val().trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"));
-        }).one("keyup", "input#datastore_slug", function(){
-            console.log(this);
-            $("form#create_datastore_form").off("keyup", "input#datastore_name");
+        $("form#create-datastore-form").on("keyup", "input#datastore-name", function(){
+            $("input#datastore-slug").val($(this).val().trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"));
+        }).one("keyup", "input#datastore-slug", function(){
+            $("form#create-datastore-form").off("keyup", "input#datastore-name");
         });
         
         /**
          * Event handler for updating a datastore.
          */
-        $("button#update_datastore").on("click", function(){
+        $("button#update-datastore").on("click", function(){
             // Store instance to this button and form
             var self = $(this);
             var form = self.closest("form");
             // Get field data
             var fieldData = {
-                name: form.find("input#datastore_name").val(),
-                slug: form.find("input#datastore_slug").val(),
-                description: form.find("textarea#datastore_description").val(),
+                name: form.find("input#datastore-name").val(),
+                slug: form.find("input#datastore-slug").val(),
+                description: form.find("textarea#datastore-description").val(),
                 attributes: buildDatastoreConfigurationAttribute(form.find("table#column-table"))
             };
-            // Make ajax call to update datastore with data from the form fields on the screen
+
+            /** Make ajax call to update datastore with data from the form fields on the screen **/
             $.ajax({
                 method: "PUT",
-                url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + self.data("datastore-slug"),
+                url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + self.data("datastore-slug") + "?include=fields",
                 dataType: "json",
                 data: JSON.stringify(fieldData),
                 contentType: "application/json",
@@ -102,9 +179,81 @@
                     self.prop("disabled", true);
                 },
                 success: function(data, textStatus, jqXHR){
-                    // Reload page
-                    location.href = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
+                    // Define url so we can reload
+                    var reloadUrl = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
                             + "&page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
+                    // Get bridge dropdown
+                    var bridgeSelect = form.find("select#datastore-bridge");
+                    
+                    /** If bridge is selected, create/update bridge model and mapping **/
+                    if (bridgeSelect.val().length > 0){
+                        // Build model ajax options with data
+                        var bridgeModelAjaxOptions = buildAttributeModelAjaxOptions("Datastore - " + data.form.name, 
+                                bridgeSelect, 
+                                form.find("table#qualification-table"), 
+                                data.form);
+                        // Build mapping ajax options with data
+                        var bridgeMappingAjaxOptions = buildAttributeMappingAjaxOptions("Datastore - " + data.form.name, 
+                                bridgeSelect, 
+                                form.find("table#qualification-table"), 
+                                data.form);
+                        
+                        /** Perform ajax call to create/update bridge model **/
+                        $.ajax($.extend(true, bridgeModelAjaxOptions, {
+                                success: function(data, textStatus, jqXHR){
+                                    /** Perform ajax call to update bridge mapping **/
+                                    $.ajax($.extend(true, bridgeMappingAjaxOptions, {
+                                            success: function(data, textStatus, jqXHR){
+                                                location.href = reloadUrl;
+                                            },
+                                            error: function(jqXHR, textStatus, errorThrown){
+                                                (new KD.Modal({
+                                                    header: "<h3>Error</h3>",
+                                                    body: "There was an error building the bridge mapping: " + errorThrown,
+                                                    footer: function(element, actions) {
+                                                        element.addClass("text-right").append(
+                                                            $("<button>", {class: "btn btn-default"}).text("OK").on("click", actions.dismiss)
+                                                        );
+                                                    },
+                                                    size: "sm",
+                                                    backdrop: true,
+                                                    backdropclose: true,
+                                                    keyboardclose: true,
+                                                    renderCallback: false,
+                                                    dismiss: function(){
+                                                        // Redirect to update datastore page on success
+                                                        location.href = redirectUrl;
+                                                    }
+                                                })).show();
+                                            }
+                                        }));
+                                },
+                                error: function(jqXHR, textStatus, errorThrown){
+                                    (new KD.Modal({
+                                        header: "<h3>Error</h3>",
+                                        body: "There was an error building the bridge model: " + errorThrown,
+                                        footer: function(element, actions) {
+                                            element.addClass("text-right").append(
+                                                $("<button>", {class: "btn btn-default"}).text("OK").on("click", actions.dismiss)
+                                            );
+                                        },
+                                        size: "sm",
+                                        backdrop: true,
+                                        backdropclose: true,
+                                        keyboardclose: true,
+                                        renderCallback: false,
+                                        dismiss: function(){
+                                            // Redirect to update datastore page on success
+                                            location.href = redirectUrl;
+                                        }
+                                    })).show();
+                                }
+                            }));
+                    }
+                    else {
+                        // Reload page on success
+                        location.href = reloadUrl;
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     self.notifie({
@@ -114,8 +263,6 @@
                         disable: false,
                         margin: {"margin-top":"10px", "margin-bottom":"10px"}
                     });
-                },
-                complete: function(jqXHR, textStatus){
                     self.prop("disabled", false);
                 }
             });
@@ -138,17 +285,195 @@
             }
         });
         
+        // Run the below code if table#qualification-table exists
+        if ($("table#qualification-table").length){
+            
+            /**
+             * Event handler for parameters link which builds and destroys the modal, keeping the data hidden in the dom.
+             */
+            $("table#qualification-table").on("click", "a.qualification-modal-link", function(e){
+                var modalParams = $(this).siblings('div.modal-params');
+                var modalBody = $("<div>");
+                // Build confirmation dialog
+                var parameterModal = new KD.Modal({
+                    header: "<h3>Bridge Parameters</h3>",
+                    body: function(element, actions) {
+                        // Move parameters table from body (where it's hidden) to the modal
+                        modalBody.append(modalParams.children())
+                            // Append to element
+                            .appendTo(element)
+                            // Event handler for delete parameter button
+                            .on("click", "td.param-actions button.param-delete", function(e){
+                                $(this).closest("tr").remove();
+                            })
+                            // Event handler for add parameter button
+                            .on("click", "td.param-add-btn button", function(e){
+                                // Get new parameter name
+                                var paramName = $(this).closest("tr").find("td.param-add-value select").val();
+                                // If parameter doesn't already exist, add it
+                                if (modalBody.find("table#params-table td.param-name[data-param-name=\""+paramName+"\"]").length <= 0){
+                                    modalBody.find("table#params-table tbody").append($("<tr>")
+                                            .append($("<td>", {class: "param-name", "data-param-name": paramName}).text(paramName))
+                                            .append($("<td>", {class: "param-actions"})
+                                                    .append($("<div>", {class: "btn-group pull-right"})
+                                                            .append($("<button>", {type: "button", class: "btn btn-xs btn-danger param-delete"})
+                                                                    .append($("<span>", {class: "fa fa-times fa-fw"}))))));
+                                }
+                            });
+                    },
+                    footer: function(element, actions) {
+                        element.addClass("text-right").append(
+                            $("<button>", {class: "btn btn-default"}).text("Close").on("click", function(){
+                                actions.dismiss();
+                            })
+                        );
+                    },
+                    size: "md",
+                    backdrop: true,
+                    backdropclose: true,
+                    keyboardclose: true,
+                    renderCallback: false,
+                    dismiss: function(){
+                        modalParams.append(modalBody.children());
+                        modalParams.siblings("a.qualification-modal-link").find("span.param-count").text(modalParams.find("table#params-table tbody tr").length);
+                    }
+                });
+                // Show confirmation dialog
+                parameterModal.show();
+                $(this).blur();
+            });
+            
+            /**
+             * Event handler for adding new qualifications
+             */
+            $("table#add-qualification-table").on("click", "td.qual-add-btn button", function(e){
+                var qualName = $("table#add-qualification-table").find("td.qual-add-name input").val().trim();
+                var qualResultType = $("table#add-qualification-table").find("td.qual-add-result-type select").val();
+                
+                if (qualName.length <= 0){
+                    $(this).notifie({
+                        anchor: "table#add-qualification-table",
+                        message: "Qualification name is required.",
+                        exitEvents: "click"
+                    });
+                }
+                else {
+                    var newQualParams = $("div.hidden-qual-params-template").clone();
+                    newQualParams.find("span.param-count").text("0");
+                    var newQualRow = $("<tr>", {class: "qualification-row"})
+                                .append($("<td>", {class: "qual-name"}).text(qualName))
+                                .append($("<td>", {class: "qual-result-type"}).text(qualResultType))
+                                .append($("<td>", {class: "qual-params"}).append(newQualParams.children()))
+                                .append($("<td>", {class: "qual-actions"}).append($("div.hidden-qual-actions-template").clone().children()));
+                    $("table#qualification-table > tbody").append(newQualRow);
+                    $("table#add-qualification-table").find("td.qual-add-name input").val("");
+                    $("table#add-qualification-table").find("td.qual-add-result-type select").prop('selectedIndex', 0)
+                }
+            })
+            
+            /**
+             * Event handlers for edit, delete, cancel edit, and save edit buttons for a qualification
+             */
+            $("table#qualification-table").on("click", "td.qual-actions button.qual-edit", function(e){
+                // Change qualification row to be editable
+                var row = $(this).closest("tr");
+                // Replace name text with input field
+                row.find("td.qual-name").html($("<input>", {
+                        value: row.find("td.qual-name").text(), 
+                        class: "input-sm form-control", 
+                        placeholder: "Qualification Name", 
+                        "data-name": row.find("td.qual-name").text()
+                    }));
+                // Replace rsult type text with dropdown
+                row.find("td.qual-result-type").html($("<select>", {
+                        class: "input-sm form-control",
+                        "data-result-type": row.find("td.qual-result-type").text()
+                    }).append($("<option>", {value: "Multiple"}).text("Multiple"))
+                        .append($("<option>", {value: "Single"}).text("Single"))
+                        .val(row.find("td.qual-result-type").text()));
+                // Hide standard action buttons and show edit action buttons
+                row.find("div.qual-actions").addClass("hide");
+                row.find("div.qual-edit-actions").removeClass("hide");
+            })
+            .on("click", "button.qual-delete", function(e){
+                // Delete the row, but confirm deletion first
+                var row = $(this).closest("tr");
+                // Create Modal to confirm delete
+                var confirmDelete = new KD.Modal({
+                    header: "<h3>Confirm Delete</h3>",
+                    body: "Are you sure you want to delete this qualification?",
+                    footer: function(element, actions) {
+                        element.addClass("text-right").append(
+                            $("<button>", {class: "btn btn-success"}).text("Yes").on("click", actions.accept),
+                            $("<button>", {class: "btn btn-link"}).text("Cancel").on("click", actions.dismiss)
+                        );
+                    },
+                    size: "sm",
+                    backdrop: true,
+                    backdropclose: true,
+                    keyboardclose: true,
+                    renderCallback: false,
+                    accept: function(){
+                        row.remove();
+                    }
+                });
+                // Show confirmation dialog
+                confirmDelete.show();
+                // Blur delete button
+                $(this).blur();
+            })
+            .on("click", "button.qual-cancel-edit", function(e){
+                // Cancel editing of qualification row
+                var row = $(this).closest("tr");
+                // Replace name input with text value
+                row.find("td.qual-name").text(row.find("td.qual-name input").data("name"));
+                // Replace result type dropdown with text value
+                row.find("td.qual-result-type").text(row.find("td.qual-result-type select").data("result-type"));
+                // Hide edit action buttons and show standard action buttons
+                row.find("div.qual-edit-actions").addClass("hide");
+                row.find("div.qual-actions").removeClass("hide");
+            })
+            .on("click", "button.qual-save-edit", function(e){
+                // Close editing of qualification row and keep changes
+                var row = $(this).closest("tr");
+                // Get new qualification name
+                var qualName = row.find("td.qual-name input").val().trim();
+                if (qualName.length <= 0){
+                    row.find("button.qual-cancel-edit").trigger("click");
+                }
+                else {
+                    // Replace name input with text value
+                    row.find("td.qual-name").text(row.find("td.qual-name input").val().trim());
+                    // Replace result type dropdown with text value
+                    row.find("td.qual-result-type").text(row.find("td.qual-result-type select").val());
+                    // Hide edit action buttons and show standard action buttons
+                    row.find("div.qual-edit-actions").addClass("hide");
+                    row.find("div.qual-actions").removeClass("hide");
+                }
+            });
+        }
+                
+        /** END *** DATASTORE/CONFIG PAGE *** DOCUMENT READY CODE *********************************/
         
-        /**
-         * Show submissions table
-         */
+        /******************************************************************************************
+         ** START *** DATASTORE/STORE PAGE *** DOCUMENT READY CODE
+         ** Displays the stored records.
+         ******************************************************************************************/
+        
+        // Run below code only if table#datastore-records-table exists
         if ($("table#datastore-records-table").length){
             var consoleSlug = $("table#datastore-records-table").data("console-slug");
             var kappSlug = $("table#datastore-records-table").data("kapp-slug");
             var datastoreSlug = $("table#datastore-records-table").data("datastore-slug");
             
+            /**
+             * Load the records for the current store
+             */
             loadDatastoreRecords(datastoreSlug);
             
+            /**
+             * Add functionality for importing CSV files
+             */
             $("input#datastore-records-import").on("change", function(e){
                 var importInput = $(this);
                 // Get files from file input
@@ -166,27 +491,38 @@
                         });
                     }
                     else {
+                        // Initialize FileReader
                         var reader = new FileReader();
+                        // Setup onload function which will process the import
                         reader.onload = function(e){
                             processDatastoreRecordsImport($.csv.toObjects(e.target.result), datastoreSlug, importInput);
                         }
+                        // Read file
                         reader.readAsText(file);
                     }
                 }
+                // Reset file input value to empty string to allow on change  to fire on the same file if needed
                 importInput.val("");
             });
             
+            /**
+             * Event handlers for edit, clone, and delete buttons for the records table
+             */
             $("table#datastore-records-table").on("click", "button.edit", function(e){
+                // On click of edit button, send user to record page for editing current row
                 var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
                 location.href = bundle.kappLocation() + "/" + consoleSlug + "?kapp=" + kappSlug + "&page=datastore/record&store=" + datastoreSlug + "&id=" + data.ID;
             }).on("click", "button.clone", function(e){
+                // On click of edit button, send user to record page for cloning current row
                 var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
                 location.href = bundle.kappLocation() + "/" + consoleSlug + "?kapp=" + kappSlug + "&page=datastore/record&store=" + datastoreSlug + "&clone=" + data.ID;
             }).on("click", "button.delete", function(e){
+                // On click of delete button, confirm that the user is sure they want to delete
                 var self = $(this);
+                // Get selected row data
                 var row = datastore.datastoreRecordsTable.row($(this).closest("tr"));
                 var data = row.data();
-                console.log(data);
+                // Build confirmation dialog
                 var confirmDelete = new KD.Modal({
                     header: "<h3>Confirm Delete</h3>",
                     body: "Are you sure you want to delete this record?",
@@ -202,7 +538,7 @@
                     keyboardclose: true,
                     renderCallback: false,
                     accept: function(){
-                        console.log('success');
+                        // On acceptance of confirmation dialog, call api to delete record
                         $.ajax({
                             url: bundle.apiLocation() + "/submissions/" + data.ID,
                             method: 'DELETE',
@@ -212,6 +548,7 @@
                                 self.prop("disabled", true);
                             },
                             success: function(response, textStatus, jqXHR){
+                                // Remove row and redraw table on success
                                 row.remove().draw();
                             },
                             error: function(jqXHR, textStatus, errorThrown){
@@ -223,11 +560,21 @@
                        });
                     }
                 });
+                // Show confirmation dialog
                 confirmDelete.show();
-                //$(confirmDelete.content()).find("button.btn-link").focus();
+                // Blur delete button
+                $(this).blur();
             });
         }
         
+        /** END *** DATASTORE/STORE PAGE *** DOCUMENT READY CODE *********************************/
+        
+        /******************************************************************************************
+         ** START *** DATASTORE/RECORD PAGE *** DOCUMENT READY CODE
+         ** Loads a specific datastore subform for adding, cloning, or editing records.
+         ******************************************************************************************/
+        
+        // Run below code only if div.datastore-record-container exists
         if ($("div.datastore-record-container").length){
             var recordContainer = $("div.datastore-record-container");
             recordContainer.on("click", "button.cancel-record", redirectToDatastore);
@@ -269,7 +616,7 @@
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         recordContainer.notifie({
-                            message: "Failed to initializa clone of the record: " + errorThrown
+                            message: "Failed to initialize clone of the record: " + errorThrown
                         });
                     }
                 });
@@ -278,10 +625,38 @@
                 K.load({
                     path: bundle.kappLocation() + "/" + datastoreSlug, 
                     container: recordContainer,
-                    created: redirectToDatastore
-                });                                
+                    created: redirectToDatastore,
+                    loaded: function(form){
+//                        console.log("FORM",form);
+//                        console.log("FORM",form.page());
+                          // TODO Implement unique check before save
+//                        form.page().on('submit', {
+//                            execute: function(e, actions){
+//                                console.log("SUBMITTING",e,e.constraints,actions);
+//                            }
+//                        });
+                    }
+                });
             }
+            
+            /**
+             * Overwrite the default field constraint violation error handler to use Notifie to display the errors above the individual fields.
+             */
+            bundle.config = {
+                renderers: {
+                    fieldConstraintViolations: function(form, fieldConstraintViolations) {
+                        _.each(fieldConstraintViolations, function(value, key){
+                            $(form.getFieldByName(key).wrapper()).notifie({
+                                message: value.join("<br>"),
+                                exitEvents: "click"
+                            });
+                        });
+                    }
+                }
+            };
         }
+        
+        /** END *** DATASTORE/RECORD PAGE *** DOCUMENT READY CODE *********************************/
     });
 
     /*----------------------------------------------------------------------------------------------
@@ -299,13 +674,151 @@
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
     
+    /**********************************************************************************************
+     ** START *** DATASTORE/CONFIG PAGE *** HELPER METHODS
+     ** Allows for creating of new datastore forms and updating those forms.
+     **********************************************************************************************/
+    
+    /**
+     * Builds the JSON String of the Datastore Display Table Options to store as an Attribute.
+     * 
+     * @param table jQuery reference to the table which contains the Display Table Options
+     * @return JSON String to be passed to the API as the attributes value
+     */
+    function buildDatastoreConfigurationAttribute(table) {
+        var datastoreConfiguration = new Array();
+        table.find("tbody tr").each(function(i, tr){
+            datastoreConfiguration.push({
+                data: $(tr).find("td.column-name").text(),
+                title: $(tr).find("td.column-name").text(),
+                visible: $(tr).find("td.column-visible input").prop("checked"),
+                searchable: $(tr).find("td.column-searchable input").prop("checked"),
+                orderable: $(tr).find("td.column-orderable input").prop("checked")//,
+                //unique: $(tr).find("td.column-unique input").prop("checked") TODO uncomment when unique is implemented
+            });
+        });
+        var attributes = [{
+            name: "Datastore Configuration",
+            values: [JSON.stringify(datastoreConfiguration)]
+        }];
+        return attributes;
+    }
+    
+    function buildAttributeModelAjaxOptions(modelName, bridge, qualificationTable, form){
+        // Create base option object for ajax
+        var options = {
+            dataType: "json",
+            contentType: "application/json"
+        };
+        // Create base data object
+        var data = {
+            name: modelName,
+            status: "Active",
+            activeMappingName: modelName,
+            mappings: [
+                {
+                    bridgeName: bridge.val() || "-",
+                    name: modelName,
+                    structure: "Submissions"
+                }
+            ],
+            attributes: form.fields,
+            qualifications: []
+        };
+        
+        // If Bridge Model exists, update it
+        if (bridge.data("model-exists")){
+            options.method = "put";
+            options.url = bundle.apiLocation() + "/models/" + modelName;
+        }
+        // If it doesn't exist, create a new Model
+        else {
+            options.method = "post";
+            options.url = bundle.apiLocation() + "/models";
+        }
+                
+        // Add all qualifications
+        qualificationTable.find("tbody tr.qualification-row").each(function(i, tr){
+            var parameters = new Array();
+            $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
+                parameters.push({
+                    name: $(trParam).find("td.param-name").text()
+                });
+            });
+            data.qualifications.push({
+                name: $(tr).find("td.qual-name").text(),
+                resultType: $(tr).find("td.qual-result-type").text(),
+                parameters: parameters
+            });
+        });
+        
+        // Add data to options
+        options.data = JSON.stringify(data);
+        
+        return options;
+    }
+    
+    function buildAttributeMappingAjaxOptions(modelMappingName, bridge, qualificationTable, form){
+        // Create base option object for ajax
+        var options = {
+            method: "put",
+            url: bundle.apiLocation() + "/models/" + modelMappingName + "/mappings/" + modelMappingName,
+            dataType: "json",
+            contentType: "application/json"
+        };
+        // Create base data object
+        var data = {
+            attributes: [],
+            qualifications: []
+        };
+        
+        _.each(form.fields, function(field){
+            data.attributes.push({
+                name: field.name,
+                structureField: "${fields('values[" + field.name + "]')}"
+            });
+        });
+        
+        // Add all qualifications with query
+        qualificationTable.find("tbody tr.qualification-row").each(function(i, tr){
+            var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=999";
+            $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
+                var paramName = $(trParam).find("td.param-name").text();
+                query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
+            });
+            data.qualifications.push({
+                name: $(tr).find("td.qual-name").text(),
+                query: query
+            });
+        });
+        
+        // Add data to options
+        options.data = JSON.stringify(data);
+        
+        return options;
+    }
+    
+    /** END *** DATASTORE/CONFIG PAGE *** HELPER METHODS ******************************************/
+    
+    /**********************************************************************************************
+     ** START *** DATASTORE/STORE PAGE *** HELPER METHODS
+     ** Displays the stored records.
+     **********************************************************************************************/
+    
+    /**
+     * Loads the records for the current datastore and displays them in a DataTable
+     * 
+     * @param datastoreSlug Slug of datastore from which to fetch records.
+     */
     function loadDatastoreRecords(datastoreSlug){
+        // Ajax call to get the records
         $.ajax({
             mathod: "GET",
             url: bundle.kappLocation() + "?partial=" + "datastore/records.json&store=" + datastoreSlug,
             dataType: "json",
             contentType: "application/json",
             success: function(data, textStatus, jqXHR){
+                // Set up DataTable configuration object with export/import buttons
                 records = $.extend(data, {
                     responsive: true,
                     pageLength: 25,
@@ -328,13 +841,17 @@
                         }
                     ]
                 });
+                // Go through the list of column objects and change all values that should be booleans from strings to booleans
                 $.each(records.columns, function( i, v){
                     v.visible = (v.visible === "true") ? true : false;
                     v.searchable = (v.searchable === "true") ? true : false;
                     v.orderable = (v.orderable === "true") ? true : false;
+                    //v.unique = (v.unique === "true") ? true : false; TODO uncomment when unique is implemented
                 });
                 console.log(records);
+                // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
+                // Append the import/export buttons to the buttons section on the page
                 datastore.datastoreRecordsTable.buttons().nodes().each(function(){
                     $("div.datastore-records-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
                 });
@@ -345,30 +862,6 @@
                 });
             }
         });
-    }
-
-    /**
-     * Builds the JSON String of the Datastore Display Table Options to store as an Attribute.
-     * 
-     * @param table jQuery reference to the table which contains the Display Table Options
-     * @return JSON String to be passed to the API as the attributes value
-     */
-    function buildDatastoreConfigurationAttribute(table) {
-        var datastoreConfiguration = new Array();
-        table.find("tbody tr").each(function(i, tr){
-            datastoreConfiguration.push({
-                data: $(tr).find("td.column-name").text(),
-                title: $(tr).find("td.column-name").text(),
-                visible: $(tr).find("td.column-visible input").prop("checked"),
-                searchable: $(tr).find("td.column-searchable input").prop("checked"),
-                orderable: $(tr).find("td.column-orderable input").prop("checked")
-            });
-        });
-        var attributes = [{
-            name: "Datastore Configuration",
-            values: [JSON.stringify(datastoreConfiguration)]
-        }];
-        return attributes;
     }
     
     /**
@@ -395,7 +888,6 @@
      * @param importInput jQuery instance of file input element.
      */
     function processDatastoreRecordsImport(importData, datastoreSlug, importInput){
-        console.log(importData);
         /** Retrieve all fields in the datastore **/
         $.ajax({
             method: 'GET',
@@ -405,10 +897,8 @@
             success: function(data, textStatus, jqXHR){
                 /** Convert fields to a map to check if file has valid headers **/
                 var fieldMap = $.extend(_.object(_.map(data.form.fields, function(field){
-                    console.log(field);
                     return [field.name, true];
                 })), {"Datastore Record ID": true, "": true});
-                console.log(fieldMap);
                 // Create array to store invalid headers
                 var invalidHeaders = new Array();
                 // Get first row (any row can be used since headers are the keys of the row object)
@@ -497,7 +987,6 @@
         // If Submission ID doesn't exist, create a new record
         if (!datastoreRecordID){
             // Create new record
-            console.log("new", row);
             $.ajax({
                 method: "POST",
                 url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions",
@@ -510,7 +999,7 @@
                     calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": ""}));
+                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": "", "ERROR": errorThrown}));
                     statusCounters.createErrors++;
                     statusCounters.processedRows++;
                     calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
@@ -519,7 +1008,6 @@
         }
         else {
             // Update record
-            console.log("update", row);
             $.ajax({
                 method: "PUT",
                 url: bundle.apiLocation() + "/submissions/" + datastoreRecordID,
@@ -532,7 +1020,7 @@
                     calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": datastoreRecordID}));
+                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": datastoreRecordID, "ERROR": errorThrown}));
                     statusCounters.updateErrors++;
                     statusCounters.processedRows++;
                     calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
@@ -542,7 +1030,7 @@
     }
     
     /**
-     * Check if all ajax calls have completed.
+     * Check if all ajax calls for import have completed.
      * If they have, show results.  
      * 
      * @param statusCounters
@@ -552,21 +1040,26 @@
     function calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug){
         if (statusCounters.processedRows == statusCounters.totalRows){
             var msg = $("<div>");
-            msg.append($("<div>").append(statusCounters.processedRows + " records were processed."));
+            msg.append($("<div>").append($("<span>", {class: "fa fa-fw"}))
+                    .append(statusCounters.processedRows + " records were processed."));
             if (statusCounters.createdRows > 0){
-                msg.append($("<div>").append(statusCounters.createdRows + " records were created successfully."));
+                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
+                        .append(statusCounters.createdRows + " records were created successfully."));
             }
             if (statusCounters.createErrors > 0){
-                msg.append($("<div>").append(statusCounters.createErrors + " records failed to save."));
+                msg.append($("<div>").append($("<span>", {class: "fa fa-times fa-fw"}))
+                        .append(statusCounters.createErrors + " records failed to save."));
             }
             if (statusCounters.updatedRows > 0){
-                msg.append($("<div>").append(statusCounters.updatedRows + " records were updated successfully."));
+                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
+                        .append(statusCounters.updatedRows + " records were updated successfully."));
             }
             if (statusCounters.updateErrors > 0){
-                msg.append($("<div>").append(statusCounters.updateErrors + " records failed to update."));
+                msg.append($("<div>", {class: "strong"}).append($("<span>", {class: "fa fa-times fa-fw"}))
+                        .append(statusCounters.updateErrors + " records failed to update."));
             }
             if (statusCounters.failedRows.length > 0){
-                var failuresContainer = $("<div>").addClass("hide").appendTo(msg);
+                var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
                 var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
                 var failures = {
                     columns: _.map(_.keys(statusCounters.failedRows[0]), function(key){return {title: key, data: key};}),
@@ -586,25 +1079,43 @@
                         }
                     ]
                 };
-                console.log(failures);
                 var failureTable = table.DataTable(failures);
-                window.zzz = failureTable;
                 msg.append($("<div>").addClass("pull-right").append(failureTable.buttons().container()));
             }
             importInput.closest("div.datastore-records-table-buttons").notifie({
-                severity: "info",
+                severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
                 anchor: "h3",
-                message: msg,
-                onShow: function(){
-                    
-                }
+                message: msg
             });
             loadDatastoreRecords(datastoreSlug);
         }
     }
     
+    /** END *** DATASTORE/STORE PAGE *** HELPER METHODS ******************************************/
+    
+    /**********************************************************************************************
+     ** START *** DATASTORE/RECORD PAGE *** HELPER METHODS
+     ** Loads a specific datastore subform for adding, cloning, or editing records.
+     **********************************************************************************************/
+    
+    /**
+     * Redirect back to the 
+     */
     function redirectToDatastore(){
         location.href = $('a.return-to-store').attr('href');
     }
-     
+    
+    /** END *** DATASTORE/RECORD PAGE *** HELPER METHODS ******************************************/
+    
+    /**********************************************************************************************
+     ** START *** GLOBAL DATASTORE *** HELPER METHODS
+     ** Helper functions used by multiple pages.
+     **********************************************************************************************/
+    
+    datastore.checkFormForDuplicates = function(){
+        return true;
+    }
+    
+    /** END *** GLOBAL DATASTORE *** HELPER METHODS ***********************************************/
+         
 })($, _);

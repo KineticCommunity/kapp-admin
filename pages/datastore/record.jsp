@@ -3,19 +3,22 @@
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 <c:set var="currentStore" value="${kapp.getForm(param.store)}" scope="request" />
 
-<bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <!-- Sets title and imports js and css specific to this console. -->
-    <bundle:variable name="head">
-        <c:import url="${bundle.path}/partials/${form.slug}/head.jsp" charEncoding="UTF-8"/>
-    </bundle:variable>
+<!-- Show page content only if Kapp & Store exist. Otherwise redirect to valid page. -->
+<c:choose>
+    <c:when test="${empty currentKapp}">
+        <script>window.location.replace("${bundle.kappLocation}");</script>
+    </c:when>
+    <c:when test="${empty currentStore}">
+        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?kapp=${currentKapp.slug}");</script>
+    </c:when>
+    <c:otherwise>
+
+        <bundle:layout page="${bundle.path}/layouts/layout.jsp">
+            <!-- Sets title and imports js and css specific to this console. -->
+            <bundle:variable name="head">
+                <c:import url="${bundle.path}/partials/datastore/head.jsp" charEncoding="UTF-8"/>
+            </bundle:variable>
     
-    <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
-    <c:choose>
-        <c:when test="${empty currentKapp}">
-            <c:redirect url="${bundle.kappPath}"/>
-        </c:when>
-        <c:otherwise>
-            
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <ol class="breadcrumb">
@@ -30,6 +33,7 @@
             
             <div class="row">
                 <div class="col-xs-12">
+<%-- TODO restrict duplicates <c:set var="uniqueFields" value="${AdminHelper.getUniqueFields(currentStore)}"/>  data-unique-fields="${uniqueFields}"--%>
                     <div class="datastore-record-container" data-datastore-slug="${currentStore.slug}"
                             data-record-id="${param.id}" data-clone-id="${param.clone}"></div>
                 </div>
@@ -47,6 +51,7 @@
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
-        </c:otherwise>
-    </c:choose>
-</bundle:layout>
+        </bundle:layout>
+        
+    </c:otherwise>
+</c:choose>

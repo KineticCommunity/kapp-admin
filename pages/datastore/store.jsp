@@ -3,19 +3,21 @@
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 <c:set var="currentStore" value="${kapp.getForm(param.store)}" scope="request" />
 
-<bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <!-- Sets title and imports js and css specific to this console. -->
-    <bundle:variable name="head">
-        <title>Admin Console<c:if test="${not empty form}"> | ${form.name}</c:if></title>
-        <c:import url="${bundle.path}/partials/${form.slug}/head.jsp" charEncoding="UTF-8"/>
-    </bundle:variable>
+<!-- Show page content only if Kapp & Store exist. Otherwise redirect to valid page. -->
+<c:choose>
+    <c:when test="${empty currentKapp}">
+        <script>window.location.replace("${bundle.kappLocation}");</script>
+    </c:when>
+    <c:when test="${empty currentStore}">
+        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?kapp=${currentKapp.slug}");</script>
+    </c:when>
+    <c:otherwise>
 
-    <!-- Show page content only if Kapp exists. Otherwise redirect to home page. -->
-    <c:choose>
-        <c:when test="${empty currentKapp}">
-            <c:redirect url="${bundle.kappPath}"/>
-        </c:when>
-        <c:otherwise>
+        <bundle:layout page="${bundle.path}/layouts/layout.jsp">
+            <!-- Sets title and imports js and css specific to this console. -->
+            <bundle:variable name="head">
+                <c:import url="${bundle.path}/partials/datastore/head.jsp" charEncoding="UTF-8"/>
+            </bundle:variable>
             
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
@@ -64,6 +66,7 @@
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
-        </c:otherwise>
-    </c:choose>
-</bundle:layout>
+        </bundle:layout>
+        
+    </c:otherwise>
+</c:choose>
