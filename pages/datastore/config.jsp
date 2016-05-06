@@ -87,7 +87,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="column" items="${AdminHelper.getDatastoreColumns(currentStore)}">
+                            <c:forEach var="column" items="${AdminHelper.getDatastoreColumns(currentStore, 'Datastore Configuration')}">
                                 <tr>
                                     <td class="column-name">${column.data}</td>
                                     <td class="column-visible"><input type="checkbox" ${column.visible ? 'checked' : ''}/></td>
