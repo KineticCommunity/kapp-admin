@@ -14,20 +14,24 @@
         <link rel="shortcut icon" href="${bundle.location}/images/favicon.ico" type="image/x-icon"/>
         <title>Admin Console<c:if test="${not empty form}"> | ${form.name}</c:if></title>
         <app:headContent/>
-        <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
-            <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.min.css"/>
+            <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.css"/>
             <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
         <bundle:scriptpack>
-            <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.min.js"/>
+            <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
+            <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
+            <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.js"/>
+            <bundle:script src="${bundle.location}/libraries/moment/moment-with-locales.js"/>
             <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
+            <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
-            <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
+            <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.min.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
         <bundle:yield name="head"/>
