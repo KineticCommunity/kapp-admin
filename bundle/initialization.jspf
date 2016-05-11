@@ -1,10 +1,11 @@
 <%-- Load Java libraries, Kinetic models & Identity --%>
 <%@page pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@page import="java.util.*" %>
 <%@page import="com.kineticdata.core.models.*" %>
 <%@page import="com.kineticdata.core.web.bundles.Bundle" %>
 <%@page import="com.kineticdata.core.web.bundles.BundleSubmissionComponent" %>
 <%@page import="com.kineticdata.core.authentication.Identity" %>
+<%@page import="java.time.ZoneId"%>
+<%@page import="java.util.*" %>
 <%@page import="org.slf4j.Logger" %>
 
 <%-- Bundle Java libraries --%>
@@ -19,35 +20,56 @@
 <%@taglib prefix="json" uri="http://kineticdata.com/taglibs/json" %>
 
 <%@include file="/WEB-INF/app/includes/task4/task4.jspf" %>
-<%@include file="SubmissionHelper.jspf"%>
-<%@include file="SetupHelper.jspf"%>
-<%@include file="CategoryHelper.jspf"%>
+
+<%-- Initialize the default zoneId and locale --%>
+<%
+    request.setAttribute("zoneId", ZoneId.systemDefault());
+    request.setAttribute("locale", Locale.US);
+%>
 
 <%-- Get bundle, space, and kapp objects --%>
 <%
     Bundle bundle = (Bundle)request.getAttribute("bundle"); 
     Space space = (Space)request.getAttribute("space");
     Kapp kapp = (Kapp)request.getAttribute("kapp");
-%>
-
-<%-- Define and initialize SetupAttribute helper --%>
-<%
-    SetupHelper setupHelper = new SetupHelper()
-        .addSetupAttribute("Task Server Url", 
-            "Task Server Url Description", 
-            true)
-        .addSetupAttribute("Task Source Name", 
-            "Task Source Name Description", 
-            true); 
+    Identity identity = (Identity)request.getAttribute("identity");
 %>
 
 <%-- Load helper(s) --%>
 <%
-  request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
-  request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
-  request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
-  request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
-  request.setAttribute("CategoryHelper", new CategoryHelper());
-  request.setAttribute("SetupHelper", setupHelper);
+    request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
+    request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
+    request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
 %>
 
+<%-- SetupHelper --%>
+<%@include file="SetupHelper.jspf"%>
+<%
+    SetupHelper setupHelper = new SetupHelper();
+    request.setAttribute("SetupHelper", setupHelper);
+%>
+
+<%-- AdminHelper --%>
+<%@include file="AdminHelper.jspf"%>
+<%
+    AdminHelper adminHelper = new AdminHelper(request, kapp, bundle);
+    request.setAttribute("AdminHelper", adminHelper);
+%>
+
+<%-- CategoryHelper --%>
+<%@include file="CategoryHelper.jspf"%>
+<%
+    request.setAttribute("CategoryHelper", new CategoryHelper());
+%>
+
+<%-- SearchHelper --%>
+<%@include file="SearchHelper.jspf"%>
+<%
+    request.setAttribute("SearchHelper", new SearchHelper());
+%>
+
+<%-- SubmissionHelper --%>
+<%@include file="SubmissionHelper.jspf"%>
+<%
+    request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
+%>

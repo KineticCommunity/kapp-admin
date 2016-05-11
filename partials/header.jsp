@@ -1,63 +1,83 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-<nav class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-            data-target="#navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <c:if test="${kapp != null}">
-                <a class="navbar-brand" href="${bundle.kappLocation}">
-                    <c:if test="${not empty kapp.getAttribute('logo-url')}">
-                        <img src="${kapp.getAttribute('logo-url').value}" alt="logo">
-                    </c:if>
-                    <c:if test="${empty kapp.getAttribute('logo-url')}">
-                        <i class="fa fa-home"></i> ${text.escape(kapp.name)}
-                    </c:if>
-                </a>
-            </c:if>
-        </div>
 
-        <div class="collapse navbar-collapse" id="navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a id="drop1" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-user fa-fw"></i> 
-                        ${text.escape(identity.username)} 
-                        <span class="fa fa-caret-down fa-fw"></span>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="drop1">
-                        <li><a href="${bundle.spaceLocation}/${kapp.slug}?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
-                        <li class="divider"></li>
-                        <li><a href="${bundle.spaceLocation}/app/"><i class="fa fa-dashboard fa-fw"></i> Management Console</a></li>
-                        <li class="divider"></li>
-                        <li><a href="${bundle.spaceLocation}/app/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a id="drop2" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hidden-lg hidden-md">Kapps <span class="fa fa-caret-down fa-fw"></span></span><span class="hidden-sm hidden-xs fa fa-th fa-fw"></span></a>
-                    <ul class="dropdown-menu" aria-labelledby="drop2">
-                        <c:forEach items="${space.kapps}" var="kapp" begin="0" end="8">
-                            <li><a href="/kinetic/${space.slug}/${kapp.slug}/">${kapp.name}</a></li>
-                        </c:forEach>
-                    </ul>
-                </li>
-            </ul>
-        <c:if test="${kapp != null}">
-            <div class="navbar-form" role="search" style='margin-right:1em;'>
-                <form action="${bundle.kappLocation}" method="GET" role="form">
-                    <div class="form-group">
-                            <input type="hidden" value="search" name="page">
-                            <input  type="text" class="states form-control predictiveText x" name="q" placeholder="Search Forms…" autocomplete="off" autofocus="autofocus">
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </c:if>
+<nav class="navbar navbar-default" role="navigation">
+    
+    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
+    
+    <div class="kapp-selector nav-title">
+        <div class="kapp-current dropdown">
+            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                <img src="${bundle.location}/images/ProductName-Request.png" height="40px">
+                <span class="fa fa-caret-down"></span>
+            </a>
+            <ul class="kapp-list dropdown-menu"> 
+                <li><a href="${bundle.kappLocation}"><span class="fa fa-home"></span> Home</a></li>
+                <li class="divider "></li>
+                <c:forEach var="consoleKapp" items="${AdminHelper.getActiveKapps()}">
+                    <li><a href="${bundle.kappLocation}?kapp=${consoleKapp.slug}">${consoleKapp.name}</a></li>
+                </c:forEach>
+            </ul> 
         </div>
     </div>
+    
+    <h2 class="kapp-title">
+        Admin Console <if test="${not empty currentKapp}"><a href="${bundle.spaceLocation}/${currentKapp.slug}" target="_blank"><small> ${currentKapp.name}</small></a></if>
+    </h2>
+    
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <c:choose>
+                <c:when test="${identity.anonymous}">
+                    <a href="${bundle.spaceLocation}/app/login">
+                        <div class="account">
+                            <span class="fa fa-sign-in fa-fw"></span>
+                            Login
+                        </div>
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="account">
+                            <span class="fa fa-user fa-fw"></span>
+                            <span>${text.escape(identity.displayName)}</span>
+                            <span class="fa fa-caret-down"></span>
+                        </div>
+                    </a>
+                </c:otherwise>
+            </c:choose>
+            <ul class="dropdown-menu">
+                <c:if test="${not identity.anonymous}">
+                    <li><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a href="${bundle.spaceLocation}/app/"><i class="fa fa-dashboard fa-fw"></i> Management Console</a></li>
+                    <li class="divider"></li>
+                    <li><a href="${bundle.spaceLocation}/app/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                </c:if>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"  aria-haspopup="true" aria-expanded="false">
+                Help
+                <span class="fa fa-caret-down fa-fw"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-header">Kinetic Community</li>
+                <c:if test="${not empty form}">
+                    <c:forEach var="link" items="${AdminHelper.getCommunityLinks(form)}">
+                        <li><a href="${link.href}" target="_blank">${link.name}</a></li>
+                    </c:forEach>
+                </c:if>
+                <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">${kapp.name} Setup Help</a></li>
+                <li class="divider"></li>
+                <c:if test="${not empty currentKapp && not empty form}">
+                    <c:forEach var="link" items="${AdminHelper.getFormHelpLinks(currentKapp,form.slug)}">
+                        <li><a href="${link.href}" target="_blank">${link.name}</a></li>
+                    </c:forEach>
+                </c:if>
+                <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">About ${kapp.name}</a></li>
+            </ul>
+        </li>
+    </ul>
 </nav>
