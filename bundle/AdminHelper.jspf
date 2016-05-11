@@ -114,7 +114,7 @@
             }
         }
         
-        public static List<LinkedHashMap> getDatastoreColumns(Form datastore){
+        public static List<LinkedHashMap> getDatastoreColumns(Form datastore, String configurationAttributeName){
             LinkedHashMap<String, Field> fields = new LinkedHashMap<>();
             for (Page page : datastore.getPages()){
                 for (Field field : page.getFields()){
@@ -124,7 +124,7 @@
             
             List<LinkedHashMap> configuration = new ArrayList<>();
             try {
-                configuration.addAll((List<LinkedHashMap>)Json.parse(datastore.getAttributeValue("Datastore Configuration")));
+                configuration.addAll((List<LinkedHashMap>)Json.parse(datastore.getAttributeValue(configurationAttributeName)));
             }
             catch (Exception e){/*Ignore bad Json*/}
             
@@ -208,7 +208,7 @@
 //         public List<String> getUniqueFields(Form datastore){
 //             List<String> uniqueFields = new ArrayList<>();
             
-//             List<LinkedHashMap> configuration = getDatastoreColumns(datastore);
+//             List<LinkedHashMap> configuration = getDatastoreColumns(datastore, "Datastore Configuration");
 //             for (LinkedHashMap config : configuration){
 //                 if ((Boolean)config.get("unique")){
 //                     uniqueFields.add((String)config.get("data"));

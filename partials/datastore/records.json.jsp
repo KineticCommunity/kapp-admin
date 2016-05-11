@@ -2,7 +2,7 @@
 <%@include file="../../bundle/initialization.jspf" %>
 
 <c:set var="currentStore" value="${kapp.getForm(param.store)}" scope="request" />
-<c:set var="fields" value="${AdminHelper.getDatastoreColumns(currentStore)}" scope="request" />
+<c:set var="fields" value="${AdminHelper.getDatastoreColumns(currentStore, 'Datastore Configuration')}" scope="request" />
 <json:object>
   <json:array name="columns">
     <c:forEach var="field" items="${fields}">

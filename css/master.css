@@ -151,6 +151,11 @@ section.page form .file-table .file-row:not(:first-child) > span {
   border-top: none;
 }
 
+/* line 87, scss/_forms.scss */
+div.embedded-form section.page form {
+  padding: 0 0 2rem 0;
+}
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Kinetic Data Task Admin
  * Date: @DATE

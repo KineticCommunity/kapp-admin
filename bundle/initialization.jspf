@@ -62,6 +62,12 @@
     request.setAttribute("CategoryHelper", new CategoryHelper());
 %>
 
+<%-- GroupHelper --%>
+<%@include file="GroupHelper.jspf"%>
+<%
+    request.setAttribute("GroupHelper", new GroupHelper(request, space));
+%>
+
 <%-- SearchHelper --%>
 <%@include file="SearchHelper.jspf"%>
 <%
