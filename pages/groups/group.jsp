@@ -158,11 +158,11 @@
                                                     <th>
                                                         Group Name <small>(Type)</small>
                                                         <div class="btn-group table-hierarchy-option pull-right">
-                                                            <button class="btn btn-xs btn-danger collapse-all" title="Collapse All">
-                                                                <span class="fa fa-compress fa-fw"></span>
+                                                            <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
+                                                                <span class="fa fa-compress fa-fw"></span> Collapse All
                                                             </button>
-                                                            <button class="btn btn-xs btn-success expand-all" title="Expand All">
-                                                                <span class="fa fa-expand fa-fw"></span>
+                                                            <button class="btn btn-xs btn-subtle expand-all" title="Expand All">
+                                                                <span class="fa fa-expand fa-fw"></span> Expand All
                                                             </button>
                                                         </div>
                                                     </th>

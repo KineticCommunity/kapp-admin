@@ -132,7 +132,7 @@
                         updateUserMembership(data.submission.values["Username"], 
                                 data.submission.values["Group Id"], 
                                 data.submission.values["Status"] == "active");
-                        //location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
                     loaded: function(form){
                         form.getFieldByName("Group Id").value(groupId);
@@ -151,7 +151,7 @@
                         updateUserMembership(data.submission.values["Username"], 
                                 data.submission.values["Group Id"], 
                                 data.submission.values["Status"] == "active");
-                        //location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
                     loaded: function(form){
                         form.getFieldByName("Group Id").value(groupId);
