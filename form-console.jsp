@@ -5,6 +5,7 @@
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
         <title>Admin Console<c:if test="${not empty form}"> | ${text.escape(form.name)}</c:if></title>
+		<app:formHeadContent/>
     </bundle:variable>
 
     <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
