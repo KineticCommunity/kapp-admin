@@ -108,16 +108,6 @@
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
             
-            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
-            <bundle:variable name="aside">
-                <h3>Group Management</h3>
-                <p>
-                    Group Management allows administrators to manage groups and their members.
-                </p>
-                <hr />
-            </bundle:variable>
-            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
-            
         </bundle:layout>
         
     </c:otherwise>

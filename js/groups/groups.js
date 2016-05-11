@@ -121,6 +121,7 @@
         if ($("div.member-form-container").length){
             var memberContainer = $("div.member-form-container");
             var memberId = memberContainer.data("member-id");
+            var memberUsername = memberContainer.data("member-username");
             var groupId = memberContainer.data("group-id");
             
             if (memberId){
@@ -128,7 +129,10 @@
                     path: bundle.spaceLocation() + "/submissions/" + memberId, 
                     container: memberContainer,
                     updated: function(data){
-                        location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        updateUserMembership(data.submission.values["Username"], 
+                                data.submission.values["Group Id"], 
+                                data.submission.values["Status"] == "active");
+                        //location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
                     loaded: function(form){
                         form.getFieldByName("Group Id").value(groupId);
@@ -144,7 +148,10 @@
                     path: bundle.kappLocation() + "/group-membership", 
                     container: memberContainer,
                     created: function(data){
-                        location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        updateUserMembership(data.submission.values["Username"], 
+                                data.submission.values["Group Id"], 
+                                data.submission.values["Status"] == "active");
+                        //location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
                     loaded: function(form){
                         form.getFieldByName("Group Id").value(groupId);
@@ -162,6 +169,7 @@
             var memberRow = self.closest("tr");
             var membershipId = memberRow.find("td.username").data("membership-id");
             var membershipUsername = memberRow.find("td.username").text();
+            var groupId = self.closest("table").data("group-id");
             (new KD.Modal({
                 header: "<h3>Confirm Delete</h3>",
                 body: "Are you sure you want to delete member " + membershipUsername + "?",
@@ -184,6 +192,7 @@
                         data: JSON.stringify({values: {"Status": "delete"}}),
                         contentType: "application/json",
                         success: function(data, textStatus, jqXHR){
+                            updateUserMembership(membershipUsername, groupId, false);
                             memberRow.remove();
                         },
                         error: function(jqXHR, textStatus, errorThrown){
@@ -411,6 +420,58 @@
                         location.reload();
                     }
                 })).show();
+            }
+        });
+    }
+    
+    function updateUserMembership(username, groupId, isActive){
+        $.ajax({
+            method: "GET",
+            url: bundle.apiLocation() + "/users/" + username + "?include=attributes",
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data, textStatus, jqXHR){
+                var saveRequired = false;
+                var attributes = data.user.attributes || [];
+                var groupAttributes = _.find(attributes, {name: "Group"});
+                // If Group attribute exists
+                if (groupAttributes){
+                    // If membership is active and doesn't exist, add it
+                    if (isActive && !_.contains(groupAttributes.values, groupId)){
+                        groupAttributes.values.push(groupId);
+                        saveRequired = true;
+                    }
+                    // If membership is not active but exists, remove it
+                    else if (!isActive && _.contains(groupAttributes.values, groupId)){
+                        groupAttributes.values = _.without(groupAttributes.values, groupId);
+                        saveRequired = true;
+                    }
+                }
+                // If Group attributes don't exist but membership is active and needs to be added
+                else if (isActive){
+                    attributes.push({
+                        name: "Group",
+                        values: [groupId]
+                    });
+                    saveRequired = true;
+                }
+                // If save is required, update the user attributes
+                if (saveRequired){
+                    $.ajax({
+                        method: "PUT",
+                        url: bundle.apiLocation() + "/users/" + username + "?include=attributes",
+                        dataType: "json",
+                        data: JSON.stringify({attributes: attributes}),
+                        contentType: "application/json",
+                        success: function(data, textStatus, jqXHR){},
+                        error: function(jqXHR, textStatus, errorThrown){
+                            console.log("Error Updating User Group Attribute: Save Failed [" + errorThrown + "]");
+                        }
+                    });
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("Error Updating User Group Attribute: User Not Found [" + errorThrown + "]");
             }
         });
     }

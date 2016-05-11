@@ -39,7 +39,8 @@
             
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="member-form-container embedded-form" data-member-id="${currentMember.id}" data-group-id="${currentGroup.id}">
+                    <div class="member-form-container embedded-form" data-group-id="${currentGroup.id}"
+                            data-member-id="${currentMember.id}" data-member-username="${currentMember.username}">
                         <div class="alert alert-info">
                             <span class="fa fa-spinner fa-spin"></span>
                             Loading
@@ -49,12 +50,6 @@
             </div>
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
-    
-            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
-            <bundle:variable name="aside">
-                TODO
-            </bundle:variable>
-            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

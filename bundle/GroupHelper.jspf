@@ -7,7 +7,7 @@
         private Set<BundleGroup> groups;
         private Map<String, BundleGroup> groupsById;
         
-        public static final String pathDelimiter = " \\ ";
+        public static final String pathDelimiter = " / ";
 
         public GroupHelper(HttpServletRequest request, Space space) {
             this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");

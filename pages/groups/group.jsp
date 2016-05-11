@@ -99,7 +99,7 @@
                                         </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <table class="table members-table table-hover"> 
+                                        <table class="table members-table table-hover" data-group-id="${currentGroup.id}"> 
                                             <thead>
                                                 <tr>
                                                     <th>Username</th>
@@ -194,12 +194,6 @@
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
     
-            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
-            <bundle:variable name="aside">
-                TODO
-            </bundle:variable>
-            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
-            
         </bundle:layout>
         
     </c:otherwise>
