@@ -11,40 +11,45 @@ table.groups-table-hierarchy tbody tr td ul {
     margin: 0;
 }
 table.groups-table-hierarchy tbody tr td li {
-    padding: 8px;
+    padding: 6px;
+    margin: 6px 0 6px 6px;
 }
-table.groups-table-hierarchy tbody tr td ul ul{
-    margin-left: 16px;
+table.groups-table-hierarchy tbody tr td ul {
+    margin-left: 20px;
 }
-table.groups-table-hierarchy tbody tr td li span.status::after {
+table.groups-table-hierarchy tbody tr td li.group-item {
+    position: relative;
+    background-color: whitesmoke;
+}
+table.groups-table-hierarchy tbody tr td li.group-item::before {
     font-family: FontAwesome;
     content: "\f04d";
     opacity: 0;
-    margin-left: 20px;    
+    position: absolute;
+    left: -18px;
 }
-table.groups-table-hierarchy tbody tr td li.has-subgroups span.status::after {
+table.groups-table-hierarchy tbody tr td li.group-item.has-subgroups::before {
     content: "\f067";
     opacity: 0.5;
 }
-table.groups-table-hierarchy tbody tr td li.has-subgroups.open span.status::after {
+table.groups-table-hierarchy tbody tr td li.group-item.has-subgroups.open::before {
     content: "\f068";
     opacity: 0.5;
 }
-table.groups-table-hierarchy tbody tr td li.has-subgroups:hover span.status::after {
+table.groups-table-hierarchy tbody tr td li.group-item.has-subgroups:hover::before {
     opacity: 0.8;
 }
 table.groups-table-hierarchy tbody tr td li.has-subgroups:hover {
     cursor: pointer;
 }
 table.groups-table-hierarchy tbody tr td li:not(.subgroup-item):hover {
-    background-color: whitesmoke;
-}
-table.groups-table-hierarchy tbody tr td li:not(.subgroup-item) {
-    border-bottom: 1px solid #ddd;
+    background-color: #efefef;
 }
 table.groups-table-hierarchy tbody tr td li.subgroup-item {
     padding: 0;
+    margin-left: 12px;
     display: none;
+    border-left: 1px solid #efefef;
 }
 table.groups-table-hierarchy tbody tr td li.subgroup-item.open {
     display: list-item;
