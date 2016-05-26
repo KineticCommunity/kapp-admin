@@ -6,21 +6,7 @@
      *--------------------------------------------------------------------------------------------*/
     $(function() {
         
-        /**
-         * Overwrite the default field constraint violation error handler to use Notifie to display the errors above the individual fields.
-         */
-        bundle.config = {
-            renderers: {
-                fieldConstraintViolations: function(form, fieldConstraintViolations) {
-                    _.each(fieldConstraintViolations, function(value, key){
-                        $(form.getFieldByName(key).wrapper()).notifie({
-                            message: value.join("<br>"),
-                            exitEvents: "click"
-                        });
-                    });
-                }
-            }
-        };
+        
         
     });
 
@@ -40,5 +26,23 @@
      *--------------------------------------------------------------------------------------------*/
     
     
+    
+    /*----------------------------------------------------------------------------------------------
+     * BUNDLE.CONFIG OVERWRITES
+     *--------------------------------------------------------------------------------------------*/
+    
+    /**
+     * Overwrite the default field constraint violation error handler to use Notifie to display the errors above the individual fields.
+     */
+    bundle.config = bundle.config || {};
+    bundle.config.renderers = bundle.config.renderers || {};
+    bundle.config.renderers.fieldConstraintViolations = function(form, fieldConstraintViolations) {
+        _.each(fieldConstraintViolations, function(value, key){
+            $(form.getFieldByName(key).wrapper()).notifie({
+                message: value.join("<br>"),
+                exitEvents: "click"
+            });
+        });
+    }
          
 })($, _);

@@ -3,7 +3,7 @@
     // If the request is scoped to a specific Kapp (space display pages are not)
     if (kapp != null) {
         // If there are any required setup attributes missing 
-        if (setupHelper.isMissingRequiredAttributes(kapp)) {
+        if (setupHelper.isMissingRequiredAttributes()) {
             // Render the setup page (this will show the full setup page if the user is a space 
             // admin, or it will show a generic error message if they are not)
             request.getRequestDispatcher(bundle.getPath()+"/pages/setup.jsp").include(request, response);

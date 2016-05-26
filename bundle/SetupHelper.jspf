@@ -1,68 +1,192 @@
-<%@page import="com.google.common.collect.ComparisonChain" %>
+<%@page import="java.io.FileReader" %>
+<%@page import="com.kineticdata.commons.util.JsonUtils" %>
+<%@page import="com.kineticdata.core.models.base.ModelWithAttributes" %>
 <%!
     public static class SetupHelper {
-
-        private List<SetupAttribute> setupAttributes = new ArrayList<SetupAttribute>();
-
-        public SetupHelper(){}
+    
+        private HttpServletRequest request;
+        private Bundle bundle;
+        private Space space;
+        private Kapp kapp;
+        private Form form;
+        
+        // Data store in the Kapp's "Kapp Configuration Status" attribute which defineswhich parts of the akpp are configured
+        private LinkedHashMap kappConfigurationStatus;  
+        // The configuration data store in setup.json
+        private LinkedHashMap kappConfigurationData;
+        // Map of configured attribute definitions for this kapp. Uses KappConfigurationAttribute object defined below
+        private LinkedHashMap kappConfigurationAttributes;
 
         /**
-         * Returns true is at least one required attribute is missing
+         * Constructor for SetupHelper
+         *
+         * Fetches and parses the "Kapp Configuration Status" attribute to determine if the Kapp and its optional components are configured.
+         * Reads and parses the setup.json configuration file which defines the necessary configurations for this kapp to run.
+         * Creates a map of all the attributes that have been configured to be displayed on the setup page and used for routing to the setup page if required attribute values are missing.
          */
-        public boolean isMissingRequiredAttributes(Kapp kapp){
-            // Iterate through setup attributes
-            for (SetupAttribute attribute : setupAttributes){
-                // If attribute is required and missing from kapp, return true
-                if (attribute.isRequired() && !kapp.hasAttribute(attribute.getName())){
-                    return true;
+        public SetupHelper(HttpServletRequest request){
+            this.request = request;
+            this.bundle = (Bundle)request.getAttribute("bundle");
+            this.space = (Space)request.getAttribute("space");
+            this.kapp = (Kapp)request.getAttribute("kapp");
+            this.form = (Form)request.getAttribute("form");
+            // Create an empty map for Kapp Configuration Attributes
+            this.kappConfigurationAttributes = new LinkedHashMap();
+            
+            // Only check kapp configuration if kapp is not null
+            if (this.kapp != null){
+                // Get and parse "Kapp Configuration Status" attribute if it exists
+                if (kapp.hasAttribute("Kapp Configuration Status")){
+                    try { this.kappConfigurationStatus = (LinkedHashMap)Json.parse(kapp.getAttributeValue("Kapp Configuration Status")); } 
+                    catch (IllegalArgumentException e){ /* Kapp Configuration Status attribute is invalid. Treat as not configured. */ }
                 }
-            }
-            // If kapp has all required attributes, return false
-            return false;
-        }
+                // If "Kapp Configuration Status" doesn't exist, or is not valid JSON, create empty map to store the status
+                if (this.kappConfigurationStatus == null){
+                    this.kappConfigurationStatus = new LinkedHashMap();
+                }
+                
+                // Read and parse the setup.json configuration data
+                try { 
+                    this.kappConfigurationData = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                }
+                // If error occurs, throw an exception. This file must exist and must contain a valid JSON Object (empty object is acceptable)
+                catch (Exception e){
+                    throw new RuntimeException("Failed to read Kapp Configuration Data from file setup.json: " + e.getMessage());
+                }
+                
+                // If kapp is configured, create the map of configured attributes
+                if (isConfigured()){
+                    // Get kapp configuration object from setup.jsp
+                    LinkedHashMap kappConfiguration = (LinkedHashMap)this.kappConfigurationData.get("kapp");
+                    // If it exists, add all attributes to the Kapp Configuration Attributes map
+                    if (kappConfiguration != null){
+                        addKappConfigurationAttributes((List)kappConfiguration.get("spaceAttributeDefinitions"), "space", space);                        
+                        addKappConfigurationAttributes((List)kappConfiguration.get("userAttributeDefinitions"), "user", null);                        
+                        addKappConfigurationAttributes((List)kappConfiguration.get("kappAttributeDefinitions"), "kapp", kapp);                        
+                        addKappConfigurationAttributes((List)kappConfiguration.get("formAttributeDefinitions"), "form", form);                        
+                        addKappConfigurationAttributes((List)kappConfiguration.get("categoryAttributeDefinitions"), "category", null);                        
+                    }
+                    // If setup.jsp has components, process those too if they are configured
+                    if (this.kappConfigurationStatus.get("components") != null){
+                        // Iterate through the components defined in the Kapp Configuration Status attribute
+                        for (Object componentStatus : ((LinkedHashMap)this.kappConfigurationStatus.get("components")).entrySet()){
+                            Map.Entry<String, Boolean> componentStatusEntry = (Map.Entry<String, Boolean>)componentStatus;
+                            // If component is configured, add its attributes to the Kapp Configured Attributes map
+                            if (Boolean.TRUE.equals(componentStatusEntry.getValue())){
+                                // Get the component object from setup.jsp
+                                LinkedHashMap componentConfiguration = (LinkedHashMap)JsonUtils.query(this.kappConfigurationData, "components/" + componentStatusEntry.getKey());
+                                // If it exists, add all attributes to the Kapp Configuration Attributes map
+                                if (componentConfiguration != null){
+                                    addKappConfigurationAttributes((List)componentConfiguration.get("spaceAttributeDefinitions"), "space", space);                        
+                                    addKappConfigurationAttributes((List)componentConfiguration.get("userAttributeDefinitions"), "user", null);                        
+                                    addKappConfigurationAttributes((List)componentConfiguration.get("kappAttributeDefinitions"), "kapp", kapp);                        
+                                    addKappConfigurationAttributes((List)componentConfiguration.get("formAttributeDefinitions"), "form", form);                        
+                                    addKappConfigurationAttributes((List)componentConfiguration.get("categoryAttributeDefinitions"), "category", null);
+                                }
 
-        /**
-         * Returns a map of all setup attributes where the key is the attribute
-         * and the value is an AttributeStatus object which tells you if the attribute definition exists and if a vlaue for the attribute is defined
-         * Map is sorted to return required attributes (sorted by name) first and then optional attributes (sorted by name)
-         */
-        public Map<SetupAttribute, AttributeStatus> getSetupAttributes(Kapp kapp){
-            // Results map to store attributes, required and optional, and whether they're present (true) or missing (false)
-            Map<SetupAttribute, AttributeStatus> allSetupAttributes = new TreeMap<SetupAttribute, AttributeStatus>();
-            // Get Kapp Attribute Definitions for checking if definition exists
-            List<AttributeDefinition> attributeDefinitions = kapp.getKappAttributeDefinitions();
-            // Iterate through setup attributes
-            for (SetupAttribute attribute : setupAttributes){
-                boolean definitionExists = false;
-                for (AttributeDefinition definition : attributeDefinitions){
-                    if (definition.getName().equals(attribute.getName())){
-                        definitionExists = true;
-                        break;
+                            }
+                        }
                     }
                 }
-                allSetupAttributes.put(attribute, new AttributeStatus(definitionExists, kapp.hasAttribute(attribute.getName())));
             }
-            // Return list of missing attributes
-            return allSetupAttributes;
         }
-
+        
         /**
-         * Adds a new setup attribute
+         * Returns true if the Kapp has been configured. Returns false otherwise.
          */
-        public SetupHelper addSetupAttribute(String name, String description, boolean required){
-            this.setupAttributes.add(new SetupAttribute(name, description, required));
-            return this;
+        public Boolean isConfigured(){
+            return Boolean.TRUE; // TODO Remove this and uncomment below code once wizard is implemented.
+//             if (this.kapp != null){
+//                 return Boolean.TRUE.equals(this.kappConfigurationStatus.get("configured"));
+//             }
+//             return Boolean.FALSE;
         }
-
-        public static class SetupAttribute implements Comparable<SetupAttribute> {
+        
+        /**
+         * Returns true if the Kapp is missing attributes that are required in order for the kapp (or form within the kapp) to run properly.
+         */
+        public boolean isMissingRequiredAttributes(){
+            for (LinkedHashMap level : ((LinkedHashMap<String,LinkedHashMap>)kappConfigurationAttributes).values()){
+                for (KappConfigurationAttribute attribute : ((LinkedHashMap<String,KappConfigurationAttribute>)level).values()){
+                    if (attribute.isApplicableToPage() && attribute.isRequired() && !attribute.isHasValue()){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
+        /**
+         * Returns a list of all attributes that have been configured for this kapp.
+         */
+        public Map<String, List<KappConfigurationAttribute>> getConfigurationAttributes(){
+            Map<String, List<KappConfigurationAttribute>> configurationAttributes = new LinkedHashMap<>();
+            for (Map.Entry<String,LinkedHashMap> level : ((LinkedHashMap<String,LinkedHashMap>)kappConfigurationAttributes).entrySet()){
+                Set<KappConfigurationAttribute> attributes = new TreeSet<>(((LinkedHashMap)level.getValue()).values());
+                configurationAttributes.put(level.getKey(), new ArrayList<KappConfigurationAttribute>(attributes));
+            }
+            return configurationAttributes;
+        }
+        
+        /**
+         * Helper function that adds attributes to the configured attributes map.
+         *
+         * @param attributes        List of attributes retrieved from the Kapp Configuration file setup.json
+         * @param level             String representation of the level at which the attribute exists (e.g. space, user, kapp, form, or category).
+         * @param attributeParent   The instance of the Model of the parent of the attribute (e.g. Space, Kapp, User, Form, Category).
+         */
+        private <A extends ModelWithAttributes> void addKappConfigurationAttributes(List<LinkedHashMap> attributes, String level, A attributeParent){
+            // Get the map of configured attributes for the current level
+            LinkedHashMap kappConfigurationAttributesByLevel = (LinkedHashMap)this.kappConfigurationAttributes.get(level);
+            // If the map doesn't exist for this level, create a new map and set it into the Kapp Configuration Attributes map
+            if (kappConfigurationAttributesByLevel == null){
+                kappConfigurationAttributesByLevel = new LinkedHashMap();
+                this.kappConfigurationAttributes.put(level, kappConfigurationAttributesByLevel);
+            }
+            // If attributes exist, add them to the map
+            if (attributes != null){
+                for (LinkedHashMap attribute : attributes){
+                    // For each attribute, add a map entry with the attribute name as the key and KappConfigurationAttribute object as the value
+                    kappConfigurationAttributesByLevel.put((String)attribute.get("name"), new KappConfigurationAttribute((String)attribute.get("name"), 
+                            (String)attribute.get("description"), 
+                            (Boolean)attribute.get("required"), 
+                            (Boolean)attribute.get("allowsMultiple"), 
+                            // If attribute parent is passed in, check if the parent has a value and set to true or false. Set to false if attribute parent doesn't exist
+                            attributeParent != null ? attributeParent.hasAttribute((String)attribute.get("name")) : false,
+                            // If attribute parent doesn't exist then this attribute is not applicable to the current page
+                            attributeParent != null ? true : false));
+                }
+            }
+        }
+        
+        /**
+         * Custom class for storing configured attributes. 
+         */
+        public static class KappConfigurationAttribute implements Comparable<KappConfigurationAttribute> {
             private String name;
             private String description;
             private boolean required;
+            private boolean allowsMultiple;
+            private boolean applicableToPage;
+            private boolean hasValue;
 
-            public SetupAttribute(String name, String description, boolean required){
+            /**
+             * Constructor for custom KappConfigurationAttribute class, which represents an attribute that has been configured for this kapp.
+             *
+             * @param name              Name of the attribute.
+             * @param description       Description of what this attribute is used for. Displayed on setup page.
+             * @param required          Boolean stating whether this attribute is required for the kapp to run properly. Category and User attributes can not be required.
+             * @param allowsMultiple    Defines whether the attribute definition allows multiple instances of this attribute.
+             * @param hasValue          Boolean indicating whether a value exists for this attribute.
+             * @param applicableToPage  Boolean indicating whether this attribute applies to the current page (if required and missing, page will redirect to setup page).
+             */
+            public KappConfigurationAttribute(String name, String description, boolean required, boolean allowsMultiple, boolean hasValue, boolean applicableToPage){
                 this.name = name;
                 this.description = description;
                 this.required = required;
+                this.allowsMultiple = allowsMultiple;
+                this.hasValue = hasValue;
+                this.applicableToPage = applicableToPage;
             }
 
             public String getName(){
@@ -76,32 +200,25 @@
             public boolean isRequired(){
                 return this.required;
             }
+            
+            public boolean isAllowsMultiple(){
+                return this.allowsMultiple;
+            }
+            
+            public boolean isHasValue(){
+                return this.hasValue;
+            }
+            
+            public boolean isApplicableToPage(){
+                return this.applicableToPage;
+            }
 
-            public int compareTo(SetupAttribute that) {
-                // Compare by required first, then by name
-                // Required compare is negated to have true values return first (instead of false which is default)
+            public int compareTo(KappConfigurationAttribute that) {
+                // Compare by required first (true sorted first), then by name(alphabetically)
                 return ComparisonChain.start()
-                        .compare(!this.required, !that.required)
+                        .compare(that.required, this.required, Ordering.natural().nullsLast())
                         .compare(this.name, that.name)
                         .result();
-            }
-        }
-
-        public static class AttributeStatus {
-            private boolean definition;
-            private boolean value;
-
-            public AttributeStatus(boolean definition, boolean value){
-                this.definition = definition;
-                this.value = value;
-            }
-
-            public boolean hasDefinition(){
-                return this.definition;
-            }
-
-            public boolean hasValue(){
-                return this.value;
             }
         }
     }

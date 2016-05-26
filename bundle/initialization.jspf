@@ -45,7 +45,7 @@
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%
-    SetupHelper setupHelper = new SetupHelper();
+    SetupHelper setupHelper = new SetupHelper(request);
     request.setAttribute("SetupHelper", setupHelper);
 %>
 
