@@ -78,7 +78,7 @@
                         groupContainer.find("button.cancel-group").remove();
                         // Add section for displaying and editing the parent path
                         addParentPathSectionToForm(groupId, groupContainer, form);
-                        // If group has subgroups, disable delete button and ake it show an error
+                        // If group has subgroups, make delete button show an error
                         if (groupContainer.data("has-subgroups")){
                             // Add event to show alert when delete is clicked that you can't delete a group with subgroups
                             groupContainer.on("click", "button.delete-group", function(e){
@@ -165,7 +165,7 @@
             var memberContainer = $("div.member-form-container");
             var memberId = memberContainer.data("member-id");
             var memberUsername = memberContainer.data("member-username");
-            var groupId = memberContainer.data("group-id");
+            var groupName = memberContainer.data("group-name");
             
             // If memberId exists, update the member
             if (memberId){
@@ -177,7 +177,7 @@
                         // When updated, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
                                 data.submission.values["Group Id"], 
-                                data.submission.values["Status"] == "active");
+                                true);
                         // Redirect back to list of members
                         location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
@@ -199,13 +199,13 @@
                         // When created, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
                                 data.submission.values["Group Id"], 
-                                data.submission.values["Status"] == "active");
+                                true);
                         // Redirect back to list of members
                         location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
                     loaded: function(form){
                         // Pre-populate the groupId field
-                        form.getFieldByName("Group Id").value(groupId);
+                        form.getFieldByName("Group Id").value(groupName);
                         // Bind event for reset button to refresh the page
                         $(form.element()).find("button.cancel-membership").on("click", function(){
                             location.href = $("a.return-to-current-group").attr("href") + "#members";
@@ -226,7 +226,7 @@
             // Get membershipId, username, and groupId
             var membershipId = memberRow.find("td.username").data("membership-id");
             var membershipUsername = memberRow.find("td.username").text();
-            var groupId = self.closest("table").data("group-id");
+            var groupName = self.closest("table").data("group-name");
             // Create modal to confirm delete
             (new KD.Modal({
                 header: "<h3>Confirm Delete</h3>",
@@ -245,14 +245,12 @@
                 accept: function(e){
                     // If delete is confirmed, update the membership submission's status to "delete"
                     $.ajax({
-                        method: "PUT",
+                        method: "DELETE",
                         url: bundle.apiLocation() + "/submissions/" + membershipId,
-                        dataType: "json",
-                        data: JSON.stringify({values: {"Status": "delete"}}),
                         contentType: "application/json",
                         success: function(data, textStatus, jqXHR){
                             // On success, update user attributes
-                            updateUserMembership(membershipUsername, groupId, false);
+                            updateUserMembership(membershipUsername, groupName, false);
                             // Remove row from table
                             memberRow.remove();
                         },
@@ -309,20 +307,20 @@
         var groupData = JSON.parse($("div.group-data-json").text());
         // Get current group object
         var group = _.find(groupData, {id: groupId});
-        // if group doesn't exist, we're creating a new group
+        // If group doesn't exist, we're creating a new group
         if (!group){
             // Create empty object to prevent null pointers
             group = {};
-            // If parent id is specified in the params, pre-set the parent id
-            if (groupContainer.data("parent-id")){
-                group.parent = groupContainer.data("parent-id");
+            // If parent is specified in the params, pre-set the parent name
+            if (groupContainer.data("parent-name")){
+                group.parent = groupContainer.data("parent-name");
                 form.getFieldByName("Parent").value(group.parent);
             }
         }
         // Build parent path view
         var pathView = $("<div>").append(parentPathString)
                 .append(parentPathDelimiter)
-                .append($("<strong>", {class: "current-group-name"}).append(group.name));
+                .append($("<strong>", {class: "current-group-name"}).append(group.displayName));
         // Create container to hold editable parent path
         var pathContainer = $("<div>", {class: "parent-path-item"});
         // Prepend Parent Path to the top of the group form
@@ -341,8 +339,14 @@
                 .append(pathContainer));
         
         // Bind text changes in Name field to update name in parent path section in real time
-        $(form.getFieldByName("Name").element()).on("keyup", function(){
+        $(form.getFieldByName("Display Name").element()).on("keyup", function(){
             $("strong.current-group-name").text($(this).val().trim());
+            if (form.getFieldByName("Parent").value()){
+                form.getFieldByName("Name").value(form.getFieldByName("Parent").value() + "::" + $(this).val().trim());
+            }
+            else {
+                form.getFieldByName("Name").value($(this).val().trim());
+            }
         });
         // Bind event for reset button to refresh the page
         $(form.element()).find("button.reset-group").on("click", function(){
@@ -363,13 +367,13 @@
     
     function makeParentPathSectionEditable(group, groupData, pathContainer, parentPath, parentPathDelimiter, form){
         // Get parent of current group
-        var iter = _.find(groupData, {id: group.parent});
+        var iter = _.find(groupData, {name: group.parent});
         // Array to store all parents
         var parents = new Array();
         // Populate array of parents going up the tree
         while (iter != null){
             parents.unshift(iter);
-            iter = _.find(groupData, {id: iter.parent});
+            iter = _.find(groupData, {name: iter.parent});
         }
         // Create container variable for current level of parent path
         var currentContainer = pathContainer;
@@ -380,7 +384,7 @@
             // Iterate through all data for current level (where group's parent matches parent we're iterating over, excluding this group)
             _.each(_.reject(_.where(groupData, {parent: parentGroup.parent}), {id: group.id}), function(g){
                 // Create option for the dropdown of this group
-                select.append($("<option>", {value: g.id}).text(g.name)); 
+                select.append($("<option>", {value: g.name}).text(g.displayName)); 
             });
             // Build the next div container, which will be nested under the current container
             var nextContainer = $("<div>", {class: "parent-path-item", "data-path-delimiter": parentPathDelimiter});
@@ -401,7 +405,7 @@
                 .append($("<button>", {class: "btn btn-xs btn-subtle"})
                         .append($("<span>", {class: "fa fa-plus fa-fw"}))
                         .append("Add Parent"))
-                .append($("<div>", {class: "parent-path-item"}).append($("<strong>", {class: "current-group-name"}).append(form.getFieldByName("Name").value())));
+                .append($("<div>", {class: "parent-path-item"}).append($("<strong>", {class: "current-group-name"}).append(form.getFieldByName("Display Name").value())));
         
         /**
          * Event handler which updates the hierarchy when any dropdown is changed in the parent path
@@ -423,11 +427,15 @@
             }));
             // If parent select exists (ie: we're not the root group) set the parent group's id into the Parent field
             if (newParentSelect.length){
-                form.getFieldByName("Parent").value(newParentSelect.val());
+                var newParentName = newParentSelect.val();
+                form.getFieldByName("Parent").value(newParentName);
+                var displayName = form.getFieldByName("Display Name").value();
+                form.getFieldByName("Name").value(newParentName + "::" + displayName);
             }
             // Otherwise set parent field to empty string
             else {
                 form.getFieldByName("Parent").value("");
+                form.getFieldByName("Name").value(form.getFieldByName("Display Name").value());
             }
         /**
          * Event handler for removing a portion of the parent path
@@ -447,11 +455,15 @@
             var newParentSelect = newParentContainer.children("select");
             // If parent select exists (ie: we're not the root group) set the parent group's id into the Parent field
             if (newParentSelect.length){
-                form.getFieldByName("Parent").value(newParentSelect.val());
+                var newParentName = newParentSelect.val();
+                form.getFieldByName("Parent").value(newParentName);
+                var displayName = form.getFieldByName("Display Name").value();
+                form.getFieldByName("Name").value(newParentName + "::" + displayName);
             }
             // Otherwise set parent field to empty string
             else {
                 form.getFieldByName("Parent").value("");
+                form.getFieldByName("Name").value(form.getFieldByName("Display Name").value());
             }
         /**
          * Event handler for adding a parent level
@@ -471,7 +483,7 @@
             var newParentSelect = $("<select>").appendTo(newParentContainer).after($("<span>", {class: "fa fa-times remove-parent-path"}));
             // Add data to new parent dropdown
             _.each(newParentData, function(group){
-                newParentSelect.append($("<option>", {value: group.id}).text(group.name)); 
+                newParentSelect.append($("<option>", {value: group.name}).text(group.displayName));
             });
             // Add new parent container to the former immediate parent container
             currentParentContainer.append(newParentContainer);
@@ -482,7 +494,10 @@
                 return g.parent == newParentSelect.val() && g.id != group.id;
             }));
             // Set Parent field to the new parent that was added
-            form.getFieldByName("Parent").value(newParentSelect.val());
+            var newParentName = newParentSelect.val();
+            form.getFieldByName("Parent").value(newParentName);
+            var displayName = form.getFieldByName("Display Name").value();
+            form.getFieldByName("Name").value(newParentName + "::" + displayName);
         });
     }
     

@@ -5,6 +5,7 @@
         private BundleSubmissionComponent submissionComponent;
         private Space space;
         private Set<BundleGroup> groups;
+        private Map<String, BundleGroup> groupsByName;
         private Map<String, BundleGroup> groupsById;
         
         public static final String pathDelimiter = " / ";
@@ -13,6 +14,7 @@
             this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
             this.space = space;
             this.groups = null;
+            this.groupsByName = null;
             this.groupsById = null;
         }
         
@@ -31,7 +33,7 @@
             Boolean groupsLoaded = loadGroups();
             
             if (groupsLoaded){
-                ArrayList<BundleGroup> allGroups = new ArrayList<>(this.groupsById.values());
+                ArrayList<BundleGroup> allGroups = new ArrayList<>(this.groupsByName.values());
                 Collections.sort(allGroups);
                 return allGroups;
             }
@@ -40,7 +42,18 @@
             }  
         }
         
-        public BundleGroup getGroup(String id){
+        public BundleGroup getGroup(String name){
+            Boolean groupsLoaded = loadGroups();
+            
+            if (groupsLoaded){
+                return this.groupsByName.get(name);
+            }
+            else {
+                return null;
+            } 
+        }
+        
+        public BundleGroup getGroupById(String id){
             Boolean groupsLoaded = loadGroups();
             
             if (groupsLoaded){
@@ -71,6 +84,7 @@
             }
             // Create empty collections for groups
             this.groups = new TreeSet<BundleGroup>();
+            this.groupsByName = new HashMap<String, BundleGroup>();
             this.groupsById = new HashMap<String, BundleGroup>();
             
             // Get all submissions from the groups forms
@@ -94,7 +108,8 @@
                 BundleGroup bundleGroup = new BundleGroup(groupSubmission);
                 // Add to templ list
                 allGroups.add(bundleGroup);
-                // Add to map of all groups by id
+                // Add to map of all groups by name
+                this.groupsByName.put(groupSubmission.getValue("Name"), bundleGroup);
                 this.groupsById.put(groupSubmission.getId().toString(), bundleGroup);
             }
             
@@ -105,7 +120,7 @@
                 // If group has a parent
                 if (bundleGroup.hasParent()){
                     // Get parent by id
-                    BundleGroup parentGroup = groupsById.get(bundleGroup.getParentId());
+                    BundleGroup parentGroup = groupsByName.get(bundleGroup.getParentName());
                     // If parent group exists
                     if (parentGroup != null){
                         // Set parent of current group
@@ -136,8 +151,9 @@
             for (BundleGroup group : this.getGroupsFlattened()){
                 LinkedHashMap groupJson = new LinkedHashMap();
                 groupJson.put("name", group.getName());
+                groupJson.put("displayName", group.getDisplayName());
                 groupJson.put("id", group.getId());
-                groupJson.put("parent", group.getParentId());
+                groupJson.put("parent", group.getParentName());
                 json.add(groupJson);
             }
             return json;
@@ -164,12 +180,9 @@
                 return this.groupSubmission.getId().toString();
             }
             
-            public String getType(){
-                return this.groupSubmission.getValue("Type");
-            }
-
-            public String getSource(){
-                return this.groupSubmission.getValue("Source");
+            public String getDisplayName(){
+                List<String> path = Text.split(this.groupSubmission.getValue("Name"), "::");
+                return path.get(path.size() - 1);
             }
             
             public String getStatus(){
@@ -197,14 +210,10 @@
                 this.parentGroup = null;
             }
             
-            public String getParentId(){
+            public String getParentName(){
                 return this.groupSubmission.getValue("Parent");
             }
             
-            public String getParentName(){
-                return this.hasParent() ? this.getParent().getName() : "";
-            }
-
             public List<BundleGroup> getParentPath(){
                 List<BundleGroup> path = new ArrayList<>();
                 BundleGroup group = this;
@@ -221,7 +230,7 @@
                     if (group.hasParent()){
                         path += GroupHelper.pathDelimiter;
                     }
-                    path += group.getName();
+                    path += group.getDisplayName();
                 }
                 return path;
             }
@@ -238,7 +247,7 @@
                     if (group.hasParent()){
                         path += GroupHelper.pathDelimiter;
                     }
-                    path += group.getName();
+                    path += group.getDisplayName();
                 }
                 return path;
             }
@@ -303,8 +312,7 @@
                 // Get all submissions from the group members form
                 Map<String, String[]> parameters = new HashMap<>();
                 parameters.put("limit", new String[]{"1000"});
-                parameters.put("values[Status]", new String[]{"active", "inactive"});
-                parameters.put("values[Group Id]", new String[]{this.getId()});
+                parameters.put("values[Group Id]", new String[]{this.getName()});
                 PaginatedList<Submission> pageOfGroupMemberSubmissions;
                 do {
                     pageOfGroupMemberSubmissions = submissionComponent.searchByForm(groupMemberForm, parameters);
@@ -320,12 +328,9 @@
             }
             
             public int compareTo(BundleGroup that) {
-                // Compare by name, then parent name, then by type, then by Id
+                // Compare by name
                 return ComparisonChain.start()
                         .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
-                        .compare(this.getParentName(), that.getParentName(), Ordering.natural().nullsLast())
-                        .compare(this.getType(), that.getType(), Ordering.natural().nullsLast())
-                        .compare(this.getId(), that.getId(), Ordering.natural().nullsLast())
                         .result();
             }
         }
@@ -349,10 +354,6 @@
             
             public String getGroupId(){
                 return this.groupMemberSubmission.getValue("Group Id");
-            }
-
-            public String getStatus(){
-                return this.groupMemberSubmission.getValue("Status");
             }
             
             public String get(String value){

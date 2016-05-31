@@ -54,7 +54,7 @@
                             <table class="table table-hover groups-table groups-table-flat open"> 
                                 <thead>
                                     <tr>
-                                        <th>Group Name <small>(Type)</small></th>
+                                        <th>Group Name</th>
                                         <th>Status</th>
                                         <th>Parent Path</th>
                                     </tr>
@@ -63,8 +63,7 @@
                                     <c:forEach items="${groupsFlat}" var="group">
                                         <tr>
                                             <td>
-                                                <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${group.id}">${group.name}</a>
-                                                <small>(${group.type})</small>
+                                                <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${group.id}">${group.displayName}</a>
                                             </td>
                                             <td><span class="label label-info">${text.titlelize(group.status)}</span></td>
                                             <td class="parent-cell" data-toggle="tooltip" title="${group.parentPathString}">${group.parentPathString}</td>
@@ -76,7 +75,7 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Group Name <small>(Type)</small>
+                                            Group Name
                                             <div class="btn-group table-hierarchy-option pull-right">
                                                 <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
                                                     <span class="fa fa-compress fa-fw"></span> Collapse All

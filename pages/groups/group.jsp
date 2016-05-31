@@ -1,7 +1,8 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-<c:set var="currentGroup" value="${GroupHelper.getGroup(param.group)}" scope="request" />
+<c:set var="currentGroup" value="${GroupHelper.getGroupById(param.group)}" scope="request" />
+<c:set var="parentGroup" value="${GroupHelper.getGroupById(param.parent)}" scope="request" />
 
 <!-- Show page content only if Kapp & Group exist. Otherwise redirect to valid page. -->
 <c:choose>
@@ -23,12 +24,12 @@
             
             <ol class="breadcrumb">
                 <li><a class="return-to-groups-console" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}">${form.name}</a></li>
-                <li class="active ng-binding">${empty currentGroup ? 'New Group' : currentGroup.name}</li>
+                <li class="active ng-binding">${empty currentGroup ? 'New Group' : currentGroup.displayName}</li>
             </ol>
             
             <div class="page-header">
                 <h3>
-                    ${not empty currentGroup ? currentGroup.name : 'New Group'}  
+                    ${not empty currentGroup ? currentGroup.displayName : 'New Group'}  
                     <c:if test="${not empty currentGroup}">
                         <small> Configuration</small>
                     </c:if>
@@ -36,11 +37,11 @@
                 <c:if test="${not empty currentGroup}">
                     <h6>
                         <c:forEach items="${currentGroup.getParentPath()}" var="parent" varStatus="status">
-                            <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${parent.id}">${parent.name}</a>
+                            <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${parent.id}">${parent.displayName}</a>
                             <c:if test="${!status.last}">${GroupHelper.getPathDelimiter()}</c:if> 
                         </c:forEach>
                         ${GroupHelper.getPathDelimiter()} 
-                        <b>${currentGroup.name}</b>
+                        <b>${currentGroup.displayName}</b>
                     </h6>
                 </c:if>
             </div>
@@ -67,8 +68,8 @@
                     
                         <div role="tabpanel" class="tab-pane active" id="general">
                             <div class="group-form-container embedded-form" data-group-id="${currentGroup.id}" data-has-subgroups="${currentGroup.hasSubgroups()}"
-                                    data-parent-id="${param.parent}" data-path-delimiter="${GroupHelper.pathDelimiter}"
-                                    data-parent-path="${not empty currentGroup ? currentGroup.getParentPathString() : GroupHelper.getGroup(param.parent).getPathString()}">
+                                    data-parent-id="${param.parent}" data-parent-name="${parentGroup.name}" data-path-delimiter="${GroupHelper.pathDelimiter}"
+                                    data-parent-path="${not empty currentGroup ? currentGroup.getParentPathString() : parentGroup.getPathString()}">
                                 <div class="alert alert-info">
                                     <span class="fa fa-spinner fa-spin"></span>
                                     Loading
@@ -81,7 +82,7 @@
                                 <div class="page-header">
                                     <h4>
                                         Members 
-                                        <small> of ${currentGroup.name}</small>
+                                        <small> of ${currentGroup.displayName}</small>
                                         <div class="pull-right">
                                             <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/member&group=${currentGroup.id}">
                                                 <span class="fa fa-plus fa-fw"></span> Add Member
@@ -92,18 +93,17 @@
                                 <c:choose>
                                     <c:when test="${empty currentGroup.members}">
                                         <div class="table no-data text-center">
-                                            <h4>${currentGroup.name} does not have any members.</h4>
+                                            <h4>${currentGroup.displayName} does not have any members.</h4>
                                             <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/member&group=${currentGroup.id}">
                                                 <span class="fa fa-plus fa-fw"></span> Add Member
                                             </a>
                                         </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <table class="table members-table table-hover" data-group-id="${currentGroup.id}"> 
+                                        <table class="table members-table table-hover" data-group-id="${currentGroup.id}" data-group-name="${currentGroup.name}"> 
                                             <thead>
                                                 <tr>
                                                     <th>Username</th>
-                                                    <th>Status</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -111,12 +111,11 @@
                                                 <c:forEach items="${currentGroup.members}" var="member">
                                                     <tr>
                                                         <td class="username" data-membership-id="${member.id}">${member.username}</td>
-                                                        <td><span class="label label-info">${text.titlelize(member.status)}</span></td>
                                                         <td>
                                                             <div class="btn-group pull-right">
-                                                                <a class="btn btn-xs btn-default edit" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/member&group=${currentGroup.id}&member=${member.id}">
-                                                                    <span class="fa fa-pencil fa-fw"></span>
-                                                                </a>
+<%--                                                                 <a class="btn btn-xs btn-default edit" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/member&group=${currentGroup.id}&member=${member.id}"> --%>
+<!--                                                                     <span class="fa fa-pencil fa-fw"></span> -->
+<!--                                                                 </a> -->
                                                                 <a class="btn btn-xs btn-primary delete" href="javascript:void(0);">
                                                                     <span class="fa fa-times fa-fw"></span>
                                                                 </a>
@@ -134,7 +133,7 @@
                                 <div class="page-header">
                                     <h4>
                                         Subgroups 
-                                        <small> of ${currentGroup.name}</small>
+                                        <small> of ${currentGroup.displayName}</small>
                                         <div class="pull-right">
                                             <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&parent=${currentGroup.id}">
                                                 <span class="fa fa-plus fa-fw"></span> Create Subgroup
@@ -145,7 +144,7 @@
                                 <c:choose>
                                     <c:when test="${empty currentGroup.subgroups}">
                                         <div class="table no-data text-center">
-                                            <h4>${currentGroup.name} does not have any subgroups.</h4>
+                                            <h4>${currentGroup.displayName} does not have any subgroups.</h4>
                                             <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&parent=${currentGroup.id}">
                                                 <span class="fa fa-plus fa-fw"></span> Create Subgroup
                                             </a>
@@ -156,7 +155,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                        Group Name <small>(Type)</small>
+                                                        Group Name
                                                         <div class="btn-group table-hierarchy-option pull-right">
                                                             <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
                                                                 <span class="fa fa-compress fa-fw"></span> Collapse All

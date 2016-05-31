@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-<c:set var="currentGroup" value="${GroupHelper.getGroup(param.group)}" scope="request" />
+<c:set var="currentGroup" value="${GroupHelper.getGroupById(param.group)}" scope="request" />
 <c:set var="currentMember" value="${currentGroup.getMember(param.member)}" scope="request" />
 
 <!-- Show page content only if Kapp & Group exist. Otherwise redirect to valid page. -->
@@ -27,7 +27,7 @@
             
             <ol class="breadcrumb">
                 <li><a class="return-to-groups-console" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}">${form.name}</a></li>
-                <li><a class="return-to-current-group" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${currentGroup.id}">${currentGroup.name}</a></li>
+                <li><a class="return-to-current-group" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${currentGroup.id}">${currentGroup.displayName}</a></li>
                 <li class="active ng-binding">${empty currentMember ? 'New Member' : 'Member: '}${currentMember.username}</li>
             </ol>
             
@@ -39,7 +39,7 @@
             
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="member-form-container embedded-form" data-group-id="${currentGroup.id}"
+                    <div class="member-form-container embedded-form" data-group-id="${currentGroup.id}" data-group-name="${currentGroup.name}"
                             data-member-id="${currentMember.id}" data-member-username="${currentMember.username}">
                         <div class="alert alert-info">
                             <span class="fa fa-spinner fa-spin"></span>

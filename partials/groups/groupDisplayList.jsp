@@ -1,8 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
 <li class="group-item ${currentGroup.hasSubgroups() ? 'has-subgroups' : ''}" data-group-id="${currentGroup.id}">
-    <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${currentGroup.id}">${currentGroup.name}</a>
-    <small>(${currentGroup.type})</small>
+    <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=groups/group&group=${currentGroup.id}">${currentGroup.displayName}</a>
     <span class="pull-right status"><span class="label label-info">${text.titlelize(currentGroup.status)}</span></span>
 </li>
 <c:if test="${currentGroup.hasSubgroups()}">
