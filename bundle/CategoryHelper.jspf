@@ -81,10 +81,6 @@
             public List<Form> getForms() { return this.category.getForms(); }
             public List<AttributeDefinition> getApplicableAttributeDefinitions() { return this.category.getApplicableAttributeDefinitions(); }
             
-            public String getDisplayName() {
-                return Text.defaultIfBlank(this.getAttributeValue("Display Name"), this.getName());
-            }
-            
             public BundleCategory getParentCategory() {
                 return parentCategory;
             }
@@ -154,8 +150,8 @@
 
                 return ComparisonChain.start()
                         .compare(thisInt, thatInt, Ordering.natural().nullsLast())
-                        .compare(this.getAttributeValue("Display Name"), that.getAttributeValue("Display Name"), Ordering.natural().nullsLast())
                         .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .compare(this.getSlug(), that.getSlug(), Ordering.natural().nullsLast())
                         .result();
             }
         }
