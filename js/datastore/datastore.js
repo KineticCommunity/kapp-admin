@@ -735,9 +735,13 @@
                     structure: "Submissions"
                 }
             ],
-            attributes: form.fields,
+            attributes: $.extend([], form.fields),
             qualifications: []
         };
+        // Add Submission ID attribute
+        data.attributes.push({
+            name: "Submission ID"
+        });
         
         // If Bridge Model exists, update it
         if (bridge.data("model-exists")){
@@ -790,6 +794,11 @@
                 name: field.name,
                 structureField: "${fields('values[" + field.name + "]')}"
             });
+        });
+        // Add Submission Id
+        data.attributes.push({
+            name: "Submission ID",
+            structureField: "${fields('id')}"
         });
         
         // Add all qualifications with query
