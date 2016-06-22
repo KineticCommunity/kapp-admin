@@ -10,7 +10,7 @@
     <br/>
 
     <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-    <c:set var="consoles" value="${AdminHelper.getActiveConsoles()}" scope="request" />
+    <c:set var="consoles" value="${empty currentKapp ? AdminHelper.getActiveConsoles() : AdminHelper.getActiveConsolesForKapp(currentKapp)}" scope="request" />
     
     <div class="row">
         <div class="${empty currentKapp ? 'col-xs-8 col-xs-offset-2' : 'col-xs-10'} ">
@@ -29,7 +29,7 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <c:forEach var="console" items="${AdminHelper.getActiveConsoles()}">
+                    <c:forEach var="console" items="${consoles}">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <strong>${console.name}</strong>

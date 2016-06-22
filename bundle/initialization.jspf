@@ -45,7 +45,7 @@
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%
-    SetupHelper setupHelper = new SetupHelper();
+    SetupHelper setupHelper = new SetupHelper(request);
     request.setAttribute("SetupHelper", setupHelper);
 %>
 
@@ -60,6 +60,12 @@
 <%@include file="CategoryHelper.jspf"%>
 <%
     request.setAttribute("CategoryHelper", new CategoryHelper());
+%>
+
+<%-- GroupHelper --%>
+<%@include file="GroupHelper.jspf"%>
+<%
+    request.setAttribute("GroupHelper", new GroupHelper(request, space));
 %>
 
 <%-- SearchHelper --%>

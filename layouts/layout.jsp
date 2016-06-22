@@ -24,14 +24,15 @@
         <bundle:scriptpack>
             <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
             <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
+            <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
+            <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.js"/>
             <bundle:script src="${bundle.location}/libraries/moment/moment-with-locales.js"/>
-            <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
-            <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
             <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.min.js"/>
+            <bundle:script src="${bundle.location}/js/admin.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
         <bundle:yield name="head"/>

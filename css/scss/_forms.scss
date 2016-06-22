@@ -24,7 +24,9 @@ section.page {
     font-weight: 400;
     overflow: hidden;
     background: $white;
-    
+    /* Required asterisk after label */
+    .checkbox.required label:first-child:after,
+    .radio.required label:first-child:after,
     .form-group.required label:after {
       content: '*';
       color: red;
@@ -82,4 +84,8 @@ section.page {
       }
     }
   }
+}
+
+div.embedded-form section.page form {
+  padding: 0 0 2rem 0;
 }

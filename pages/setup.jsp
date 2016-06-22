@@ -12,12 +12,13 @@
             </c:when>
             <c:when test="${identity.spaceAdmin}">
                 <h2>
-                    Kapp Setup
+                    ${kapp.name} Kapp Setup
                 </h2>
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th width="15%">Status</th>
+                            <th width="10%">Level</th>
+                            <th width="10%">Status</th>
                             <th width="10%">Required?</th>
                             <th>Name</th>
                             <th>Description</th>
@@ -25,38 +26,59 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${SetupHelper.getSetupAttributes(kapp)}" var="setupAttributeEntry">
-                            <tr class="${setupAttributeEntry.value.hasValue() ? "success" : setupAttributeEntry.key.isRequired() ? "danger" : "warning"}">
-                                <td>
-                                    <span class="fa ${setupAttributeEntry.value.hasValue() ? "fa-check" : "fa-exclamation-triangle"}"></span>
-                                    <c:choose>
-                                        <c:when test="${setupAttributeEntry.value.hasValue()}">
-                                            Found
-                                        </c:when>
-                                        <c:when test="${setupAttributeEntry.value.hasDefinition()}">
-                                            <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/kapp/attributes">Missing Value</a>
-                                        </c:when>
-                                        <c:otherwise>
-                                           <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/attributeDefinitions/Kapp/new"> Missing Definition</a>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td class="${setupAttributeEntry.key.isRequired() ? "required" : "optional"}">
-                                    ${setupAttributeEntry.key.isRequired() ? "Required" : "Optional"}
-                                </td>
-                                <td>${setupAttributeEntry.key.getName()}</td>
-                                <td>${setupAttributeEntry.key.getDescription()}</td>
-        
-        
-                            </tr>
+                        <c:forEach items="${SetupHelper.getConfigurationAttributes()}" var="setupAttributeEntryMap">
+                            <c:forEach items="${setupAttributeEntryMap.value}" var="setupAttributeEntry">
+                                <tr class="text-left ${setupAttributeEntry.isApplicableToPage()? setupAttributeEntry.isHasValue() ? 'success' : setupAttributeEntry.isRequired() ? 'danger' : 'warning' : 'info'}">
+                                    <td>${text.titlelize(setupAttributeEntryMap.key)}</td>
+                                    <td>
+                                        <c:if test="${setupAttributeEntry.isApplicableToPage()}">
+                                            <span class="fa ${setupAttributeEntry.isHasValue() ? "fa-check" : "fa-exclamation-triangle"}"></span>
+                                            <c:choose>
+                                                <c:when test="${setupAttributeEntry.isHasValue()}">
+                                                    Found
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${text.equals(setupAttributeEntryMap.key, 'space')}">
+                                                            <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/space/attributes">Missing</a>
+                                                        </c:when>
+                                                        <c:when test="${text.equals(setupAttributeEntryMap.key, 'kapp')}">
+                                                            <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/kapp/attributes">Missing</a>
+                                                        </c:when>
+                                                        <c:when test="${text.equals(setupAttributeEntryMap.key, 'form')}">
+                                                            <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${form.slug}/attributes">Missing</a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            Missing
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:if>
+                                    </td>
+                                    <td class="${setupAttributeEntry.isRequired() ? "required" : "optional"}">
+                                        ${setupAttributeEntry.isRequired() ? "Required" : "Optional"}
+                                    </td>
+                                    <td>${setupAttributeEntry.getName()}</td>
+                                    <td>${setupAttributeEntry.getDescription()}</td>
+                                </tr>
+                            </c:forEach>
                         </c:forEach>
                     </tbody>
                 </table>
         
-                <p class="text-muted">To update your attribute values visit the <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/kapp/attributes">
-                Kapp Attribute settings</a>.</p>
-                <p class="text-muted">To define your attributes visit the <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/attributeDefinitions/Kapp/new">
-                Attribute Definitions settings</a>.</p>
+                <p class="text-muted">
+                    To update your attribute values visit <c:if test="${not empty form}"><a href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${form.slug}/attributes">
+                    Form Attributes</a>, </c:if> <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/kapp/attributes">
+                    Kapp Attributes</a><c:if test="${not empty form}">,</c:if> or <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/space/attributes">
+                    Space Attributes</a>.
+                </p>
+                <p class="text-muted">
+                    To define your attributes visit <c:if test="${not empty form}"><a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/attributeDefinitions/Form/new">
+                    Form Attribute Definitions</a>,</c:if> <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/setup/attributeDefinitions/Kapp/new">
+                    Kapp Attribute Definitions</a><c:if test="${not empty form}">,</c:if> or <a href="${bundle.spaceLocation}/app/#/${kapp.slug}/attributeDefinitions/Space/new">
+                    Space Attribute Definitions</a>.
+                </p>
             </c:when>
         </c:choose>
     </div>

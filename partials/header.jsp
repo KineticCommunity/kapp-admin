@@ -9,7 +9,7 @@
     <div class="kapp-selector nav-title">
         <div class="kapp-current dropdown">
             <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-                <img src="${bundle.location}/images/ProductName-Request.png" height="40px">
+                <img src="${bundle.location}/images/ProductName-Admin.png" height="40px">
                 <span class="fa fa-caret-down"></span>
             </a>
             <ul class="kapp-list dropdown-menu"> 

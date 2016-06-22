@@ -4,7 +4,7 @@ The Category Helper contains helper methods for fetching categories from a Kapp 
 
 A category may specify its parent category by adding a _Parent_ Attribute with the name of the parent category.
 
-Categories are returned sorted, first by their _Sort Order_ attribute, then by their _Display Name_ attribute, and finally by their _name_ field.
+Categories are returned sorted, first by their _Sort Order_ attribute, then by their _name_ field, and finally by their _slug_ field.
 
 ### Examples
 
@@ -39,8 +39,8 @@ request.setAttribute("CategoryHelper", new CategoryHelper());
 | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `List<BundleCategory> getCategories(Kapp kapp)`        | Gathers, maps, and sorts all of `kapp`'s categories/subcategories, and returns a list of the root categories.                                     |
 | `List<BundleCategory> getCategories(Form form)`        | Returns categories that are set to `form`.                                                                                                        |
-| `BundleCategory getCategory(String name, Kapp kapp)`   | Returns a single category object from `kapp` based on the `name` (not Display Name).                                                              |
-| `BundleCategory getCategory(String name, Form form)`   | Returns a single category object from the parent Kapp of the `form` based on the `name` (not Display Name).                                       |
+| `BundleCategory getCategory(String name, Kapp kapp)`   | Returns a single category object from `kapp` based on the `name`.                                                              |
+| `BundleCategory getCategory(String name, Form form)`   | Returns a single category object from the parent Kapp of the `form` based on the `name`.                                       |
 
 ---
 

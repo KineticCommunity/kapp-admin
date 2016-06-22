@@ -41,7 +41,7 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <table class="table table-hover"> 
+                            <table class="table table-hover datastore-list-table"> 
                                 <thead>
                                     <tr>
                                         <th>Name</th>

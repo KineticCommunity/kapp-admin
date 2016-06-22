@@ -5,7 +5,20 @@
      *   This section is executed on page load to register events and otherwise manipulate the DOM.
      *--------------------------------------------------------------------------------------------*/
     $(function() {
+
+        /******************************************************************************************
+         ** START *** DATASTORE/CONSOLE PAGE *** DOCUMENT READY CODE
+         ** Lists all datastores.
+         ******************************************************************************************/
+
+        // If on console page
+        if ($("table.datastore-list-table").length){
+            // Clear DataTables attribute from local storage to remove save state of datastores
+            window.localStorage.removeItem("DataTables_datastore-records-table_" + window.location.pathname);
+        }
         
+        /** END *** DATASTORE/CONSOLE PAGE *** DOCUMENT READY CODE *********************************/
+
         /******************************************************************************************
          ** START *** DATASTORE/CONFIG PAGE *** DOCUMENT READY CODE
          ** Allows for creating of new datastore forms and updating those forms.
@@ -822,6 +835,7 @@
                 records = $.extend(data, {
                     responsive: true,
                     pageLength: 25,
+                    stateSave: true,
                     buttons: [
                         {
                             extend: "csv",

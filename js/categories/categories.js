@@ -162,7 +162,7 @@
             }
             // check if category already exists
             if($('li[data-id="' + name + '"]').length > 0 && $('input#parent-name').val() !== name){
-                $(this).notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that slug already exists.', disable: false });
                 return false;
             }
             // Update the li
@@ -213,7 +213,7 @@
             }
             // check if category already exists and is not this item
             if( $('li[data-id="' + name + '"]').length > 0){
-                $(this).notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that name already exists.', disable: false });
+                $(this).notifie({ type: 'alert', severity: 'danger', message: 'A catagory with that slug already exists.', disable: false });
                 return false;
             }
             // Create the category

@@ -1,0 +1,376 @@
+<%@page import="com.kineticdata.core.web.bundles.PaginatedList" %>
+<%!
+    public static class GroupHelper {
+    
+        private BundleSubmissionComponent submissionComponent;
+        private Space space;
+        private Set<BundleGroup> groups;
+        private Map<String, BundleGroup> groupsByName;
+        private Map<String, BundleGroup> groupsById;
+        
+        public static final String pathDelimiter = " / ";
+
+        public GroupHelper(HttpServletRequest request, Space space) {
+            this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
+            this.space = space;
+            this.groups = null;
+            this.groupsByName = null;
+            this.groupsById = null;
+        }
+        
+        public List<BundleGroup> getGroups() {
+            Boolean groupsLoaded = loadGroups();
+            
+            if (groupsLoaded){
+                return new ArrayList<BundleGroup>(this.groups);
+            }
+            else {
+                return new ArrayList<BundleGroup>();
+            }            
+        }
+        
+        public List<BundleGroup> getGroupsFlattened() {
+            Boolean groupsLoaded = loadGroups();
+            
+            if (groupsLoaded){
+                ArrayList<BundleGroup> allGroups = new ArrayList<>(this.groupsByName.values());
+                Collections.sort(allGroups);
+                return allGroups;
+            }
+            else {
+                return new ArrayList<BundleGroup>();
+            }  
+        }
+        
+        public BundleGroup getGroup(String name){
+            Boolean groupsLoaded = loadGroups();
+            
+            if (groupsLoaded){
+                return this.groupsByName.get(name);
+            }
+            else {
+                return null;
+            } 
+        }
+        
+        public BundleGroup getGroupById(String id){
+            Boolean groupsLoaded = loadGroups();
+            
+            if (groupsLoaded){
+                return this.groupsById.get(id);
+            }
+            else {
+                return null;
+            } 
+        }
+        
+        private boolean loadGroups(){
+            // If groups exists, return true because they're already loaded
+            if (this.groups != null){
+                return true;
+            }
+            // Get the group form from the admin kapp. Admin Kapp must be defined as space attribute Admin Kapp Slug. Group form must have slug of group.
+            Form groupForm;
+            try {
+                groupForm = this.space.getKapp(this.space.getAttributeValue("Admin Kapp Slug")).getForm("group");
+                if (groupForm == null){
+                    // TODO error?
+                    return false;
+                }
+            }
+            catch (Exception e){
+                // TODO error?
+                return false;
+            }
+            // Create empty collections for groups
+            this.groups = new TreeSet<BundleGroup>();
+            this.groupsByName = new HashMap<String, BundleGroup>();
+            this.groupsById = new HashMap<String, BundleGroup>();
+            
+            // Get all submissions from the groups forms
+            List<Submission> groupSubmissions = new ArrayList<>();
+            Map<String, String[]> parameters = new HashMap<>();
+            parameters.put("limit", new String[]{"1000"});
+            parameters.put("values[Status]", new String[]{"active", "inactive"});
+            PaginatedList<Submission> pageOfGroupSubmissions;
+            do {
+                pageOfGroupSubmissions = this.submissionComponent.searchByForm(groupForm, parameters);
+                groupSubmissions.addAll(pageOfGroupSubmissions);
+                parameters.put("pageToken", new String[]{pageOfGroupSubmissions.getNextPageToken()});
+            } 
+            while (Text.isNotBlank(pageOfGroupSubmissions.getNextPageToken()));
+            
+            // Create temp list to store all group submissions converted to BundleGroup onjects
+            List<BundleGroup> allGroups = new ArrayList<BundleGroup>();
+            // Process each submissions
+            for (Submission groupSubmission : groupSubmissions){
+                // Convert to BundleGroup object
+                BundleGroup bundleGroup = new BundleGroup(groupSubmission);
+                // Add to templ list
+                allGroups.add(bundleGroup);
+                // Add to map of all groups by name
+                this.groupsByName.put(groupSubmission.getValue("Name"), bundleGroup);
+                this.groupsById.put(groupSubmission.getId().toString(), bundleGroup);
+            }
+            
+            // Go through temp list and create hierarchy
+            while (!allGroups.isEmpty()){
+                // Get the first group
+                BundleGroup bundleGroup = allGroups.remove(0);
+                // If group has a parent
+                if (bundleGroup.hasParent()){
+                    // Get parent by id
+                    BundleGroup parentGroup = groupsByName.get(bundleGroup.getParentName());
+                    // If parent group exists
+                    if (parentGroup != null){
+                        // Set parent of current group
+                        bundleGroup.setParent(parentGroup);
+                        // Add current group to subgroups of parent group
+                        parentGroup.addSubgroup(bundleGroup);
+                        // Skip adding group to groups list since it's not a root group
+                        continue;
+                    }
+                    // If parent group doesn't exist
+                    else {
+                        // Remove parent from current group TODO error?
+                        bundleGroup.clearParent();
+                    }
+                }
+                this.groups.add(bundleGroup);
+            }
+            
+            return true;
+        }
+        
+        public String getPathDelimiter(){
+            return this.pathDelimiter;
+        }
+        
+        public List<LinkedHashMap> getGroupsFlattenedJson(){
+            List<LinkedHashMap> json = new ArrayList<LinkedHashMap>();
+            for (BundleGroup group : this.getGroupsFlattened()){
+                LinkedHashMap groupJson = new LinkedHashMap();
+                groupJson.put("name", group.getName());
+                groupJson.put("displayName", group.getDisplayName());
+                groupJson.put("id", group.getId());
+                groupJson.put("parent", group.getParentName());
+                json.add(groupJson);
+            }
+            return json;
+        }
+        
+        public class BundleGroup implements Comparable<BundleGroup> {
+            Submission groupSubmission;
+            BundleGroup parentGroup;
+            Set<BundleGroup> subgroups;
+            Map<String, BundleGroupMember> members;
+            
+            public BundleGroup(Submission groupSubmission) { 
+                this.groupSubmission = groupSubmission; 
+                this.parentGroup = null;
+                this.subgroups = new TreeSet<BundleGroup>();
+                this.members = null;
+            }
+            
+            public String getName(){
+                return this.groupSubmission.getValue("Name");
+            }
+            
+            public String getId(){
+                return this.groupSubmission.getId().toString();
+            }
+            
+            public String getDisplayName(){
+                List<String> path = Text.split(this.groupSubmission.getValue("Name"), "::");
+                return path.get(path.size() - 1);
+            }
+            
+            public String getStatus(){
+                return this.groupSubmission.getValue("Status");
+            }
+            
+            public String get(String value){
+                return this.groupSubmission.getValue(value);
+            }
+            
+            public boolean hasParent(){
+                return Text.isNotBlank(this.groupSubmission.getValue("Parent"));
+            }
+            
+            public BundleGroup getParent(){
+                return this.parentGroup;
+            }
+            
+            private void setParent(BundleGroup parentGroup){
+                this.parentGroup = parentGroup;
+            }
+            
+            private void clearParent(){
+                this.groupSubmission.setValue("Parent", null);
+                this.parentGroup = null;
+            }
+            
+            public String getParentName(){
+                return this.groupSubmission.getValue("Parent");
+            }
+            
+            public List<BundleGroup> getParentPath(){
+                List<BundleGroup> path = new ArrayList<>();
+                BundleGroup group = this;
+                while (group.hasParent()){
+                    path.add(0, group.getParent());
+                    group = group.getParent();
+                }
+                return path;
+            }
+            
+            public String getParentPathString(){
+                String path = "";
+                for (BundleGroup group : this.getParentPath()){
+                    if (group.hasParent()){
+                        path += GroupHelper.pathDelimiter;
+                    }
+                    path += group.getDisplayName();
+                }
+                return path;
+            }
+            
+            public List<BundleGroup> getPath(){
+                List<BundleGroup> path = this.getParentPath();
+                path.add(this);
+                return path;
+            }
+            
+            public String getPathString(){
+                String path = "";
+                for (BundleGroup group : this.getPath()){
+                    if (group.hasParent()){
+                        path += GroupHelper.pathDelimiter;
+                    }
+                    path += group.getDisplayName();
+                }
+                return path;
+            }
+            
+            public boolean hasSubgroups() {
+                return !this.subgroups.isEmpty();
+            }
+            
+            public List<BundleGroup> getSubgroups() {
+                return new ArrayList<BundleGroup>(this.subgroups);
+            }
+            
+            private void addSubgroup(BundleGroup subgroup) {
+                this.subgroups.add(subgroup);
+            }
+            
+            public List<BundleGroupMember> getMembers(){
+                Boolean membersLoaded = this.loadMembers();
+                
+                if (membersLoaded){
+                    List<BundleGroupMember> groupMembers = new ArrayList<BundleGroupMember>(this.members.values());
+                    Collections.sort(groupMembers);
+                    return groupMembers;
+                }
+                else {
+                    return new ArrayList<BundleGroupMember>();
+                } 
+            }
+            
+            public BundleGroupMember getMember(String membershipId){
+                Boolean membersLoaded = this.loadMembers();
+                
+                if (membersLoaded){
+                    return this.members.get(membershipId);
+                }
+                else {
+                    return null;
+                }
+            }
+            
+            private boolean loadMembers(){
+                // If members exists, return true because they're already loaded
+                if (this.members != null){
+                    return true;
+                }
+                // Get the group member form from the admin kapp. Admin Kapp must be defined as space attribute Admin Kapp Slug. Group form must have slug of group.
+                Form groupMemberForm;
+                try {
+                    groupMemberForm = space.getKapp(space.getAttributeValue("Admin Kapp Slug")).getForm("group-membership");
+                    if (groupMemberForm == null){
+                        // TODO error?
+                        return false;
+                    }
+                }
+                catch (Exception e){
+                    // TODO error?
+                    return false;
+                }
+                // Create empty lis for members
+                this.members = new TreeMap<String, BundleGroupMember>();
+                
+                // Get all submissions from the group members form
+                Map<String, String[]> parameters = new HashMap<>();
+                parameters.put("limit", new String[]{"1000"});
+                parameters.put("values[Group Id]", new String[]{this.getName()});
+                PaginatedList<Submission> pageOfGroupMemberSubmissions;
+                do {
+                    pageOfGroupMemberSubmissions = submissionComponent.searchByForm(groupMemberForm, parameters);
+                    for (Submission groupMemberSubmission : pageOfGroupMemberSubmissions){
+                        BundleGroupMember bundleGroupMember = new BundleGroupMember(groupMemberSubmission);
+                        this.members.put(bundleGroupMember.getId(), bundleGroupMember);
+                    }
+                    parameters.put("pageToken", new String[]{pageOfGroupMemberSubmissions.getNextPageToken()});
+                } 
+                while (Text.isNotBlank(pageOfGroupMemberSubmissions.getNextPageToken()));
+                
+                return true;
+            }
+            
+            public int compareTo(BundleGroup that) {
+                // Compare by name
+                return ComparisonChain.start()
+                        .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .result();
+            }
+        }
+        
+        public class BundleGroupMember implements Comparable<BundleGroupMember> {
+            Submission groupMemberSubmission;
+            BundleGroup group;
+            
+            public BundleGroupMember(Submission groupMemberSubmission) { 
+                this.groupMemberSubmission = groupMemberSubmission; 
+                this.group = null;
+            }
+            
+            public String getUsername(){
+                return this.groupMemberSubmission.getValue("Username");
+            }
+            
+            public String getId(){
+                return this.groupMemberSubmission.getId().toString();
+            }
+            
+            public String getGroupId(){
+                return this.groupMemberSubmission.getValue("Group Id");
+            }
+            
+            public String get(String value){
+                return this.groupMemberSubmission.getValue(value);
+            }
+            
+            public BundleGroup getGroup(){
+                return this.group;
+            }
+            
+            public int compareTo(BundleGroupMember that) {
+                // Compare by username, then id
+                return ComparisonChain.start()
+                        .compare(this.getUsername(), that.getUsername(), Ordering.natural().nullsLast())
+                        .compare(this.getId(), that.getId(), Ordering.natural().nullsLast())
+                        .result();
+            }
+        }
+    }
+%>
