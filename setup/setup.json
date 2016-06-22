@@ -1,16 +1,15 @@
 {
-    "kapp": {
-        "spaceAttributeDefinitions": [
-            {
-                "name": "Admin Kapp Slug",
-                "allowsMultiple": false,
-                "required": true,
-                "description": "The slug of the Admin Kapp."
-            }
-        ],
-        "userAttributeDefinitions": [],
-        "kappAttributeDefinitions": [],
-        "formAttributeDefinitions": [],
-        "categoryAttributeDefinitions": []
-    }
+    "spaceAttributeDefinitions": [
+        {
+            "name": "Admin Kapp Slug",
+            "allowsMultiple": false,
+            "required": true,
+            "description": "The slug of the Admin Kapp.",
+            "values":["admin"]
+        }
+    ],
+    "kappAttributeDefinitions": [],
+    "formAttributeDefinitions": [],
+    "categoryAttributeDefinitions": [],
+    "userAttributeDefinitions": []
 }

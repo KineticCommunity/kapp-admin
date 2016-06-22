@@ -49,10 +49,12 @@
             </c:choose>
             <ul class="dropdown-menu">
                 <c:if test="${not identity.anonymous}">
-                    <li><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
-                    <li class="divider"></li>
                     <li><a href="${bundle.spaceLocation}/app/"><i class="fa fa-dashboard fa-fw"></i> Management Console</a></li>
+                    <c:if test="${identity.spaceAdmin}">
+                        <li><a href="${bundle.kappLocation}?setup"><i class="fa fa-cogs fa-fw"></i> Kapp Setup</a></li>
+                    </c:if>
                     <li class="divider"></li>
+                    <li><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
                     <li><a href="${bundle.spaceLocation}/app/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
                 </c:if>
             </ul>
