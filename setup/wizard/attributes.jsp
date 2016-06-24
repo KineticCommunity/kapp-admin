@@ -120,10 +120,10 @@
         </tbody>
     </table>
 </div>
-
+<hr /> 
 <!-- ATTRIBUTE VALUES -->
 <div class="attribute-values text-left">
-    <h3>Attribute Values</h3>
+    <h3>Attribute Values <small>Space and Kapp Levels Only</small></h3>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -135,6 +135,9 @@
             </tr>
         </thead>
         <tbody>
+            <tr class="empty-state-message">
+                <td colspan="6"><i>No space or kapp attributes defined.</i></td>
+            </tr>
             <!-- SPACE ATTRIBUTE VALUES -->
             <c:forEach items="${SetupHelper.getSpaceAttributeDefinitions()}" var="attributeDefinition">
                 <tr data-name="${attributeDefinition.name}" data-level="space"

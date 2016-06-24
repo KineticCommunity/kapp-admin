@@ -19,3 +19,78 @@ div.attribute-value span.input-group-addon {
   color: white;
   font-weight: bold;
 }
+
+
+
+
+div.generator div.panel-heading {
+  padding: 5px 5px 5px 8px;
+}
+div.generator div.panel-body {
+  padding: 2px 8px;
+}
+div.generator input[type="text"] {
+  width: 75%;
+  height: 2rem;
+  font-size: 90%;
+}
+div.generator textarea.generated-json {
+  width: 100%;
+  height: 300px;
+}
+
+
+
+
+div.json-container {
+  font-family: monospace;
+}
+div.json-container div.object::before {
+  content: "{";
+  font-weight: bold;
+}
+div.json-container div.object:not(:empty)::before {
+  display: block;
+}
+div.json-container div.object[name]::before {
+  content: attr(name)": {";
+}
+div.json-container div.object::after {
+  content: "}";
+  display: block;
+  font-weight: bold;
+}
+div.json-container div.array::before {
+  content: "[";
+  font-weight: bold;
+}
+div.json-container div.array:not(:empty)::before {
+  display: block;
+}
+div.json-container div.array[name]::before {
+  content: attr(name)": [";
+}
+div.json-container div.array::after {
+  content: "]";
+  display: block;
+  font-weight: bold;
+}
+
+
+div.json-container div.object.json::after {
+  content: "} *** Some values are not shown due to their complexity, but will be included in the generated output.";
+}
+div.json-container div.array.json::after {
+  content: "] *** Some values are not shown due to their complexity, but will be included in the generated output.";
+}
+
+div.json-container div > span, div.json-container div > div {
+  margin-left: 20px;
+}
+div.json-container span[name]::before {
+  content: attr(name)": ";
+  font-weight: bold;
+}
+div.json-container span {
+  display: block;
+}

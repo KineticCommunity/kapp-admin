@@ -67,7 +67,7 @@
             // Build maps of all attribute values in the wizard
             var spaceValues = new Object();
             var kappValues = new Object();
-            $("div.attribute-values table tbody tr").each(function(index,attr){
+            $("div.attribute-values table tbody tr:not(.empty-state-message)").each(function(index,attr){
                 var attribute = {
                     name: $(attr).data("name"),
                     values: new Array()
@@ -636,6 +636,55 @@
                 resolveConfigurationPage(webhookErrors, $("div.webhooks-container"), bundle.kappLocation() + "?setup=wizard/webhooks&step=webhooks");
             });
             
+        });
+        
+        /***********************************************************************************************
+         * Admin Kapp Form Functions
+         ***********************************************************************************************/
+        
+        // Save Admin Kapp Form Configurations
+        $("div.admin-kapp-forms-container").on("click", "button.save-configuration", function(){
+            // Add loader
+            $(this).notifie({
+                anchor: "p.setup-actions",
+                message: "<span class='fa fa-spinner fa-spin'></span> Saving Configuration",
+                severity: "info",
+                disable: true
+            });
+            
+            var formErrors = new Array();
+                        
+            // Build list of forms that need to be created
+            var forms = new Array();
+            $("div.custom-admin-kapp-forms table tbody tr:not(.empty-state-message)").each(function(i,e){
+                var form = $(e).data("json");
+                if (!form.exists){
+                    forms.push(form);
+                }
+            });
+            
+            // Store promises for all ajax calls
+            var deferreds = new Array();
+            // Create forms
+            $.each(forms, function(i,form){
+                console.log(JSON.stringify(form));
+                deferreds.push($.ajax({
+                    method: "post",
+                    url: bundle.apiLocation() + "/kapps/" + $("div.custom-admin-kapp-forms").data("admin-kapp-slug") + "/forms",
+                    data: JSON.stringify(form),
+                    dataType: "json",
+                    contentType: "application/json",
+                    error: function(jqXHR, textStatus, errorThrown){
+                        formErrors.push("Failed to create new Form in the Admin Kapp with slug: \"" + form.slug + "\". (" + errorThrown + ")");
+                    }
+                }));
+            });
+            
+            // After forms are finished processing, resolve the page
+            $.when.apply($, wrapDeferreds(deferreds)).done(function(){
+                resolveConfigurationPage(formErrors, $("div.admin-kapp-forms-container"), bundle.kappLocation() + "?setup=wizard/adminKappForms&step=adminKappForms");
+            });
+        
         });
         
         

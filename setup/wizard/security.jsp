@@ -39,7 +39,7 @@
         </tbody>
     </table>
 </div>
-
+<hr /> 
 <!-- SECURITY POLICIES -->
 <div class="security-policies text-left">
     <h3>Security Policies</h3>

@@ -84,6 +84,11 @@
                             <c:import url="${bundle.path}/setup/wizard/webhooks.jsp" charEncoding="UTF-8"/>
                         </div>
                     </c:when>
+                    <c:when test="${Text.equals(param.step, 'adminKappForms')}">
+                        <div class="admin-kapp-forms-container">
+                            <c:import url="${bundle.path}/setup/wizard/adminKappForms.jsp" charEncoding="UTF-8"/>
+                        </div>
+                    </c:when>
                     <c:otherwise>
                         <p class="text-center">This setup wizard will guide you through configuring the below components and data required for this Kapp to run.</p> 
                         <table class="table table-hover">
@@ -93,7 +98,10 @@
                                 </tr>
                                 <c:forEach var="progress" items="${SetupHelper.getWizardProgress()}">
                                     <tr class="${progress.configured ? 'success' : 'danger'}">
-                                        <td>${progress.description}</td>
+                                        <td>
+                                            <a class="fa fa-share" href="${bundle.kappLocation}?setup=wizard&step=${progress.slug}"></a> 
+                                            ${progress.description}
+                                        </td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${progress.configured}">

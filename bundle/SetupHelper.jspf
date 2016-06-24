@@ -65,10 +65,11 @@
             this.configured = this.kapp.hasAttribute("Kapp Configuration Status");
             this.exists = false;
             this.valid = true;
-            this.adminExists = false;
+            this.missingAttributes = false;
+            this.adminKapp = this.space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
+            this.adminExists = this.adminKapp != null;
             this.adminRequired = false;
             this.adminValid = true;
-            this.missingAttributes = false;
             
             // Map to store parsed configuration file
             LinkedHashMap configuration = new LinkedHashMap();
@@ -76,7 +77,13 @@
             if (this.kapp != null){                
                 try { 
                     // Read and parse the setup.json configuration data
-                    configuration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                    LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                    String stringConfiguration = Json.toString(parsedConfiguration);
+                    stringConfiguration = Text.replace(stringConfiguration, "{{kapp.slug}}", this.kapp.getSlug());
+                    stringConfiguration = Text.replace(stringConfiguration, "{{kapp.name}}", this.kapp.getName());
+                    stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.slug}}", this.adminExists ? this.adminKapp.getSlug() : "");
+                    stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.name}}", this.adminExists ? this.adminKapp.getName() : "");
+                    configuration = (LinkedHashMap)Json.parse(stringConfiguration);
                 }
                 // If file doesn't exist, no configuration exists
                 catch (FileNotFoundException e){/* Configuration is already an empty map */}
@@ -283,22 +290,13 @@
                 this.exists = true;
                 this.adminRequired = true;
                 LinkedHashMap adminConfiguration = (LinkedHashMap)configuration.get("adminKapp");
-                this.adminKapp = space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
-                if (this.adminKapp != null){
-                    this.adminExists = true;
-                }
                 // Admin Kapp Forms
                 if (adminConfiguration.get("forms") != null){
                     for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)adminConfiguration.get("forms")){
                         ConfigForm configForm = new ConfigForm(form, this.adminKapp);
                         this.adminKappForms.add(configForm);
                         if (!configForm.isExists()){
-                            if (configForm.isFormDefinition()){
-                                this.valid = false;
-                            }
-                            else {
-                                this.adminValid = false;                                
-                            }
+                            this.valid = false;
                         }
                     }
                 }
@@ -310,8 +308,12 @@
          * @returns Name of page user should be routed to, or null if user does not need to be routed
          */
         public String routeToSetup(){
+            // Route to generator if requested
+            if (Text.equals(this.request.getParameter("setup"), "generator")){
+                return "generator";
+            }
             // Only route to setup if configurations exist
-            if (this.exists){
+            else if (this.exists){
                 // If user specified a setup url parameter, go to setup page or configuration wizard if requested
                 if (this.request.getParameterValues("setup") != null){
                     return Text.isNotBlank(this.request.getParameter("setup")) ? this.request.getParameter("setup") : "setup";
@@ -336,6 +338,7 @@
         public boolean isAdminRequired(){ return this.adminRequired; }
         public boolean isAdminValid(){ return this.adminValid; }
         public boolean isMissingAttributes(){ return this.missingAttributes; }
+        public Kapp getAdminKapp(){ return this.adminKapp; }
         public List<ConfigAttributeDefinition> getSpaceAttributeDefinitions(){ return this.spaceAttributeDefinitions; }
         public List<ConfigAttributeDefinition> getKappAttributeDefinitions(){ return this.kappAttributeDefinitions; }
         public List<ConfigAttributeDefinition> getFormAttributeDefinitions(){ return this.formAttributeDefinitions; }
@@ -494,7 +497,7 @@
 
         public boolean areAdminKappFormsConfigured(){
             for (ConfigForm form : this.adminKappForms){
-                if (this.adminKapp == null || this.adminKapp.getForm(form.getName()) == null){
+                if (this.adminKapp == null || this.adminKapp.getForm(form.getSlug()) == null){
                     return false;
                 }
             }
@@ -1033,13 +1036,13 @@
 
             public ConfigForm(LinkedHashMap<String, Object> form, Kapp kapp){
                 this.anonymous = Boolean.TRUE.equals((Boolean)form.get("anonymous"));
-                this.bridgedResources = (List<LinkedHashMap>)form.get("bridgedResources");
-                this.categorizations = (List<LinkedHashMap>)form.get("categorizations");
+                this.bridgedResources = form.containsKey("bridgedResources") ? (List<LinkedHashMap>)form.get("bridgedResources") : new ArrayList<LinkedHashMap>();
+                this.categorizations = form.containsKey("categorizations") ? (List<LinkedHashMap>)form.get("categorizations") : new ArrayList<LinkedHashMap>();
                 this.customHeadContent = (String)form.get("customHeadContent");
                 this.description = (String)form.get("description");
                 this.name = (String)form.get("name");
                 this.notes = (String)form.get("notes");
-                this.pages = (List<LinkedHashMap>)form.get("pages");
+                this.pages = form.containsKey("pages") ? (List<LinkedHashMap>)form.get("pages") : new ArrayList<LinkedHashMap>();
                 this.slug = (String)form.get("slug");
                 this.status = (String)form.get("status");
                 this.submissionLabelExpression = (String)form.get("submissionLabelExpression");
@@ -1074,7 +1077,7 @@
             public String getSubmissionLabelExpression(){ return this.submissionLabelExpression; }
             public String getType(){ return this.type; }
             public boolean isExists(){ return this.exists; }
-            public boolean isFormDefinition(){ return this.pages != null; }
+            public boolean hasFormDefinition(){ return this.pages != null && !this.pages.isEmpty(); }
         }
         
         private Map<String,Object> doApiPost(String url, Object data) throws Exception {

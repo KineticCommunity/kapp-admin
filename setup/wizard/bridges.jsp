@@ -38,7 +38,7 @@
         </tbody>
     </table>
 </div>
-
+<hr /> 
 <!-- BRIDGE MODELS -->
 <div class="bridge-models text-left">
     <h3>Bridge Models</h3>
@@ -72,7 +72,7 @@
         </tbody>
     </table>
 </div>
-
+<hr /> 
 <div class="bridge-mappings text-left">
     <h3>Bridge Mappings</h3>
     <table class="table table-hover">
