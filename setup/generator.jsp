@@ -339,8 +339,8 @@
                                     <c:forEach var="page" items="${form.pages}">
                                         <div class="object json" data-json="${Text.escape(Json.toString(page.getParsedContent()))}">
                                             <span name="name">${page.name}</span>
-                                            <span name="renderType"></span>
-                                            <span name="type">${page.type}</span>
+                                            <span name="renderType">${page.type}</span>
+                                            <span name="type">page</span>
                                             <span name="advanceCondition">${page.advanceCondition}</span>
                                             <span name="displayCondition">${page.displayCondition}</span>
                                             <span name="displayPage">${page.displayPage}</span>
