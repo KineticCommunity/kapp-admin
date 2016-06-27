@@ -308,12 +308,8 @@
          * @returns Name of page user should be routed to, or null if user does not need to be routed
          */
         public String routeToSetup(){
-            // Route to generator if requested
-            if (Text.equals(this.request.getParameter("setup"), "generator")){
-                return "generator";
-            }
             // Only route to setup if configurations exist
-            else if (this.exists){
+            if (this.exists){
                 // If user specified a setup url parameter, go to setup page or configuration wizard if requested
                 if (this.request.getParameterValues("setup") != null){
                     return Text.isNotBlank(this.request.getParameter("setup")) ? this.request.getParameter("setup") : "setup";

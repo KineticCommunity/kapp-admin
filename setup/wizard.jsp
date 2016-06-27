@@ -109,6 +109,7 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="label label-danger"><span class="fa fa-times"></span> Not Configured</span>
+                                                    <c:set var="notConfigured" value="${true}"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
@@ -118,6 +119,11 @@
                         </table>
                         <c:if test="${!SetupHelper.getWizardProgress().isEmpty()}">
                             <p class="text-center">
+                                <c:if test="${empty notConfigured}">
+                                    <a href="${bundle.kappLocation}" class="btn btn-lg btn-primary">
+                                        <b><span class="fa fa-home"></span> Kapp Home<b>
+                                    </a>
+                                </c:if>
                                 <a href="${bundle.kappLocation}?setup=wizard&step=${SetupHelper.getWizardNextStep(null)}" 
                                         class="btn btn-lg btn-primary">
                                     <b><span class="fa fa-play"></span> Start<b>
