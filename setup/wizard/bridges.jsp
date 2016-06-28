@@ -17,10 +17,13 @@
         </thead>
         <tbody>
             <c:forEach items="${SetupHelper.bridges}" var="bridge">
-                <c:if test="${bridge.exists}">
-                    <c:set var="bridge" value="${space.getBridge(bridge.name)}"/>
-                    <c:set var="status" value="${true}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${bridge.exists}">
+                        <c:set var="bridge" value="${space.getBridge(bridge.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
                 <tr data-status="${status}" data-name="${bridge.name}" data-status-value="${bridge.status}" class="${status ? 'success' : 'danger'}">
                     <td>${bridge.name}</td>
                     <td>${bridge.status}</td>
@@ -63,10 +66,13 @@
         <tbody>
             <c:forEach items="${SetupHelper.bridgeModels}" var="bridgeModel">
                 <c:set var="json" value="${Text.escape(Json.toString(bridgeModel))}"/>
-                <c:if test="${bridgeModel.exists}">
-                    <c:set var="bridgeModel" value="${space.getBridgeModel(bridgeModel.name)}"/>
-                    <c:set var="status" value="${true}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${bridgeModel.exists}">
+                        <c:set var="bridgeModel" value="${space.getBridgeModel(bridgeModel.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
                 <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
                     <td>${bridgeModel.name}</td>
                     <td>${bridgeModel.status}</td>
@@ -103,10 +109,13 @@
             <c:forEach items="${SetupHelper.bridgeModels}" var="bridgeModel">
                 <c:forEach items="${bridgeModel.mappings}" var="bridgeMapping">
                     <c:set var="json" value="${Text.escape(Json.toString(bridgeMapping))}"/>
-                    <c:if test="${bridgeMapping.exists}">
-                        <c:set var="bridgeMapping" value="${space.getBridgeModelMapping(bridgeModel.name, bridgeMapping.name)}"/>
-                        <c:set var="status" value="${true}"/>
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${bridgeMapping.exists}">
+                            <c:set var="bridgeMapping" value="${space.getBridgeModelMapping(bridgeModel.name, bridgeMapping.name)}"/>
+                            <c:set var="status" value="${true}"/>
+                        </c:when>
+                        <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                    </c:choose>
                     <tr data-json="${status ? '' : json}" data-model-name="${bridgeModel.name}" 
                             data-status="${status}" class="${status ? 'success' : 'danger'}">
                         <td>${bridgeModel.name}</td>

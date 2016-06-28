@@ -27,11 +27,13 @@
             </tr>
             <c:forEach items="${SetupHelper.getAdminKappForms()}" var="form">
                 <c:set var="hasFormDefinition" value="${form.hasFormDefinition()}"/>
-                <c:set var="json" value="${Text.escape(Json.toString(form))}"/>
-                <c:if test="${form.exists}">
-                    <c:set var="form" value="${SetupHelper.adminKapp.getForm(form.slug)}"/>
-                    <c:set var="status" value="${true}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${form.exists}">
+                        <c:set var="form" value="${SetupHelper.adminKapp.getForm(form.slug)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
                 <c:if test="${!hasFormDefinition}">
                     <tr class="${status ? 'success' : 'danger'}">
                         <td>${form.name}</td>
@@ -78,11 +80,14 @@
             <c:forEach items="${SetupHelper.getAdminKappForms()}" var="form">
                 <c:set var="hasFormDefinition" value="${form.hasFormDefinition()}"/>
                 <c:set var="json" value="${Text.escape(Json.toString(form))}"/>
-                <c:if test="${form.exists}">
-                    <c:set var="form" value="${SetupHelper.adminKapp.getForm(form.slug)}"/>
-                    <c:set var="status" value="${true}"/>
-                </c:if>
-                <c:if test="${hasFormDefinition     }">
+                <c:choose>
+                    <c:when test="${form.exists}">
+                        <c:set var="form" value="${SetupHelper.adminKapp.getForm(form.slug)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
+                <c:if test="${hasFormDefinition}">
                     <tr data-json="${status ? '' : json}" class="${status ? 'success' : 'danger'}">
                         <td>${form.name}</td>
                         <td>${form.description}</td>

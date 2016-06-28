@@ -20,10 +20,13 @@
         <tbody>
             <c:forEach items="${SetupHelper.getForms()}" var="form">
                 <c:set var="json" value="${Text.escape(Json.toString(form))}"/>
-                <c:if test="${form.exists}">
-                    <c:set var="form" value="${kapp.getForm(form.slug)}"/>
-                    <c:set var="status" value="${true}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${form.exists}">
+                        <c:set var="form" value="${kapp.getForm(form.slug)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
                 <tr data-json="${status ? '' : json}" class="${status ? 'success' : 'danger'}">
                     <td>${form.name}</td>
                     <td>${form.description}</td>

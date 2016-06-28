@@ -20,19 +20,22 @@
             <!-- SPACE ATTRIBUTE DEFINITIONS -->
             <c:forEach items="${SetupHelper.getSpaceAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="description" value="${attributeDefinition.description}"/>
-                <c:if test="${attributeDefinition.isDefinitionExists()}">
-                    <c:set var="attributeDefinition" value="${space.getSpaceAttributeDefinition(attributeDefinition.name)}"/>
-                    <c:set var="spaceStatus" value="${true}"/>
-                </c:if>
-                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${spaceStatus}"
-                        data-level="space" class="space-attribute-definition ${spaceStatus ? 'success' : 'danger'}">
+                <c:choose>
+                    <c:when test="${attributeDefinition.isDefinitionExists()}">
+                        <c:set var="attributeDefinition" value="${space.getSpaceAttributeDefinition(attributeDefinition.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
+                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
+                        data-level="space" class="space-attribute-definition ${status ? 'success' : 'danger'}">
                     <td>Space</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${spaceStatus ? description : attributeDefinition.description}</td>
+                    <td>${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${spaceStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
@@ -45,19 +48,22 @@
             <!-- KAPP ATTRIBUTE DEFINITIONS -->
             <c:forEach items="${SetupHelper.getKappAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="description" value="${attributeDefinition.description}"/>
-                <c:if test="${attributeDefinition.isDefinitionExists()}">
-                    <c:set var="attributeDefinition" value="${kapp.getKappAttributeDefinition(attributeDefinition.name)}"/>
-                    <c:set var="kappStatus" value="${true}"/>
-                </c:if>
-                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${kappStatus}"
-                        data-level="kapp" class="kapp-attribute-definition ${kappStatus ? 'success' : 'danger'}">
+                <c:choose>
+                    <c:when test="${attributeDefinition.isDefinitionExists()}">
+                        <c:set var="attributeDefinition" value="${kapp.getKappAttributeDefinition(attributeDefinition.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
+                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
+                        data-level="kapp" class="kapp-attribute-definition ${status ? 'success' : 'danger'}">
                     <td>Kapp</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${kappStatus ? description : attributeDefinition.description}</td>
+                    <td>${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${kappStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
@@ -70,19 +76,22 @@
             <!-- FORM ATTRIBUTE DEFINITIONS -->
             <c:forEach items="${SetupHelper.getFormAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="description" value="${attributeDefinition.description}"/>
-                <c:if test="${attributeDefinition.isDefinitionExists()}">
-                    <c:set var="attributeDefinition" value="${kapp.getFormAttributeDefinition(attributeDefinition.name)}"/>
-                    <c:set var="formStatus" value="${true}"/>
-                </c:if>
-                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${formStatus}"
-                        data-level="form" class="form-attribute-definition ${formStatus ? 'success' : 'danger'}">
+                <c:choose>
+                    <c:when test="${attributeDefinition.isDefinitionExists()}">
+                        <c:set var="attributeDefinition" value="${kapp.getFormAttributeDefinition(attributeDefinition.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
+                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
+                        data-level="form" class="form-attribute-definition ${status ? 'success' : 'danger'}">
                     <td>Form</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${formStatus ? description : attributeDefinition.description}</td>
+                    <td>${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${formStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
@@ -95,19 +104,22 @@
             <!-- CATEGORY ATTRIBUTE DEFINITIONS -->
             <c:forEach items="${SetupHelper.getCategoryAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="description" value="${attributeDefinition.description}"/>
-                <c:if test="${attributeDefinition.isDefinitionExists()}">
-                    <c:set var="attributeDefinition" value="${kapp.getCategoryAttributeDefinition(attributeDefinition.name)}"/>
-                    <c:set var="categoryStatus" value="${true}"/>
-                </c:if>
-                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${categoryStatus}"
-                        data-level="category" class="cateogry-attribute-definition ${categoryStatus ? 'success' : 'danger'}">
+                <c:choose>
+                    <c:when test="${attributeDefinition.isDefinitionExists()}">
+                        <c:set var="attributeDefinition" value="${kapp.getCategoryAttributeDefinition(attributeDefinition.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
+                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
+                        data-level="category" class="cateogry-attribute-definition ${status ? 'success' : 'danger'}">
                     <td>Category</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${categoryStatus ? description : attributeDefinition.description}</td>
+                    <td>${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${categoryStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
@@ -120,19 +132,22 @@
             <!-- USER ATTRIBUTE DEFINITIONS -->
             <c:forEach items="${SetupHelper.getUserAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="description" value="${attributeDefinition.description}"/>
-                <c:if test="${attributeDefinition.isDefinitionExists()}">
-                    <c:set var="attributeDefinition" value="${space.getUserAttributeDefinition(attributeDefinition.name)}"/>
-                    <c:set var="userStatus" value="${true}"/>
-                </c:if>
-                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${userStatus}"
-                        data-level="user" class="user-attribute-definition ${userStatus ? 'success' : 'danger'}">
+                <c:choose>
+                    <c:when test="${attributeDefinition.isDefinitionExists()}">
+                        <c:set var="attributeDefinition" value="${space.getUserAttributeDefinition(attributeDefinition.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
+                <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
+                        data-level="user" class="user-attribute-definition ${status ? 'success' : 'danger'}">
                     <td>User</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${userStatus ? description : attributeDefinition.description}</td>
+                    <td>${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${userStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
@@ -239,7 +254,7 @@
                             </span>
                         </div>
                     </td>
-                    <td>${attributeDefinition.isRequired() ? '<b>Required</b>' : 'Optional'}</td>
+                    <td>${attributeDefinition.isRequired() ? '<b class="text-danger">Required</b>' : 'Optional'}</td>
                     <td>${allowsMultiple ? 'Yes' : 'No'}</td>
                 </tr>
             </c:forEach>

@@ -16,10 +16,13 @@
         <tbody>
             <c:forEach items="${SetupHelper.getFormTypes()}" var="formType">
                 <c:set var="json" value="${Text.escape(Json.toString(formType))}"/>
-                <c:if test="${not empty kapp.getFormType(formType.name)}">
-                    <c:set var="formType" value="${kapp.getFormType(formType.name)}"/>
-                    <c:set var="status" value="${true}"/>
-                </c:if>
+                <c:choose>
+                    <c:when test="${not empty kapp.getFormType(formType.name)}">
+                        <c:set var="formType" value="${kapp.getFormType(formType.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:when>
+                    <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
+                </c:choose>
                 <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
                     <td>${formType.name}</td>
                     <td>
