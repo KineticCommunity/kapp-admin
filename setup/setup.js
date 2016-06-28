@@ -236,26 +236,32 @@
             // Build list of bridges that need to be created
             var bridges = new Array();
             $("div.bridges table tbody tr").each(function(i,e){
-                var bridge = $(e).data("json");
-                if (!bridge.exists){
-                    bridges.push(bridge);
+                if (!$(e).data("status")){
+                    bridges.push({
+                        name: $(e).data("name"),
+                        status: $(e).data("status-value"),
+                        url: $(e).find('input').val()
+                    });
                 }
             });
             
-            // Build list of bridge models and mappings that need to be created
+            // Build list of bridge models that need to be created
             var bridgeModels = new Array();
-            var bridgeMappings = new Array();
             $("div.bridge-models table tbody tr").each(function(i,e){
-                var model = $(e).data("json");
-                $.each(model.mappings, function(j,mapping){
-                    if (!mapping.exists){
-                        mapping.modelName = model.name;
-                        bridgeMappings.push(mapping);
-                    }
-                });
-                if (!model.exists){
+                if (!$(e).data("status")){
+                    var model = $(e).data("json");
                     delete model.mappings;
                     bridgeModels.push(model);
+                }
+            });
+            
+            // Build list of bridge that need to be created
+            var bridgeMappings = new Array();
+            $("div.bridge-mappings table tbody tr").each(function(i,e){
+                if (!$(e).data("status")){
+                    var mapping = $(e).data("json");
+                    mapping.modelName = $(e).data("model-name");
+                    bridgeMappings.push(mapping);
                 }
             });
         
@@ -433,9 +439,8 @@
             // Build list of forms that need to be created
             var forms = new Array();
             $("div.forms table tbody tr").each(function(i,e){
-                var form = $(e).data("json");
-                if (!form.exists){
-                    forms.push(form);
+                if (!$(e).data("status")){
+                    forms.push($(e).data("json"));
                 }
             });
             
@@ -657,9 +662,8 @@
             // Build list of forms that need to be created
             var forms = new Array();
             $("div.custom-admin-kapp-forms table tbody tr:not(.empty-state-message)").each(function(i,e){
-                var form = $(e).data("json");
-                if (!form.exists){
-                    forms.push(form);
+                if (!$(e).data("status")){
+                    forms.push($(e).data("json"));
                 }
             });
             

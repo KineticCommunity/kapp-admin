@@ -26,16 +26,22 @@
                 <td colspan="6"><i>No required Admin Kapp Forms.</i></td>
             </tr>
             <c:forEach items="${SetupHelper.getAdminKappForms()}" var="form">
-                <c:if test="${!form.hasFormDefinition()}">
-                    <tr class="${form.exists ? 'success' : 'danger'}">
+                <c:set var="hasFormDefinition" value="${form.hasFormDefinition()}"/>
+                <c:set var="json" value="${Text.escape(Json.toString(form))}"/>
+                <c:if test="${form.exists}">
+                    <c:set var="form" value="${SetupHelper.adminKapp.getForm(form.slug)}"/>
+                    <c:set var="status" value="${true}"/>
+                </c:if>
+                <c:if test="${!hasFormDefinition}">
+                    <tr class="${status ? 'success' : 'danger'}">
                         <td>${form.name}</td>
                         <td>${form.description}</td>
                         <td>${form.slug}</td>
-                        <td>${form.type}</td>
+                        <td>${status ? form.typeName : form.type}</td>
                         <td>${form.status}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${form.exists}">
+                                <c:when test="${status}">
                                     <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                                 </c:when>
                                 <c:otherwise>
@@ -70,16 +76,22 @@
                 <td colspan="6"><i>No required Custom Admin Kapp Forms.</i></td>
             </tr>
             <c:forEach items="${SetupHelper.getAdminKappForms()}" var="form">
-                <c:if test="${form.hasFormDefinition()}">
-                    <tr data-json="${Text.escape(Json.toString(form))}" class="${form.exists ? 'success' : 'danger'}">
+                <c:set var="hasFormDefinition" value="${form.hasFormDefinition()}"/>
+                <c:set var="json" value="${Text.escape(Json.toString(form))}"/>
+                <c:if test="${form.exists}">
+                    <c:set var="form" value="${SetupHelper.adminKapp.getForm(form.slug)}"/>
+                    <c:set var="status" value="${true}"/>
+                </c:if>
+                <c:if test="${hasFormDefinition     }">
+                    <tr data-json="${status ? '' : json}" class="${status ? 'success' : 'danger'}">
                         <td>${form.name}</td>
                         <td>${form.description}</td>
                         <td>${form.slug}</td>
-                        <td>${form.type}</td>
+                        <td>${status ? form.typeName : form.type}</td>
                         <td>${form.status}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${form.exists}">
+                                <c:when test="${status}">
                                     <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                                 </c:when>
                                 <c:otherwise>

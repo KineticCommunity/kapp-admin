@@ -16,13 +16,17 @@
         </thead>
         <tbody>
             <c:forEach items="${SetupHelper.getCategories()}" var="category">
-                <c:set var="categoryStatus" value="${not empty kapp.getCategory(category.slug)}"/>
-                <tr data-json="${Text.escape(Json.toString(category))}" data-status="${categoryStatus}" class="${categoryStatus ? 'success' : 'danger'}">
+                <c:set var="json" value="${Text.escape(Json.toString(category))}"/>
+                <c:if test="${not empty kapp.getCategory(category.slug)}">
+                    <c:set var="category" value="${kapp.getCategory(category.slug)}"/>
+                    <c:set var="status" value="${true}"/>
+                </c:if>
+                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
                     <td>${category.name}</td>
                     <td>${category.slug}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${categoryStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>

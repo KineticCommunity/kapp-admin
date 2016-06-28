@@ -17,22 +17,31 @@
         </thead>
         <tbody>
             <c:forEach items="${SetupHelper.bridges}" var="bridge">
-                <tr data-json="${Text.escape(Json.toString(bridge))}" class="${bridge.exists ? 'success' : 'danger'}">
+                <c:if test="${bridge.exists}">
+                    <c:set var="bridge" value="${space.getBridge(bridge.name)}"/>
+                    <c:set var="status" value="${true}"/>
+                </c:if>
+                <tr data-status="${status}" data-name="${bridge.name}" data-status-value="${bridge.status}" class="${status ? 'success' : 'danger'}">
                     <td>${bridge.name}</td>
                     <td>${bridge.status}</td>
-                    <td>
-                        <input type="text" class="form-control" placeholder="Bridge Url" value="${bridge.url}">
-                    </td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${bridge.exists}">
+                    <c:choose>
+                        <c:when test="${status}">
+                            <td>
+                                ${bridge.url}
+                            </td>
+                            <td>
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
-                            </c:when>
-                            <c:otherwise>
+                            </td>
+                        </c:when>
+                        <c:otherwise>
+                            <td>
+                        <input type="text" class="form-control" placeholder="Bridge Url" value="${bridge.url}">
+                            </td>
+                            <td>
                                 <span class="label label-danger"><span class="fa fa-times"></span> Not Configured</span>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
+                            </td>
+                        </c:otherwise>
+                    </c:choose>
                 </tr>
             </c:forEach>
         </tbody>
@@ -53,13 +62,18 @@
         </thead>
         <tbody>
             <c:forEach items="${SetupHelper.bridgeModels}" var="bridgeModel">
-                <tr data-json="${Text.escape(Json.toString(bridgeModel))}" class="${bridgeModel.exists ? 'success' : 'danger'}">
+                <c:set var="json" value="${Text.escape(Json.toString(bridgeModel))}"/>
+                <c:if test="${bridgeModel.exists}">
+                    <c:set var="bridgeModel" value="${space.getBridgeModel(bridgeModel.name)}"/>
+                    <c:set var="status" value="${true}"/>
+                </c:if>
+                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
                     <td>${bridgeModel.name}</td>
                     <td>${bridgeModel.status}</td>
                     <td>${bridgeModel.activeMappingName}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${bridgeModel.exists}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
@@ -88,14 +102,20 @@
         <tbody>
             <c:forEach items="${SetupHelper.bridgeModels}" var="bridgeModel">
                 <c:forEach items="${bridgeModel.mappings}" var="bridgeMapping">
-                    <tr data-status="${bridgeMapping.exists}" class="${bridgeMapping.exists ? 'success' : 'danger'}">
+                    <c:set var="json" value="${Text.escape(Json.toString(bridgeMapping))}"/>
+                    <c:if test="${bridgeMapping.exists}">
+                        <c:set var="bridgeMapping" value="${space.getBridgeModelMapping(bridgeModel.name, bridgeMapping.name)}"/>
+                        <c:set var="status" value="${true}"/>
+                    </c:if>
+                    <tr data-json="${status ? '' : json}" data-model-name="${bridgeModel.name}" 
+                            data-status="${status}" class="${status ? 'success' : 'danger'}">
                         <td>${bridgeModel.name}</td>
                         <td>${bridgeMapping.name}</td>
                         <td>${bridgeMapping.bridgeName}</td>
                         <td>${bridgeMapping.structure}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${bridgeMapping.exists}">
+                                <c:when test="${status}">
                                     <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                                 </c:when>
                                 <c:otherwise>

@@ -17,15 +17,18 @@
         </thead>
         <tbody>
             <c:forEach items="${SetupHelper.getSecurityPolicyDefinitions()}" var="securityPolicyDefinition">
-                <c:set var="securityPolicyDefinitionStatus" value="${not empty kapp.getSecurityPolicyDefinition(securityPolicyDefinition.name)}"/>
-                <tr data-json="${Text.escape(Json.toString(securityPolicyDefinition))}" data-status="${securityPolicyDefinitionStatus}" 
-                        class="${securityPolicyDefinitionStatus ? 'success' : 'danger'}">
+                <c:set var="json" value="${Text.escape(Json.toString(securityPolicyDefinition))}"/>
+                <c:if test="${not empty kapp.getSecurityPolicyDefinition(securityPolicyDefinition.name)}">
+                    <c:set var="securityPolicyDefinition" value="${kapp.getSecurityPolicyDefinition(securityPolicyDefinition.name)}"/>
+                    <c:set var="status" value="${true}"/>
+                </c:if>
+                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
                     <td>${securityPolicyDefinition.name}</td>
                     <td>${securityPolicyDefinition.type}</td>
                     <td>${securityPolicyDefinition.message}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${securityPolicyDefinitionStatus}">
+                            <c:when test="${status}">
                                 <span class="label label-success"><span class="fa fa-check"></span> Configured</span>
                             </c:when>
                             <c:otherwise>
