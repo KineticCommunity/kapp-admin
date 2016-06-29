@@ -24,7 +24,8 @@
         private Kapp kapp;
         private Kapp adminKapp;
         private Form form;
-        private boolean exists; // Does the configuration exist
+        
+        private boolean exists; // Does a configuration exist in setup.json
         private boolean configured; // Is the Kapp configured
         private boolean valid; // Is the Kapp configuration valid
         private boolean adminRequired; // Is the Admin Kapp required by this Kapp
@@ -47,14 +48,13 @@
         private List<ConfigSecurityPolicy> securityPolicies = new ArrayList<>();
         private List<ConfigBridge> bridges = new ArrayList<>();
         private List<ConfigBridgeModel> bridgeModels = new ArrayList<>();
-        // Lists to store all configuration data for the Admin Kapp required by this Kapp
+        // Lists to store all configuration data for the Admin Kapp, if required by this Kapp
         private List<ConfigForm> adminKappForms = new ArrayList<>();
 
         /**
          * Constructor for SetupHelper
          *
          * Reads and parses the setup.json configuration file which defines the necessary configurations for this kapp to run.
-         * Builds a KappConfigurationData object which contains the parsed data, including which components have been configured.
          */
         public SetupHelper(HttpServletRequest request){    
             this.request = request;
@@ -62,14 +62,18 @@
             this.space = (Space)request.getAttribute("space");
             this.kapp = (Kapp)request.getAttribute("kapp");
             this.form = (Form)request.getAttribute("form");
+            
+            // If Kapp Configuration Status exists, Kapp has been configured
             this.configured = this.kapp.hasAttribute("Kapp Configuration Status");
-            this.exists = false;
-            this.valid = true;
-            this.missingAttributes = false;
+            this.exists = false; // Default to configuration not existing
+            this.valid = true; // Default to configuration being valid
+            this.missingAttributes = false; // Default to no missing attributes
+            
+            // Get the Admin Kapp using the slug defined in the Admin Kapp Slug space attribute, if it exists
             this.adminKapp = this.space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
             this.adminExists = this.adminKapp != null;
-            this.adminRequired = false;
-            this.adminValid = true;
+            this.adminRequired = false; // Default to not required
+            this.adminValid = true; // Deault to Admin Kapp configuration being valid
             
             // Map to store parsed configuration file
             LinkedHashMap configuration = new LinkedHashMap();
@@ -78,20 +82,25 @@
                 try { 
                     // Read and parse the setup.json configuration data
                     LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                    // Save configuration as string
                     String stringConfiguration = Json.toString(parsedConfiguration);
+                    // Replace dynamic value placeholders with the values
                     stringConfiguration = Text.replace(stringConfiguration, "{{kapp.slug}}", this.kapp.getSlug());
                     stringConfiguration = Text.replace(stringConfiguration, "{{kapp.name}}", this.kapp.getName());
                     stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.slug}}", this.adminExists ? this.adminKapp.getSlug() : "");
                     stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.name}}", this.adminExists ? this.adminKapp.getName() : "");
+                    // Parse configuration
                     configuration = (LinkedHashMap)Json.parse(stringConfiguration);
                 }
-                // If file doesn't exist, no configuration exists
+                // If file doesn't exist, no configuration exists, no error
                 catch (FileNotFoundException e){/* Configuration is already an empty map */}
-                // If error occurs, throw an exception. This file must contain a valid JSON Object (empty object is acceptable)
+                // If error occurs, throw an exception. This file must contain a valid JSON Object
                 catch (Exception e){
                     throw new RuntimeException("Failed to read Kapp Configuration Data from file setup.json: " + e.getMessage());
                 }
             }
+            
+            /** PROCESS CONFIGURATION FILE AND STORE IN CUSTOM MODELS DEFINED BELOW **/
             
             // Space attribute definitions
             if (configuration.get("spaceAttributeDefinitions") != null){
@@ -99,14 +108,18 @@
                     ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(spaceAttribute, 
                             this.space, 
                             this.space != null ? this.space.getSpaceAttributeDefinition((String)spaceAttribute.get("name")) != null : null);
+                    // Add to configuration
                     this.spaceAttributeDefinitions.add(configAttribute);
+                    // If not valid, set configuration validity to false
                     if (!configAttribute.isValid()){
                         this.valid = false;
                     }
+                    // Are required values missing
                     if (configAttribute.isMissingValues()){
                         this.missingAttributes = true;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.spaceAttributeDefinitions.isEmpty()){
                     this.exists = true;
                 }
@@ -117,14 +130,18 @@
                     ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(kappAttribute, 
                             this.kapp, 
                             this.kapp != null ? this.kapp.getKappAttributeDefinition((String)kappAttribute.get("name")) != null : null);
+                    // Add to configuration
                     this.kappAttributeDefinitions.add(configAttribute);
+                    // If not valid, set configuration validity to false
                     if (!configAttribute.isValid()){
                         this.valid = false;
                     }
+                    // Are required values missing
                     if (configAttribute.isMissingValues()){
                         this.missingAttributes = true;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.kappAttributeDefinitions.isEmpty()){
                     this.exists = true;
                 }
@@ -135,14 +152,18 @@
                     ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(formAttribute, 
                             this.form, 
                             this.kapp != null ? this.kapp.getFormAttributeDefinition((String)formAttribute.get("name")) != null : null);
+                    // Add to configuration
                     this.formAttributeDefinitions.add(configAttribute);
+                    // If not valid, set configuration validity to false
                     if (!configAttribute.isValid()){
                         this.valid = false;
                     }
+                    // Are required values missing
                     if (configAttribute.isMissingValues()){
                         this.missingAttributes = true;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.formAttributeDefinitions.isEmpty()){
                     this.exists = true;
                 }
@@ -153,14 +174,18 @@
                     ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(categoryAttribute, 
                             null, 
                             this.kapp != null ? this.kapp.getCategoryAttributeDefinition((String)categoryAttribute.get("name")) != null : null);
+                    // Add to configuration
                     this.categoryAttributeDefinitions.add(configAttribute);
+                    // If not valid, set configuration validity to false
                     if (!configAttribute.isValid()){
                         this.valid = false;
                     }
+                    // Are required values missing
                     if (configAttribute.isMissingValues()){
                         this.missingAttributes = true;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.categoryAttributeDefinitions.isEmpty()){
                     this.exists = true;
                 }
@@ -171,14 +196,18 @@
                     ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(userAttribute, 
                             null, 
                             this.space != null ? this.space.getUserAttributeDefinition((String)userAttribute.get("name")) != null : null);
+                    // Add to configuration
                     this.userAttributeDefinitions.add(configAttribute);
+                    // If not valid, set configuration validity to false
                     if (!configAttribute.isValid()){
                         this.valid = false;
                     }
+                    // Are required values missing
                     if (configAttribute.isMissingValues()){
                         this.missingAttributes = true;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.userAttributeDefinitions.isEmpty()){
                     this.exists = true;
                 }
@@ -187,8 +216,10 @@
             // Form types
             if (configuration.get("formTypes") != null){
                 for (LinkedHashMap<String, String> formType : (List<LinkedHashMap>)configuration.get("formTypes")){
+                    // Add to configuration
                     this.formTypes.add(new ConfigFormType(formType));
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.formTypes.isEmpty()){
                     this.exists = true;
                 }
@@ -197,8 +228,10 @@
             // Categories
             if (configuration.get("categories") != null){
                 for (LinkedHashMap<String, String> category : (List<LinkedHashMap>)configuration.get("categories")){
+                    // Add to configuration
                     this.categories.add(new ConfigCategory(category));
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.categories.isEmpty()){
                     this.exists = true;
                 }
@@ -207,8 +240,10 @@
             // Space Webhooks
             if (configuration.get("spaceWebhooks") != null){
                 for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("spaceWebhooks")){
+                    // Add to configuration
                     this.spaceWebhooks.add(new ConfigWebhook(webhook));
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.spaceWebhooks.isEmpty()){
                     this.exists = true;
                 }
@@ -216,8 +251,10 @@
             // Kapp Webhooks
             if (configuration.get("kappWebhooks") != null){
                 for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("kappWebhooks")){
+                    // Add to configuration
                     this.kappWebhooks.add(new ConfigWebhook(webhook));
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.kappWebhooks.isEmpty()){
                     this.exists = true;
                 }
@@ -226,8 +263,10 @@
             // Security Policy Definitions
             if (configuration.get("securityPolicyDefinitions") != null){
                 for (LinkedHashMap<String, String> securityPolicyDefinition : (List<LinkedHashMap>)configuration.get("securityPolicyDefinitions")){
+                    // Add to configuration
                     this.securityPolicyDefinitions.add(new ConfigSecurityPolicyDefinition(securityPolicyDefinition));
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.securityPolicyDefinitions.isEmpty()){
                     this.exists = true;
                 }
@@ -236,8 +275,10 @@
             // Security Policies
             if (configuration.get("securityPolicies") != null){
                 for (LinkedHashMap<String, String> securityPolicy : (List<LinkedHashMap>)configuration.get("securityPolicies")){
+                    // Add to configuration
                     this.securityPolicies.add(new ConfigSecurityPolicy(securityPolicy));
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.securityPolicies.isEmpty()){
                     this.exists = true;
                 }
@@ -247,11 +288,14 @@
             if (configuration.get("bridges") != null){
                 for (LinkedHashMap<String, String> bridge : (List<LinkedHashMap>)configuration.get("bridges")){
                     ConfigBridge configBridge = new ConfigBridge(bridge, this.space);
+                    // Add to configuration
                     this.bridges.add(configBridge);
+                    // If bridge doesn't exist, set configuration validity to false
                     if (!configBridge.isExists()){
                         this.valid = false;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.bridges.isEmpty()){
                     this.exists = true;
                 }
@@ -261,11 +305,14 @@
             if (configuration.get("bridgeModels") != null){
                 for (LinkedHashMap<String, Object> bridgeModel : (List<LinkedHashMap>)configuration.get("bridgeModels")){
                     ConfigBridgeModel configBridgeModel = new ConfigBridgeModel(bridgeModel, this.space);
+                    // Add to configuration
                     this.bridgeModels.add(configBridgeModel);
+                    // If bridge model or bridge model mappings don't exist, set configuration validity to false
                     if (!configBridgeModel.isExists() || !configBridgeModel.isMappingsExist()){
                         this.valid = false;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.bridgeModels.isEmpty()){
                     this.exists = true;
                 }
@@ -275,11 +322,14 @@
             if (configuration.get("forms") != null){
                 for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)configuration.get("forms")){
                     ConfigForm configForm = new ConfigForm(form, this.kapp);
+                    // Add to configuration
                     this.forms.add(configForm);
+                    // If form doesn't exist, set configuration validity to false
                     if (!configForm.isExists()){
                         this.valid = false;
                     }
                 }
+                // If at least 1 configuration exists, set that configuration exists
                 if (!this.forms.isEmpty()){
                     this.exists = true;
                 }
@@ -287,6 +337,7 @@
             
             // Admin Kapp Requirement
             if (configuration.get("adminKapp") != null){
+                // If adminKapp property exists, set that configuration exists and Admin Kapp is required
                 this.exists = true;
                 this.adminRequired = true;
                 LinkedHashMap adminConfiguration = (LinkedHashMap)configuration.get("adminKapp");
@@ -294,7 +345,9 @@
                 if (adminConfiguration.get("forms") != null){
                     for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)adminConfiguration.get("forms")){
                         ConfigForm configForm = new ConfigForm(form, this.adminKapp);
+                        // Add to configuration
                         this.adminKappForms.add(configForm);
+                        // If required Admin Kapp form doesn't exist in the Admin Kapp, set configuration validity to false
                         if (!configForm.isExists()){
                             this.valid = false;
                         }
@@ -327,6 +380,11 @@
             return null;
         }
         
+        
+        /******************************************************************************************
+         ** GETTER FUNCTIONS FOR CONFIGURATION DETAILS AND DATA. 
+         ******************************************************************************************/
+
         public boolean isConfigured(){ return this.configured; }
         public boolean isValid(){ return this.valid; }
         public boolean isExists(){ return this.exists; }
@@ -351,7 +409,13 @@
         public List<ConfigBridgeModel> getBridgeModels(){ return this.bridgeModels; }
         public List<ConfigForm> getAdminKappForms(){ return this.adminKappForms; }
         
-        public boolean doAttributesExist(){
+        
+        /******************************************************************************************
+         ** METHODS FOR CHECKING IF CONFIGURATIONS EXIST AND IF THEY'RE CONFIGURED
+         ** Used by the Setup Wizard
+         ******************************************************************************************/
+        
+        private boolean doAttributesExist(){
             if (!this.spaceAttributeDefinitions.isEmpty() 
                     || !this.kappAttributeDefinitions.isEmpty()
                     || !this.formAttributeDefinitions.isEmpty()
@@ -362,7 +426,7 @@
             return false;
         }
         
-        public boolean areAttributesConfigured(){
+        private boolean areAttributesConfigured(){
             for (ConfigAttributeDefinition attribute : this.spaceAttributeDefinitions){
                 if (!attribute.isDefinitionExists() || (attribute.isRequired() && attribute.isMissingValues())){
                     return false;
@@ -391,14 +455,14 @@
             return true;
         }
         
-        public boolean doBridgesExist(){
+        private boolean doBridgesExist(){
             if (!this.bridges.isEmpty() || !this.bridgeModels.isEmpty()){
                 return true;
             }
             return false;
         }
 
-        public boolean areBridgesConfigured(){
+        private boolean areBridgesConfigured(){
             for (ConfigBridge bridge : this.bridges){
                 if (!bridge.isExists()){
                     return false;
@@ -412,11 +476,11 @@
             return true;
         }
         
-        public boolean doCategoriesExist(){
+        private boolean doCategoriesExist(){
             return !this.categories.isEmpty();
         }
 
-        public boolean areCategoriesConfigured(){
+        private boolean areCategoriesConfigured(){
             for (ConfigCategory category : this.categories){
                 if (this.kapp.getCategory(category.getSlug()) == null){
                     return false;
@@ -425,11 +489,11 @@
             return true;
         }
         
-        public boolean doFormTypesExist(){
+        private boolean doFormTypesExist(){
             return !this.formTypes.isEmpty();
         }
 
-        public boolean areFormTypesConfigured(){
+        private boolean areFormTypesConfigured(){
             for (ConfigFormType formType : this.formTypes){
                 if (this.kapp.getFormType(formType.getName()) == null){
                     return false;
@@ -438,11 +502,11 @@
             return true;
         }
         
-        public boolean doFormsExist(){
+        private boolean doFormsExist(){
             return !this.forms.isEmpty();
         }
 
-        public boolean areFormsConfigured(){
+        private boolean areFormsConfigured(){
             for (ConfigForm form : this.forms){
                 if (!form.isExists()){
                     return false;
@@ -451,11 +515,11 @@
             return true;
         }
 
-        public boolean doSecurityPoliciesExist(){
+        private boolean doSecurityPoliciesExist(){
             return !this.securityPolicies.isEmpty() || !this.securityPolicyDefinitions.isEmpty();
         }
 
-        public boolean areSecurityPoliciesConfigured(){
+        private boolean areSecurityPoliciesConfigured(){
             for (ConfigSecurityPolicyDefinition securityPolicyDefinition : this.securityPolicyDefinitions){
                 if (this.kapp.getSecurityPolicyDefinition(securityPolicyDefinition.getName()) == null){
                     return false;
@@ -469,11 +533,11 @@
             return true;
         }
         
-        public boolean doWebhooksExist(){
+        private boolean doWebhooksExist(){
             return !this.spaceWebhooks.isEmpty() || !this.kappWebhooks.isEmpty();
         }
 
-        public boolean areWebhooksConfigured(){
+        private boolean areWebhooksConfigured(){
             for (ConfigWebhook spaceWebhook : this.spaceWebhooks){
                 if (this.space.getWebhook(spaceWebhook.getName()) == null){
                     return false;
@@ -487,11 +551,11 @@
             return true;
         }
         
-        public boolean doAdminKappFormsExist(){
+        private boolean doAdminKappFormsExist(){
             return !this.adminKappForms.isEmpty();
         }
 
-        public boolean areAdminKappFormsConfigured(){
+        private boolean areAdminKappFormsConfigured(){
             for (ConfigForm form : this.adminKappForms){
                 if (this.adminKapp == null || this.adminKapp.getForm(form.getSlug()) == null){
                     return false;
@@ -500,9 +564,16 @@
             return true;
         }
         
+        
+        /******************************************************************************************
+         ** METHODS FOR GETTING STATUS AND DETAILS ABOUT THE SETUP WIZARD
+         ******************************************************************************************/
+        
+        /**
+         * Returns a list of the applicable Setup Wizard pages and whether they're configured or not
+         */
         public List<LinkedHashMap> getWizardProgress() {
             List<LinkedHashMap> progressData = new ArrayList<>();
-            boolean isAllConfigured = true;
             
             if (this.doAttributesExist()){
                 LinkedHashMap data = new LinkedHashMap();
@@ -511,9 +582,6 @@
                 data.put("slug", "attributes");
                 data.put("configured", this.areAttributesConfigured());
                 progressData.add(data);
-                if (!this.areAttributesConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doBridgesExist()){
@@ -523,9 +591,6 @@
                 data.put("slug", "bridges");
                 data.put("configured", this.areBridgesConfigured());
                 progressData.add(data);
-                if (!this.areBridgesConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doCategoriesExist()){
@@ -535,9 +600,6 @@
                 data.put("slug", "categories");
                 data.put("configured", this.areCategoriesConfigured());
                 progressData.add(data);
-                if (!this.areCategoriesConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doFormTypesExist()){
@@ -547,9 +609,6 @@
                 data.put("slug", "formTypes");
                 data.put("configured", this.areFormTypesConfigured());
                 progressData.add(data);
-                if (!this.areFormTypesConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doFormsExist()){
@@ -559,9 +618,6 @@
                 data.put("slug", "forms");
                 data.put("configured", this.areFormsConfigured());
                 progressData.add(data);
-                if (!this.areFormsConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doSecurityPoliciesExist()){
@@ -571,9 +627,6 @@
                 data.put("slug", "security");
                 data.put("configured", this.areSecurityPoliciesConfigured());
                 progressData.add(data);
-                if (!this.areSecurityPoliciesConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doWebhooksExist()){
@@ -583,9 +636,6 @@
                 data.put("slug", "webhooks");
                 data.put("configured", this.areWebhooksConfigured());
                 progressData.add(data);
-                if (!this.areWebhooksConfigured()){
-                    isAllConfigured = false;
-                }
             }
             
             if (this.doAdminKappFormsExist()){
@@ -595,18 +645,19 @@
                 data.put("slug", "adminKappForms");
                 data.put("configured", this.areAdminKappFormsConfigured());
                 progressData.add(data);
-                if (!this.areAdminKappFormsConfigured()){
-                    isAllConfigured = false;
-                }
             }
-            
-            // Update Kapp Configuration Status attribute if necessary
-            //updateKappConfigurationStatus(isAllConfigured);
-            
+           
             return progressData;
         }
         
+        /**
+         * Updates the Kapp Configuration Status kapp attribute based on whether the Kapp is configured or not.
+         * If the Kapp Configuration Status attribute definition doesn't exist, it gets created.
+         * If Kapp Configuration Status attribute value doesn't exist and Kapp is configured, adds an attribute value.
+         * If Kapp Configuration Status attribute value exists but Kapp is not configured, removes the attribute value.
+         */
         public void updateKappConfigurationStatus() throws Exception {
+            // Check if all existing configurations are configured
             boolean allConfigured = this.areAttributesConfigured() && this.areBridgesConfigured()
                 && this.areCategoriesConfigured() && this.areFormTypesConfigured()
                 && this.areFormsConfigured() && this.areSecurityPoliciesConfigured()
@@ -618,6 +669,7 @@
                 if (this.kapp.getKappAttributeDefinition("Kapp Configuration Status") == null){
                     LinkedHashMap<String, Object> definition = new LinkedHashMap<>();
                     definition.put("name", "Kapp Configuration Status");
+                    definition.put("description", "Defines whether the Kapp is configured. Value is automatically managed by the Setup Wizard. DO NOT MODIFY.");
                     definition.put("allowsMultiple", false);
                     Map<String, Object> result = doApiPost("/kapps/" + kapp.getSlug() + "/kappAttributeDefinitions", definition);
                 }
@@ -653,6 +705,10 @@
             
         }
         
+        /**
+         * Returns the slug of the next step in the wizard, given the slug of the current step.
+         * If current step is null, returns the first step.
+         */
         public String getWizardNextStep(String currentStep) {
             List<LinkedHashMap> steps = this.getWizardProgress();
             if (steps.isEmpty()){
@@ -671,6 +727,10 @@
             return "";
         }
         
+        /**
+         * Returns the slug of the previous step in the wizard, given the slug of the current step.
+         * If current step is null, returns empty string, wich results in home page.
+         */
         public String getWizardPreviousStep(String currentStep) {
             List<LinkedHashMap> steps = this.getWizardProgress();
             if (steps.isEmpty() || Text.isBlank(currentStep)){
@@ -686,6 +746,9 @@
             return "";
         }
         
+        /**
+         * Returns true if the given step is the last step of the wizard.
+         */
         public boolean isWizardLastStep(String currentStep) {
             List<LinkedHashMap> steps = this.getWizardProgress();
             if (!steps.isEmpty() && Text.equals((String)steps.get(steps.size()-1).get("slug"), currentStep)){
@@ -694,8 +757,9 @@
             return false;
         }
         
+        
         /******************************************************************************************
-         *** Config Models
+         ** CUSTOM CONFIGURATION MODELS
          ******************************************************************************************/
                 
         public static class ConfigAttributeDefinition {
@@ -1077,9 +1141,21 @@
             public String getSubmissionLabelExpression(){ return this.submissionLabelExpression; }
             public String getType(){ return this.type; }
             public boolean isExists(){ return this.exists; }
-            public boolean hasFormDefinition(){ return this.pages != null && !this.pages.isEmpty(); }
+            
+            /**
+             * Returns true if the configuration defines a full form, which can be created.
+             * Returns false if the configuration is missing pages.
+             */
+            public boolean hasFormDefinition(){ 
+                return this.pages != null && !this.pages.isEmpty(); 
+            }
         }
         
+        
+        /******************************************************************************************
+         ** API CALLS FOR PUT AND POST
+         ******************************************************************************************/
+         
         private Map<String,Object> doApiPost(String url, Object data) throws Exception {
             return doApiRequest(url, data, true);
         }
@@ -1134,13 +1210,4 @@
         }
         
     }
-
-
-/**
-SPACE EXPORT:
-bridges,bridgeModels,bridgeModels.attributes,bridgeModels.qualifications,bridgeModels.qualifications.parameters,bridgeModels.mappings,bridgeModels.mappings.attributes,bridgeModels.mappings.qualifications,attributes,webhooks,spaceAttributeDefinitions,userAttributeDefinitions
-
-KAPP EXPORT:
-kappAttributeDefinitions,categoryAttributeDefinitions,formAttributeDefinitions,categories,formTypes,securityPolicyDefinitions,securityPolicies,webhooks,attributes,forms,forms.details,forms.attributes,forms.pages,forms.categorization,forms.securityPolicies,forms.bridgedResources,forms.customHeadContent
-**/
 %>

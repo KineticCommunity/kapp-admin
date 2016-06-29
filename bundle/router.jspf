@@ -1,9 +1,9 @@
 <%
-// String to storethe path to the JSP that the response should be delegated to
-String delegateJsp = null;
+    // String to store the path to the JSP that the response should be delegated to
+    String delegateJsp = null;
 %>
 
-<%-- INVALID SETUP ROUTING --%>
+<%-- INVALID CONFIGURATION ROUTING --%>
 <%
     // If the request is scoped to a specific Kapp (space display pages are not)
     if (kapp != null) {
