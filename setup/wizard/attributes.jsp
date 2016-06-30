@@ -190,7 +190,7 @@
                             <c:forEach items="${attributeDefinition.getAttribute().getValues()}" var="attributeValue">
                                 <div class="input-group input-group-sm attribute-value">
                                     <span class="input-group-addon label-success"><span class="fa fa-check"></span> <span class="status">Found</span></span>
-                                    <input type="text" class="form-control" placeholder="Attribute Value" value="${attributeValue}">
+                                    <input type="text" class="form-control" placeholder="Attribute Value" value="${Text.escape(attributeValue)}">
                                     <span class="input-group-btn">
                                         <button class="btn btn-sm btn-danger delete-value" type="button"><span class="fa fa-times"></span></button>
                                     </span>
@@ -200,14 +200,14 @@
                         <c:forEach items="${attributeDefinition.getMissingDefaultValues()}" var="attributeValue">
                             <div class="input-group input-group-sm attribute-value">
                                 <span class="input-group-addon label-warning"><span class="fa fa-times"></span> <span class="status">New</span></span>
-                                <input type="text" class="form-control" placeholder="Attribute Value" value="${attributeValue}">
+                                <input type="text" class="form-control" placeholder="Attribute Value" value="${Text.escape(attributeValue)}">
                                 <span class="input-group-btn">
                                     <button class="btn btn-sm btn-danger delete-value" type="button"><span class="fa fa-times"></span></button>
                                 </span>
                             </div>
                         </c:forEach>
                         <div class="input-group input-group-sm ${allowsMultiple ? '' : 'single-add-restriction'}">
-                            <input type="text" class="form-control" placeholder="Add Attribute Value" value="${attributeValue}">
+                            <input type="text" class="form-control" placeholder="Add Attribute Value">
                             <span class="input-group-btn">
                                 <button class="btn btn-sm btn-success add-value" type="button"><span class="fa fa-plus"></span></button>
                             </span>
@@ -229,7 +229,7 @@
                             <c:forEach items="${attributeDefinition.getAttribute().getValues()}" var="attributeValue">
                                 <div class="input-group input-group-sm attribute-value">
                                     <span class="input-group-addon label-success"><span class="fa fa-check"></span> <span class="status">Found</span></span>
-                                    <input type="text" class="form-control" placeholder="Attribute Value" value="${attributeValue}">
+                                    <input type="text" class="form-control" placeholder="Attribute Value" value="${Text.escape(attributeValue)}">
                                     <span class="input-group-btn">
                                         <button class="btn btn-sm btn-danger delete-value" type="button"><span class="fa fa-times"></span></button>
                                     </span>
@@ -240,7 +240,7 @@
                             <c:forEach items="${attributeDefinition.getMissingDefaultValues()}" var="attributeValue">
                                 <div class="input-group input-group-sm attribute-value">
                                     <span class="input-group-addon label-warning"><span class="fa fa-times"></span> <span class="status">New</span></span>
-                                    <input type="text" class="form-control" placeholder="Attribute Value" value="${attributeValue}">
+                                    <input type="text" class="form-control" placeholder="Attribute Value" value="${Text.escape(attributeValue)}">
                                     <span class="input-group-btn">
                                         <button class="btn btn-sm btn-danger delete-value" type="button"><span class="fa fa-times"></span></button>
                                     </span>
@@ -248,7 +248,7 @@
                             </c:forEach>
                         </c:if>
                         <div class="input-group input-group-sm ${allowsMultiple ? '' : 'single-add-restriction'}">
-                            <input type="text" class="form-control" placeholder="Add Attribute Value" value="${attributeValue}">
+                            <input type="text" class="form-control" placeholder="Add Attribute Value">
                             <span class="input-group-btn">
                                 <button class="btn btn-sm btn-success add-value" type="button"><span class="fa fa-plus"></span></button>
                             </span>
