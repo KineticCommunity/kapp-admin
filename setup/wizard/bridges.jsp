@@ -24,7 +24,7 @@
                     </c:when>
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
-                <tr data-status="${status}" data-name="${bridge.name}" data-status-value="${bridge.status}" class="${status ? 'success' : 'danger'}">
+                <tr data-status="${status}" data-name="${bridge.name}" data-status-value="${bridge.status}" class="${status ? 'success' : 'warning'}">
                     <td>${bridge.name}</td>
                     <td>${bridge.status}</td>
                     <c:choose>
@@ -73,7 +73,7 @@
                     </c:when>
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
-                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
+                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'warning'}">
                     <td>${bridgeModel.name}</td>
                     <td>${bridgeModel.status}</td>
                     <td>${bridgeModel.activeMappingName}</td>
@@ -117,7 +117,7 @@
                         <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                     </c:choose>
                     <tr data-json="${status ? '' : json}" data-model-name="${bridgeModel.name}" 
-                            data-status="${status}" class="${status ? 'success' : 'danger'}">
+                            data-status="${status}" class="${status ? 'success' : 'warning'}">
                         <td>${bridgeModel.name}</td>
                         <td>${bridgeMapping.name}</td>
                         <td>${bridgeMapping.bridgeName}</td>

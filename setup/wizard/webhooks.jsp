@@ -27,7 +27,7 @@
                     </c:when>
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
-                <tr data-json="${status ? '' : json}" data-level="space" data-status="${status}" class="${status ? 'success' : 'danger'}">
+                <tr data-json="${status ? '' : json}" data-level="space" data-status="${status}" class="${status ? 'success' : 'warning'}">
                     <td>Space</td>
                     <td>${webhook.name}</td>
                     <td>${webhook.type}</td>
@@ -54,7 +54,7 @@
                     </c:when>
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
-                <tr data-json="${status ? '' : json}" data-level="kapp" data-status="${status}" class="${status ? 'success' : 'danger'}">
+                <tr data-json="${status ? '' : json}" data-level="kapp" data-status="${status}" class="${status ? 'success' : 'warning'}">
                     <td>Space</td>
                     <td>${webhook.name}</td>
                     <td>${webhook.type}</td>

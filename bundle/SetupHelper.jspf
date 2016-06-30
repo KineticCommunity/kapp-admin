@@ -64,7 +64,7 @@
             this.form = (Form)request.getAttribute("form");
             
             // If Kapp Configuration Status exists, Kapp has been configured
-            this.configured = this.kapp.hasAttribute("Kapp Configuration Status");
+            this.configured = this.kapp != null && this.kapp.hasAttribute("Kapp Configuration Status");
             this.exists = false; // Default to configuration not existing
             this.valid = true; // Default to configuration being valid
             this.missingAttributes = false; // Default to no missing attributes
@@ -98,258 +98,258 @@
                 catch (Exception e){
                     throw new RuntimeException("Failed to read Kapp Configuration Data from file setup.json: " + e.getMessage());
                 }
-            }
             
-            /** PROCESS CONFIGURATION FILE AND STORE IN CUSTOM MODELS DEFINED BELOW **/
-            
-            // Space attribute definitions
-            if (configuration.get("spaceAttributeDefinitions") != null){
-                for (LinkedHashMap<String, Object> spaceAttribute : (List<LinkedHashMap>)configuration.get("spaceAttributeDefinitions")){
-                    ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(spaceAttribute, 
-                            this.space, 
-                            this.space != null ? this.space.getSpaceAttributeDefinition((String)spaceAttribute.get("name")) != null : null);
-                    // Add to configuration
-                    this.spaceAttributeDefinitions.add(configAttribute);
-                    // If not valid, set configuration validity to false
-                    if (!configAttribute.isValid()){
-                        this.valid = false;
-                    }
-                    // Are required values missing
-                    if (configAttribute.isMissingValues()){
-                        this.missingAttributes = true;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.spaceAttributeDefinitions.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            // Kapp attribute definitions
-            if (configuration.get("kappAttributeDefinitions") != null){
-                for (LinkedHashMap<String, Object> kappAttribute : (List<LinkedHashMap>)configuration.get("kappAttributeDefinitions")){
-                    ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(kappAttribute, 
-                            this.kapp, 
-                            this.kapp != null ? this.kapp.getKappAttributeDefinition((String)kappAttribute.get("name")) != null : null);
-                    // Add to configuration
-                    this.kappAttributeDefinitions.add(configAttribute);
-                    // If not valid, set configuration validity to false
-                    if (!configAttribute.isValid()){
-                        this.valid = false;
-                    }
-                    // Are required values missing
-                    if (configAttribute.isMissingValues()){
-                        this.missingAttributes = true;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.kappAttributeDefinitions.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            // Form attribute definitions
-            if (configuration.get("formAttributeDefinitions") != null){
-                for (LinkedHashMap<String, Object> formAttribute : (List<LinkedHashMap>)configuration.get("formAttributeDefinitions")){
-                    ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(formAttribute, 
-                            this.form, 
-                            this.kapp != null ? this.kapp.getFormAttributeDefinition((String)formAttribute.get("name")) != null : null);
-                    // Add to configuration
-                    this.formAttributeDefinitions.add(configAttribute);
-                    // If not valid, set configuration validity to false
-                    if (!configAttribute.isValid()){
-                        this.valid = false;
-                    }
-                    // Are required values missing
-                    if (configAttribute.isMissingValues()){
-                        this.missingAttributes = true;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.formAttributeDefinitions.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            // Category attribute definitions
-            if (configuration.get("categoryAttributeDefinitions") != null){
-                for (LinkedHashMap<String, Object> categoryAttribute : (List<LinkedHashMap>)configuration.get("categoryAttributeDefinitions")){
-                    ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(categoryAttribute, 
-                            null, 
-                            this.kapp != null ? this.kapp.getCategoryAttributeDefinition((String)categoryAttribute.get("name")) != null : null);
-                    // Add to configuration
-                    this.categoryAttributeDefinitions.add(configAttribute);
-                    // If not valid, set configuration validity to false
-                    if (!configAttribute.isValid()){
-                        this.valid = false;
-                    }
-                    // Are required values missing
-                    if (configAttribute.isMissingValues()){
-                        this.missingAttributes = true;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.categoryAttributeDefinitions.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            // User attribute definitions
-            if (configuration.get("userAttributeDefinitions") != null){
-                for (LinkedHashMap<String, Object> userAttribute : (List<LinkedHashMap>)configuration.get("userAttributeDefinitions")){
-                    ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(userAttribute, 
-                            null, 
-                            this.space != null ? this.space.getUserAttributeDefinition((String)userAttribute.get("name")) != null : null);
-                    // Add to configuration
-                    this.userAttributeDefinitions.add(configAttribute);
-                    // If not valid, set configuration validity to false
-                    if (!configAttribute.isValid()){
-                        this.valid = false;
-                    }
-                    // Are required values missing
-                    if (configAttribute.isMissingValues()){
-                        this.missingAttributes = true;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.userAttributeDefinitions.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            
-            // Form types
-            if (configuration.get("formTypes") != null){
-                for (LinkedHashMap<String, String> formType : (List<LinkedHashMap>)configuration.get("formTypes")){
-                    // Add to configuration
-                    this.formTypes.add(new ConfigFormType(formType));
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.formTypes.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            
-            // Categories
-            if (configuration.get("categories") != null){
-                for (LinkedHashMap<String, String> category : (List<LinkedHashMap>)configuration.get("categories")){
-                    // Add to configuration
-                    this.categories.add(new ConfigCategory(category));
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.categories.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            
-            // Space Webhooks
-            if (configuration.get("spaceWebhooks") != null){
-                for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("spaceWebhooks")){
-                    // Add to configuration
-                    this.spaceWebhooks.add(new ConfigWebhook(webhook));
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.spaceWebhooks.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            // Kapp Webhooks
-            if (configuration.get("kappWebhooks") != null){
-                for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("kappWebhooks")){
-                    // Add to configuration
-                    this.kappWebhooks.add(new ConfigWebhook(webhook));
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.kappWebhooks.isEmpty()){
-                    this.exists = true;
-                }
-            }
-
-            // Security Policy Definitions
-            if (configuration.get("securityPolicyDefinitions") != null){
-                for (LinkedHashMap<String, String> securityPolicyDefinition : (List<LinkedHashMap>)configuration.get("securityPolicyDefinitions")){
-                    // Add to configuration
-                    this.securityPolicyDefinitions.add(new ConfigSecurityPolicyDefinition(securityPolicyDefinition));
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.securityPolicyDefinitions.isEmpty()){
-                    this.exists = true;
-                }
-            }
-
-            // Security Policies
-            if (configuration.get("securityPolicies") != null){
-                for (LinkedHashMap<String, String> securityPolicy : (List<LinkedHashMap>)configuration.get("securityPolicies")){
-                    // Add to configuration
-                    this.securityPolicies.add(new ConfigSecurityPolicy(securityPolicy));
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.securityPolicies.isEmpty()){
-                    this.exists = true;
-                }
-            }
-
-            // Bridges
-            if (configuration.get("bridges") != null){
-                for (LinkedHashMap<String, String> bridge : (List<LinkedHashMap>)configuration.get("bridges")){
-                    ConfigBridge configBridge = new ConfigBridge(bridge, this.space);
-                    // Add to configuration
-                    this.bridges.add(configBridge);
-                    // If bridge doesn't exist, set configuration validity to false
-                    if (!configBridge.isExists()){
-                        this.valid = false;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.bridges.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            
-            // Bridge Models
-            if (configuration.get("bridgeModels") != null){
-                for (LinkedHashMap<String, Object> bridgeModel : (List<LinkedHashMap>)configuration.get("bridgeModels")){
-                    ConfigBridgeModel configBridgeModel = new ConfigBridgeModel(bridgeModel, this.space);
-                    // Add to configuration
-                    this.bridgeModels.add(configBridgeModel);
-                    // If bridge model or bridge model mappings don't exist, set configuration validity to false
-                    if (!configBridgeModel.isExists() || !configBridgeModel.isMappingsExist()){
-                        this.valid = false;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.bridgeModels.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            
-            // Forms
-            if (configuration.get("forms") != null){
-                for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)configuration.get("forms")){
-                    ConfigForm configForm = new ConfigForm(form, this.kapp);
-                    // Add to configuration
-                    this.forms.add(configForm);
-                    // If form doesn't exist, set configuration validity to false
-                    if (!configForm.isExists()){
-                        this.valid = false;
-                    }
-                }
-                // If at least 1 configuration exists, set that configuration exists
-                if (!this.forms.isEmpty()){
-                    this.exists = true;
-                }
-            }
-            
-            // Admin Kapp Requirement
-            if (configuration.get("adminKapp") != null){
-                // If adminKapp property exists, set that configuration exists and Admin Kapp is required
-                this.exists = true;
-                this.adminRequired = true;
-                LinkedHashMap adminConfiguration = (LinkedHashMap)configuration.get("adminKapp");
-                // Admin Kapp Forms
-                if (adminConfiguration.get("forms") != null){
-                    for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)adminConfiguration.get("forms")){
-                        ConfigForm configForm = new ConfigForm(form, this.adminKapp);
+                /** PROCESS CONFIGURATION FILE AND STORE IN CUSTOM MODELS DEFINED BELOW **/
+                
+                // Space attribute definitions
+                if (configuration.get("spaceAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> spaceAttribute : (List<LinkedHashMap>)configuration.get("spaceAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(spaceAttribute, 
+                                this.space, 
+                                this.space != null ? this.space.getSpaceAttributeDefinition((String)spaceAttribute.get("name")) != null : null);
                         // Add to configuration
-                        this.adminKappForms.add(configForm);
-                        // If required Admin Kapp form doesn't exist in the Admin Kapp, set configuration validity to false
+                        this.spaceAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.spaceAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Kapp attribute definitions
+                if (configuration.get("kappAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> kappAttribute : (List<LinkedHashMap>)configuration.get("kappAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(kappAttribute, 
+                                this.kapp, 
+                                this.kapp != null ? this.kapp.getKappAttributeDefinition((String)kappAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.kappAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.kappAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Form attribute definitions
+                if (configuration.get("formAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> formAttribute : (List<LinkedHashMap>)configuration.get("formAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(formAttribute, 
+                                this.form, 
+                                this.kapp != null ? this.kapp.getFormAttributeDefinition((String)formAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.formAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.formAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Category attribute definitions
+                if (configuration.get("categoryAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> categoryAttribute : (List<LinkedHashMap>)configuration.get("categoryAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(categoryAttribute, 
+                                null, 
+                                this.kapp != null ? this.kapp.getCategoryAttributeDefinition((String)categoryAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.categoryAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.categoryAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // User attribute definitions
+                if (configuration.get("userAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> userAttribute : (List<LinkedHashMap>)configuration.get("userAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(userAttribute, 
+                                null, 
+                                this.space != null ? this.space.getUserAttributeDefinition((String)userAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.userAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.userAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Form types
+                if (configuration.get("formTypes") != null){
+                    for (LinkedHashMap<String, String> formType : (List<LinkedHashMap>)configuration.get("formTypes")){
+                        // Add to configuration
+                        this.formTypes.add(new ConfigFormType(formType));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.formTypes.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Categories
+                if (configuration.get("categories") != null){
+                    for (LinkedHashMap<String, String> category : (List<LinkedHashMap>)configuration.get("categories")){
+                        // Add to configuration
+                        this.categories.add(new ConfigCategory(category));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.categories.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Space Webhooks
+                if (configuration.get("spaceWebhooks") != null){
+                    for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("spaceWebhooks")){
+                        // Add to configuration
+                        this.spaceWebhooks.add(new ConfigWebhook(webhook));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.spaceWebhooks.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Kapp Webhooks
+                if (configuration.get("kappWebhooks") != null){
+                    for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("kappWebhooks")){
+                        // Add to configuration
+                        this.kappWebhooks.add(new ConfigWebhook(webhook));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.kappWebhooks.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+    
+                // Security Policy Definitions
+                if (configuration.get("securityPolicyDefinitions") != null){
+                    for (LinkedHashMap<String, String> securityPolicyDefinition : (List<LinkedHashMap>)configuration.get("securityPolicyDefinitions")){
+                        // Add to configuration
+                        this.securityPolicyDefinitions.add(new ConfigSecurityPolicyDefinition(securityPolicyDefinition));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.securityPolicyDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+    
+                // Security Policies
+                if (configuration.get("securityPolicies") != null){
+                    for (LinkedHashMap<String, String> securityPolicy : (List<LinkedHashMap>)configuration.get("securityPolicies")){
+                        // Add to configuration
+                        this.securityPolicies.add(new ConfigSecurityPolicy(securityPolicy));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.securityPolicies.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+    
+                // Bridges
+                if (configuration.get("bridges") != null){
+                    for (LinkedHashMap<String, String> bridge : (List<LinkedHashMap>)configuration.get("bridges")){
+                        ConfigBridge configBridge = new ConfigBridge(bridge, this.space);
+                        // Add to configuration
+                        this.bridges.add(configBridge);
+                        // If bridge doesn't exist, set configuration validity to false
+                        if (!configBridge.isExists()){
+                            this.valid = false;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.bridges.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Bridge Models
+                if (configuration.get("bridgeModels") != null){
+                    for (LinkedHashMap<String, Object> bridgeModel : (List<LinkedHashMap>)configuration.get("bridgeModels")){
+                        ConfigBridgeModel configBridgeModel = new ConfigBridgeModel(bridgeModel, this.space);
+                        // Add to configuration
+                        this.bridgeModels.add(configBridgeModel);
+                        // If bridge model or bridge model mappings don't exist, set configuration validity to false
+                        if (!configBridgeModel.isExists() || !configBridgeModel.isMappingsExist()){
+                            this.valid = false;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.bridgeModels.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Forms
+                if (configuration.get("forms") != null){
+                    for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)configuration.get("forms")){
+                        ConfigForm configForm = new ConfigForm(form, this.kapp);
+                        // Add to configuration
+                        this.forms.add(configForm);
+                        // If form doesn't exist, set configuration validity to false
                         if (!configForm.isExists()){
                             this.valid = false;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.forms.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Admin Kapp Requirement
+                if (configuration.get("adminKapp") != null){
+                    // If adminKapp property exists, set that configuration exists and Admin Kapp is required
+                    this.exists = true;
+                    this.adminRequired = true;
+                    LinkedHashMap adminConfiguration = (LinkedHashMap)configuration.get("adminKapp");
+                    // Admin Kapp Forms
+                    if (adminConfiguration.get("forms") != null){
+                        for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)adminConfiguration.get("forms")){
+                            ConfigForm configForm = new ConfigForm(form, this.adminKapp);
+                            // Add to configuration
+                            this.adminKappForms.add(configForm);
+                            // If required Admin Kapp form doesn't exist in the Admin Kapp, set configuration validity to false
+                            if (!configForm.isExists()){
+                                this.valid = false;
+                            }
                         }
                     }
                 }

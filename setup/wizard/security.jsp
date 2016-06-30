@@ -25,7 +25,7 @@
                     </c:when>
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
-                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'danger'}">
+                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'warning'}">
                     <td>${securityPolicyDefinition.name}</td>
                     <td>${securityPolicyDefinition.type}</td>
                     <td>${securityPolicyDefinition.message}</td>
@@ -61,7 +61,7 @@
             <c:forEach items="${SetupHelper.getSecurityPolicies()}" var="securityPolicy">
                 <c:set var="securityPolicyStatus" value="${not empty kapp.getSecurityPolicy(securityPolicy.endpoint) && Text.equals(kapp.getSecurityPolicy(securityPolicy.endpoint).name, securityPolicy.name)}"/>
                 <tr data-json="${Text.escape(Json.toString(securityPolicy))}" data-status="${securityPolicyStatus}" 
-                        class="${securityPolicyStatus ? 'success' : 'danger'}">
+                        class="${securityPolicyStatus ? 'success' : 'warning'}">
                     <td>${securityPolicy.endpoint}</td>
                     <td>${securityPolicy.name}</td>
                     <td>

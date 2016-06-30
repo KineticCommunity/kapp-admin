@@ -35,7 +35,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <c:if test="${!hasFormDefinition}">
-                    <tr class="${status ? 'success' : 'danger'}">
+                    <tr class="${status ? 'success' : 'warning'}">
                         <td>${form.name}</td>
                         <td>${form.description}</td>
                         <td>${form.slug}</td>
@@ -88,7 +88,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <c:if test="${hasFormDefinition}">
-                    <tr data-json="${status ? '' : json}" class="${status ? 'success' : 'danger'}">
+                    <tr data-json="${status ? '' : json}" class="${status ? 'success' : 'warning'}">
                         <td>${form.name}</td>
                         <td>${form.description}</td>
                         <td>${form.slug}</td>

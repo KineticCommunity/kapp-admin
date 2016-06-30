@@ -28,7 +28,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
-                        data-level="space" class="space-attribute-definition ${status ? 'success' : 'danger'}">
+                        data-level="space" class="space-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Space</td>
                     <td>${attributeDefinition.name}</td>
                     <td>${status ? description : attributeDefinition.description}</td>
@@ -56,7 +56,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
-                        data-level="kapp" class="kapp-attribute-definition ${status ? 'success' : 'danger'}">
+                        data-level="kapp" class="kapp-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Kapp</td>
                     <td>${attributeDefinition.name}</td>
                     <td>${status ? description : attributeDefinition.description}</td>
@@ -84,7 +84,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
-                        data-level="form" class="form-attribute-definition ${status ? 'success' : 'danger'}">
+                        data-level="form" class="form-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Form</td>
                     <td>${attributeDefinition.name}</td>
                     <td>${status ? description : attributeDefinition.description}</td>
@@ -112,7 +112,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
-                        data-level="category" class="cateogry-attribute-definition ${status ? 'success' : 'danger'}">
+                        data-level="category" class="cateogry-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Category</td>
                     <td>${attributeDefinition.name}</td>
                     <td>${status ? description : attributeDefinition.description}</td>
@@ -140,7 +140,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <tr data-name="${attributeDefinition.name}" data-allows-multiple="${attributeDefinition.isAllowsMultiple()}" data-status="${status}"
-                        data-level="user" class="user-attribute-definition ${status ? 'success' : 'danger'}">
+                        data-level="user" class="user-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>User</td>
                     <td>${attributeDefinition.name}</td>
                     <td>${status ? description : attributeDefinition.description}</td>
@@ -182,7 +182,7 @@
             <c:forEach items="${SetupHelper.getSpaceAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="allowsMultiple" value="${attributeDefinition.isDefinitionExists() ? space.getSpaceAttributeDefinition(attributeDefinition.name).isAllowsMultiple() : attributeDefinition.isAllowsMultiple()}"/>
                 <tr data-name="${attributeDefinition.name}" data-level="space"
-                        class="space-attribute ${attributeDefinition.isDefinitionExists() ? 'success' : 'danger'}">
+                        class="space-attribute ${attributeDefinition.isDefinitionExists() ? 'success' : 'warning'}">
                     <td>Space</td>
                     <td>${attributeDefinition.name}</td>
                     <td class="space-attribute-values">
@@ -221,7 +221,7 @@
             <c:forEach items="${SetupHelper.getKappAttributeDefinitions()}" var="attributeDefinition">
                 <c:set var="allowsMultiple" value="${attributeDefinition.isDefinitionExists() ? kapp.getKappAttributeDefinition(attributeDefinition.name).isAllowsMultiple() : attributeDefinition.isAllowsMultiple()}"/>
                 <tr data-name="${attributeDefinition.name}" data-level="kapp" 
-                        class="${attributeDefinition.isDefinitionExists() ? 'success' : 'danger'}">
+                        class="${attributeDefinition.isDefinitionExists() ? 'success' : 'warning'}">
                     <td>Kapp</td>
                     <td>${attributeDefinition.name}</td>
                     <td class="kapp-attribute-values">

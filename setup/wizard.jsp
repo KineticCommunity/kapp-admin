@@ -97,7 +97,7 @@
                                     <td colspan="2"><span class="fa fa-exclamation-circle"></span> <i>No required configurations are defined.</i></td>
                                 </tr>
                                 <c:forEach var="progress" items="${SetupHelper.getWizardProgress()}">
-                                    <tr class="${progress.configured ? 'success' : 'danger'}">
+                                    <tr class="${progress.configured ? 'success' : 'warning'}">
                                         <td>
                                             <a class="fa fa-share" href="${bundle.kappLocation}?setup=wizard&step=${progress.slug}"></a> 
                                             ${progress.description}

@@ -19,3 +19,6 @@ div.attribute-value span.input-group-addon {
   color: white;
   font-weight: bold;
 }
+.empty-state-message:not(:only-child) {
+  display: none;
+}
