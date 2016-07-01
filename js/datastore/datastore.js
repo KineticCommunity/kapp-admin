@@ -1146,9 +1146,13 @@
     function checkDuplicateRecord(form, uniqueConfiguration, datastoreSlug, recordContainer, actions){
         var q = "";
         for (var i = 0; i < uniqueConfiguration.length; i++){
-            if (form.getFieldByName(uniqueConfiguration[i].data)){
+            var field = form.getFieldByName(uniqueConfiguration[i].data);
+            if (field){
                 if (q.length > 0){ q += " AND "; }
-                q += "values[" + uniqueConfiguration[i].data + "] = \"" + form.getFieldByName(uniqueConfiguration[i].data).value() + "\"";
+                q += "values[" + uniqueConfiguration[i].data + "] = "
+                        + (field.value() && field.value().length 
+                                ? "\"" + field.value() + "\"" 
+                                : "null");
             }
             else {
                 recordContainer.notifie({
