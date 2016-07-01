@@ -891,7 +891,6 @@
                     v.orderable = (v.orderable === "true") ? true : false;
                     v.unique = (v.unique === "true") ? true : false;
                 });
-                console.log(records);
                 // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
                 // Append the import/export buttons to the buttons section on the page
@@ -1145,7 +1144,6 @@
      * Check if duplicate record already exists
      */
     function checkDuplicateRecord(form, uniqueConfiguration, datastoreSlug, recordContainer, actions){
-        console.log("FORM", form.submission().id());
         var q = "";
         for (var i = 0; i < uniqueConfiguration.length; i++){
             if (form.getFieldByName(uniqueConfiguration[i].data)){

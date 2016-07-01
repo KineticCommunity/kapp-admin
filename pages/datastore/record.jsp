@@ -36,7 +36,7 @@
 <%-- TODO restrict duplicates <c:set var="uniqueFields" value="${AdminHelper.getUniqueFields(currentStore)}"/>  data-unique-fields="${uniqueFields}"--%>
                     <div class="datastore-record-container embedded-form" data-datastore-slug="${currentStore.slug}"
                             data-record-id="${param.id}" data-clone-id="${param.clone}"
-                            data-datastore-configuration="${text.escape(kapp.getForm(currentStore.slug).getAttributeValue('Datastore Configuration'))}"></div>
+                            data-datastore-configuration="${text.escape(currentStore.getAttributeValue('Datastore Configuration'))}"></div>
                 </div>
             </div>
             
