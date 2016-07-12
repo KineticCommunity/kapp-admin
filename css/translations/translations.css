@@ -1,0 +1,8 @@
+/* CSS Specific to the Translation Console*/
+div.translations-tab-content {
+    background: transparent;
+}
+
+input {
+  width: 100%;
+}
