@@ -320,7 +320,7 @@
     // Update a current category
     function updateCategory(kapp,obj,stopSiblings, originalCategory, deselectCategory) {
         if(siblingsArray.length === 0){
-            siblingsArray = $(obj).siblings();
+            siblingsArray = $(obj).siblings('li');
         }
         var category, categoryName = $(obj).attr('data-id');
         // Check if originalCategory is defined. This will contain the 
@@ -338,44 +338,62 @@
         var parent = $(obj).parent().closest('li').attr('data-id');
         var url = bundle.spaceLocation() + '/app/api/v1/kapps/' + kapp + '/categories/' + category + '?include=attributes';
 
-        // Create the payload by what is defined
-        var payload = '{"slug": "' + categoryName + '","name": "' + displayName + '",';
-        // These are attributes 
-        if( sortOrder != undefined ||  parent != undefined){
-            payload = payload + '"attributes": [';
-            if(sortOrder != undefined){
-                payload = payload + '{ "name":"Sort Order","values":["' + sortOrder + '"]},';
-            }   
-            if(parent != undefined){
-                payload = payload + '{ "name":"Parent","values":["' + parent + '"]},';
-            }
-            payload = payload.substring(0,payload.length-1) + '] '; 
-        }
-        // Close the payload
-        payload = payload + '}';
-        // Update via api
+        // Get category to add other attributes
         $.ajax({
-            method: 'PUT',
+            method: 'GET',
             url: url,
             dataType: "json",
-            data: payload,
-            contentType: "application/json"
-        }).done(function(){
-            // clear our the lastUpdated so we know we are done and can do the next
-            lastUpdated = '';
-            // Check if we shoudl update siblings
-            if(!stopSiblings){
-                // If this is the last sibling set the stop
-                if(siblingsArray.length === 1) {stopSiblings = true;}
-                var item = siblingsArray[0];
-                siblingsArray.splice(0,1);
-                updateCategory(kapp,$(item),stopSiblings,undefined,false);
+            contentType: "application/json",
+            success: function( data ){
+                // Create the payload by what is defined
+                var payload = '{"slug": "' + categoryName + '","name": "' + displayName + '",';
+                // These are attributes 
+                payload = payload + '"attributes": [ ';
+                if( sortOrder != undefined ||  parent != undefined){
+                    if(sortOrder != undefined){
+                        payload = payload + '{ "name":"Sort Order","values":["' + sortOrder + '"]},';
+                    }   
+                    if(parent != undefined){
+                        payload = payload + '{ "name":"Parent","values":["' + parent + '"]},';
+                    }
+                }
+                // Add attributes besides sort and parent
+                $.each(data.category.attributes, function(index,value){
+                    var stringVal = JSON.stringify(value);
+                    if(stringVal.indexOf('Sort Order') > -1){
+                    }
+                    else {
+                        payload = payload + stringVal + ",";
+                    }
+                });
+                payload = payload.substring(0,payload.length-1) + '] '; 
+                // Close the payload
+                payload = payload + '}';
+                // Update via api
+                $.ajax({
+                    method: 'PUT',
+                    url: url,
+                    dataType: "json",
+                    data: payload,
+                    contentType: "application/json"
+                }).done(function(){
+                    // clear our the lastUpdated so we know we are done and can do the next
+                    lastUpdated = '';
+                    // Check if we should update siblings
+                    if(!stopSiblings){
+                        // If this is the last sibling set the stop
+                        if(siblingsArray.length === 1) {stopSiblings = true;}
+                        var item = siblingsArray[0];
+                        siblingsArray.splice(0,1);
+                        updateCategory(kapp,$(item),stopSiblings,undefined,false);
+                    }
+                });
+                $('ul.sortable').sortable();
+                if(deselectCategory){
+                    clearSelectedCategory();
+                }
             }
         });
-        $('ul.sortable').sortable();
-        if(deselectCategory){
-            clearSelectedCategory();
-        }
     }
 
     // Create an array for storing all items to delete
