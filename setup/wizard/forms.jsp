@@ -27,7 +27,7 @@
                     </c:when>
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
-                <tr data-json="${status ? '' : json}" class="${status ? 'success' : 'warning'}">
+                <tr data-json="${status ? '' : json}" data-status="${status}" class="${status ? 'success' : 'warning'}">
                     <td>${form.name}</td>
                     <td>${form.description}</td>
                     <td>${form.slug}</td>

@@ -18,118 +18,43 @@
 
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
-            <ol class="breadcrumb">
-                <li class="active">${space.name}</li>
-            </ol>
-            
             <div class="page-header">
                 <h3>${form.name}</h3>
             </div>
         
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="translation-navigation">
-                        <ul class="nav nav-pills sub-nav" role="tablist">
-                            <li role="presentation">
-                                <a href="#config" aria-controls="home" role="tab" data-toggle="tab"><span class="fa fa-cog"></span></a>
-                            </li>
-                            <li role="presentation" class="active">
-                                <a href="#translations" aria-controls="home" role="tab" data-toggle="tab">${space.name} Translations</a>
-                            </li>
-                            <li>
-                                <a href="#children" aria-controls="home" role="tab" data-toggle="tab">Kapps</a>
-                            </li>
-                            <li class="pull-right">
-                                <select name="" id="">
-                                    <option value="en_US">English</option>
-                                    <option value="es_SP">Spanish</option>
-                                    <option value="de_DE">German</option>
-                                </select>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="tab-content translations-tab-content">
-                    
-                        <div role="tabpanel" class="tab-pane active" id="translations">
-                            <table class="table table-hover datastore-list-table"> 
-                                <thead>
-                                    <tr>
-                                        <th>Key</th>
-                                        <th width="50%">Translation</th>
-                                        <th width="6%"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><a href="#">Key 1</a></td>
-                                        <td><input type="text" value="Translation 1" /></td>
-                                        <td>
-                                            <div class="btn-group pull-right">
-                                                <button class="btn btn-xs btn-danger">
-                                                    <span class="fa fa-times fa-fw"></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">Key 2</a></td>
-                                        <td><input type="text" value="Translation 2" /></td>
-                                        <td>
-                                            <div class="btn-group pull-right">
-                                                <button class="btn btn-xs btn-danger">
-                                                    <span class="fa fa-times fa-fw"></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">Key 3</a></td>
-                                        <td><input type="text" value="Translation 3" /></td>
-                                        <td>
-                                            <div class="btn-group pull-right">
-                                                <button class="btn btn-xs btn-danger">
-                                                    <span class="fa fa-times fa-fw"></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table class="table" id="add-translation-table"> 
-                                <tbody>
-                                    <tr>
-                                        <td class="">
-                                            <input class="input-sm form-control" placeholder="Key">
-                                        </td>
-                                        <td width="50%" class="">
-                                            <input class="input-sm form-control" placeholder="Translation">
-                                        </td>
-                                        <td width="10%" class="qual-add-btn">
-                                            <button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="children">
-                            <table class="table table-hover datastore-list-table"> 
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${space.kapps}" var="spaceKapp">
-                                        <tr>
-                                            <td><a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/kapp&slug=${spaceKapp.slug}">${spaceKapp.name}</a></td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                    </div>
+                    <h4>Kapps</h4>
+                </div>
+            </div>
+            
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-hover datastore-list-table"> 
+                        <thead>
+                            <tr>
+                                <th>Kapp</th>
+                                <th>Default Locale</th>
+                                <th style="width:50%;">Enabled Locales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="tKapp" items="${space.kapps}">
+                                <tr>
+                                    <td><a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/kapp&slug=${tKapp.slug}">${tKapp.name}</a></td>
+                                    <td><span class="label label-primary">en_US</span></td>
+                                    <td>
+                                        <span class="label label-success">en</span>
+                                        <span class="label label-success">en_US</span>
+                                        <span class="label label-success">fr_FR</span>
+                                        <span class="label label-success">es</span>
+                                        <span class="label label-success">es_MX</span>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         
