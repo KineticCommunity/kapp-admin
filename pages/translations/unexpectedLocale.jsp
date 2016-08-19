@@ -31,14 +31,14 @@
             <ol class="breadcrumb">
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/kapp">${text.escape(i18nKapp.name)}</a></li>
-                <li class="active">Unexpected Contexts</li>
+                <li class="active">Unexpected Locales</li>
             </ol>
             
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
-                            <span>Unexpected Contexts</span>
+                            <span>Unexpected Locales</span>
                             <small>${text.escape(i18nKapp.name)}</small>
                         </h3>
                     </div>
@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="bs-callout bs-callout-info">
-                        An <b>Unexpected Context</b> is...
+                        An <b>Unexpected Locale</b> is...
                         
                         Lorem ipsum
                     </div>
@@ -58,24 +58,26 @@
                            data-empty-message="No unexpected contexts."> 
                         <thead>
                             <tr>
-                                <th>Unexpected Context Name</th>
+                                <th>Language Name</th>
+                                <th>Locale Code</th>
                                 <th data-orderable="false"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="unexpectedContextName" items="${translationSnapshot.getUnexpectedContextNames(i18nKapp)}"> 
-                                <c:set var="unexpectedContext" value="${translationSnapshot.getContext(unexpectedContextName)}" />
+                            <c:forEach var="unexpectedLocaleCode" items="${translationSnapshot.getUnexpectedLocaleCodes()}"> 
                                 <tr>
+                                    <td>${TranslationLocale.get(unexpectedLocaleCode).name}</td>
                                     <td>
-                                        <a href="${i18nKappUrl}&page=translations/context&context=${text.escape(unexpectedContextName)}">
-                                            ${text.escape(unexpectedContextName)}
+                                        <a class="btn btn-xs btn-warning"
+                                           href="${i18nKappUrl}&page=translations/locale&locale=${text.escape(unexpectedLocaleCode)}">
+                                            ${text.escape(unexpectedLocaleCode)}
                                         </a>
                                     </td>
                                     <td class="text-right">
-                                        <button class="btn btn-xs btn-default rename-context-button"
-                                                data-context-name="${text.escape(unexpectedContextName)}">
-                                            <span class="fa fa-pencil-square-o fa-fw"></span>
-                                            <span>Rename Context</span>
+                                        <button class="btn btn-xs btn-default enable-unexpected-locale-btn"
+                                                data-locale-code="${text.escape(unexpectedLocaleCode)}">
+                                            <span class="fa fa-plus fa-fw"></span>
+                                            <span>Enable Locale</span>
                                         </button>
                                     </td>
                                 </tr>

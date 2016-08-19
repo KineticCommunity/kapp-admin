@@ -11,7 +11,7 @@
          */
         $("table[data-table-source]").each(function(i,table){
             $.ajax({
-                mathod: "GET",
+                method: "GET",
                 url: encodeURI($(table).data("table-source")),
                 dataType: "json",
                 contentType: "application/json",
@@ -36,8 +36,19 @@
                         drawCallback: function(){
                             $("[data-tooltip]").tooltip();
                         },
+                        headerCallback: function( thead ){
+                            if ($(thead).closest("table").data("delete-all")){
+                                $(thead).find("th.actions").html(
+                                    $("<div>", {class: "dropdown more-actions pull-right"}).append(
+                                        "<span data-toggle=\"dropdown\" class=\"fa fa-chevron-down\"></span>",
+                                        "<ul role=\"menu\" class=\"dropdown-menu dropdown-menu-right\">" + 
+                                            "<li><a class=\"delete-all-btn\">Delete All</a></li>" + 
+                                        "</ul>"
+                                    )
+                                );
+                            }
+                        },
                         rowCallback: function(row, data){
-                            console.log(data);
                             $(row).find("td.locale").html("<span class=\"btn-xs btn-subtle\" disabled data-tooltip title=\"" 
                                     + data.language + "\">" + data.locale + "</span>");
                             $(row).find("td.context").html("<span class=\"btn-xs btn-subtle\" data-tooltip title=\"" 
@@ -50,7 +61,7 @@
                                 }
                                 $(this).html($("<a>", {href: keyUrl}).text(data.key));
                             });
-                            if (data.references.length > 0){
+                            if (data.references && data.references.length > 0){
                                 $(row).find("td.references").html($("<span>", {
                                     class: "fa fa-info fa-fw text-muted", 
                                     "data-tooltip": true, 
@@ -76,11 +87,11 @@
                     });
                     if ($(table).data("empty-message")){
                         records.language.emptyTable = $(table).data("empty-message");
-                        if ($(table).data("seed-context") && $(table).data("seed-target-locale")){
+                        if ($(table).data("seed")){
                             var seedButton = $("<button>", {
                                     class: "btn btn-xs btn-default seed-context-btn pull-right",
-                                    "data-seed-target-locale": $(table).data("seed-target-locale"),
-                                    "data-seed-context": $(table).data("seed-context")
+                                    "data-seed-target-locale": $(table).data("locale"),
+                                    "data-seed-context": $(table).data("context")
                                 })
                                 .append("<span class='fa fa-fw fa-plus'></span>")
                                 .append("Import Keys From Default Locale");
@@ -177,6 +188,75 @@
                                                         + "</b> context for the key <b>" + data.key + "</b><br>Error: " + errorThrown
                                         });
                                         $(document).scrollTop(0);
+                                    }
+                                });
+                            }
+                        });
+                        // Show confirmation dialog
+                        confirmDelete.show();
+                        // Blur delete button
+                        $(this).blur();
+                    }).on("click", "a.delete-all-btn", function(){
+                        var self = $(this);
+                        var url = bundle.adminTranslations.apiBaseUrl;
+                        var confirmMessage = "";
+                        var locale = $(this).closest("table").data("locale");
+                        var context = $(this).closest("table").data("context");
+                        if (context.length > 0){
+                            confirmMessage = "Are you sure you want to delete <b>ALL</b> of the "  
+                                + "translations in the <b>" + context + "</b> context " 
+                                + "for all locales?";
+                            if (context.indexOf("form.") === 0){
+                                url += "/forms/" + context.substring(5) + "/translations";
+                            }
+                            else {
+                                url += "/translationContexts/" + context + "/translations"
+                            }
+                            if (locale.length > 0){
+                                url += "?locale=" + locale;
+                                confirmMessage = "Are you sure you want to delete <b>ALL</b> of the "  
+                                    + "translations in the <b>" + context + "</b> context " 
+                                    + "for the <b>" + locale + "</b> locale?";
+                            }
+                        }
+                        else if (locale.length > 0){
+                            url += "/locales/" + locale + "/translations";
+                            confirmMessage = "Are you sure you want to delete <b>ALL</b> of the "  
+                                + "translations in all contexts for the <b>" + locale + "</b> locale?";
+                        }
+                        else {
+                            return;
+                        }
+                        
+                        var confirmDelete = new KD.Modal({
+                            header: "<h4>Confirm Delete</h4>",
+                            body: confirmMessage,
+                            footer: function(element, actions) {
+                                element.addClass("text-right").append(
+                                    $("<button>", {class: "btn btn-success"}).text("Yes").on("click", actions.accept),
+                                    $("<button>", {class: "btn btn-link"}).text("Cancel").on("click", actions.dismiss)
+                                );
+                            },
+                            size: "md",
+                            backdrop: true,
+                            backdropclose: true,
+                            keyboardclose: true,
+                            renderCallback: false,
+                            accept: function(){
+                                $.ajax({
+                                    method: "delete",
+                                    url: url,
+                                    contentType: "application/json",
+                                    success: function(){
+                                        window.location.reload();
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown){
+                                        try { 
+                                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                        } catch(e){}
+                                        self.closest("table").notifie({
+                                            message: "Failed to delete the translations.<br>Error: " + errorThrown
+                                        });
                                     }
                                 });
                             }
@@ -284,7 +364,37 @@
                         errorThrown = JSON.parse(jqXHR.responseText).error; 
                     } catch(e){}
                     row.closest("table").notifie({
-                        message: "Failed to enable the <b>" + localeName + "</b> locale <b>" + locale + ".<br>Error: " + errorThrown
+                        message: "Failed to enable the <b>" + localeName + "</b> locale <b>" + locale + "</b>.<br>Error: " + errorThrown
+                    });
+                    button.attr("disabled", false);
+                }
+            });
+        });
+        
+        /*
+         * Click event handler for enabling an unexpected locale
+         */
+        $("button.enable-unexpected-locale-btn").on("click", function(e){
+            var button = $(this);
+            var localeCode = $(this).data("locale-code");
+            $.ajax({
+                method: "put",
+                url: bundle.adminTranslations.apiBaseUrl + "/locales",
+                data: JSON.stringify({
+                    code: localeCode
+                }),
+                beforeSend: function(){
+                    button.attr("disabled", true);
+                },
+                success: function(){
+                    window.location.replace(bundle.adminTranslations.i18nKappUrl + "&page=translations/locale&locale=" + localeCode);
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    try { 
+                        errorThrown = JSON.parse(jqXHR.responseText).error; 
+                    } catch(e){}
+                    button.closest("table").notifie({
+                        message: "Failed to enable the unexpected locale <b>" + localeCode + "</b>.<br>Error: " + errorThrown
                     });
                     button.attr("disabled", false);
                 }
@@ -773,10 +883,18 @@
         $("button.import-translations-btn").fileupload({
             type: "post",
             url: bundle.adminTranslations.apiBaseUrl + "/translations.csv"
+        }).bind('fileuploadsend', function (e, data) {
+            $(this).notifie({
+                anchor: "h3",
+                message: "<span class='fa fa-spinner fa-spin'></span> Importing...",
+                severity: "info"
+            });
         }).bind('fileuploaddone', function (e, data) {
             $(this).notifie({
                 anchor: "h3",
-                message: "<b>Import Completed Successfully</b><br>" + data.response().result.message,
+                message: "<b>Import Completed Successfully</b><br>" + data.response().result.message
+                    + "<br><a class='pull-right btn btn-sm btn-default' href='javascript:window.location.reload();'>"
+                    + "<span class='fa fa-refresh'></span> Reload Page</a>",
                 severity: "info",
                 exitEvents: "click"
             });

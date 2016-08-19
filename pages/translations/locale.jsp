@@ -79,10 +79,16 @@
                                 Missing ${missingTranslations.size()} Translations
                             </a>
                         </c:if>
+                        <c:if test="${translationSnapshot.getUnexpectedLocaleCodes().contains(param.locale)}">
+                            <a class="btn btn-xs btn-warning" 
+                                href="${i18nKappUrl}&page=translations/unexpectedLocale">
+                                Unexpected Locale
+                            </a>
+                        </c:if>
                         <select class="change-locale pull-right">
                             <c:if test="${!translationSnapshot.enabledLocaleCodes.contains(param.locale)}">
                                 <option value="${i18nKappUrl}&page=translations/locale&locale=${text.escape(param.locale)}" selected>
-                                    Unenabled Locale: ${text.escape(param.locale)}
+                                    Unexpected Locale: ${text.escape(param.locale)}
                                 </option>
                             </c:if>
                             <c:forEach var="localeCode" items="${translationSnapshot.enabledLocaleCodes}">
@@ -98,10 +104,14 @@
             
             <div class="row entries-container">
                 <div class="col-xs-12">
-                    <table class="table table-hover table-striped" data-state-save="true"
+                    <table class="table table-hover table-striped" 
+                           data-state-save="true"
                            id="locale_${i18nKapp.slug}_${text.escape(param.locale)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&locale=${text.escape(param.locale)}"
-                           data-empty-message="No <b>${TranslationLocale.get(param.locale).name}</b> translations found.">
+                           data-empty-message="No <b>${TranslationLocale.get(param.locale).name}</b> translations found."
+                           data-delete-all="true"
+                           data-context="${text.escape(param.context)}" 
+                           data-locale="${text.escape(param.locale)}">
                         <thead></thead>
                         <tbody>
                             <tr>

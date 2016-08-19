@@ -104,10 +104,18 @@
                     </div>
                             
                     <div class="col-xs-12">
-                        <c:if test="${contextBreadCrumb && translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
+                        <c:if test="${(contextBreadCrumb || contextAndLocaleBreadCrumb)
+                                      && translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
                             <a class="btn btn-xs btn-warning" 
-                               href="${i18nKappUrl}&page=translations/unexpected">
+                               href="${i18nKappUrl}&page=translations/unexpectedContext">
                                 Unexpected Context
+                            </a>
+                        </c:if>
+                        <c:if test="${(localeBreadCrumb || contextAndLocaleBreadCrumb)
+                                      && translationSnapshot.getUnexpectedLocaleCodes().contains(param.locale)}">
+                            <a class="btn btn-xs btn-warning" 
+                                href="${i18nKappUrl}&page=translations/unexpectedLocale">
+                                Unexpected Locale
                             </a>
                         </c:if>
                     </div>

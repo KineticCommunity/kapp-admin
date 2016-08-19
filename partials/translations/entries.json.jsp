@@ -160,8 +160,7 @@
                     <json:property name="byLocale" value="${text.isNotBlank(param.locale)}"/>
                     <json:property name="i18nKappUrl" value="${i18nKappUrl}"/>
                     <json:property name="references" value="${translationContextPack.getReferences(entry.key)}"/>
-                    <json:property name="dependencyCount" value="${translationSnapshot.getDependentEntries(i18nKapp, entry.contextName, entry.localeCode, entry.key).size()}"/>
-                    <json:property name="dependencyCount" value="${translationSnapshot.getDependentEntries(i18nKapp, entry.contextName, entry.localeCode, entry.key).size()}"/>
+                    <%--<json:property name="dependencyCount" value="${translationSnapshot.getDependentEntries(i18nKapp, entry.contextName, entry.localeCode, entry.key).size()}"/>--%>
                     <json:property name="virtual" value="${empty entry.id}"/>
                 </json:object>
             </c:forEach>

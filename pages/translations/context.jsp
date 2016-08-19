@@ -102,12 +102,6 @@
                     </div>
                             
                     <div class="col-xs-12">
-                        <c:if test="${translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
-                            <a class="btn btn-xs btn-warning" 
-                                href="${i18nKappUrl}&page=translations/unexpected">
-                                Unexpected Context
-                            </a>
-                        </c:if>
                         <c:if test="${missingTranslations.size() > 0}">
                             <a class="btn btn-xs btn-warning" 
                                href="${i18nKappUrl}&page=translations/missing&context=${text.escape(param.context)}${localeUrlParam}">
@@ -124,17 +118,33 @@
                                 </option>
                             </c:forEach>
                         </select>
+                        <c:if test="${translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
+                            <a class="btn btn-xs btn-warning" 
+                                href="${i18nKappUrl}&page=translations/unexpectedContext">
+                                Unexpected Context
+                            </a>
+                        </c:if>
+                        <c:if test="${text.isNotBlank(param.locale) 
+                                      && translationSnapshot.getUnexpectedLocaleCodes().contains(param.locale)}">
+                            <a class="btn btn-xs btn-warning" 
+                                href="${i18nKappUrl}&page=translations/unexpectedLocale">
+                                Unexpected Locale
+                            </a>
+                        </c:if>
                     </div>
                 </div>
             </div>
             
             <div class="row entries-container">
                 <div class="col-xs-12">
-                    <table class="table table-hover table-striped" data-state-save="true"
+                    <table class="table table-hover table-striped" 
+                           data-state-save="true"
                            id="context_${i18nKapp.slug}_${text.escape(param.context)}_${text.escape(param.locale)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&context=${text.escape(param.context)}${localeUrlParam}"
                            data-empty-message="No ${emptyMessageLocale}translations found in the <b>${text.escape(param.context)}</b> context."
-                           data-seed-context="${text.escape(param.context)}" data-seed-target-locale="${text.escape(param.locale)}">
+                           data-seed="true" data-delete-all="true"
+                           data-context="${text.escape(param.context)}" 
+                           data-locale="${text.escape(param.locale)}">
                             
                         <thead></thead>
                         <tbody>

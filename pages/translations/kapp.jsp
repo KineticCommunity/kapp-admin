@@ -79,9 +79,19 @@
                                value="${translationSnapshot.getUnexpectedContextNames(i18nKapp)}"/>
                         <c:if test="${unexpectedContexts.size() > 0}">
                             <a class="btn btn-xs btn-warning" 
-                               href="${i18nKappUrl}&page=translations/unexpected">
+                               href="${i18nKappUrl}&page=translations/unexpectedContext">
                                 <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Found ${unexpectedContexts.size()} Unexpected Contexts
+                            </a>
+                        </c:if>
+                        
+                        <c:set var="unexpectedLocales" 
+                               value="${translationSnapshot.getUnexpectedLocaleCodes()}"/>
+                        <c:if test="${unexpectedLocales.size() > 0}">
+                            <a class="btn btn-xs btn-warning" 
+                               href="${i18nKappUrl}&page=translations/unexpectedLocale">
+                                <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                Found ${unexpectedLocales.size()} Unexpected Locales
                             </a>
                         </c:if>
                     </div>

@@ -88,17 +88,17 @@
                     </div>
                             
                     <div class="col-xs-12">
-                        <c:if test="${translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
-                            <a class="btn btn-xs btn-warning" 
-                               href="${i18nKappUrl}&page=translations/unexpected">
-                                Unexpected Context
-                            </a>
-                        </c:if>
                         <c:if test="${missingTranslations.size() > 0}">
                             <a class="btn btn-xs btn-warning" 
                                href="${i18nKappUrl}&page=translations/missing&context=${text.escape(param.context)}&key=${text.escape(param.key)}">
                                 <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Missing ${missingTranslations.size()} Translations
+                            </a>
+                        </c:if>
+                        <c:if test="${translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
+                            <a class="btn btn-xs btn-warning" 
+                               href="${i18nKappUrl}&page=translations/unexpectedContext">
+                                Unexpected Context
                             </a>
                         </c:if>
                     </div>
