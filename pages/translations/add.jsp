@@ -48,6 +48,7 @@
                        value="${text.escape(param.context)}" />
             </c:when>
             <c:when test="${text.isNotBlank(param.locale)}">
+                <c:set var="localeUrlParam" value="&locale=${text.escape(param.locale)}"/>
                 <c:set var="localeBreadCrumb" value="${true}"/>
                 <c:set var="pageTitle"
                        value="${TranslationLocale.get(param.locale).name}" />
@@ -139,10 +140,10 @@
                                 <tr>
                                     <td>
                                         <select class="form-control input-sm" 
-                                                ${translationSnapshot.enabledLocaleCodes.contains(param.locale) ? 'disabled' : ''}
+                                                ${translationSnapshot.getEnabledLocaleCodes(param.context).contains(param.locale) ? 'disabled' : ''}
                                                 data-entry-locale>
                                             <option value=""></option>
-                                            <c:forEach var="localeCode" items="${translationSnapshot.enabledLocaleCodes}">
+                                            <c:forEach var="localeCode" items="${translationSnapshot.getEnabledLocaleCodes(param.context)}">
                                                 <option value="${localeCode}" ${param.locale == localeCode ? 'selected' : ''}>${TranslationLocale.get(localeCode).name} | ${localeCode}</option>
                                             </c:forEach>
                                         </select>
