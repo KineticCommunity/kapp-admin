@@ -35,7 +35,7 @@
                     <c:otherwise><c:set var="status" value="${false}"/></c:otherwise>
                 </c:choose>
                 <c:if test="${!hasFormDefinition}">
-                    <tr class="${status ? 'success' : 'warning'}">
+                    <tr data-status="${status}" class="${status ? 'success' : 'warning'}">
                         <td>${form.name}</td>
                         <td>${form.description}</td>
                         <td>${form.slug}</td>
