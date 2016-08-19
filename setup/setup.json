@@ -484,7 +484,7 @@
             "anonymous": false,
             "customHeadContent": null,
             "notes": null,
-            "submissionLabelExpression": null,
+            "submissionLabelExpression": "${values('Context')},${values('Locale')},${values('Key').substring(0,50)}",
             "attributes": [],
             "bridgedResources": [],
             "categorizations": [],
@@ -543,7 +543,10 @@
                             "required": true,
                             "requiredMessage": null,
                             "omitWhenHidden": null,
-                            "pattern": null,
+                            "pattern": {
+                                "regex": "^[a-z]{2}(_[A-Z]{2}(_[A-Z]+)?)?$",
+                                "message": "Locale must be a valid locale code."
+                            },
                             "constraints": [],
                             "events": [],
                             "renderAttributes": {},
@@ -564,7 +567,12 @@
                             "requiredMessage": null,
                             "omitWhenHidden": null,
                             "pattern": null,
-                            "constraints": [],
+                            "constraints": [
+                                {
+                                    "content": "values('Key').length <= 256",
+                                    "message": "Key must be less than or equal to 256 characters."
+                                }
+                            ],
                             "events": [],
                             "renderAttributes": {},
                             "dataType": "string",
@@ -590,6 +598,15 @@
                             "dataType": "string",
                             "renderType": "text",
                             "rows": 1
+                        },
+                        {
+                            "type": "button",
+                            "label": "Save",
+                            "name": "Save",
+                            "visible": true,
+                            "enabled": true,
+                            "renderType": "submit-page",
+                            "renderAttributes": {}
                         }
                     ],
                     "events": [],
@@ -601,7 +618,24 @@
                     "displayPage": null
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies": [
+                {
+                    "endpoint": "Display",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Modification",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Submission Access",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Submission Modification",
+                    "name": "Admins"
+                }
+            ]
         },
         {
             "name": "Translation Events",
@@ -612,7 +646,7 @@
             "anonymous": false,
             "customHeadContent": null,
             "notes": null,
-            "submissionLabelExpression": null,
+            "submissionLabelExpression": "${values('Type')} - ${submission('id')}",
             "attributes": [],
             "bridgedResources": [],
             "categorizations": [],
@@ -678,6 +712,15 @@
                             "dataType": "string",
                             "renderType": "text",
                             "rows": 1
+                        },
+                        {
+                            "type": "button",
+                            "label": "Save",
+                            "name": "Save",
+                            "visible": true,
+                            "enabled": true,
+                            "renderType": "submit-page",
+                            "renderAttributes": {}
                         }
                     ],
                     "events": [],
@@ -689,7 +732,24 @@
                     "displayPage": null
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies": [
+                {
+                    "endpoint": "Display",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Modification",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Submission Access",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Submission Modification",
+                    "name": "Admins"
+                }
+            ]
         },
         {
             "name": "Translation Settings",
@@ -700,7 +760,7 @@
             "anonymous": false,
             "customHeadContent": null,
             "notes": null,
-            "submissionLabelExpression": null,
+            "submissionLabelExpression": "${values('Name')} - ${values('Value')}",
             "attributes": [],
             "bridgedResources": [],
             "categorizations": [],
@@ -766,6 +826,15 @@
                             "dataType": "string",
                             "renderType": "text",
                             "rows": 1
+                        },
+                        {
+                            "type": "button",
+                            "label": "Save",
+                            "name": "Save",
+                            "visible": true,
+                            "enabled": true,
+                            "renderType": "submit-page",
+                            "renderAttributes": {}
                         }
                     ],
                     "events": [],
@@ -777,7 +846,24 @@
                     "displayPage": null
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies": [
+                {
+                    "endpoint": "Display",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Modification",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Submission Access",
+                    "name": "Admins"
+                },
+                {
+                    "endpoint": "Submission Modification",
+                    "name": "Admins"
+                }
+            ]
         },
         {
             "name": "Translations",

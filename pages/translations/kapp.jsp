@@ -1,18 +1,27 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-<c:set var="translationKapp" value="${space.getKapp(param.slug)}" scope="request" />
+<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
+<c:set var="i18nKapp" value="${space.getKapp(text.escape(param.slug))}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
+<c:set var="i18nKappUrl" value="${i18nBaseUrl}&slug=${text.escape(param.slug)}" scope="request" />
+<c:set var="i18nApiUrl" value="${bundle.spaceLocation}/app/apis/translations/v1/kapps/${i18nKapp.slug}" scope="request" />
 
 <!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
 <c:choose>
     <c:when test="${empty currentKapp}">
         <script>window.location.replace("${bundle.kappLocation}");</script>
     </c:when>
-    <c:when test="${empty translationKapp}">
-        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}");</script>
+    <c:when test="${empty i18nKapp}">
+        <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
     <c:otherwise>
     
+        <c:set scope="request" var="translationSnapshot"
+               value="${translationManager.getSnapshot(i18nKapp)}" />
+        <c:set scope="request" var="publishedSnapshot"
+               value="${translationManager.getCachedSnapshot(i18nKapp)}" />
+        <c:set var="pendingChanges" 
+               value="${translationManager.getChanges(i18nKapp, publishedSnapshot, translationSnapshot)}"/>
 
         <bundle:layout page="${bundle.path}/layouts/layout.jsp">
             <!-- Sets title and imports js and css specific to this console. -->
@@ -22,101 +31,233 @@
 
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
+            <c:if test="${pendingChanges.size() > 0}">
+                <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
+                    <span class="fa fa-lg fa-cloud-upload"></span>
+                    <span>There are ${pendingChanges.size()} translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
+                </a>
+            </c:if>
+            
             <ol class="breadcrumb">
-                <li><a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}">Translations</a></li>
-                <li class="active">${translationKapp.name}</li>
+                <li><a href="${i18nBaseUrl}">Translations</a></li>
+                <li class="active">${text.escape(i18nKapp.name)}</li>
             </ol>
-            
+                
             <div class="page-header">
-                <h3>
-                    ${translationKapp.name}
-                    <div class="pull-right">
-                        <a class="btn btn-sm btn-primary" href="#">
-                            <span class="fa fa-download fa-fw"></span> Export
-                        </a>
-                        <a class="btn btn-sm btn-primary" href="#">
-                            <span class="fa fa-upload fa-fw"></span> Import
-                        </a>
-                        <a class="btn btn-sm btn-default" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&slug=${param.slug}&page=locales">
-                            <span class="fa fa-cog fa-fw"></span> Locales
-                        </a>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h3>
+                            <span>${text.escape(i18nKapp.name)}</span>
+                            <div class="pull-right">
+                                <a class="btn btn-sm btn-primary" href="${i18nApiUrl}/translations.csv">
+                                    <span class="fa fa-download fa-fw"></span> Export
+                                </a>
+                                <button class="btn btn-sm btn-primary import-translations-btn fileinput-button">
+                                    <span class="fa fa-upload fa-fw"></span> Import
+                                    <input id="fileupload" type="file" accept=".csv"/>
+                                </button>
+                                <a class="btn btn-sm btn-default" 
+                                   href="${i18nKappUrl}&page=translations/add">
+                                    <span class="fa fa-plus fa-fw"></span> Add Entries
+                                </a>
+                            </div>
+                        </h3>
                     </div>
-                </h3>
+                            
+                    <div class="col-xs-12">
+                        <c:set var="allMissingTranslations" 
+                               value="${translationSnapshot.getMissingEntries(i18nKapp)}"/>
+                        <c:if test="${allMissingTranslations.size() > 0}">
+                            <a class="btn btn-xs btn-warning" 
+                               href="${i18nKappUrl}&page=translations/missing">
+                                <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                Missing ${allMissingTranslations.size()} Translations
+                            </a>
+                        </c:if>
+
+                        <c:set var="unexpectedContexts" 
+                               value="${translationSnapshot.getUnexpectedContextNames(i18nKapp)}"/>
+                        <c:if test="${unexpectedContexts.size() > 0}">
+                            <a class="btn btn-xs btn-warning" 
+                               href="${i18nKappUrl}&page=translations/unexpected">
+                                <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                Found ${unexpectedContexts.size()} Unexpected Contexts
+                            </a>
+                        </c:if>
+                    </div>
+                </div>
             </div>
-            
+                
             <div class="row">
                 <div class="col-xs-12">
-                    <h4>Core Contexts</h4>
+                    <h4>Locales</h4>
                 </div>
                 <div class="col-xs-12">
-                    <table class="table table-hover datastore-list-table"> 
+                    <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th data-orderable="false">Available Locales</th>
+                                <th style="width:15%;">Default Locale</th>
+                                <th>
+                                    Enabled Locales
+                                    <a class="btn btn-xs btn-default pull-right" 
+                                       href="${i18nKappUrl}&page=translations/locales">
+                                        <span class="fa fa-cog fa-fw"></span> Manage Locales
+                                    </a>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-<%--                             <c:forEach var="context" items="${}"> --%>
-                                <tr>
-                                    <td>
-                                        <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}">Shared${context.displayName}</a>
-                                        <a class="btn btn-xs btn-warning" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/missing&slug=${param.slug}&context=${context.name}">6 Missing Translations</a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=en">en</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=en_US">en_US</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=fr_FR">fr_FR</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=es">es</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=es_MX">es_MX</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}">Bundle${context.displayName}</a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=en">en</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=en_US">en_US</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=fr_FR">fr_FR</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=es">es</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${context.name}&locale=es_MX">es_MX</a>
-                                    </td>
-                                </tr>
-<%--                             </c:forEach> --%>
+                            <tr>
+                                <td>
+                                    <c:set var="defaultLocale" value="${translationManager.getDefaultLocale(i18nKapp)}"/>
+                                    <c:choose>
+                                        <c:when test="${defaultLocale != null}">
+                                            <a class="btn btn-xs btn-info" 
+                                               data-tooltip title="${defaultLocale.name}"
+                                               href="${i18nKappUrl}&page=translations/locale&locale=${defaultLocale.code}">
+                                                ${defaultLocale.code}
+                                            </a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a class="btn btn-xs btn-warning" 
+                                               href="${i18nKappUrl}&page=translations/locales">
+                                                <span class="fa fa-exclamation-triangle fa-fw"></span> Not Set
+                                            </a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${translationManager.getEnabledLocales(i18nKapp).size() > 0}">
+                                            <c:forEach var="locale" items="${translationManager.getEnabledLocales(i18nKapp)}">
+                                                <a class="btn btn-xs btn-success" 
+                                                   data-tooltip title="${locale.name}"
+                                                   href="${i18nKappUrl}&page=translations/locale&locale=${locale.code}">
+                                                    ${locale.code}
+                                                </a>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a class="btn btn-xs btn-warning" 
+                                               href="${i18nKappUrl}&page=translations/locales">
+                                                <span class="fa fa-exclamation-triangle fa-fw"></span> No Enabled Locales
+                                            </a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
+            <hr /><br />
+            
             <div class="row">
+
                 <div class="col-xs-12">
-                    <h4>Form Contexts</h4>
-                </div>
-                <div class="col-xs-12">
-                    <table class="table table-hover datastore-list-table" id="dt-test"> 
+                    <table class="table table-hover table-striped" 
+                           data-table-dom data-table-name="Core Contexts"> 
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Slug</th>
-                                <th>Type</th>
+                                <th>Context Name</th>
                                 <th data-orderable="false">Available Locales</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="translationForm" items="${translationKapp.forms}">
+                            <tr>
+                                <td>
+                                    <a href="${i18nKappUrl}&page=translations/context&context=bundle">bundle</a>
+                                    <c:set var="missingBundleTranslations" 
+                                           value="${translationSnapshot.getMissingEntriesByContext(i18nKapp, 'bundle')}"/>
+                                    <c:if test="${missingBundleTranslations.size() > 0}">
+                                        <a class="btn btn-xs btn-warning pull-right" 
+                                           href="${i18nKappUrl}&page=translations/missing&context=bundle">
+                                            <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                            Missing ${missingBundleTranslations.size()}
+                                        </a>
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <c:forEach var="localeCode" items="${translationSnapshot.getAvailableLocaleCodes('bundle')}">
+                                        <a class="btn btn-xs btn-success"
+                                           data-tooltip title="${TranslationLocale.get(localeCode).name}"
+                                           href="${i18nKappUrl}&page=translations/context&context=bundle&locale=${localeCode}">
+                                            ${localeCode}
+                                        </a>
+                                    </c:forEach>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="${i18nKappUrl}&page=translations/context&context=shared">shared</a>
+                                    <c:set var="missingSharedTranslations" 
+                                           value="${translationSnapshot.getMissingEntriesByContext(i18nKapp, 'shared')}"/>
+                                    <c:if test="${missingSharedTranslations.size() > 0}">
+                                        <a class="btn btn-xs btn-warning pull-right" 
+                                           href="${i18nKappUrl}&page=translations/missing&context=shared">
+                                            <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                            Missing ${missingSharedTranslations.size()}
+                                        </a>
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <c:forEach var="localeCode" items="${translationSnapshot.getAvailableLocaleCodes('shared')}">
+                                        <a class="btn btn-xs btn-success" 
+                                           data-tooltip title="${TranslationLocale.get(localeCode).name}"
+                                           href="${i18nKappUrl}&page=translations/context&context=shared&locale=${localeCode}">
+                                            ${localeCode}
+                                        </a>
+                                    </c:forEach>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <hr /><br />
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-hover table-striped" 
+                           data-table-dom data-table-name="Form Contexts"
+                           data-empty-message="No form contexts found. Add forms to your Kapp to see form contexts."> 
+                        <thead>
+                            <tr>
+                                <th>Context Name</th>
+                                <th>Form Name</th>
+                                <th style="width:15%;">Type</th>
+                                <th data-orderable="false">Available Locales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="translationForm" items="${i18nKapp.forms}">
                                 <tr>
                                     <td>
-                                        <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${translationForm.slug}">${translationForm.name}</a>
+                                        <a href="${i18nKappUrl}&page=translations/context&context=form.${translationForm.slug}">
+                                            form.${translationForm.slug}
+                                        </a>
+                                        <c:set var="missingTranslations" 
+                                               value="${translationSnapshot.getMissingEntriesByContext(i18nKapp, 'form.'.concat(translationForm.slug))}"/>
+                                        <c:if test="${missingTranslations.size() > 0}">
+                                            <a class="btn btn-xs btn-warning pull-right" 
+                                               href="${i18nKappUrl}&page=translations/missing&context=form.${translationForm.slug}">
+                                                <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                                Missing ${missingTranslations.size()}
+                                            </a>
+                                        </c:if>
                                     </td>
-                                    <td>${translationForm.slug}</td>
-                                    <td>${translationForm.typeName}</td>
+                                    <td>${text.escape(translationForm.name)}</td>
+                                    <td>${text.escape(translationForm.typeName)}</td>
                                     <td>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${translationForm.slug}&locale=en">en</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${translationForm.slug}&locale=en_US">en_US</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${translationForm.slug}&locale=fr_FR">fr_FR</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${translationForm.slug}&locale=es">es</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=${translationForm.slug}&locale=es_MX">es_MX</a>
+                                        <c:forEach var="localeCode" items="${translationSnapshot.getAvailableLocaleCodes('form.'.concat(translationForm.slug))}">
+                                            <a class="btn btn-xs btn-success" 
+                                               data-tooltip title="${TranslationLocale.get(localeCode).name}"
+                                               href="${i18nKappUrl}&page=translations/context&context=form.${translationForm.slug}&locale=${localeCode}">
+                                                ${localeCode}
+                                            </a>
+                                        </c:forEach>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -125,33 +266,67 @@
                 </div>
             </div>
             
+            <hr /><br />
+            
             <div class="row">
                 <div class="col-xs-12">
-                    <h4>Custom Contexts</h4>
-                </div>
-                <div class="col-xs-12">
-                    <table class="table table-hover datastore-list-table"> 
+                    <table class="table table-hover table-striped" 
+                           data-table-dom data-table-name="Custom Contexts"
+                           data-empty-message="No custom contexts found. You may create custom contexts below."> 
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Context Name</th>
                                 <th data-orderable="false">Available Locales</th>
                             </tr>
                         </thead>
                         <tbody>
-<%--                             <c:forEach var="context" items="${}"> --%>
+                            <c:forEach var="customContextName" items="${translationSnapshot.getCustomContextNames()}"> 
                                 <tr>
                                     <td>
-                                        <a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=">Custom${context.name}</a>
+                                        <a href="${i18nKappUrl}&page=translations/context&context=${text.escape(customContextName)}">
+                                            ${text.escape(customContextName)}
+                                        </a>
+                                        <c:set var="missingTranslations" 
+                                               value="${translationSnapshot.getMissingEntriesByContext(i18nKapp, customContextName)}"/>
+                                        <c:if test="${missingTranslations.size() > 0}">
+                                            <a class="btn btn-xs btn-warning pull-right" 
+                                               href="${i18nKappUrl}&page=translations/missing&context=${text.escape(customContextName)}">
+                                                <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                                Missing ${missingTranslations.size()}
+                                            </a>
+                                        </c:if>
                                     </td>
                                     <td>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=&locale=en">en</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=&locale=en_US">en_US</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=&locale=fr_FR">fr_FR</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=&locale=es">es</a>
-                                        <a class="btn btn-xs btn-success" href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/context&slug=${param.slug}&context=&locale=es_MX">es_MX</a>
+                                        <c:forEach var="localeCode" items="${translationSnapshot.getAvailableLocaleCodes(customContextName)}">
+                                            <a class="btn btn-xs btn-success" 
+                                               data-tooltip title="${TranslationLocale.get(localeCode).name}"
+                                               href="${i18nKappUrl}&page=translations/context&context=${text.escape(customContextName)}&locale=${localeCode}">
+                                                ${localeCode}
+                                            </a>
+                                        </c:forEach>
                                     </td>
                                 </tr>
-<%--                             </c:forEach> --%>
+                            </c:forEach> 
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-12">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td style="width:75%;">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon custom-context-prefix">custom.</span>
+                                        <input type="text" class="form-control custom-context-name" placeholder="Custom Context Name">
+                                    </div>
+                                </td>
+                                <td style="width:25%;" class="text-right">
+                                    <button class="btn btn-sm btn-success add-custom-context-btn" type="button" disabled>
+                                        <span class="fa fa-plus"></span>
+                                        Add Custom Context
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

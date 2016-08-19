@@ -14,7 +14,7 @@
     <c:when test="${empty i18nKapp}">
         <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
-    <c:when test="${text.isBlank(param.context)}">
+    <c:when test="${text.isBlank(param.locale)}">
         <script>window.location.replace("${i18nKappUrl}&page=translations/kapp");</script>
     </c:when>
     <c:otherwise>
@@ -22,28 +22,15 @@
         <!-- Get Translation Snapshot for the current Kapp -->
         <c:set scope="request" var="translationSnapshot"
                value="${translationManager.getSnapshot(i18nKapp)}" />
-        <!-- Get Translation Context Pack for the current context -->
-        <c:set scope="request" var="translationContextPack"
-               value="${translationSnapshot.getContextPack(i18nKapp, param.context)}" />
-        <!-- Get Missing Translations for the current context and locale -->
-        <c:choose>
-            <c:when test="${text.isNotBlank(param.locale)}">
-                <c:set var="missingTranslations" 
-                       value="${translationContextPack.getMissingEntriesByLocale(param.locale)}"/>
-                <c:set var="localeUrlParam" value="&locale=${text.escape(param.locale)}"/>
-                <c:set var="localeUrlApiParam" value="?locale=${text.escape(param.locale)}"/>
-                <c:set var="emptyMessageLocale" value="<b>${TranslationLocale.get(param.locale).name}</b> "/>
-            </c:when>
-            <c:otherwise>
-                <c:set var="missingTranslations" value="${translationContextPack.getMissingEntries()}"/>
-            </c:otherwise>
-        </c:choose>
+        <!-- Get Missing Translations for the current locale -->
+        <c:set var="missingTranslations" 
+               value="${translationSnapshot.getMissingEntriesByLocale(i18nKapp, param.locale)}"/>
         <!-- Get Cached translations and calculate changes waiting to be published -->
         <c:set scope="request" var="publishedSnapshot"
                value="${translationManager.getCachedSnapshot(i18nKapp)}" />
         <c:set var="pendingChanges" 
                value="${translationManager.getChanges(i18nKapp, publishedSnapshot, translationSnapshot)}"/>
-
+        
         <bundle:layout page="${bundle.path}/layouts/layout.jsp">
             <!-- Sets title and imports js and css specific to this console. -->
             <bundle:variable name="head">
@@ -62,39 +49,22 @@
             <ol class="breadcrumb">
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/kapp">${text.escape(i18nKapp.name)}</a></li>
-                <li class="active">${text.escape(param.context)}</li>
+                <li class="active">${text.escape(param.locale)}</li>
             </ol>
             
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
-                            <span>${text.escape(param.context)}</span>
-                            <c:if test="${!translationSnapshot.getExpectedContextNames(i18nKapp).contains(param.context) || text.startsWith(param.context, 'custom.')}">
-                                <small class="text-primary">
-                                    <span class="fa fa-pencil-square-o fa-fw rename-context-button" 
-                                          data-tooltip title="Rename Context" 
-                                          data-context-name="${text.escape(param.context)}">
-                                    </span>
-                                </small>
-                            </c:if>
+                            <span>${TranslationLocale.get(param.locale).name}</span>
                             <small>Translations</small>
                             <div class="pull-right">
-                                <c:choose>
-                                    <c:when test="${text.startsWith(param.context, 'form.')}">
-                                        <c:set var="exportUrl" 
-                                               value="${i18nApiUrl}/forms/${text.substring(text.escape(param.context), 5)}/translations.csv${localeUrlApiParam}"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <c:set var="exportUrl" 
-                                               value="${i18nApiUrl}/translationContexts/${text.escape(param.context)}/translations.csv${localeUrlApiParam}"/>
-                                    </c:otherwise>
-                                </c:choose>
-                                <a class="btn btn-sm btn-primary" href="${exportUrl}">
+                                <a class="btn btn-sm btn-primary" 
+                                   href="${i18nApiUrl}/translations.csv?locale=${text.escape(param.locale)}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
                                 <a class="btn btn-sm btn-default" 
-                                   href="${i18nKappUrl}&page=translations/add&context=${text.escape(param.context)}${localeUrlParam}">
+                                   href="${i18nKappUrl}&page=translations/add&locale=${text.escape(param.locale)}">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>
                             </div>
@@ -102,23 +72,21 @@
                     </div>
                             
                     <div class="col-xs-12">
-                        <c:if test="${translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
-                            <a class="btn btn-xs btn-warning" 
-                                href="${i18nKappUrl}&page=translations/unexpected">
-                                Unexpected Context
-                            </a>
-                        </c:if>
                         <c:if test="${missingTranslations.size() > 0}">
                             <a class="btn btn-xs btn-warning" 
-                               href="${i18nKappUrl}&page=translations/missing&context=${text.escape(param.context)}${localeUrlParam}">
-                                <span class="fa fa-fw fa-exclamation-triangle"></span> 
+                               href="${i18nKappUrl}&page=translations/missing&locale=${text.escape(param.locale)}">
+                                <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Missing ${missingTranslations.size()} Translations
                             </a>
                         </c:if>
                         <select class="change-locale pull-right">
-                            <option value="${i18nKappUrl}&page=translations/context&context=${text.escape(param.context)}">All Locales</option>
-                            <c:forEach var="localeCode" items="${translationSnapshot.getEnabledLocaleCodes(param.context)}">
-                                <option value="${i18nKappUrl}&page=translations/context&context=${text.escape(param.context)}&locale=${localeCode}" 
+                            <c:if test="${!translationSnapshot.enabledLocaleCodes.contains(param.locale)}">
+                                <option value="${i18nKappUrl}&page=translations/locale&locale=${text.escape(param.locale)}" selected>
+                                    Unenabled Locale: ${text.escape(param.locale)}
+                                </option>
+                            </c:if>
+                            <c:forEach var="localeCode" items="${translationSnapshot.enabledLocaleCodes}">
+                                <option value="${i18nKappUrl}&page=translations/locale&locale=${localeCode}" 
                                     ${param.locale == localeCode ? 'selected' : ''}>
                                     ${TranslationLocale.get(localeCode).name} | ${localeCode}
                                 </option>
@@ -131,11 +99,9 @@
             <div class="row entries-container">
                 <div class="col-xs-12">
                     <table class="table table-hover table-striped" data-state-save="true"
-                           id="context_${i18nKapp.slug}_${text.escape(param.context)}_${text.escape(param.locale)}"
-                           data-table-source="${i18nKappUrl}&partial=translations/entries.json&context=${text.escape(param.context)}${localeUrlParam}"
-                           data-empty-message="No ${emptyMessageLocale}translations found in the <b>${text.escape(param.context)}</b> context."
-                           data-seed-context="${text.escape(param.context)}" data-seed-target-locale="${text.escape(param.locale)}">
-                            
+                           id="locale_${i18nKapp.slug}_${text.escape(param.locale)}"
+                           data-table-source="${i18nKappUrl}&partial=translations/entries.json&locale=${text.escape(param.locale)}"
+                           data-empty-message="No <b>${TranslationLocale.get(param.locale).name}</b> translations found.">
                         <thead></thead>
                         <tbody>
                             <tr>

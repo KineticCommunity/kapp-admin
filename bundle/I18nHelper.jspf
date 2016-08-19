@@ -1,0 +1,152 @@
+<%@page import="com.kineticdata.bundles.Text"%>
+<%@page import="com.kineticdata.core.authentication.Identity"%>
+<%@page import="com.kineticdata.core.models.*"%>
+<%@page import="java.time.*"%>
+<%@page import="com.kineticdata.core.i18n.translations.*"%>
+<%@page import="java.util.*"%>
+<%!
+    public static class I18nHelper {
+        
+        /*------------------------------------------------------------------------------------------
+         * CONSTRUCTOR
+         *----------------------------------------------------------------------------------------*/
+        
+        private String contextPath;
+        private Kapp kapp;
+        private TranslationManager manager;
+        private TranslationLocale locale;
+        private TranslationSnapshot snapshot;
+        
+        public I18nHelper(HttpServletRequest request) throws Exception {
+            this(request, Locale.getDefault());
+        }
+        
+        public I18nHelper(HttpServletRequest request, Locale defaultLocale) throws Exception {
+            // Set the context path
+            this.contextPath = request.getContextPath();
+            
+            // Determine the prefered locale of the user
+            Identity identity = (Identity)request.getAttribute("identity");
+            String preferredLocale = (identity == null || identity.getUser() == null) 
+                ? null 
+                : identity.getUser().getPreferredLocale();
+            
+            // Obtain a reference to the kapp
+            kapp = (Kapp)request.getAttribute("kapp");
+            // Obtain a reference to the snapshot
+            manager = (TranslationManager)request.getServletContext()
+                .getAttribute("translationManager");
+            // If the kapp is not set on the request
+            if (kapp == null) {
+                locale = TranslationLocale.get(defaultLocale);
+            }
+            // If the kapp is set for the request
+            else {
+                // Obtain the cached snapshot for the kapp
+                snapshot = manager.getCachedSnapshot(kapp);
+                
+                // Determine the context
+                String contextName;
+                // If the request is to render the kapp (rather than the form)
+                if (request.getAttribute("form") != null) {
+                    // Build the context name
+                    Form form = (Form)request.getAttribute("form");
+                    contextName = "form."+form.getSlug();
+                }
+                // If there is a form set into the request, set the translations
+                else {
+                    contextName = "bundle";
+                }
+                
+                // Obtain a reference to the available locales for the context
+                Set<String> availableLocales = snapshot.getAvailableLocaleCodes(contextName);
+
+                // Determine the locale
+                if (request.getParameter("locale") != null) {
+                    locale = TranslationLocale.get(request.getParameter("locale"));
+                } else if (availableLocales.contains(preferredLocale)) {
+                    locale = TranslationLocale.get(preferredLocale);
+                } else if (availableLocales.contains(TranslationLocale.getCode(request.getLocale()))) {
+                    locale = TranslationLocale.get(request.getLocale());
+                } else if (snapshot.getDefaultLocaleCode() != null) {
+                    locale = TranslationLocale.get(snapshot.getDefaultLocaleCode());
+                } else {
+                    locale = TranslationLocale.get(Locale.getDefault());
+                }
+                
+                // Set the translations into the request (so that the form renderers can use them)
+                request.setAttribute("translations", 
+                    snapshot.getBundlePack(contextName, locale.getCode()).getTranslations());
+            }
+        }
+        
+        
+        /*------------------------------------------------------------------------------------------
+         * ACCESSOR METHODS
+         *----------------------------------------------------------------------------------------*/
+        
+        public Locale getLocale() {
+            return locale.getLocale();
+        }
+        
+        public ZoneId getZoneId() {
+            return ZoneId.systemDefault();
+        }
+        
+        /*------------------------------------------------------------------------------------------
+         * SCRIPT PATH METHODS
+         *----------------------------------------------------------------------------------------*/
+        
+        public String scriptPath(Form form) {
+            // Get the bundle pack
+            TranslationBundle bundle = snapshot.getBundle("form."+form.getSlug(), locale.getCode());
+            // Return the path
+            return contextPath+"/"+kapp.getSpace().getSlug()+
+                "/app/apis/translations/v1/kapps/"+kapp.getSlug()+
+                "/forms/"+form.getSlug()+
+                "/translations.js?locale="+locale.getCode()+"&v="+bundle.getSignature();
+        }
+        
+        public String scriptPath(String contextName) {
+            // Get the bundle pack
+            TranslationBundle bundle = snapshot.getBundle(contextName, locale.getCode());
+            // Return the path
+            return contextPath+"/"+kapp.getSpace().getSlug()+
+                "/app/apis/translations/v1/kapps/"+kapp.getSlug()+
+                "/translationContexts/"+Text.escapeUrlSegment(contextName)+
+                "/translations.js?locale="+locale.getCode()+"&v="+bundle.getSignature();
+        }
+        
+        /*------------------------------------------------------------------------------------------
+         * TRANSLATION METHODS
+         *----------------------------------------------------------------------------------------*/
+        
+        public String translate(String key) {
+            return translate(key, Collections.EMPTY_MAP);
+        }
+        
+        public String translate(String key, Map<String,String> substitutions) {
+            return snapshot.getBundlePack("bundle", locale.getCode())
+                .translate(key, substitutions);
+        }
+        
+        public String translate(Form form, String key) {
+            return translate(form, key, Collections.EMPTY_MAP);
+        }
+        
+        public String translate(Form form, String key, Map<String,String> substitutions) {
+            return snapshot.getBundlePack("form."+form.getSlug(), locale.getCode())
+                .translate(key, substitutions);
+        }
+        
+        public String translate(String contextName, String key) {
+            return translate(contextName, key, Collections.EMPTY_MAP);
+        }
+        
+        public String translate(String contextName, String key, Map<String,String> substitutions) {
+            return snapshot.getBundlePack(contextName, locale.getCode())
+                .translate(key, substitutions);
+        }
+        
+    }
+%>

@@ -4,6 +4,7 @@
 <%@page import="com.kineticdata.core.web.bundles.Bundle" %>
 <%@page import="com.kineticdata.core.web.bundles.BundleSubmissionComponent" %>
 <%@page import="com.kineticdata.core.authentication.Identity" %>
+<%@page import="com.kineticdata.core.i18n.translations.*" %>
 <%@page import="java.time.ZoneId"%>
 <%@page import="java.util.*" %>
 <%@page import="org.slf4j.Logger" %>
@@ -21,12 +22,6 @@
 
 <%@include file="/WEB-INF/app/includes/task4/task4.jspf" %>
 
-<%-- Initialize the default zoneId and locale --%>
-<%
-    request.setAttribute("zoneId", ZoneId.systemDefault());
-    request.setAttribute("locale", Locale.US);
-%>
-
 <%-- Get bundle, space, and kapp objects --%>
 <%
     Bundle bundle = (Bundle)request.getAttribute("bundle"); 
@@ -40,6 +35,15 @@
     request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
     request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
     request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
+%>
+
+<%-- I18NHelper --%>
+<%@include file="I18nHelper.jspf"%>
+<%
+    I18nHelper i18nHelper = new I18nHelper(request);
+    request.setAttribute("i18n", i18nHelper);
+    request.setAttribute("locale", i18nHelper.getLocale());
+    request.setAttribute("zoneId", i18nHelper.getZoneId());
 %>
 
 <%-- SetupHelper --%>

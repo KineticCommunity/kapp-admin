@@ -1,8 +1,54 @@
 /* CSS Specific to the Translation Console*/
-div.translations-tab-content {
-    background: transparent;
+table.dataTable {
+  table-layout: fixed;
+}
+table.table > tbody > tr:not(.full-text) > td.ellipsis,
+table.table > tbody > tr > td > span > span.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+table.table > tbody > tr > td > span {
+  display: inline-block;
+  max-width: 100%;
+}
+table.table > tbody > tr > td > span > span.ellipsis {
+  display: block;
 }
 
-input {
+table.table > tbody > tr > td.inherited-value {
+  font-style: italic;
+}
+
+table.table > tbody > tr > td.locale-code-cell {
+  vertical-align: middle;
+}
+
+table.table > tbody > tr > td {
+  line-height: 1.71428571;
+}
+table.table > tbody > tr > td > .btn:not(.pull-right):not(.pull-left) {
+  position: relative;
+  top: -2px;
+}
+
+div.translation-editor textarea,
+div.add-entry-container textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+}
+div.translation-editor small {
+  font-weight: normal;
+}
+
+span.rename-context-button {
+  cursor: pointer;
+}
+
+a.pending-publish {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top: none;
   width: 100%;
 }

@@ -1,7 +1,8 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
 <%@include file="../../bundle/router.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
+<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
 
 <!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
 <c:choose>
@@ -19,37 +20,60 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>${form.name}</h3>
+                <h3>${text.escape(form.name)}</h3>
             </div>
-        
-            <div class="row">
-                <div class="col-xs-12">
-                    <h4>Kapps</h4>
-                </div>
-            </div>
-            
             
             <div class="row">
                 <div class="col-xs-12">
-                    <table class="table table-hover datastore-list-table"> 
+                    <table class="table table-hover table-striped" 
+                           data-table-dom data-table-name="Kapps"> 
                         <thead>
                             <tr>
                                 <th>Kapp</th>
-                                <th>Default Locale</th>
-                                <th style="width:50%;">Enabled Locales</th>
+                                <th data-orderable="false">Default Locale</th>
+                                <th data-orderable="false" style="width:50%;">Enabled Locales</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="tKapp" items="${space.kapps}">
+                            <c:forEach var="kapp" items="${space.kapps}">
                                 <tr>
-                                    <td><a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=translations/kapp&slug=${tKapp.slug}">${tKapp.name}</a></td>
-                                    <td><span class="label label-primary">en_US</span></td>
+                                    <td><a href="${i18nBaseUrl}&page=translations/kapp&slug=${kapp.slug}">${text.escape(kapp.name)}</a></td>
                                     <td>
-                                        <span class="label label-success">en</span>
-                                        <span class="label label-success">en_US</span>
-                                        <span class="label label-success">fr_FR</span>
-                                        <span class="label label-success">es</span>
-                                        <span class="label label-success">es_MX</span>
+                                        <c:set var="defaultLocale" value="${translationManager.getDefaultLocale(kapp)}"/>
+                                        <c:choose>
+                                            <c:when test="${defaultLocale != null}">
+                                                <a class="btn btn-xs btn-info" 
+                                                   data-tooltip title="${defaultLocale.name}"
+                                                   href="${i18nBaseUrl}&page=translations/locale&slug=${kapp.slug}&locale=${defaultLocale.code}">
+                                                    ${defaultLocale.code}
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a class="btn btn-xs btn-warning" 
+                                                   href="{i18nBaseUrl}&page=translations/locales&slug=${kapp.slug}">
+                                                    <span class="fa fa-exclamation-triangle fa-fw"></span> Not Set
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${translationManager.getEnabledLocales(kapp).size() > 0}">
+                                                <c:forEach var="locale" items="${translationManager.getEnabledLocales(kapp)}">
+                                                    <a class="btn btn-xs btn-success" 
+                                                       data-tooltip title="${locale.name}"
+                                                       href="${i18nKappUrl}&page=translations/locale&locale=${locale.code}">
+                                                        ${locale.code}
+                                                    </a>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a class="btn btn-xs btn-warning" 
+                                                   href="${i18nBaseUrl}&page=translations/locales&slug=${kapp.slug}">
+                                                    <span class="fa fa-exclamation-triangle fa-fw"></span> No Enabled Locales
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                 </tr>
                             </c:forEach>
