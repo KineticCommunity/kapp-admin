@@ -62,7 +62,7 @@
                                                 <c:forEach var="locale" items="${translationManager.getEnabledLocales(kapp)}">
                                                     <a class="btn btn-xs btn-success" 
                                                        data-tooltip title="${locale.name}"
-                                                       href="${i18nKappUrl}&page=translations/locale&locale=${locale.code}">
+                                                       href="${i18nBaseUrl}&page=translations/locale&slug=${kapp.slug}&locale=${locale.code}">
                                                         ${locale.code}
                                                     </a>
                                                 </c:forEach>
