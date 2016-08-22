@@ -962,6 +962,15 @@
             });
         });
         
+        $("[data-clear-entry-table-states]").each(function(i, state){
+            var re = new RegExp("^DataTables_(context|missing|key|locale)_" + $(state).data("clear-entry-table-states"));
+            $.each(Object.keys(window.localStorage), function(i, key){
+                if (re.test(key)) {
+                    localStorage.removeItem(key);
+                }
+            });
+        });
+        
     });
 
     /*----------------------------------------------------------------------------------------------

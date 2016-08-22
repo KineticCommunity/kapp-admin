@@ -43,7 +43,7 @@
                 <li class="active">${text.escape(i18nKapp.name)}</li>
             </ol>
                 
-            <div class="page-header">
+            <div class="page-header" data-clear-entry-table-states="${i18nKapp.slug}">
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
