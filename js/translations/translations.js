@@ -298,6 +298,181 @@
         });
         
         /*
+         * Initialize DataTable for adding entries
+         */
+        $("table[data-add-entries-table]").each(function(i,table){
+            var tableContainer = $(table).closest("div.new-entries-container");
+            var addContainer = tableContainer.siblings("div.add-entry-container");
+            
+            var options = {
+                columns: [
+                    {
+                        title: "Locale",
+                        data: "locale",
+                        class: "locale",
+                        width: "10%"
+                    },
+                    {
+                        title: "Context",
+                        data: "context",
+                        class: "context",
+                        width: "15%"
+                    },
+                    {
+                        title: "Key",
+                        data: "key",
+                        class: "key ellipsis"
+                    },
+                    {
+                        title: "Translation",
+                        data: "value",
+                        class: "translation ellipsis"
+                    },
+                    {
+                        title: "",
+                        orderable: false,
+                        searchable: false,
+                        defaultContent: "<div class=\"btn-group pull-right\" role=\"group\"><button class=\"edit-translation-btn btn btn-xs btn-default\" type=\"button\"><span class=\"fa fa-pencil\"></span></button><button class=\"delete-translation-btn btn btn-xs btn-danger\" type=\"button\"><span class=\"fa fa-times\"></span></button></div>",
+                        class: "actions",
+                        width: "8%"
+                    }
+                ],
+                data: [],
+                paging: false,
+                dom: "<'dt-title'f>ti",
+                language: {
+                    search: "Filter"
+                },
+                drawCallback: function(){
+                    $("[data-tooltip]").tooltip();
+                },
+                rowCallback: sourcedTableRowCallback
+            };
+            if ($(table).data("empty-message")){
+                options.language.emptyTable = $(table).data("empty-message");
+            }
+            if ($(table).data("context").trim().length > 0){
+                options.columns = _.reject(options.columns, {title: "Context"});
+            }
+
+            // Build DataTable
+            $(table).dataTable(options);
+            $(table).parent().find("div.dt-title").prepend($("<h4>", {class: "pull-left"}).append($(table).data("table-name")));
+            $(table).on("click", "td", function(e){
+                if (e.target == this){
+                    $(this).closest("tr").toggleClass("full-text");
+                }
+            }).on("click", "button.edit-translation-btn", function(){
+                var row = $(this).closest("tr");
+                var table = row.closest("table");
+                var data = table.DataTable().row(row).data();
+                addContainer.find("select[data-entry-locale]").val(data.locale);
+                addContainer.find("select[data-entry-context]").val(data.context);
+                addContainer.find("input[data-entry-key]").val(data.key);
+                addContainer.find("textarea[data-entry-value]").val(data.value).focus();
+                $(document).scrollTop(0);
+            }).on("click", "button.delete-translation-btn", function(){
+                var row = $(this).closest("tr");
+                var table = row.closest("table");
+                var dtRow = table.DataTable().row(row);
+                var data = table.DataTable().row(row).data();
+                var url = bundle.adminTranslations.apiBaseUrl;
+                if (data.context.indexOf("form.") === 0){
+                    url += "/forms/" + data.context.substring(5) + "/deleteTranslation";
+                }
+                else {
+                    url += "/translationContexts/" + data.context + "/deleteTranslation"
+                }
+                // Create Modal to confirm delete
+                var confirmDelete = new KD.Modal({
+                    header: "<h4>Confirm Delete</h4>",
+                    body: "Are you sure you want to delete the <b>" + data.language 
+                            + "</b> translation in the <b>" + data.context 
+                            + "</b> context for the key <b>" + data.key + "</b>?",
+                    footer: function(element, actions) {
+                        element.addClass("text-right").append(
+                            $("<button>", {class: "btn btn-success"}).text("Yes").on("click", actions.accept),
+                            $("<button>", {class: "btn btn-link"}).text("Cancel").on("click", actions.dismiss)
+                        );
+                    },
+                    size: "md",
+                    backdrop: true,
+                    backdropclose: true,
+                    keyboardclose: true,
+                    renderCallback: false,
+                    accept: function(){
+                        $.ajax({
+                            method: "post",
+                            url: url,
+                            data: JSON.stringify({
+                                key: data.key,
+                                locale: data.locale,
+                                value: data.value
+                            }),
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function(){
+                                dtRow.remove().draw(false);
+                            },
+                            error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
+                                row.closest("table").notifie({
+                                    message: "Failed to delete the <b>" + data.language 
+                                                + "</b> translation in the <b>" + data.context 
+                                                + "</b> context for the key <b>" + data.key + "</b><br>Error: " + errorThrown
+                                });
+                                $(document).scrollTop(0);
+                            }
+                        });
+                    }
+                });
+                // Show confirmation dialog
+                confirmDelete.show();
+                // Blur delete button
+                $(this).blur();
+            });
+        });
+        
+        function sourcedTableRowCallback(row, data){
+            $(row).find("td.locale").html("<span class=\"btn-xs btn-subtle\" disabled data-tooltip title=\"" 
+                    + data.language + "\">" + data.locale + "</span>");
+            $(row).find("td.context").html("<span class=\"btn-xs btn-subtle\" data-tooltip title=\"" 
+                    + data.context + "\"><span class=\"ellipsis\">" + data.context + "</span></span>");
+            $(row).find("td.key").each(function(){
+                var keyUrl = data.i18nKappUrl + "&page=translations/key&context=" 
+                        + data.context + "&key=" + encodeURIComponent(data.key);
+                if (data.byLocale === true){
+                    keyUrl += "&locale=" + data.locale;
+                }
+                $(this).html($("<a>", {href: keyUrl}).text(data.key));
+            });
+            if (data.references && data.references.length > 0){
+                $(row).find("td.references").html($("<span>", {
+                    class: "fa fa-info fa-fw text-muted", 
+                    "data-tooltip": true, 
+                    title: "Referenced by:\n- " + data.references.join("\n- ")
+                }));
+            }
+            $(row).find("td.translation").text(data.value);
+            if (data.inherited){
+                $(row).find("td.translation").addClass("inherited-value")
+                    .prepend($("<span>", {
+                        class: "fa fa-fw fa-level-up fa-rotate-90",
+                        "data-tooltip": "",
+                        title: "Inherited from:\n" + data.sourceContext + " | " + data.sourceLocale
+                    }));
+            }
+            if (data.missing){
+                $(row).find("td.translation").html("<span class=\"btn-xs btn-warning\" disabled>Missing</span>");
+            }
+            if (data.virtual){
+                $(row).find("td.actions button.delete-translation-btn").attr("disabled", true);
+            }
+        }
+        
+        /*
          * Initialize DataTable for dom sourced tables
          */
         $("table[data-table-dom]").each(function(i,table){
@@ -732,7 +907,17 @@
                                 inherited: false,
                                 virtual: false
                             };
-                            table.DataTable().row.add(tableData).draw(false);
+                            var matchingRow = table.DataTable().row(function(i, data){
+                                return data.context === tableData.context 
+                                        && data.locale === tableData.locale
+                                        && data.key === tableData.key;
+                            });
+                            if (matchingRow.length > 0){
+                                matchingRow.data(tableData).draw(false);
+                            }
+                            else {
+                                table.DataTable().row.add(tableData).draw(false);
+                            }
                             container.find("textarea[data-entry-value]").val("");
                             container.find("input[data-entry-key]").val("").focus();
                             saveButton.attr("disabled", false);

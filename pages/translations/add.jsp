@@ -126,9 +126,6 @@
             <div class="entries-container">
                 <div class="row add-entry-container bs-callout bs-callout-info">
                     <div class="col-xs-12">
-                        <h4>Add New Translation Entry</h4>
-                    </div>
-                    <div class="col-xs-12">
                         <table class="table"> 
                             <thead>
                                 <tr>
@@ -207,7 +204,7 @@
                         <div class="text-right">
                             <button class="btn btn-success" data-entry-save>
                                 <span class="fa fa-check"></span>
-                                <span>Save New Translation Entry</span>
+                                <span>Save Translation Entry</span>
                             </button>
                         </div>
                     </div>
@@ -216,8 +213,8 @@
                 <div class="row new-entries-container">
                     <div class="col-xs-12">
                         <table class="table table-hover table-striped" 
-                               data-table-name="New Translation Entries"
-                               data-table-source="${i18nKappUrl}&partial=translations/entries.json${contextUrlParam}${localeUrlParam}&add"
+                               data-table-name="Translation Entries"
+                               data-add-entries-table data-context="${param.context}"
                                data-empty-message="You have not added any new entries yet.">
                             <thead></thead>
                             <tbody>
