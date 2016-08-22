@@ -97,6 +97,7 @@
                                 .append("Import Keys From Default Locale");
                             records.language.emptyTable += seedButton.get(0).outerHTML;
                             $(table).on("click", "button.seed-context-btn", function(){
+                                var self = $(this);
                                 var url = bundle.adminTranslations.apiBaseUrl;
                                 if ($(this).data("seed-context").indexOf("form.") === 0){
                                     url += "/forms/" + $(this).data("seed-context").substring(5) + "/seedKeys";
@@ -112,6 +113,14 @@
                                     }),
                                     dataType: "json",
                                     contentType: "application/json",
+                                    beforeSend: function(){
+                                        self.notifie({
+                                            anchor: "table",
+                                            message: "<span class='fa fa-spinner fa-spin'></span> Importing Keys...",
+                                            severity: "info",
+                                            permanent: true
+                                        });
+                                    },
                                     success: function(){
                                         window.location.reload();
                                     },
@@ -119,7 +128,8 @@
                                         try { 
                                             errorThrown = JSON.parse(jqXHR.responseText).error; 
                                         } catch(e){}
-                                        $(this).closest("table").notifie({
+                                        self.notifie({
+                                            anchor: "table",
                                             message: "Failed to import keys from the default locale.<br>Error: " + errorThrown
                                         });
                                     }
@@ -247,6 +257,14 @@
                                     method: "delete",
                                     url: url,
                                     contentType: "application/json",
+                                    beforeSend: function(){
+                                        self.notifie({
+                                            anchor: "table",
+                                            message: "<span class='fa fa-spinner fa-spin'></span> Deleting All Translations...",
+                                            severity: "info",
+                                            permanent: true
+                                        });
+                                    },
                                     success: function(){
                                         window.location.reload();
                                     },
@@ -254,7 +272,8 @@
                                         try { 
                                             errorThrown = JSON.parse(jqXHR.responseText).error; 
                                         } catch(e){}
-                                        self.closest("table").notifie({
+                                        self.notifie({
+                                            anchor: "table",
                                             message: "Failed to delete the translations.<br>Error: " + errorThrown
                                         });
                                     }
@@ -887,7 +906,8 @@
             $(this).notifie({
                 anchor: "h3",
                 message: "<span class='fa fa-spinner fa-spin'></span> Importing...",
-                severity: "info"
+                severity: "info",
+                permanent: true
             });
         }).bind('fileuploaddone', function (e, data) {
             $(this).notifie({
@@ -896,7 +916,7 @@
                     + "<br><a class='pull-right btn btn-sm btn-default' href='javascript:window.location.reload();'>"
                     + "<span class='fa fa-refresh'></span> Reload Page</a>",
                 severity: "info",
-                exitEvents: "click"
+                permanent: true
             });
         }).bind('fileuploadfail', function (e, data) {
             var errorThrown = data.response().errorThrown;
@@ -918,6 +938,12 @@
                 contentType: "application/json",
                 beforeSend: function(){
                     self.attr("disabled", true);
+                    self.notifie({
+                        anchor: "h3",
+                        message: "<span class='fa fa-spinner fa-spin'></span> Publishing...",
+                        severity: "info",
+                        permanent: true
+                    });
                 },
                 success: function(){
                     window.location.replace(bundle.adminTranslations.i18nKappUrl + "&page=translations/kapp");

@@ -33,6 +33,9 @@
                 <c:set var="localeUrlParam" value="&locale=${text.escape(param.locale)}"/>
                 <c:set var="localeUrlApiParam" value="?locale=${text.escape(param.locale)}"/>
                 <c:set var="emptyMessageLocale" value="<b>${TranslationLocale.get(param.locale).name}</b> "/>
+                <c:if test="${!text.equals(translationSnapshot.defaultLocaleCode, param.locale)}">
+                    <c:set var="seedEmpty" value="data-seed=\"true\""/>
+                </c:if>
             </c:when>
             <c:otherwise>
                 <c:set var="missingTranslations" value="${translationContextPack.getMissingEntries()}"/>
@@ -142,7 +145,7 @@
                            id="context_${i18nKapp.slug}_${text.escape(param.context)}_${text.escape(param.locale)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&context=${text.escape(param.context)}${localeUrlParam}"
                            data-empty-message="No ${emptyMessageLocale}translations found in the <b>${text.escape(param.context)}</b> context."
-                           data-seed="true" data-delete-all="true"
+                           ${seedEmpty} data-delete-all="true"
                            data-context="${text.escape(param.context)}" 
                            data-locale="${text.escape(param.locale)}">
                             
