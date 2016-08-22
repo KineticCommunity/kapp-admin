@@ -48,9 +48,11 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="bs-callout bs-callout-info">
-                        An <b>Unexpected Context</b> is...
-                        
-                        Lorem ipsum
+                        An <b>Unexpected Context</b> occurs when there are 
+                        translation entries with contexts the system is not 
+                        expecting. This can occur if a form slug is changed, 
+                        a form with translations is deleted, or invalid data is 
+                        imported.
                     </div>
                 </div>
                 <div class="col-xs-12">
