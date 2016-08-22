@@ -1,89 +1,354 @@
-<%@page import="java.io.FileReader" %>
+<%@page import="com.google.common.collect.ImmutableMap" %>
+<%@page import="com.google.common.collect.Iterables" %>
 <%@page import="com.kineticdata.commons.util.JsonUtils" %>
 <%@page import="com.kineticdata.core.models.base.ModelWithAttributes" %>
+<%@page import="java.io.FileNotFoundException" %>
+<%@page import="java.io.FileReader" %>
+<%@page import="org.apache.http.client.HttpClient"%>
+<%@page import="org.apache.http.client.methods.HttpEntityEnclosingRequestBase"%>
+<%@page import="org.apache.http.client.methods.HttpPost"%>
+<%@page import="org.apache.http.client.methods.HttpPut"%>
+<%@page import="org.apache.http.entity.ContentType"%>
+<%@page import="org.apache.http.entity.StringEntity"%>
+<%@page import="org.apache.http.HttpResponse"%>
+<%@page import="org.apache.http.impl.cookie.BasicClientCookie"%>
+<%@page import="org.apache.http.impl.client.BasicCookieStore"%>
+<%@page import="org.apache.http.impl.client.HttpClientBuilder"%>
+<%@page import="org.apache.http.util.EntityUtils"%>
 <%!
     public static class SetupHelper {
     
-        private HttpServletRequest request;
+        private static HttpServletRequest request;
         private Bundle bundle;
         private Space space;
         private Kapp kapp;
+        private Kapp adminKapp;
         private Form form;
         
-        // Data store in the Kapp's "Kapp Configuration Status" attribute which defineswhich parts of the akpp are configured
-        private LinkedHashMap kappConfigurationStatus;  
-        // The configuration data store in setup.json
-        private LinkedHashMap kappConfigurationData;
-        // Map of configured attribute definitions for this kapp. Uses KappConfigurationAttribute object defined below
-        private LinkedHashMap kappConfigurationAttributes;
+        private boolean exists; // Does a configuration exist in setup.json
+        private boolean configured; // Is the Kapp configured
+        private boolean valid; // Is the Kapp configuration valid
+        private boolean adminRequired; // Is the Admin Kapp required by this Kapp
+        private boolean adminExists; // Does the Admin Kapp exist
+        private boolean adminValid; // Is the Admin Kapp configuration required by this Kapp valid
+        private boolean missingAttributes; // Is this Kapp missing required attributes
+        
+        // Lists to store all configuration data for this Kapp
+        private List<ConfigAttributeDefinition> spaceAttributeDefinitions = new ArrayList<>();
+        private List<ConfigAttributeDefinition> kappAttributeDefinitions = new ArrayList<>();
+        private List<ConfigAttributeDefinition> formAttributeDefinitions = new ArrayList<>();
+        private List<ConfigAttributeDefinition> categoryAttributeDefinitions = new ArrayList<>();
+        private List<ConfigAttributeDefinition> userAttributeDefinitions = new ArrayList<>();
+        private List<ConfigFormType> formTypes = new ArrayList<>();
+        private List<ConfigCategory> categories = new ArrayList<>();
+        private List<ConfigWebhook> spaceWebhooks = new ArrayList<>();
+        private List<ConfigWebhook> kappWebhooks = new ArrayList<>();
+        private List<ConfigForm> forms = new ArrayList<>();
+        private List<ConfigSecurityPolicyDefinition> securityPolicyDefinitions = new ArrayList<>();
+        private List<ConfigSecurityPolicy> securityPolicies = new ArrayList<>();
+        private List<ConfigBridge> bridges = new ArrayList<>();
+        private List<ConfigBridgeModel> bridgeModels = new ArrayList<>();
+        // Lists to store all configuration data for the Admin Kapp, if required by this Kapp
+        private List<ConfigForm> adminKappForms = new ArrayList<>();
 
         /**
          * Constructor for SetupHelper
          *
-         * Fetches and parses the "Kapp Configuration Status" attribute to determine if the Kapp and its optional components are configured.
          * Reads and parses the setup.json configuration file which defines the necessary configurations for this kapp to run.
-         * Creates a map of all the attributes that have been configured to be displayed on the setup page and used for routing to the setup page if required attribute values are missing.
          */
-        public SetupHelper(HttpServletRequest request){
+        public SetupHelper(HttpServletRequest request){    
             this.request = request;
             this.bundle = (Bundle)request.getAttribute("bundle");
             this.space = (Space)request.getAttribute("space");
             this.kapp = (Kapp)request.getAttribute("kapp");
             this.form = (Form)request.getAttribute("form");
-            // Create an empty map for Kapp Configuration Attributes
-            this.kappConfigurationAttributes = new LinkedHashMap();
             
+            // If Kapp Configuration Status exists, Kapp has been configured
+            this.configured = this.kapp != null && this.kapp.hasAttribute("Kapp Configuration Status");
+            this.exists = false; // Default to configuration not existing
+            this.valid = true; // Default to configuration being valid
+            this.missingAttributes = false; // Default to no missing attributes
+            
+            // Get the Admin Kapp using the slug defined in the Admin Kapp Slug space attribute, if it exists
+            this.adminKapp = this.space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
+            this.adminExists = this.adminKapp != null;
+            this.adminRequired = false; // Default to not required
+            this.adminValid = true; // Deault to Admin Kapp configuration being valid
+            
+            // Map to store parsed configuration file
+            LinkedHashMap configuration = new LinkedHashMap();
             // Only check kapp configuration if kapp is not null
-            if (this.kapp != null){
-                // Get and parse "Kapp Configuration Status" attribute if it exists
-                if (kapp.hasAttribute("Kapp Configuration Status")){
-                    try { this.kappConfigurationStatus = (LinkedHashMap)Json.parse(kapp.getAttributeValue("Kapp Configuration Status")); } 
-                    catch (IllegalArgumentException e){ /* Kapp Configuration Status attribute is invalid. Treat as not configured. */ }
-                }
-                // If "Kapp Configuration Status" doesn't exist, or is not valid JSON, create empty map to store the status
-                if (this.kappConfigurationStatus == null){
-                    this.kappConfigurationStatus = new LinkedHashMap();
-                }
-                
-                // Read and parse the setup.json configuration data
+            if (this.kapp != null){                
                 try { 
-                    this.kappConfigurationData = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                    // Read and parse the setup.json configuration data
+                    LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                    // Save configuration as string
+                    String stringConfiguration = Json.toString(parsedConfiguration);
+                    // Replace dynamic value placeholders with the values
+                    stringConfiguration = Text.replace(stringConfiguration, "{{kapp.slug}}", this.kapp.getSlug());
+                    stringConfiguration = Text.replace(stringConfiguration, "{{kapp.name}}", this.kapp.getName());
+                    stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.slug}}", this.adminExists ? this.adminKapp.getSlug() : "");
+                    stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.name}}", this.adminExists ? this.adminKapp.getName() : "");
+                    // Parse configuration
+                    configuration = (LinkedHashMap)Json.parse(stringConfiguration);
                 }
-                // If error occurs, throw an exception. This file must exist and must contain a valid JSON Object (empty object is acceptable)
+                // If file doesn't exist, no configuration exists, no error
+                catch (FileNotFoundException e){/* Configuration is already an empty map */}
+                // If error occurs, throw an exception. This file must contain a valid JSON Object
                 catch (Exception e){
                     throw new RuntimeException("Failed to read Kapp Configuration Data from file setup.json: " + e.getMessage());
                 }
+            
+                /** PROCESS CONFIGURATION FILE AND STORE IN CUSTOM MODELS DEFINED BELOW **/
                 
-                // If kapp is configured, create the map of configured attributes
-                if (isConfigured()){
-                    // Get kapp configuration object from setup.jsp
-                    LinkedHashMap kappConfiguration = (LinkedHashMap)this.kappConfigurationData.get("kapp");
-                    // If it exists, add all attributes to the Kapp Configuration Attributes map
-                    if (kappConfiguration != null){
-                        addKappConfigurationAttributes((List)kappConfiguration.get("spaceAttributeDefinitions"), "space", space);                        
-                        addKappConfigurationAttributes((List)kappConfiguration.get("userAttributeDefinitions"), "user", null);                        
-                        addKappConfigurationAttributes((List)kappConfiguration.get("kappAttributeDefinitions"), "kapp", kapp);                        
-                        addKappConfigurationAttributes((List)kappConfiguration.get("formAttributeDefinitions"), "form", form);                        
-                        addKappConfigurationAttributes((List)kappConfiguration.get("categoryAttributeDefinitions"), "category", null);                        
+                // Space attribute definitions
+                if (configuration.get("spaceAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> spaceAttribute : (List<LinkedHashMap>)configuration.get("spaceAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(spaceAttribute, 
+                                this.space, 
+                                this.space != null ? this.space.getSpaceAttributeDefinition((String)spaceAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.spaceAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
                     }
-                    // If setup.jsp has components, process those too if they are configured
-                    if (this.kappConfigurationStatus.get("components") != null){
-                        // Iterate through the components defined in the Kapp Configuration Status attribute
-                        for (Object componentStatus : ((LinkedHashMap)this.kappConfigurationStatus.get("components")).entrySet()){
-                            Map.Entry<String, Boolean> componentStatusEntry = (Map.Entry<String, Boolean>)componentStatus;
-                            // If component is configured, add its attributes to the Kapp Configured Attributes map
-                            if (Boolean.TRUE.equals(componentStatusEntry.getValue())){
-                                // Get the component object from setup.jsp
-                                LinkedHashMap componentConfiguration = (LinkedHashMap)JsonUtils.query(this.kappConfigurationData, "components/" + componentStatusEntry.getKey());
-                                // If it exists, add all attributes to the Kapp Configuration Attributes map
-                                if (componentConfiguration != null){
-                                    addKappConfigurationAttributes((List)componentConfiguration.get("spaceAttributeDefinitions"), "space", space);                        
-                                    addKappConfigurationAttributes((List)componentConfiguration.get("userAttributeDefinitions"), "user", null);                        
-                                    addKappConfigurationAttributes((List)componentConfiguration.get("kappAttributeDefinitions"), "kapp", kapp);                        
-                                    addKappConfigurationAttributes((List)componentConfiguration.get("formAttributeDefinitions"), "form", form);                        
-                                    addKappConfigurationAttributes((List)componentConfiguration.get("categoryAttributeDefinitions"), "category", null);
-                                }
-
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.spaceAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Kapp attribute definitions
+                if (configuration.get("kappAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> kappAttribute : (List<LinkedHashMap>)configuration.get("kappAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(kappAttribute, 
+                                this.kapp, 
+                                this.kapp != null ? this.kapp.getKappAttributeDefinition((String)kappAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.kappAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.kappAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Form attribute definitions
+                if (configuration.get("formAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> formAttribute : (List<LinkedHashMap>)configuration.get("formAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(formAttribute, 
+                                this.form, 
+                                this.kapp != null ? this.kapp.getFormAttributeDefinition((String)formAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.formAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.formAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Category attribute definitions
+                if (configuration.get("categoryAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> categoryAttribute : (List<LinkedHashMap>)configuration.get("categoryAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(categoryAttribute, 
+                                null, 
+                                this.kapp != null ? this.kapp.getCategoryAttributeDefinition((String)categoryAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.categoryAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.categoryAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // User attribute definitions
+                if (configuration.get("userAttributeDefinitions") != null){
+                    for (LinkedHashMap<String, Object> userAttribute : (List<LinkedHashMap>)configuration.get("userAttributeDefinitions")){
+                        ConfigAttributeDefinition configAttribute = new ConfigAttributeDefinition(userAttribute, 
+                                null, 
+                                this.space != null ? this.space.getUserAttributeDefinition((String)userAttribute.get("name")) != null : null);
+                        // Add to configuration
+                        this.userAttributeDefinitions.add(configAttribute);
+                        // If not valid, set configuration validity to false
+                        if (!configAttribute.isValid()){
+                            this.valid = false;
+                        }
+                        // Are required values missing
+                        if (configAttribute.isMissingValues()){
+                            this.missingAttributes = true;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.userAttributeDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Form types
+                if (configuration.get("formTypes") != null){
+                    for (LinkedHashMap<String, String> formType : (List<LinkedHashMap>)configuration.get("formTypes")){
+                        // Add to configuration
+                        this.formTypes.add(new ConfigFormType(formType));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.formTypes.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Categories
+                if (configuration.get("categories") != null){
+                    for (LinkedHashMap<String, String> category : (List<LinkedHashMap>)configuration.get("categories")){
+                        // Add to configuration
+                        this.categories.add(new ConfigCategory(category));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.categories.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Space Webhooks
+                if (configuration.get("spaceWebhooks") != null){
+                    for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("spaceWebhooks")){
+                        // Add to configuration
+                        this.spaceWebhooks.add(new ConfigWebhook(webhook));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.spaceWebhooks.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                // Kapp Webhooks
+                if (configuration.get("kappWebhooks") != null){
+                    for (LinkedHashMap<String, String> webhook : (List<LinkedHashMap>)configuration.get("kappWebhooks")){
+                        // Add to configuration
+                        this.kappWebhooks.add(new ConfigWebhook(webhook));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.kappWebhooks.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+    
+                // Security Policy Definitions
+                if (configuration.get("securityPolicyDefinitions") != null){
+                    for (LinkedHashMap<String, String> securityPolicyDefinition : (List<LinkedHashMap>)configuration.get("securityPolicyDefinitions")){
+                        // Add to configuration
+                        this.securityPolicyDefinitions.add(new ConfigSecurityPolicyDefinition(securityPolicyDefinition));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.securityPolicyDefinitions.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+    
+                // Security Policies
+                if (configuration.get("securityPolicies") != null){
+                    for (LinkedHashMap<String, String> securityPolicy : (List<LinkedHashMap>)configuration.get("securityPolicies")){
+                        // Add to configuration
+                        this.securityPolicies.add(new ConfigSecurityPolicy(securityPolicy));
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.securityPolicies.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+    
+                // Bridges
+                if (configuration.get("bridges") != null){
+                    for (LinkedHashMap<String, String> bridge : (List<LinkedHashMap>)configuration.get("bridges")){
+                        ConfigBridge configBridge = new ConfigBridge(bridge, this.space);
+                        // Add to configuration
+                        this.bridges.add(configBridge);
+                        // If bridge doesn't exist, set configuration validity to false
+                        if (!configBridge.isExists()){
+                            this.valid = false;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.bridges.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Bridge Models
+                if (configuration.get("bridgeModels") != null){
+                    for (LinkedHashMap<String, Object> bridgeModel : (List<LinkedHashMap>)configuration.get("bridgeModels")){
+                        ConfigBridgeModel configBridgeModel = new ConfigBridgeModel(bridgeModel, this.space);
+                        // Add to configuration
+                        this.bridgeModels.add(configBridgeModel);
+                        // If bridge model or bridge model mappings don't exist, set configuration validity to false
+                        if (!configBridgeModel.isExists() || !configBridgeModel.isMappingsExist()){
+                            this.valid = false;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.bridgeModels.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Forms
+                if (configuration.get("forms") != null){
+                    for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)configuration.get("forms")){
+                        ConfigForm configForm = new ConfigForm(form, this.kapp);
+                        // Add to configuration
+                        this.forms.add(configForm);
+                        // If form doesn't exist, set configuration validity to false
+                        if (!configForm.isExists()){
+                            this.valid = false;
+                        }
+                    }
+                    // If at least 1 configuration exists, set that configuration exists
+                    if (!this.forms.isEmpty()){
+                        this.exists = true;
+                    }
+                }
+                
+                // Admin Kapp Requirement
+                if (configuration.get("adminKapp") != null){
+                    // If adminKapp property exists, set that configuration exists and Admin Kapp is required
+                    this.exists = true;
+                    this.adminRequired = true;
+                    LinkedHashMap adminConfiguration = (LinkedHashMap)configuration.get("adminKapp");
+                    // Admin Kapp Forms
+                    if (adminConfiguration.get("forms") != null){
+                        for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)adminConfiguration.get("forms")){
+                            ConfigForm configForm = new ConfigForm(form, this.adminKapp);
+                            // Add to configuration
+                            this.adminKappForms.add(configForm);
+                            // If required Admin Kapp form doesn't exist in the Admin Kapp, set configuration validity to false
+                            if (!configForm.isExists()){
+                                this.valid = false;
                             }
                         }
                     }
@@ -92,134 +357,857 @@
         }
         
         /**
-         * Returns true if the Kapp has been configured. Returns false otherwise.
+         * Helper function for deciding if user needs to be routed to a setup page.
+         * @returns Name of page user should be routed to, or null if user does not need to be routed
          */
-        public Boolean isConfigured(){
-            return Boolean.TRUE; // TODO Remove this and uncomment below code once wizard is implemented.
-//             if (this.kapp != null){
-//                 return Boolean.TRUE.equals(this.kappConfigurationStatus.get("configured"));
-//             }
-//             return Boolean.FALSE;
+        public String routeToSetup(){
+            // Only route to setup if configurations exist
+            if (this.exists){
+                // If user specified a setup url parameter, go to setup page or configuration wizard if requested
+                if (this.request.getParameterValues("setup") != null){
+                    return Text.isNotBlank(this.request.getParameter("setup")) ? this.request.getParameter("setup") : "setup";
+                }
+                // If app is not configured, go to configuration wizard
+                else if (!this.configured){
+                    return "wizard";
+                }
+                // If current page has invalid configuration, route to setup page
+                else if (!this.valid || this.missingAttributes){
+                    return "setup";
+                }
+            }
+            // Do not route to setup
+            return null;
         }
         
-        /**
-         * Returns true if the Kapp is missing attributes that are required in order for the kapp (or form within the kapp) to run properly.
-         */
-        public boolean isMissingRequiredAttributes(){
-            for (LinkedHashMap level : ((LinkedHashMap<String,LinkedHashMap>)kappConfigurationAttributes).values()){
-                for (KappConfigurationAttribute attribute : ((LinkedHashMap<String,KappConfigurationAttribute>)level).values()){
-                    if (attribute.isApplicableToPage() && attribute.isRequired() && !attribute.isHasValue()){
-                        return true;
-                    }
-                }
+        
+        /******************************************************************************************
+         ** GETTER FUNCTIONS FOR CONFIGURATION DETAILS AND DATA. 
+         ******************************************************************************************/
+
+        public boolean isConfigured(){ return this.configured; }
+        public boolean isValid(){ return this.valid; }
+        public boolean isExists(){ return this.exists; }
+        public boolean isAdminExists(){ return this.adminExists; }
+        public boolean isAdminRequired(){ return this.adminRequired; }
+        public boolean isAdminValid(){ return this.adminValid; }
+        public boolean isMissingAttributes(){ return this.missingAttributes; }
+        public Kapp getAdminKapp(){ return this.adminKapp; }
+        public List<ConfigAttributeDefinition> getSpaceAttributeDefinitions(){ return this.spaceAttributeDefinitions; }
+        public List<ConfigAttributeDefinition> getKappAttributeDefinitions(){ return this.kappAttributeDefinitions; }
+        public List<ConfigAttributeDefinition> getFormAttributeDefinitions(){ return this.formAttributeDefinitions; }
+        public List<ConfigAttributeDefinition> getCategoryAttributeDefinitions(){ return this.categoryAttributeDefinitions; }
+        public List<ConfigAttributeDefinition> getUserAttributeDefinitions(){ return this.userAttributeDefinitions; }
+        public List<ConfigFormType> getFormTypes(){ return this.formTypes; }
+        public List<ConfigCategory> getCategories(){ return this.categories; }
+        public List<ConfigWebhook> getSpaceWebhooks(){ return this.spaceWebhooks; }
+        public List<ConfigWebhook> getKappWebhooks(){ return this.kappWebhooks; }
+        public List<ConfigForm> getForms(){ return this.forms; }
+        public List<ConfigSecurityPolicyDefinition> getSecurityPolicyDefinitions(){ return this.securityPolicyDefinitions; }
+        public List<ConfigSecurityPolicy> getSecurityPolicies(){ return this.securityPolicies; }
+        public List<ConfigBridge> getBridges(){ return this.bridges; }
+        public List<ConfigBridgeModel> getBridgeModels(){ return this.bridgeModels; }
+        public List<ConfigForm> getAdminKappForms(){ return this.adminKappForms; }
+        
+        
+        /******************************************************************************************
+         ** METHODS FOR CHECKING IF CONFIGURATIONS EXIST AND IF THEY'RE CONFIGURED
+         ** Used by the Setup Wizard
+         ******************************************************************************************/
+        
+        private boolean doAttributesExist(){
+            if (!this.spaceAttributeDefinitions.isEmpty() 
+                    || !this.kappAttributeDefinitions.isEmpty()
+                    || !this.formAttributeDefinitions.isEmpty()
+                    || !this.categoryAttributeDefinitions.isEmpty()
+                    || !this.userAttributeDefinitions.isEmpty()){
+                return true;
             }
             return false;
         }
         
-        /**
-         * Returns a list of all attributes that have been configured for this kapp.
-         */
-        public Map<String, List<KappConfigurationAttribute>> getConfigurationAttributes(){
-            Map<String, List<KappConfigurationAttribute>> configurationAttributes = new LinkedHashMap<>();
-            for (Map.Entry<String,LinkedHashMap> level : ((LinkedHashMap<String,LinkedHashMap>)kappConfigurationAttributes).entrySet()){
-                Set<KappConfigurationAttribute> attributes = new TreeSet<>(((LinkedHashMap)level.getValue()).values());
-                configurationAttributes.put(level.getKey(), new ArrayList<KappConfigurationAttribute>(attributes));
-            }
-            return configurationAttributes;
-        }
-        
-        /**
-         * Helper function that adds attributes to the configured attributes map.
-         *
-         * @param attributes        List of attributes retrieved from the Kapp Configuration file setup.json
-         * @param level             String representation of the level at which the attribute exists (e.g. space, user, kapp, form, or category).
-         * @param attributeParent   The instance of the Model of the parent of the attribute (e.g. Space, Kapp, User, Form, Category).
-         */
-        private <A extends ModelWithAttributes> void addKappConfigurationAttributes(List<LinkedHashMap> attributes, String level, A attributeParent){
-            // Get the map of configured attributes for the current level
-            LinkedHashMap kappConfigurationAttributesByLevel = (LinkedHashMap)this.kappConfigurationAttributes.get(level);
-            // If the map doesn't exist for this level, create a new map and set it into the Kapp Configuration Attributes map
-            if (kappConfigurationAttributesByLevel == null){
-                kappConfigurationAttributesByLevel = new LinkedHashMap();
-                this.kappConfigurationAttributes.put(level, kappConfigurationAttributesByLevel);
-            }
-            // If attributes exist, add them to the map
-            if (attributes != null){
-                for (LinkedHashMap attribute : attributes){
-                    // For each attribute, add a map entry with the attribute name as the key and KappConfigurationAttribute object as the value
-                    kappConfigurationAttributesByLevel.put((String)attribute.get("name"), new KappConfigurationAttribute((String)attribute.get("name"), 
-                            (String)attribute.get("description"), 
-                            (Boolean)attribute.get("required"), 
-                            (Boolean)attribute.get("allowsMultiple"), 
-                            // If attribute parent is passed in, check if the parent has a value and set to true or false. Set to false if attribute parent doesn't exist
-                            attributeParent != null ? attributeParent.hasAttribute((String)attribute.get("name")) : false,
-                            // If attribute parent doesn't exist then this attribute is not applicable to the current page
-                            attributeParent != null ? true : false));
+        private boolean areAttributesConfigured(){
+            for (ConfigAttributeDefinition attribute : this.spaceAttributeDefinitions){
+                if (!attribute.isDefinitionExists() || (attribute.isRequired() && attribute.isMissingValues())){
+                    return false;
                 }
             }
+            for (ConfigAttributeDefinition attribute : this.kappAttributeDefinitions){
+                if (!attribute.isDefinitionExists() || (attribute.isRequired() && attribute.isMissingValues())){
+                    return false;
+                }
+            }
+            for (ConfigAttributeDefinition attribute : this.formAttributeDefinitions){
+                if (!attribute.isDefinitionExists()){
+                    return false;
+                }
+            }
+            for (ConfigAttributeDefinition attribute : this.categoryAttributeDefinitions){
+                if (!attribute.isDefinitionExists()){
+                    return false;
+                }
+            }
+            for (ConfigAttributeDefinition attribute : this.userAttributeDefinitions){
+                if (!attribute.isDefinitionExists()){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        private boolean doBridgesExist(){
+            if (!this.bridges.isEmpty() || !this.bridgeModels.isEmpty()){
+                return true;
+            }
+            return false;
+        }
+
+        private boolean areBridgesConfigured(){
+            for (ConfigBridge bridge : this.bridges){
+                if (!bridge.isExists()){
+                    return false;
+                }
+            }
+            for (ConfigBridgeModel bridgeModel : this.bridgeModels){
+                if (!bridgeModel.isExists() || !bridgeModel.isMappingsExist()){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        private boolean doCategoriesExist(){
+            return !this.categories.isEmpty();
+        }
+
+        private boolean areCategoriesConfigured(){
+            for (ConfigCategory category : this.categories){
+                if (this.kapp.getCategory(category.getSlug()) == null){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        private boolean doFormTypesExist(){
+            return !this.formTypes.isEmpty();
+        }
+
+        private boolean areFormTypesConfigured(){
+            for (ConfigFormType formType : this.formTypes){
+                if (this.kapp.getFormType(formType.getName()) == null){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        private boolean doFormsExist(){
+            return !this.forms.isEmpty();
+        }
+
+        private boolean areFormsConfigured(){
+            for (ConfigForm form : this.forms){
+                if (!form.isExists()){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private boolean doSecurityPoliciesExist(){
+            return !this.securityPolicies.isEmpty() || !this.securityPolicyDefinitions.isEmpty();
+        }
+
+        private boolean areSecurityPoliciesConfigured(){
+            for (ConfigSecurityPolicyDefinition securityPolicyDefinition : this.securityPolicyDefinitions){
+                if (this.kapp.getSecurityPolicyDefinition(securityPolicyDefinition.getName()) == null){
+                    return false;
+                }
+            }
+            for (ConfigSecurityPolicy securityPolicy : this.securityPolicies){
+                if (this.kapp.getSecurityPolicy(securityPolicy.getEndpoint()) == null){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        private boolean doWebhooksExist(){
+            return !this.spaceWebhooks.isEmpty() || !this.kappWebhooks.isEmpty();
+        }
+
+        private boolean areWebhooksConfigured(){
+            for (ConfigWebhook spaceWebhook : this.spaceWebhooks){
+                if (this.space.getWebhook(spaceWebhook.getName()) == null){
+                    return false;
+                }
+            }
+            for (ConfigWebhook kappWebhook : this.kappWebhooks){
+                if (this.kapp.getWebhook(kappWebhook.getName()) == null){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        private boolean doAdminKappFormsExist(){
+            return !this.adminKappForms.isEmpty();
+        }
+
+        private boolean areAdminKappFormsConfigured(){
+            for (ConfigForm form : this.adminKappForms){
+                if (this.adminKapp == null || this.adminKapp.getForm(form.getSlug()) == null){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        
+        /******************************************************************************************
+         ** METHODS FOR GETTING STATUS AND DETAILS ABOUT THE SETUP WIZARD
+         ******************************************************************************************/
+        
+        /**
+         * Returns a list of the applicable Setup Wizard pages and whether they're configured or not
+         */
+        public List<LinkedHashMap> getWizardProgress() {
+            List<LinkedHashMap> progressData = new ArrayList<>();
+            
+            if (this.doAttributesExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Attributes");
+                data.put("description", "Attribute Definitions and Values");
+                data.put("slug", "attributes");
+                data.put("configured", this.areAttributesConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doBridgesExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Bridges");
+                data.put("description", "Bridges, Bridge Models, and Bridge Mappings");
+                data.put("slug", "bridges");
+                data.put("configured", this.areBridgesConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doCategoriesExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Categories");
+                data.put("description", "Category Definitions");
+                data.put("slug", "categories");
+                data.put("configured", this.areCategoriesConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doFormTypesExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Form Types");
+                data.put("description", "Form Types");
+                data.put("slug", "formTypes");
+                data.put("configured", this.areFormTypesConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doFormsExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Forms");
+                data.put("description", "Forms");
+                data.put("slug", "forms");
+                data.put("configured", this.areFormsConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doSecurityPoliciesExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Security");
+                data.put("description", "Security Policies and Definitions");
+                data.put("slug", "security");
+                data.put("configured", this.areSecurityPoliciesConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doWebhooksExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Webhooks");
+                data.put("description", "Webhooks");
+                data.put("slug", "webhooks");
+                data.put("configured", this.areWebhooksConfigured());
+                progressData.add(data);
+            }
+            
+            if (this.doAdminKappFormsExist()){
+                LinkedHashMap data = new LinkedHashMap();
+                data.put("name", "Admin Kapp Forms");
+                data.put("description", "Forms for the Admin Kapp");
+                data.put("slug", "adminKappForms");
+                data.put("configured", this.areAdminKappFormsConfigured());
+                progressData.add(data);
+            }
+           
+            return progressData;
         }
         
         /**
-         * Custom class for storing configured attributes. 
+         * Updates the Kapp Configuration Status kapp attribute based on whether the Kapp is configured or not.
+         * If the Kapp Configuration Status attribute definition doesn't exist, it gets created.
+         * If Kapp Configuration Status attribute value doesn't exist and Kapp is configured, adds an attribute value.
+         * If Kapp Configuration Status attribute value exists but Kapp is not configured, removes the attribute value.
          */
-        public static class KappConfigurationAttribute implements Comparable<KappConfigurationAttribute> {
-            private String name;
-            private String description;
-            private boolean required;
-            private boolean allowsMultiple;
-            private boolean applicableToPage;
-            private boolean hasValue;
-
-            /**
-             * Constructor for custom KappConfigurationAttribute class, which represents an attribute that has been configured for this kapp.
-             *
-             * @param name              Name of the attribute.
-             * @param description       Description of what this attribute is used for. Displayed on setup page.
-             * @param required          Boolean stating whether this attribute is required for the kapp to run properly. Category and User attributes can not be required.
-             * @param allowsMultiple    Defines whether the attribute definition allows multiple instances of this attribute.
-             * @param hasValue          Boolean indicating whether a value exists for this attribute.
-             * @param applicableToPage  Boolean indicating whether this attribute applies to the current page (if required and missing, page will redirect to setup page).
-             */
-            public KappConfigurationAttribute(String name, String description, boolean required, boolean allowsMultiple, boolean hasValue, boolean applicableToPage){
+        public void updateKappConfigurationStatus() throws Exception {
+            // Check if all existing configurations are configured
+            boolean allConfigured = this.areAttributesConfigured() && this.areBridgesConfigured()
+                && this.areCategoriesConfigured() && this.areFormTypesConfigured()
+                && this.areFormsConfigured() && this.areSecurityPoliciesConfigured()
+                && this.areWebhooksConfigured() && this.areAdminKappFormsConfigured();
+            
+            // Check if we need to update the Kapp Configuration Status
+            if (allConfigured != this.configured){
+                // If Kapp Configuration Status attribute definition doesn't exists, create it
+                if (this.kapp.getKappAttributeDefinition("Kapp Configuration Status") == null){
+                    LinkedHashMap<String, Object> definition = new LinkedHashMap<>();
+                    definition.put("name", "Kapp Configuration Status");
+                    definition.put("description", "Defines whether the Kapp is configured. Value is automatically managed by the Setup Wizard. DO NOT MODIFY.");
+                    definition.put("allowsMultiple", false);
+                    Map<String, Object> result = doApiPost("/kapps/" + kapp.getSlug() + "/kappAttributeDefinitions", definition);
+                }
+            }
+            
+            // If configured and Kapp Configuration Status attribute value doesn't exist, create an entry
+            if (allConfigured && !this.kapp.hasAttribute("Kapp Configuration Status")){
+                LinkedHashMap<String, Object> updateKapp = new LinkedHashMap<>();
+                List<Object> attributes = new ArrayList<Object>(this.kapp.getAttributes());
+                LinkedHashMap<String, Object> statusAttribute = new LinkedHashMap<>();
+                statusAttribute.put("name" , "Kapp Configuration Status");
+                statusAttribute.put("values", Arrays.asList("true"));
+                attributes.add(statusAttribute);
+                updateKapp.put("attributes", attributes);
+                Map<String,Object> result = doApiPut("/kapps/" + this.kapp.getSlug(), updateKapp);
+            }
+            
+            // If not configured and Kapp Configuration Status attribute value exists, remove it
+            if (!allConfigured && this.kapp.hasAttribute("Kapp Configuration Status")){
+                LinkedHashMap<String, Object> updateKapp = new LinkedHashMap<>();
+                List<Attribute> attributes = new ArrayList<>(this.kapp.getAttributes());
+                Iterator<Attribute> iter = attributes.iterator();
+                while (iter.hasNext()) {
+                    Attribute a = iter.next();
+                    if (Text.equals(a.getName(), "Kapp Configuration Status")){
+                        iter.remove();
+                        break;
+                    }
+                }
+                updateKapp.put("attributes", attributes);
+                Map<String,Object> result = doApiPut("/kapps/" + this.kapp.getSlug(), updateKapp);
+            }
+            
+        }
+        
+        /**
+         * Returns the slug of the next step in the wizard, given the slug of the current step.
+         * If current step is null, returns the first step.
+         */
+        public String getWizardNextStep(String currentStep) {
+            List<LinkedHashMap> steps = this.getWizardProgress();
+            if (steps.isEmpty()){
+                return "";
+            }
+            if (Text.isBlank(currentStep)){
+                return (String)steps.get(0).get("slug");
+            }
+            else {
+                for (int i = 0; i < steps.size()-1; i++){
+                    if (Text.equals(currentStep, (String)steps.get(i).get("slug"))){
+                        return (String)steps.get(i+1).get("slug");
+                    }
+                }
+            }
+            return "";
+        }
+        
+        /**
+         * Returns the slug of the previous step in the wizard, given the slug of the current step.
+         * If current step is null, returns empty string, wich results in home page.
+         */
+        public String getWizardPreviousStep(String currentStep) {
+            List<LinkedHashMap> steps = this.getWizardProgress();
+            if (steps.isEmpty() || Text.isBlank(currentStep)){
+                return "";
+            }
+            else {
+                for (int i = 1; i < steps.size(); i++){
+                    if (Text.equals(currentStep, (String)steps.get(i).get("slug"))){
+                        return (String)steps.get(i-1).get("slug");
+                    }
+                }
+            }
+            return "";
+        }
+        
+        /**
+         * Returns true if the given step is the last step of the wizard.
+         */
+        public boolean isWizardLastStep(String currentStep) {
+            List<LinkedHashMap> steps = this.getWizardProgress();
+            if (!steps.isEmpty() && Text.equals((String)steps.get(steps.size()-1).get("slug"), currentStep)){
+                return true;
+            }
+            return false;
+        }
+        
+        
+        /******************************************************************************************
+         ** CUSTOM CONFIGURATION MODELS
+         ******************************************************************************************/
+                
+        public static class ConfigAttributeDefinition {
+            String name;
+            String description;
+            boolean allowsMultiple;
+            boolean applicable;
+            boolean required;
+            ConfigAttribute attribute;
+            ConfigAttribute defaultAttribute;
+            boolean valid;
+            boolean missingValues;
+            boolean definitionExists;
+            
+            public <A extends ModelWithAttributes> ConfigAttributeDefinition(LinkedHashMap<String, Object> attribute, A attributeContext, boolean definitionExists){
+                this.name = (String)attribute.get("name");
+                this.description = (String)attribute.get("description");
+                this.allowsMultiple = Boolean.TRUE.equals((Boolean)attribute.get("allowsMultiple"));
+                this.applicable = attributeContext != null;
+                this.required = Boolean.TRUE.equals((Boolean)attribute.get("required"));
+                this.attribute = this.applicable && attributeContext.hasAttribute((String)attribute.get("name")) 
+                        ? new ConfigAttribute(this.name, attributeContext.getAttributeValues((String)attribute.get("name"))) 
+                        : null;
+                this.defaultAttribute = attribute.get("values") != null ? new ConfigAttribute(this.name, (List<String>)attribute.get("values")) : null;
+                this.definitionExists = definitionExists;
+                this.valid = !this.required || definitionExists;
+                this.missingValues = this.required && this.applicable && this.attribute == null;
+            }
+            
+            public boolean isValid(){ return this.valid; }
+            public boolean isApplicable(){ return this.applicable; }
+            public boolean isRequired(){ return this.required; }
+            public boolean isAllowsMultiple(){ return this.allowsMultiple; }
+            public boolean isMissingValues(){ return this.missingValues; }
+            public boolean isDefinitionExists(){ return this.definitionExists; }
+            public String getName(){ return this.name; }
+            public String getDescription(){ return this.description; }
+            public ConfigAttribute getAttribute(){ return this.attribute; }
+            public boolean hasAttributeValues(){ return this.attribute != null; }
+            public boolean hasAttributeValue(String value){ return this.attribute != null && this.attribute.hasValue(value); }
+            public ConfigAttribute getDefaultAttribute(){ return this.defaultAttribute; }
+            
+            public List<String> getMissingDefaultValues(){ 
+                List<String> missingDefaultValues = new ArrayList<>();
+                if (this.defaultAttribute != null){
+                    for (String value : this.defaultAttribute.getValues()){
+                        if (!this.hasAttributeValue(value)){
+                            missingDefaultValues.add(value);
+                        }
+                    }
+                }
+                return missingDefaultValues; 
+            }            
+        }
+        
+        public static class ConfigAttribute {
+            String name;
+            List<String> values;
+            
+            public <A extends ModelWithAttributes> ConfigAttribute(LinkedHashMap<String, Object> attribute, A attributeContext){
+                this.name = (String)attribute.get("name");
+                this.values = attributeContext != null ? (List<String>)attributeContext.getAttributeValues((String)attribute.get("name")) : new ArrayList<String>();
+            }
+            
+            public ConfigAttribute(String name, List<String> values){
                 this.name = name;
-                this.description = description;
-                this.required = required;
-                this.allowsMultiple = allowsMultiple;
-                this.hasValue = hasValue;
-                this.applicableToPage = applicableToPage;
-            }
-
-            public String getName(){
-                return this.name;
-            }
-
-            public String getDescription(){
-                return this.description;
-            }
-
-            public boolean isRequired(){
-                return this.required;
+                this.values = values;
             }
             
-            public boolean isAllowsMultiple(){
-                return this.allowsMultiple;
+            public String getName(){ return this.name; }
+            public List<String> getValues(){ return this.values; }
+            public boolean hasValue(String value){ return this.values.contains(value); }
+        }
+        
+        public static class ConfigFormType {
+            String name;
+            
+            public ConfigFormType(LinkedHashMap<String, String> formType){
+                this.name = (String)formType.get("name");
             }
             
-            public boolean isHasValue(){
-                return this.hasValue;
-            }
+            public String getName(){ return this.name; }
+        }
+        
+        public static class ConfigCategory {
+            String slug;
+            String name;
             
-            public boolean isApplicableToPage(){
-                return this.applicableToPage;
+            public ConfigCategory(LinkedHashMap<String, String> category){
+                this.name = (String)category.get("name");
+                this.slug = (String)category.get("slug");
             }
 
-            public int compareTo(KappConfigurationAttribute that) {
-                // Compare by required first (true sorted first), then by name(alphabetically)
-                return ComparisonChain.start()
-                        .compare(that.required, this.required, Ordering.natural().nullsLast())
-                        .compare(this.name, that.name)
-                        .result();
+            public String getName(){ return this.name; }
+            public String getSlug(){ return this.slug; }
+        }
+        
+        public static class ConfigWebhook {
+            String name;
+            String type;
+            String event;
+            String url;
+            String filter;
+            
+            public ConfigWebhook(LinkedHashMap<String, String> webhook){
+                this.name = (String)webhook.get("name");
+                this.type = (String)webhook.get("type");
+                this.event = (String)webhook.get("event");
+                this.url = (String)webhook.get("url");
+                this.filter = (String)webhook.get("filter");
+            }
+
+            public String getName(){ return this.name; }
+            public String getType(){ return this.type; }
+            public String getEvent(){ return this.event; }
+            public String getUrl(){ return this.url; }
+            public String getFilter(){ return this.filter; }
+        }
+        
+        public static class ConfigSecurityPolicyDefinition {
+            String name;
+            String type;
+            String message;
+            String rule;
+            
+            public ConfigSecurityPolicyDefinition(LinkedHashMap<String, String> securityPolicyDefinition){
+                this.name = (String)securityPolicyDefinition.get("name");
+                this.type = (String)securityPolicyDefinition.get("type");
+                this.message = (String)securityPolicyDefinition.get("message");
+                this.rule = (String)securityPolicyDefinition.get("rule");
+            }
+            
+            public String getName(){ return this.name; }
+            public String getType(){ return this.type; }
+            public String getMessage(){ return this.message; }
+            public String getRule(){ return this.rule; }
+        }
+        
+        public static class ConfigSecurityPolicy {
+            String name;
+            String endpoint;
+            
+            public ConfigSecurityPolicy(LinkedHashMap<String, String> securityPolicy){
+                this.name = (String)securityPolicy.get("name");
+                this.endpoint = (String)securityPolicy.get("endpoint");
+            }
+            
+            public String getName(){ return this.name; }
+            public String getEndpoint(){ return this.endpoint; }
+        }
+        
+        public static class ConfigBridge {
+            String name;
+            String status;
+            String url;
+            boolean exists;
+            
+            public ConfigBridge(LinkedHashMap<String, String> bridge, Space space){
+                this.name = (String)bridge.get("name");
+                this.status = (String)bridge.get("status");
+                this.url = (String)bridge.get("url");
+                this.exists = space.getBridge(this.name) != null ? true : false;
+            }
+            
+            public String getName(){ return this.name; }
+            public String getStatus(){ return this.status; }
+            public String getUrl(){ return this.url; }
+            public boolean isExists(){ return this.exists; }
+        }
+        
+        public static class ConfigBridgeModel {
+            String name;
+            String status;
+            String activeMappingName;
+            List<ConfigBridgeModelAttribute> attributes = new ArrayList<>();
+            List<ConfigBridgeModelMapping> mappings = new ArrayList<>();
+            List<ConfigBridgeModelQualification> qualifications = new ArrayList<>();
+            boolean exists;
+            boolean mappingsExist = true;
+            
+            public ConfigBridgeModel(LinkedHashMap<String, Object> bridgeModel, Space space){
+                this.name = (String)bridgeModel.get("name");
+                this.status = (String)bridgeModel.get("status");
+                this.activeMappingName = (String)bridgeModel.get("activeMappingName");
+                // Bridge Model Attributes
+                if (bridgeModel.get("attributes") != null){
+                    for (LinkedHashMap<String, String> bridgeModelAttribute : (List<LinkedHashMap>)bridgeModel.get("attributes")){
+                        this.attributes.add(new ConfigBridgeModelAttribute(bridgeModelAttribute));
+                    }
+                }
+                // Bridge Model Mappings
+                if (bridgeModel.get("mappings") != null){
+                    for (LinkedHashMap<String, Object> bridgeModelMapping : (List<LinkedHashMap>)bridgeModel.get("mappings")){
+                        ConfigBridgeModelMapping configBridgeModelMapping = new ConfigBridgeModelMapping(bridgeModelMapping, space.getBridgeModel(this.name));
+                        this.mappings.add(configBridgeModelMapping);
+                        if (!configBridgeModelMapping.isExists()){
+                            this.mappingsExist = false;
+                        }
+                    }
+                }
+                // Bridge Model Qualifications
+                if (bridgeModel.get("qualifications") != null){
+                    for (LinkedHashMap<String, Object> bridgeModelQualification : (List<LinkedHashMap>)bridgeModel.get("qualifications")){
+                        this.qualifications.add(new ConfigBridgeModelQualification(bridgeModelQualification));
+                    }
+                }
+                this.exists = space.getBridgeModel(this.name) != null ? true : false;
+            }
+            
+            public String getName(){ return this.name; }
+            public String getStatus(){ return this.status; }
+            public String getActiveMappingName(){ return this.activeMappingName; }
+            public List<ConfigBridgeModelAttribute> getAttributes(){ return this.attributes; }
+            public List<ConfigBridgeModelMapping> getMappings(){ return this.mappings; }
+            public List<ConfigBridgeModelQualification> getQualifications(){ return this.qualifications; }
+            public boolean isExists(){ return this.exists; }
+            public boolean isMappingsExist(){ return this.mappingsExist; }
+        }
+        
+        public static class ConfigBridgeModelAttribute {
+            String name;
+            
+            public ConfigBridgeModelAttribute(LinkedHashMap<String, String> bridgeModelAttribute){
+                this.name = (String)bridgeModelAttribute.get("name");
+            }
+            
+            public String getName(){ return this.name; }
+        }
+        
+        public static class ConfigBridgeModelMapping {
+            String name;
+            String bridgeName;
+            String structure;
+            List<ConfigBridgeModelMappingAttribute> attributes = new ArrayList<>();
+            List<ConfigBridgeModelMappingQualification> qualifications = new ArrayList<>();
+            boolean exists;
+            
+            public ConfigBridgeModelMapping(LinkedHashMap<String, Object> bridgeModelMapping, BridgeModel bridgeModel){
+                this.name = (String)bridgeModelMapping.get("name");
+                this.bridgeName = (String)bridgeModelMapping.get("bridgeName");
+                this.structure = (String)bridgeModelMapping.get("structure");
+                // Bridge Model Mapping Attributes
+                if (bridgeModelMapping.get("attributes") != null){
+                    for (LinkedHashMap<String, String> bridgeModelMappingAttribute : (List<LinkedHashMap>)bridgeModelMapping.get("attributes")){
+                        this.attributes.add(new ConfigBridgeModelMappingAttribute(bridgeModelMappingAttribute));
+                    }
+                }
+                // Bridge Model Mapping Qualifications
+                if (bridgeModelMapping.get("qualifications") != null){
+                    for (LinkedHashMap<String, String> bridgeModelMappingQualification : (List<LinkedHashMap>)bridgeModelMapping.get("qualifications")){
+                        this.qualifications.add(new ConfigBridgeModelMappingQualification(bridgeModelMappingQualification));
+                    }
+                }
+                this.exists = bridgeModel != null && bridgeModel.getMapping(this.name) != null ? true : false;
+            }
+            
+            public String getName(){ return this.name; }
+            public String getBridgeName(){ return this.bridgeName; }
+            public String getStructure(){ return this.structure; }
+            public List<ConfigBridgeModelMappingAttribute> getAttributes(){ return this.attributes; }
+            public List<ConfigBridgeModelMappingQualification> getQualifications(){ return this.qualifications; }
+            public boolean isExists(){ return this.exists; }
+        }
+
+        public static class ConfigBridgeModelMappingAttribute {
+            String name;
+            String structureField;
+            
+            public ConfigBridgeModelMappingAttribute(LinkedHashMap<String, String> bridgeModelMappingAttribute){
+                this.name = (String)bridgeModelMappingAttribute.get("name");
+                this.structureField = (String)bridgeModelMappingAttribute.get("structureField");
+            }
+            
+            public String getName(){ return this.name; }
+            public String getStructureField(){ return this.structureField; }
+        }
+
+        public static class ConfigBridgeModelQualification {
+            String name;
+            String resultType;
+            List<ConfigBridgeModelQualificationParameter> parameters = new ArrayList<>();
+            
+            public ConfigBridgeModelQualification(LinkedHashMap<String, Object> configBridgeModelQualification){
+                this.name = (String)configBridgeModelQualification.get("name");
+                this.resultType = (String)configBridgeModelQualification.get("resultType");
+                // Bridge Model Qualification parameters
+                if (configBridgeModelQualification.get("parameters") != null){
+                    for (LinkedHashMap<String, String> bridgeModelQualificationParameters : (List<LinkedHashMap>)configBridgeModelQualification.get("parameters")){
+                        this.parameters.add(new ConfigBridgeModelQualificationParameter(bridgeModelQualificationParameters));
+                    }
+                }
+            }
+            
+            public String getName(){ return this.name; }
+            public String getResultType(){ return this.resultType; }
+            public List<ConfigBridgeModelQualificationParameter> getParameters(){ return this.parameters; }
+        }
+
+        public static class ConfigBridgeModelQualificationParameter {
+            String name;
+            
+            public ConfigBridgeModelQualificationParameter(LinkedHashMap<String, String> configBridgeModelQualificationParameter){
+                this.name = (String)configBridgeModelQualificationParameter.get("name");
+            }
+            
+            public String getName(){ return this.name; }
+        }
+
+        public static class ConfigBridgeModelMappingQualification {
+            String name;
+            String query;
+            
+            public ConfigBridgeModelMappingQualification(LinkedHashMap<String, String> bridgeModelMappingQualification){
+                this.name = (String)bridgeModelMappingQualification.get("name");
+                this.query = (String)bridgeModelMappingQualification.get("query");
+            }
+            
+            public String getName(){ return this.name; }
+            public String getQuery(){ return this.query; }
+        }
+        
+        public static class ConfigForm {
+            boolean anonymous;
+            List<ConfigAttribute> attributes = new ArrayList<>();
+            List<LinkedHashMap> bridgedResources;
+            List<LinkedHashMap> categorizations;
+            String customHeadContent;
+            String description;
+            String name;
+            String notes;
+            List<LinkedHashMap> pages;
+            List<ConfigSecurityPolicy> securityPolicies = new ArrayList<>();
+            String slug;
+            String status;
+            String submissionLabelExpression;
+            String type;
+            boolean exists;
+
+            public ConfigForm(LinkedHashMap<String, Object> form, Kapp kapp){
+                this.anonymous = Boolean.TRUE.equals((Boolean)form.get("anonymous"));
+                this.bridgedResources = form.containsKey("bridgedResources") ? (List<LinkedHashMap>)form.get("bridgedResources") : new ArrayList<LinkedHashMap>();
+                this.categorizations = form.containsKey("categorizations") ? (List<LinkedHashMap>)form.get("categorizations") : new ArrayList<LinkedHashMap>();
+                this.customHeadContent = (String)form.get("customHeadContent");
+                this.description = (String)form.get("description");
+                this.name = (String)form.get("name");
+                this.notes = (String)form.get("notes");
+                this.pages = form.containsKey("pages") ? (List<LinkedHashMap>)form.get("pages") : new ArrayList<LinkedHashMap>();
+                this.slug = (String)form.get("slug");
+                this.status = (String)form.get("status");
+                this.submissionLabelExpression = (String)form.get("submissionLabelExpression");
+                this.type = (String)form.get("type");
+                // Form Attributes
+                if (form.get("attributes") != null){
+                    for (LinkedHashMap<String, Object> attribute : (List<LinkedHashMap>)form.get("attributes")){
+                        this.attributes.add(new ConfigAttribute((String)attribute.get("name"), (List<String>)attribute.get("values")));
+                    }
+                }
+                // Form Security Policy
+                if (form.get("securityPolicies") != null){
+                    for (LinkedHashMap<String, String> securityPolicy : (List<LinkedHashMap>)form.get("securityPolicies")){
+                        this.securityPolicies.add(new ConfigSecurityPolicy(securityPolicy));
+                    }
+                }
+                this.exists = kapp != null && kapp.getForm(this.slug) != null;
+            }
+            
+            public boolean isAnonymous(){ return this.anonymous; }
+            public List<ConfigAttribute> getAttributes(){ return this.attributes; }
+            public List<LinkedHashMap> getBridgedResources(){ return this.bridgedResources; }
+            public List<LinkedHashMap> getCategorizations(){ return this.categorizations; }
+            public String getCustomHeadContent(){ return this.customHeadContent; }
+            public String getDescription(){ return this.description; }
+            public String getName(){ return this.name; }
+            public String getNotes(){ return this.notes; }
+            public List<LinkedHashMap> getPages(){ return this.pages; }
+            public List<ConfigSecurityPolicy> getSecurityPolicies(){ return this.securityPolicies; }
+            public String getSlug(){ return this.slug; }
+            public String getStatus(){ return this.status; }
+            public String getSubmissionLabelExpression(){ return this.submissionLabelExpression; }
+            public String getType(){ return this.type; }
+            public boolean isExists(){ return this.exists; }
+            
+            /**
+             * Returns true if the configuration defines a full form, which can be created.
+             * Returns false if the configuration is missing pages.
+             */
+            public boolean hasFormDefinition(){ 
+                return this.pages != null && !this.pages.isEmpty(); 
             }
         }
+        
+        
+        /******************************************************************************************
+         ** API CALLS FOR PUT AND POST
+         ******************************************************************************************/
+         
+        private Map<String,Object> doApiPost(String url, Object data) throws Exception {
+            return doApiRequest(url, data, true);
+        }
+
+        private Map<String,Object> doApiPut(String url, Object data) throws Exception {
+            return doApiRequest(url, data, false);
+        }
+        
+        private Map<String,Object> doApiRequest(String url, Object data, boolean isCreate) throws Exception {
+            // Build the URL
+            StringBuilder requestUrl = new StringBuilder();
+            requestUrl.append(request.getScheme()).append("://").append(request.getServerName());
+            if (request.getServerPort() != 80 && request.getServerPort() != 443) {
+                requestUrl.append(":").append(request.getServerPort());
+            }
+            requestUrl.append(this.bundle.getApiLocation()).append(url);
+            
+            // StringEntity is the raw data that is sent in the request.
+            // The Rest endpoint is expecting JSON so we convert the Java Object. 
+            // We can set the content type for the request header here.
+            StringEntity entity = new StringEntity(Json.toString(data), ContentType.APPLICATION_JSON);
+            // Set request
+            HttpEntityEnclosingRequestBase resourceRequest;
+            if (isCreate){
+                resourceRequest = new HttpPost(requestUrl.toString());
+            }
+            else {
+                resourceRequest = new HttpPut(requestUrl.toString());
+            }
+            resourceRequest.setEntity(entity);
+            // Set client
+            BasicCookieStore cookieStore = new BasicCookieStore(); 
+            for (Cookie cookie : request.getCookies()) {
+                BasicClientCookie basicClientCookie = 
+                    new BasicClientCookie(cookie.getName(), cookie.getValue());
+                basicClientCookie.setDomain(request.getServerName());
+                cookieStore.addCookie(basicClientCookie);
+            }
+            HttpClient httpClient = HttpClientBuilder.create()
+                .setDefaultCookieStore(cookieStore)
+                .build();
+            // Make request
+            HttpResponse response = httpClient.execute(resourceRequest);
+            // Throw error if response is not 200
+            if (response.getStatusLine().getStatusCode() != 200){
+                throw new RuntimeException("Failed: HTTP Error Code: " + response.getStatusLine().getStatusCode());
+            }
+            // Retrieve the response body
+            String responseBody = EntityUtils.toString(response.getEntity());
+            // Return the parsed JSON
+            return (Map<String,Object>)Json.parse(responseBody);
+        }
+        
     }
 %>

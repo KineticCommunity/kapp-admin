@@ -1,6 +1,6 @@
 /**
  * Notifie JS
- * Version 0.3.2
+ * Version 0.3.3
  * 
  * Library that extends jQuery to add a .notifie(options) function for displaying alerts and confirmations.
  * Requires jQuery, Bootstrap, FontAwesome
@@ -91,6 +91,10 @@
  *              Default: false
  *              If true and if notification at the anchor level already exists, this .notifie() call will only close that notification.
  * 
+ *  -permanent: Boolean
+ *              Default: false
+ *              If true notification will not have a close button.
+ * 
  *  -exit:      Boolean
  *              Default: false
  *              If true, this .notifie() call will only close the notification(s) at the anchor level.
@@ -122,6 +126,7 @@ jQuery.fn.extend({
             expire: null,
             disable: options && options.type === "confirm" ? true : false,
             toggle: false,
+            permanent: false,
             exit: false,
             recurseExit: false
         }, options || {});
@@ -219,11 +224,13 @@ jQuery.fn.extend({
                 });
             }
 
-            // Build notification close button and attach exit event function on click
-            $("<button>", {type: 'button'}).addClass('fa fa-times close').on('click', function(e){
-                // Close popup and call appropriate onConfirm/onReject function (which is handled by the exit event)
-                $(this).closest('.notifie').trigger('exit', false);
-            }).appendTo(notification);
+            if (!options.permanent){
+                // Build notification close button and attach exit event function on click
+                $("<button>", {type: 'button'}).addClass('fa fa-times close').on('click', function(e){
+                    // Close popup and call appropriate onConfirm/onReject function (which is handled by the exit event)
+                    $(this).closest('.notifie').trigger('exit', false);
+                }).appendTo(notification);
+            }
             // Build notification message
             $("<div>").addClass("notifie-message").html(options.message).appendTo(notification);
             // If confirm, build buttons
@@ -282,6 +289,8 @@ jQuery.fn.extend({
 /**
  * Change Log
  * 
+ * v0.3.3 2016-08-22
+ *  - Added "permanent" option which hides the close button if set to true.
  * v0.3.2 2016-04-29
  *  - Callbacks now receive the notification element as the first parameter.
  *  - Disable option is changed to by default be false for alerts and true for confirmations.

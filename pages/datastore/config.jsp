@@ -83,7 +83,7 @@
                                 <th style="width:15%;">Visible</th>
                                 <th style="width:15%;">Searchable</th>
                                 <th style="width:15%;">Sortable</th>
-<!--                                 <th style="width:15%;">Unique</th> -->
+                                <th style="width:15%;">Unique</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,7 +93,7 @@
                                     <td class="column-visible"><input type="checkbox" ${column.visible ? 'checked' : ''}/></td>
                                     <td class="column-searchable"><input type="checkbox" ${column.searchable ? 'checked' : ''}/></td>
                                     <td class="column-orderable"><input type="checkbox" ${column.orderable ? 'checked' : ''}/></td>
-<%--                                     <td class="column-unique"><input type="checkbox" ${column.unique ? 'checked' : ''}/></td> --%>
+                                    <td class="column-unique"><input type="checkbox" ${column.unique ? 'checked' : ''}/></td>
                                 </tr>
                             </c:forEach>
                         </tbody>

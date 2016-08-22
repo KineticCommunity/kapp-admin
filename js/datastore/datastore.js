@@ -595,12 +595,24 @@
             var datastoreSlug = recordContainer.data("datastore-slug");
             var recordId = recordContainer.data("record-id");
             var cloneId = recordContainer.data("clone-id");
+            var configuration = recordContainer.data('datastore-configuration');
+            var uniqueConfiguration = typeof configuration === 'object' ? _.where(configuration, {unique: true}) : new Array();
             
             if (recordId){
                 K.load({
                     path: bundle.spaceLocation() + "/submissions/" + recordId, 
                     container: recordContainer,
-                    updated: redirectToDatastore
+                    updated: redirectToDatastore,
+                    loaded: function(form){
+                        form.page().on('submit', {
+                            execute: function(e, actions){
+                                if ($.isEmptyObject(e.constraints) && uniqueConfiguration.length){
+                                    actions.stop();
+                                    checkDuplicateRecord(form, uniqueConfiguration, datastoreSlug, recordContainer, actions);
+                                }
+                            }
+                        });
+                    }
                 });
             }
             else if (cloneId){
@@ -623,6 +635,14 @@
                                         });
                                     }
                                 }
+                                form.page().on('submit', {
+                                    execute: function(e, actions){
+                                        if ($.isEmptyObject(e.constraints) && uniqueConfiguration.length){
+                                            actions.stop();
+                                            checkDuplicateRecord(form, uniqueConfiguration, datastoreSlug, recordContainer, actions);
+                                        }
+                                    }
+                                });
                             },
                             created: redirectToDatastore
                         }); 
@@ -640,14 +660,14 @@
                     container: recordContainer,
                     created: redirectToDatastore,
                     loaded: function(form){
-//                        console.log("FORM",form);
-//                        console.log("FORM",form.page());
-                          // TODO Implement unique check before save
-//                        form.page().on('submit', {
-//                            execute: function(e, actions){
-//                                console.log("SUBMITTING",e,e.constraints,actions);
-//                            }
-//                        });
+                        form.page().on('submit', {
+                            execute: function(e, actions){
+                                if ($.isEmptyObject(e.constraints) && uniqueConfiguration.length){
+                                    actions.stop();
+                                    checkDuplicateRecord(form, uniqueConfiguration, datastoreSlug, recordContainer, actions);
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -706,8 +726,8 @@
                 title: $(tr).find("td.column-name").text(),
                 visible: $(tr).find("td.column-visible input").prop("checked"),
                 searchable: $(tr).find("td.column-searchable input").prop("checked"),
-                orderable: $(tr).find("td.column-orderable input").prop("checked")//,
-                //unique: $(tr).find("td.column-unique input").prop("checked") TODO uncomment when unique is implemented
+                orderable: $(tr).find("td.column-orderable input").prop("checked"),
+                unique: $(tr).find("td.column-unique input").prop("checked")
             });
         });
         var attributes = [{
@@ -735,9 +755,13 @@
                     structure: "Submissions"
                 }
             ],
-            attributes: form.fields,
+            attributes: $.extend([], form.fields),
             qualifications: []
         };
+        // Add Submission ID attribute
+        data.attributes.push({
+            name: "Submission ID"
+        });
         
         // If Bridge Model exists, update it
         if (bridge.data("model-exists")){
@@ -790,6 +814,11 @@
                 name: field.name,
                 structureField: "${fields('values[" + field.name + "]')}"
             });
+        });
+        // Add Submission Id
+        data.attributes.push({
+            name: "Submission ID",
+            structureField: "${fields('id')}"
         });
         
         // Add all qualifications with query
@@ -860,9 +889,8 @@
                     v.visible = (v.visible === "true") ? true : false;
                     v.searchable = (v.searchable === "true") ? true : false;
                     v.orderable = (v.orderable === "true") ? true : false;
-                    //v.unique = (v.unique === "true") ? true : false; TODO uncomment when unique is implemented
+                    v.unique = (v.unique === "true") ? true : false;
                 });
-                console.log(records);
                 // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
                 // Append the import/export buttons to the buttons section on the page
@@ -1111,6 +1139,50 @@
      ** START *** DATASTORE/RECORD PAGE *** HELPER METHODS
      ** Loads a specific datastore subform for adding, cloning, or editing records.
      **********************************************************************************************/
+    
+    /**
+     * Check if duplicate record already exists
+     */
+    function checkDuplicateRecord(form, uniqueConfiguration, datastoreSlug, recordContainer, actions){
+        var q = "";
+        for (var i = 0; i < uniqueConfiguration.length; i++){
+            var field = form.getFieldByName(uniqueConfiguration[i].data);
+            if (field){
+                if (q.length > 0){ q += " AND "; }
+                q += "values[" + uniqueConfiguration[i].data + "] = "
+                        + (field.value() && field.value().length 
+                                ? "\"" + field.value() + "\"" 
+                                : "null");
+            }
+            else {
+                recordContainer.notifie({
+                    message: "Failed to build query to check for duplicates. Please verify that the datastore configuration is correct."
+                });
+                return;
+            }
+        }
+        $.ajax({
+            mathod: "GET",
+            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions?q=" + q,
+            dataType: "json",
+            contentType: "application/json",
+            success: function(result, textStatus, jqXHR){
+                if (_.reject(result.submissions, {id: form.submission().id()}).length > 0){
+                    recordContainer.notifie({
+                        message: "Duplicate record already exists."
+                    });
+                }
+                else {
+                    actions.continue();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                recordContainer.notifie({
+                    message: "Failed to save due to error in duplicate check: " + errorThrown
+                });
+            }
+        });
+    }
     
     /**
      * Redirect back to the 

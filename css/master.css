@@ -446,13 +446,13 @@ input[type="checkbox"]:focus {
  *   Buttons
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .btn-primary {
-  border-color: #c55100;
+  border-color: #c55000;
   background-color: #D95900;
   color: #fff;
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
   border-color: #D95900;
-  background-color: #c55100;
+  background-color: #c55000;
   color: #fff;
 }
 
@@ -463,13 +463,13 @@ input[type="checkbox"]:focus {
 }
 
 .btn-default {
-  border-color: #003c73;
+  border-color: #003b72;
   background-color: #00427E;
   color: #fff;
 }
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
   border-color: #00427E;
-  background-color: #003c73;
+  background-color: #003b72;
   color: #fff;
 }
 .datepicker .btn-default {
@@ -479,7 +479,7 @@ input[type="checkbox"]:focus {
 }
 .datepicker .btn-default:hover, .datepicker .btn-default:focus, .datepicker .btn-default:active, .datepicker .btn-default.active {
   border-color: #00427E;
-  background-color: #003c73;
+  background-color: #003b72;
   color: #fff;
 }
 
@@ -645,7 +645,7 @@ dl a {
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (min-width: 1301px) {
   body {
-    background: #c6c2c1;
+    background: #c5c2c1;
   }
 
   .task-wrapper {
@@ -684,7 +684,7 @@ dl a {
 }
 
 .tab-content {
-  background-color: #d7d4d3;
+  background-color: #d7d3d2;
 }
 .tab-content.content-main {
   background-color: #fff;
@@ -706,7 +706,7 @@ dl a {
   color: #808080;
 }
 .sidebar h4 {
-  color: #777574;
+  color: #767474;
 }
 .sidebar h6 {
   display: block;
@@ -839,7 +839,7 @@ dl a {
 }
 
 .table-callout-info {
-  border-color: #003c73;
+  border-color: #003b72;
   background-color: #b1daff;
 }
 
@@ -1075,6 +1075,10 @@ td .label {
 
 .form-control-static a {
   color: #D95900;
+}
+
+.empty-state-message:not(:only-child) {
+  display: none;
 }
 
 .sort {

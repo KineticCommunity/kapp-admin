@@ -1,0 +1,24 @@
+div.wizard {
+  color: #000;
+  position: relative;
+}
+div.wizard h2 {
+  color: #666;
+}
+div.wizard h3 {
+  color: #333;
+}
+div.wizard a:not(.btn) {
+  color: #D95900;
+}
+
+div.single-add-restriction:not(:only-child) {
+  display: none;
+}
+div.attribute-value span.input-group-addon {
+  color: white;
+  font-weight: bold;
+}
+.empty-state-message:not(:only-child) {
+  display: none;
+}

@@ -35,7 +35,8 @@
                 <div class="col-xs-12">
 <%-- TODO restrict duplicates <c:set var="uniqueFields" value="${AdminHelper.getUniqueFields(currentStore)}"/>  data-unique-fields="${uniqueFields}"--%>
                     <div class="datastore-record-container embedded-form" data-datastore-slug="${currentStore.slug}"
-                            data-record-id="${param.id}" data-clone-id="${param.clone}"></div>
+                            data-record-id="${param.id}" data-clone-id="${param.clone}"
+                            data-datastore-configuration="${text.escape(currentStore.getAttributeValue('Datastore Configuration'))}"></div>
                 </div>
             </div>
             

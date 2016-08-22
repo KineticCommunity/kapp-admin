@@ -901,3 +901,7 @@ td .label{
 .form-control-static{
   a{color: $kineticOrange;}
 }
+
+.empty-state-message:not(:only-child){
+  display: none;
+}

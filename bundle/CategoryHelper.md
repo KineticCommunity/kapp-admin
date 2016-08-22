@@ -39,8 +39,8 @@ request.setAttribute("CategoryHelper", new CategoryHelper());
 | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `List<BundleCategory> getCategories(Kapp kapp)`        | Gathers, maps, and sorts all of `kapp`'s categories/subcategories, and returns a list of the root categories.                                     |
 | `List<BundleCategory> getCategories(Form form)`        | Returns categories that are set to `form`.                                                                                                        |
-| `BundleCategory getCategory(String name, Kapp kapp)`   | Returns a single category object from `kapp` based on the `name`.                                                              |
-| `BundleCategory getCategory(String name, Form form)`   | Returns a single category object from the parent Kapp of the `form` based on the `name`.                                       |
+| `BundleCategory getCategory(String slug, Kapp kapp)`   | Returns a single category object from `kapp` based on the `slug`.                                                              |
+| `BundleCategory getCategory(String slug, Form form)`   | Returns a single category object from the parent Kapp of the `form` based on the `slug`.                                       |
 
 ---
 
