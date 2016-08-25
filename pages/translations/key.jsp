@@ -56,14 +56,14 @@
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/kapp">${text.escape(i18nKapp.name)}</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/context&context=${text.escape(param.context)}">${text.escape(param.context)}</a></li>
-                <li class="active">${text.truncate(text.escape(param.key), 30, "...")}</li>
+                <li class="active">${text.truncate(text.escape(param.key), 30, '...')}</li>
             </ol>
             
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
-                            <span>${text.truncate(text.escape(param.key), 30, "...")}</span>
+                            <span>${text.truncate(text.escape(param.key), 30, '...')}</span>
                             <small>Translations</small>
                             <div class="pull-right">
                                 <c:choose>

@@ -204,19 +204,20 @@
             return searchOptions;
         }
         
-//         TODO Disallow duplicate submissions        
-//         public List<String> getUniqueFields(Form datastore){
-//             List<String> uniqueFields = new ArrayList<>();
-            
-//             List<LinkedHashMap> configuration = getDatastoreColumns(datastore, "Datastore Configuration");
-//             for (LinkedHashMap config : configuration){
-//                 if ((Boolean)config.get("unique")){
-//                     uniqueFields.add((String)config.get("data"));
-//                 }
-//             }
-            
-//             return uniqueFields;
-//         }
-
+        
+        /*-----------------------------------------------------------------------------------------
+         * TRANSLATIONS CONSOLE HELPER FUNCTIONS
+         *----------------------------------------------------------------------------------------*/
+        
+        /**
+         * Sorts the given list of locale codes by the name of the locale and returns a list of codes
+         */
+        public List<String> sortLocaleCodesByName(Collection<String> localeCodes){
+            Map<String, String> locales = new TreeMap<String, String>();
+            for (String localeCode : localeCodes){
+                locales.put(TranslationLocale.get(localeCode).getName(), localeCode);
+            }
+            return new ArrayList<String>(locales.values());
+        }
     }
 %>
