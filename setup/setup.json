@@ -600,6 +600,29 @@
                             "rows": 1
                         },
                         {
+                          "type": "field",
+                          "name": "Tombstone",
+                          "label": "Tombstone",
+                          "key": "f6",
+                          "defaultValue": null,
+                          "defaultResourceName": null,
+                          "visible": false,
+                          "enabled": true,
+                          "required": false,
+                          "requiredMessage": null,
+                          "omitWhenHidden": false,
+                          "pattern": {
+                            "regex": "Yes",
+                            "message": "Tombstone value must be empty or \"Yes\"."
+                          },
+                          "constraints": [],
+                          "events": [],
+                          "renderAttributes": {},
+                          "dataType": "string",
+                          "renderType": "text",
+                          "rows": 1
+                        },
+                        {
                             "type": "button",
                             "label": "Save",
                             "name": "Save",

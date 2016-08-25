@@ -213,7 +213,7 @@
                             </span>
                         </div>
                     </td>
-                    <td>${attributeDefinition.isRequired() ? '<b class="text-danger">Required</b>' : 'Optional'}</td>
+                    <td>${attributeDefinition.isRequired() ? '<b class=\"text-danger\">Required</b>' : 'Optional'}</td>
                     <td>${allowsMultiple ? 'Yes' : 'No'}</td>
                 </tr>
             </c:forEach>
@@ -254,7 +254,7 @@
                             </span>
                         </div>
                     </td>
-                    <td>${attributeDefinition.isRequired() ? '<b class="text-danger">Required</b>' : 'Optional'}</td>
+                    <td>${attributeDefinition.isRequired() ? '<b class=\"text-danger\">Required</b>' : 'Optional'}</td>
                     <td>${allowsMultiple ? 'Yes' : 'No'}</td>
                 </tr>
             </c:forEach>

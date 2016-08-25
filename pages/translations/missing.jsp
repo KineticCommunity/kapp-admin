@@ -131,7 +131,7 @@
                     <li><a href="${i18nKappUrl}&page=translations/context&context=${text.escape(param.context)}${localeUrlParam}">${text.escape(param.context)}</a></li>
                 </c:if>
                 <c:if test="${keyBreadCrumb}">
-                    <li><a href="${i18nKappUrl}&page=translations/key&context=${text.escape(param.context)}&key=${text.escape(param.key)}">${text.truncate(text.escape(param.key), 30, "...")}</a></li>
+                    <li><a href="${i18nKappUrl}&page=translations/key&context=${text.escape(param.context)}&key=${text.escape(param.key)}">${text.truncate(text.escape(param.key), 30, '...')}</a></li>
                 </c:if>
                 <c:if test="${localeBreadCrumb}">
                     <li><a href="${i18nKappUrl}&page=translations/locale&locale=${text.escape(param.locale)}">${text.escape(param.locale)}</a></li>

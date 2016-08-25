@@ -113,7 +113,7 @@
                             <tr>
                                 <td style="width:45%;">
                                     <select class="form-control input-sm enable-locale">
-                                        <c:forEach var="localeCode" items="${translationSnapshot.disabledLocaleCodes}">
+                                        <c:forEach var="localeCode" items="${AdminHelper.sortLocaleCodesByName(translationSnapshot.disabledLocaleCodes)}">
                                             <option value="${localeCode}">${TranslationLocale.get(localeCode).name}</option>
                                         </c:forEach>
                                     </select>
