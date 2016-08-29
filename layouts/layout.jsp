@@ -36,7 +36,7 @@
             <bundle:script src="${bundle.location}/js/admin.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
-        <!-- Moment-with-locales.js is incompatible with the bundle:scriptpack minification process. -->
+        <%-- Moment-with-locales.js is incompatible with the bundle:scriptpack minification process. --%>
         <bundle:scriptpack minify="false">
             <bundle:script src="${bundle.location}/libraries/moment/moment-with-locales.min.js"/>
         </bundle:scriptpack>
