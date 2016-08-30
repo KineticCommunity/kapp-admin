@@ -171,6 +171,7 @@
                                                     <tr>
                                                         <td class="param-add-value">
                                                             <select class="input-sm form-control">
+                                                                <option value="Submission ID">Submission ID</option>
                                                                 <c:forEach var="field" items="${currentStore.pages[0].fields}">
                                                                     <option value="${field.name}">${field.name}</option>
                                                                 </c:forEach>

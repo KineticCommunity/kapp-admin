@@ -826,7 +826,12 @@
             var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=999";
             $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
                 var paramName = $(trParam).find("td.param-name").text();
-                query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
+                if (paramName !== "Submission ID"){
+                    query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
+                }
+                else {
+                    query += "&id=${parameters('" + paramName + "')}";
+                }
             });
             data.qualifications.push({
                 name: $(tr).find("td.qual-name").text(),
