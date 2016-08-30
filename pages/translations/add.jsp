@@ -65,12 +65,20 @@
 
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
-            <c:if test="${pendingChanges.size() > 0}">
-                <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
-                    <span class="fa fa-lg fa-cloud-upload"></span>
-                    <span>There are ${pendingChanges.size()} translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
-                </a>
-            </c:if>
+            <c:choose>
+                <c:when test="${pendingChanges.size() > 0}">
+                    <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
+                        <span class="fa fa-lg fa-cloud-upload"></span>
+                        <span>There are ${pendingChanges.size()}<span class="plus-placeholder"></span> translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info hide">
+                        <span class="fa fa-lg fa-cloud-upload"></span>
+                        <span>Your newly added translations are waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
+                    </a>
+                </c:otherwise>
+            </c:choose>
             
             <ol class="breadcrumb">
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
