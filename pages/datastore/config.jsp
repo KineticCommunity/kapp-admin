@@ -112,7 +112,8 @@
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label for="datastore-bridge" class="control-label">Bridge Name</label>
-                                <select id="datastore-bridge" class="form-control" data-bridge-name="${bridgeName}" data-model-exists="${not empty bridgeModel}">
+                                <select id="datastore-bridge" class="form-control" data-bridge-name="${bridgeName}" 
+                                        data-model-exists="${not empty bridgeModel}" data-model-current-name="${bridgeModelName}">
                                     <c:if test="${empty bridgeName || empty space.getBridge(bridgeName)}"><option/></c:if>
                                     <c:forEach var="bridge" items="${space.bridges}">
                                         <option value="${bridge.name}" ${bridgeName eq bridge.name ? 'selected' : ''}>${bridge.name}</option>

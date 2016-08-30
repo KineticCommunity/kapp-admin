@@ -235,7 +235,7 @@
                                                     renderCallback: false,
                                                     dismiss: function(){
                                                         // Redirect to update datastore page on success
-                                                        location.href = redirectUrl;
+                                                        location.href = reloadUrl;
                                                     }
                                                 })).show();
                                             }
@@ -257,7 +257,7 @@
                                         renderCallback: false,
                                         dismiss: function(){
                                             // Redirect to update datastore page on success
-                                            location.href = redirectUrl;
+                                            location.href = reloadUrl;
                                         }
                                     })).show();
                                 }
@@ -766,7 +766,7 @@
         // If Bridge Model exists, update it
         if (bridge.data("model-exists")){
             options.method = "put";
-            options.url = bundle.apiLocation() + "/models/" + modelName;
+            options.url = bundle.apiLocation() + "/models/" + bridge.data("model-current-name");
         }
         // If it doesn't exist, create a new Model
         else {
