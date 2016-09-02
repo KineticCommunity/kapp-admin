@@ -889,13 +889,6 @@
                         }
                     ]
                 });
-                // Go through the list of column objects and change all values that should be booleans from strings to booleans
-                $.each(records.columns, function( i, v){
-                    v.visible = (v.visible === "true") ? true : false;
-                    v.searchable = (v.searchable === "true") ? true : false;
-                    v.orderable = (v.orderable === "true") ? true : false;
-                    v.unique = (v.unique === "true") ? true : false;
-                });
                 // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
                 // Append the import/export buttons to the buttons section on the page
