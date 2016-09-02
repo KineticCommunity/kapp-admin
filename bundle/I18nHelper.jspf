@@ -1,11 +1,14 @@
 <%@page import="com.kineticdata.bundles.Text"%>
 <%@page import="com.kineticdata.core.authentication.Identity"%>
+<%@page import="com.kineticdata.core.i18n.translations.*"%>
 <%@page import="com.kineticdata.core.models.*"%>
 <%@page import="java.time.*"%>
-<%@page import="com.kineticdata.core.i18n.translations.*"%>
 <%@page import="java.util.*"%>
 <%!
     public static class I18nHelper {
+    
+        private static final TranslationSnapshot EMPTY_SNAPSHOT = 
+            new TranslationSnapshot(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
         
         /*------------------------------------------------------------------------------------------
          * CONSTRUCTOR
@@ -31,66 +34,163 @@
                 ? null 
                 : identity.getUser().getPreferredLocale();
             
-            // Obtain a reference to the kapp
-            kapp = (Kapp)request.getAttribute("kapp");
-            // Obtain a reference to the snapshot
+            // Obtain a reference to the translation manager
             manager = (TranslationManager)request.getServletContext()
                 .getAttribute("translationManager");
-            // If the kapp is not set on the request
+            
+            // Obtain a reference to the kapp
+            kapp = (Kapp)request.getAttribute("kapp");
+            // If the kapp is not set on the request (indicating this is a request to render the space page)
             if (kapp == null) {
-                locale = TranslationLocale.get(defaultLocale);
+                // Obtain a reference to the space
+                Space space = (Space)request.getAttribute("space");
+                // If the space has an admin kapp specified
+                if (space.hasAttribute("Admin Kapp Slug") 
+                        && space.getKapp(space.getAttributeValue("Admin Kapp Slug")) != null){
+                    // Set the kapp to the admin kapp
+                    kapp = space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
+                }
+            }
+            
+            // Determine the context
+            String contextName;
+            // If the kapp is null (indicating this is a request to render the space page and the space does
+            // not define an admin kapp)
+            if (kapp == null) {
+                // Use an empty snapshot to ensure all of the translate methods still work
+                snapshot = EMPTY_SNAPSHOT;
+                contextName = "bundle";
             }
             // If the kapp is set for the request
             else {
                 // Obtain the cached snapshot for the kapp
                 snapshot = manager.getCachedSnapshot(kapp);
-                
-                // Determine the context
-                String contextName;
-                // If the request is to render the kapp (rather than the form)
+                // If the request is to render the form (rather than the bundle)
                 if (request.getAttribute("form") != null) {
                     // Build the context name
                     Form form = (Form)request.getAttribute("form");
                     contextName = "form."+form.getSlug();
                 }
-                // If there is a form set into the request, set the translations
+                // If there is no form set into the request, set the translations for the bundle context
                 else {
                     contextName = "bundle";
                 }
                 
-                // Obtain a reference to the available locales for the context
-                Set<String> availableLocales = snapshot.getAvailableLocaleCodes(contextName);
-
-                // Determine the locale
-                if (request.getParameter("locale") != null) {
-                    locale = TranslationLocale.get(request.getParameter("locale"));
-                } else if (availableLocales.contains(preferredLocale)) {
-                    locale = TranslationLocale.get(preferredLocale);
-                } else if (availableLocales.contains(TranslationLocale.getCode(request.getLocale()))) {
-                    locale = TranslationLocale.get(request.getLocale());
-                } else if (snapshot.getDefaultLocaleCode() != null) {
-                    locale = TranslationLocale.get(snapshot.getDefaultLocaleCode());
-                } else {
-                    locale = TranslationLocale.get(Locale.getDefault());
-                }
-                
-                // Set the translations into the request (so that the form renderers can use them)
-                request.setAttribute("translations", 
-                    snapshot.getBundlePack(contextName, locale.getCode()).getTranslations());
             }
+            
+            // Determine the locale
+            if (request.getParameter("locale") != null) {
+                locale = TranslationLocale.get(request.getParameter("locale"));
+            } else if (preferredLocale != null) {
+                locale = TranslationLocale.get(preferredLocale);
+            } else if (TranslationLocale.getCode(request.getLocale()) != null) {
+                locale = TranslationLocale.get(request.getLocale());
+            } else if (snapshot.getDefaultLocaleCode() != null) {
+                locale = TranslationLocale.get(snapshot.getDefaultLocaleCode());
+            } else {
+                locale = TranslationLocale.get(Locale.getDefault());
+            }
+            
+            // Set the translations into the request (so that the form renderers can use them)
+            request.setAttribute("translations", 
+                snapshot.getBundlePack(contextName, locale.getCode()).getTranslations());
         }
         
-        
         /*------------------------------------------------------------------------------------------
-         * ACCESSOR METHODS
+         * METHODS
          *----------------------------------------------------------------------------------------*/
         
         public Locale getLocale() {
             return locale.getLocale();
         }
         
+        public String getLocaleCode(Locale locale) {
+            String result;
+            if (!"".equals(locale.getVariant())) {
+                result = locale.getLanguage() 
+                    + "_" + locale.getCountry()
+                    + "_" + locale.getVariant();
+            } else if (!"".equals(locale.getCountry())) {
+                result = locale.getLanguage() 
+                    + "_" + locale.getCountry();
+            } else if (!"".equals(locale.getLanguage())) {
+                result = locale.getLanguage();
+            } else {
+                result = "";
+            }
+            return result;
+        }
+        
+        public String getLocaleNameGlobalized(Locale locale) {
+            return locale.getDisplayName(locale);
+        }
+
+        public String getLocaleNameLocalized(Locale locale, Locale inLocale) {
+            return locale.getDisplayName((inLocale == null) ? Locale.getDefault() : inLocale);
+        }
+        
+        public List<Locale> getSystemLocales() {
+            return getSystemLocales(null, Collections.EMPTY_LIST);
+        }
+        
+        public List<Locale> getSystemLocales(Collection<Locale> preferredLocales) {
+            return getSystemLocales(null, preferredLocales);
+        }
+        
+        public List<Locale> getSystemLocales(Enumeration<Locale> preferredLocales) {
+            return getSystemLocales(null, Collections.list(preferredLocales));
+        }
+
+        public List<Locale> getSystemLocales(Locale locale) {
+            return getSystemLocales(locale, Collections.EMPTY_LIST);
+        }
+
+        public List<Locale> getSystemLocales(Locale locale, Enumeration<Locale> preferredLocales) {
+            return getSystemLocales(locale, Collections.list(preferredLocales));
+        }
+        
+        public List<Locale> getSystemLocales(Locale locale, Collection<Locale> preferredLocales) {
+            List<Locale> results = new ArrayList<>();
+            for (Locale currentLocale : Locale.getAvailableLocales()) {
+                if (!Locale.ROOT.equals(currentLocale)) {
+                    results.add(currentLocale);
+                }
+            }
+            Collections.sort(results, new LocaleComparator(locale, preferredLocales));
+            return results;
+        }
+        
         public ZoneId getZoneId() {
             return ZoneId.systemDefault();
+        }
+        
+        /*------------------------------------------------------------------------------------------
+         * LOCALE METHODS
+         *----------------------------------------------------------------------------------------*/
+        
+        public String getCode(Locale locale) {
+            String result;
+            if (!"".equals(locale.getVariant())) {
+                result = locale.getLanguage() 
+                    + "_" + locale.getCountry()
+                    + "_" + locale.getVariant();
+            } else if (!"".equals(locale.getCountry())) {
+                result = locale.getLanguage() 
+                    + "_" + locale.getCountry();
+            } else if (!"".equals(locale.getLanguage())) {
+                result = locale.getLanguage();
+            } else {
+                result = "";
+            }
+            return result;
+        }
+        
+        public String getGlobalizedName(Locale locale) {
+            return locale.getDisplayName(locale);
+        }
+
+        public String getLocalizedName(Locale locale, Locale inLocale) {
+            return locale.getDisplayName((inLocale == null) ? Locale.getDefault() : inLocale);
         }
         
         /*------------------------------------------------------------------------------------------
@@ -146,6 +246,55 @@
         public String translate(String contextName, String key, Map<String,String> substitutions) {
             return snapshot.getBundlePack(contextName, locale.getCode())
                 .translate(key, substitutions);
+        }
+        
+        
+        /*----------------------------------------------------------------------------------------------
+         * HELPER CLASSES
+         *--------------------------------------------------------------------------------------------*/
+    
+        public static class LocaleComparator implements Comparator<Locale> {
+            private final Locale locale;
+            private final Map<Locale,Integer> preferredLocales;
+            public LocaleComparator() {
+                this(null, Collections.EMPTY_LIST);
+            }
+            public LocaleComparator(Locale locale) {
+                this(locale, Collections.EMPTY_LIST);
+            }
+            public LocaleComparator(Locale locale, Collection<Locale> preferredLocales) {
+                // Initialize the locale variables
+                this.locale = locale;
+                this.preferredLocales = new HashMap<>();
+                // Populate the preferred locales
+                if (preferredLocales != null) {
+                    Iterator<Locale> iterator = preferredLocales.iterator();
+                    int i=0;
+                    while (iterator.hasNext()) {
+                        this.preferredLocales.put(iterator.next(), i++);
+                    }
+                }
+            }
+            @Override
+            public int compare(Locale o1, Locale o2) {
+                int result;
+                Integer o1Weight = preferredLocales.get(o1);
+                Integer o2Weight = preferredLocales.get(o2);
+                if (o1 == o2) {
+                    result = 0;
+                } else if (o1Weight != null && o2Weight != null) {
+                    result = o1Weight.compareTo(o2Weight);
+                } else if (o1Weight != null) {
+                    result = -1;
+                } else if (o2Weight != null) {
+                    result = 1;
+                } else {
+                    result = String.CASE_INSENSITIVE_ORDER.compare(
+                        o1.getDisplayName(locale == null ? o1 : Locale.getDefault()), 
+                        o2.getDisplayName(locale == null ? o2 : Locale.getDefault()));
+                }
+                return result;
+            }
         }
         
     }

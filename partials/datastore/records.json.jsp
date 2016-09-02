@@ -17,14 +17,14 @@
     <json:object>
       <json:property name="title" value="Datastore Record ID"/>
       <json:property name="data" value="ID"/>
-      <json:property name="visible" value="false"/>
+      <json:property name="visible" value="${false}"/>
     </json:object>
     <json:object>
       <json:property name="title" value=""/>
       <json:property name="data" value=""/>
-      <json:property name="visible" value="true"/>
+      <json:property name="visible" value="${true}"/>
       <json:property name="class" value="all"/>
-      <json:property name="orderable" value="false"/>
+      <json:property name="orderable" value="${false}"/>
       <json:property name="defaultContent" value="<div class=\"btn-group datastore-btns\"><button class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></button><button class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></button><button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button></div> "/>
     </json:object>
   </json:array>

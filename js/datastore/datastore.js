@@ -235,7 +235,7 @@
                                                     renderCallback: false,
                                                     dismiss: function(){
                                                         // Redirect to update datastore page on success
-                                                        location.href = redirectUrl;
+                                                        location.href = reloadUrl;
                                                     }
                                                 })).show();
                                             }
@@ -257,7 +257,7 @@
                                         renderCallback: false,
                                         dismiss: function(){
                                             // Redirect to update datastore page on success
-                                            location.href = redirectUrl;
+                                            location.href = reloadUrl;
                                         }
                                     })).show();
                                 }
@@ -766,7 +766,7 @@
         // If Bridge Model exists, update it
         if (bridge.data("model-exists")){
             options.method = "put";
-            options.url = bundle.apiLocation() + "/models/" + modelName;
+            options.url = bundle.apiLocation() + "/models/" + bridge.data("model-current-name");
         }
         // If it doesn't exist, create a new Model
         else {
@@ -826,7 +826,12 @@
             var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=999";
             $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
                 var paramName = $(trParam).find("td.param-name").text();
-                query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
+                if (paramName !== "Submission ID"){
+                    query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
+                }
+                else {
+                    query += "&id=${parameters('" + paramName + "')}";
+                }
             });
             data.qualifications.push({
                 name: $(tr).find("td.qual-name").text(),
@@ -883,13 +888,6 @@
                             action: importDatastoreRecords
                         }
                     ]
-                });
-                // Go through the list of column objects and change all values that should be booleans from strings to booleans
-                $.each(records.columns, function( i, v){
-                    v.visible = (v.visible === "true") ? true : false;
-                    v.searchable = (v.searchable === "true") ? true : false;
-                    v.orderable = (v.orderable === "true") ? true : false;
-                    v.unique = (v.unique === "true") ? true : false;
                 });
                 // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);

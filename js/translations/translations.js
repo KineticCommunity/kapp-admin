@@ -921,6 +921,17 @@
                             container.find("textarea[data-entry-value]").val("");
                             container.find("input[data-entry-key]").val("").focus();
                             saveButton.attr("disabled", false);
+                            
+                            // Get publish notice
+                            var publishNotice = $("a.pending-publish");
+                            // If notice is hidden (no pending chnages), show it
+                            if (publishNotice.is(".hide")){
+                                publishNotice.removeClass("hide");
+                            }
+                            // If notice already shown, add plus to existing number if it hasn't been done yet
+                            else {
+                                publishNotice.find("span.plus-placeholder").replaceWith("+");
+                            }
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             try { 
@@ -1098,8 +1109,8 @@
             $(this).notifie({
                 anchor: "h3",
                 message: "<b>Import Completed Successfully</b><br>" + data.response().result.message
-                    + "<br><a class='pull-right btn btn-sm btn-default' href='javascript:window.location.reload();'>"
-                    + "<span class='fa fa-refresh'></span> Reload Page</a>",
+                    + "<br><a class='pull-right btn btn-sm btn-default' href='" + bundle.adminTranslations.i18nKappUrl + "&page=translations/publish'>"
+                    + "<span class='fa fa-cloud-upload'></span> Publish Imported Changes</a>",
                 severity: "info",
                 permanent: true
             });
