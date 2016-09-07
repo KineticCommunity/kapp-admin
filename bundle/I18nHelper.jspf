@@ -1,3 +1,5 @@
+<%@page import="com.google.common.collect.Lists"%>
+<%@page import="com.google.common.base.Function"%>
 <%@page import="com.kineticdata.bundles.Text"%>
 <%@page import="com.kineticdata.core.authentication.Identity"%>
 <%@page import="com.kineticdata.core.i18n.translations.*"%>
@@ -35,20 +37,20 @@
                 : identity.getUser().getPreferredLocale();
             
             // Obtain a reference to the translation manager
-            manager = (TranslationManager)request.getServletContext()
+            this.manager = (TranslationManager)request.getServletContext()
                 .getAttribute("translationManager");
             
             // Obtain a reference to the kapp
-            kapp = (Kapp)request.getAttribute("kapp");
+            this.kapp = (Kapp)request.getAttribute("kapp");
             // If the kapp is not set on the request (indicating this is a request to render the space page)
-            if (kapp == null) {
+            if (this.kapp == null) {
                 // Obtain a reference to the space
                 Space space = (Space)request.getAttribute("space");
                 // If the space has an admin kapp specified
                 if (space.hasAttribute("Admin Kapp Slug") 
                         && space.getKapp(space.getAttributeValue("Admin Kapp Slug")) != null){
                     // Set the kapp to the admin kapp
-                    kapp = space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
+                    this.kapp = space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
                 }
             }
             
@@ -56,15 +58,15 @@
             String contextName;
             // If the kapp is null (indicating this is a request to render the space page and the space does
             // not define an admin kapp)
-            if (kapp == null) {
+            if (this.kapp == null) {
                 // Use an empty snapshot to ensure all of the translate methods still work
-                snapshot = EMPTY_SNAPSHOT;
+                this.snapshot = EMPTY_SNAPSHOT;
                 contextName = "bundle";
             }
             // If the kapp is set for the request
             else {
                 // Obtain the cached snapshot for the kapp
-                snapshot = manager.getCachedSnapshot(kapp);
+                this.snapshot = this.manager.getCachedSnapshot(kapp);
                 // If the request is to render the form (rather than the bundle)
                 if (request.getAttribute("form") != null) {
                     // Build the context name
@@ -80,15 +82,15 @@
             
             // Determine the locale
             if (request.getParameter("locale") != null) {
-                locale = TranslationLocale.get(request.getParameter("locale"));
+                this.locale = TranslationLocale.get(request.getParameter("locale"));
             } else if (preferredLocale != null) {
-                locale = TranslationLocale.get(preferredLocale);
+                this.locale = TranslationLocale.get(preferredLocale);
             } else if (TranslationLocale.getCode(request.getLocale()) != null) {
-                locale = TranslationLocale.get(request.getLocale());
+                this.locale = TranslationLocale.get(request.getLocale());
             } else if (snapshot.getDefaultLocaleCode() != null) {
-                locale = TranslationLocale.get(snapshot.getDefaultLocaleCode());
+                this.locale = TranslationLocale.get(snapshot.getDefaultLocaleCode());
             } else {
-                locale = TranslationLocale.get(Locale.getDefault());
+                this.locale = TranslationLocale.get(Locale.getDefault());
             }
             
             // Set the translations into the request (so that the form renderers can use them)
@@ -99,6 +101,27 @@
         /*------------------------------------------------------------------------------------------
          * METHODS
          *----------------------------------------------------------------------------------------*/
+         
+        public List<Locale> getEnabledLocales() {
+            return getEnabledLocales(this.kapp);
+        }
+        
+        public List<Locale> getEnabledLocales(Kapp kapp) {
+            if (kapp == null){
+                return Collections.EMPTY_LIST;
+            }
+            else {
+                return Lists.transform(
+                    this.manager.getEnabledLocales(kapp),
+                    new Function<TranslationLocale, Locale>() {
+                        @Override
+                        public Locale apply(TranslationLocale locale) {
+                            return locale.getLocale();
+                        }
+                    }
+                );    
+            }
+        }
         
         public Locale getLocale() {
             return locale.getLocale();
@@ -162,35 +185,6 @@
         
         public ZoneId getZoneId() {
             return ZoneId.systemDefault();
-        }
-        
-        /*------------------------------------------------------------------------------------------
-         * LOCALE METHODS
-         *----------------------------------------------------------------------------------------*/
-        
-        public String getCode(Locale locale) {
-            String result;
-            if (!"".equals(locale.getVariant())) {
-                result = locale.getLanguage() 
-                    + "_" + locale.getCountry()
-                    + "_" + locale.getVariant();
-            } else if (!"".equals(locale.getCountry())) {
-                result = locale.getLanguage() 
-                    + "_" + locale.getCountry();
-            } else if (!"".equals(locale.getLanguage())) {
-                result = locale.getLanguage();
-            } else {
-                result = "";
-            }
-            return result;
-        }
-        
-        public String getGlobalizedName(Locale locale) {
-            return locale.getDisplayName(locale);
-        }
-
-        public String getLocalizedName(Locale locale, Locale inLocale) {
-            return locale.getDisplayName((inLocale == null) ? Locale.getDefault() : inLocale);
         }
         
         /*------------------------------------------------------------------------------------------

@@ -598,7 +598,7 @@
         /*
          * Click event handler for disabling a locale
          */
-        $("button.disable-locale-btn").on("click", function(){
+        $("a.disable-locale-btn").on("click", function(){
             var row = $(this).closest("tr");
             var locale = row.data("locale");
             var localeName = row.data("locale-name");
