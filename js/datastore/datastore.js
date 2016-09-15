@@ -889,6 +889,18 @@
                         }
                     ]
                 });
+                $.each(_.where(records.columns, {renderType: "date"}), function(i, col){
+                    col.render = $.fn.dataTable.render.moment("date", "ll", bundle.config.userLocale);
+                });
+                $.each(_.where(records.columns, {renderType: "datetime"}), function(i, col){
+                    col.render = $.fn.dataTable.render.moment("datetime", "lll", bundle.config.userLocale);
+                });
+                $.each(_.where(records.columns, {renderType: "time"}), function(i, col){
+                    col.render = $.fn.dataTable.render.moment("time", "LT", bundle.config.userLocale);
+                });
+                $.each(_.where(records.columns, {renderType: "checkbox"}), function(i, col){
+                    col.render = $.fn.dataTable.render.checkbox();
+                });
                 // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
                 // Append the import/export buttons to the buttons section on the page

@@ -9,6 +9,7 @@
       <json:object>
         <json:property name="title" value="${field.title}"/>
         <json:property name="data" value="${field.data}"/>
+        <json:property name="renderType" value="${field.renderType}"/>
         <json:property name="visible" value="${field.visible}"/>
         <json:property name="searchable" value="${field.searchable}"/>
         <json:property name="orderable" value="${field.orderable}"/>

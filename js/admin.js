@@ -44,5 +44,54 @@
             });
         });
     }
+    
+    /*----------------------------------------------------------------------------------------------
+     * DEFINE RENDERERS FOR DATATABLES FOR FIELD TYPES
+     *--------------------------------------------------------------------------------------------*/
+    
+    /**
+     * Renderer for formatting dates, times, and datetimes.
+     */
+    $.fn.dataTable.render.moment = function(from, to, locale){
+        switch(from) {
+            case "datetime":
+                from = "YYYY-MM-DDTHH:mm:ssZ";
+                break;
+            case "time":
+                from = "HH:mm";
+                break;
+            case "date":
+                from = "YYYY-MM-DD";
+                break;
+        }
+        // Defaults if arguments are missing
+        if (from == null){
+            from = "YYYY-MM-DD";
+        }
+        if (to == null){
+            to = from;
+        }
+        if ( locale == null ){
+            locale = 'en';
+        }
+        return function ( d, type, row ){
+            if (d == null || d.length <= 0){
+                return d;
+            }
+            var m = window.moment(d, from, locale, true);
+            // Order and type get a number value from Moment, everything else
+            // sees the rendered value
+            return m.format(type === 'sort' || type === 'type' ? 'x' : to);
+        };
+    };
+    
+    /**
+     * Renderer for formatting checkboxes.
+     */
+    $.fn.dataTable.render.checkbox = function(){
+        return function ( d, type, row ){
+            return d.replace(/^\[(.*)\]$/, "$1");
+        };
+    };
          
 })($, _);
