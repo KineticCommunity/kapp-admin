@@ -1,85 +1,126 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
 
-<nav class="navbar navbar-default" role="navigation">
-    
-    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-    
-    <div class="kapp-selector nav-title">
-        <div class="kapp-current dropdown">
-            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-                <img src="${bundle.location}/images/ProductName-Admin.png" height="40px">
-                <span class="fa fa-caret-down"></span>
+<nav class="navbar navbar-default" id="bundle-header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle dropdown" data-toggle="collapse"
+            data-target="#navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">${i18n.translate('Toggle navigation')}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="${not empty kapp ? bundle.kappLocation : bundle.spaceLocation}">
+                <c:choose>
+                    <c:when test="${not empty kapp && kapp.hasAttribute('Logo Url')}">
+                        <img src="${space.getAttributeValue('Logo Url')}" alt="${text.escape(i18n.translate(kapp.name))}">
+                    </c:when>
+                    <c:when test="${space.hasAttribute('Logo Url')}">
+                        <img src="${kapp.getAttributeValue('Logo Url')}" alt="${text.escape(i18n.translate(space.name))}">
+                    </c:when>
+                    <c:when test="${not empty kapp}">
+                        <span class="fa fa-home fa-fw"></span>
+                        <span>${text.escape(i18n.translate(kapp.name))}</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="fa fa-home fa-fw"></span>
+                        <c:choose>
+                            <c:when test="${not empty kapp && kapp.hasAttribute('Company Name')}">
+                                <span>${text.escape(i18n.translate(kapp.getAttributeValue('Company Name')))}</span>
+                            </c:when>
+                            <c:when test="${space.hasAttribute('Company Name')}">
+                                <span>${text.escape(i18n.translate(space.getAttributeValue('Company Name')))}</span>
+                            </c:when>
+                            <c:when test="${not empty kapp}">
+                                <span>${text.escape(i18n.translate(kapp.name))}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span>${text.escape(i18n.translate(space.name))}</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:otherwise>
+                </c:choose>
             </a>
-            <ul class="kapp-list dropdown-menu"> 
-                <li><a href="${bundle.kappLocation}"><span class="fa fa-home"></span> Home</a></li>
-                <li class="divider "></li>
-                <c:forEach var="consoleKapp" items="${AdminHelper.getActiveKapps()}">
-                    <li><a href="${bundle.kappLocation}?kapp=${consoleKapp.slug}">${consoleKapp.name}</a></li>
-                </c:forEach>
-            </ul> 
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <c:choose>
+                        <c:when test="${identity.anonymous}">
+                            <a href="${bundle.spaceLocation}/app/login" class="hidden-xs">
+                                <span class="fa fa-sign-in fa-fw"></span> 
+                                <span>${i18n.translate('Login')}</span>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a id="userMenu" href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-user fa-fw"></span>
+                                <span>${text.escape(text.trim(identity.displayName, identity.username))}</span>
+                                <span class="fa fa-caret-down fa-fw"></span>
+                            </a>
+                            <ul class="dropdown-menu show-xs priority" aria-labelledby="userMenu">
+                                <li class="hidden-xs">
+                                    <a href="${bundle.spaceLocation}/?page=profile">
+                                        <span class="fa fa-pencil fa-fw"></span>
+                                        <span>${i18n.translate('Edit Profile')}</span>
+                                    </a>
+                                </li>
+                                <li class="priority hidden-lg hidden-md hidden-sm">
+                                    <a href="${bundle.spaceLocation}/?page=profile">
+                                        <span class="fa fa-user fa-fw"></span> 
+                                        <span>${i18n.translate('Profile')}</span>
+                                    </a>
+                                </li>
+                                <li class="divider hidden-xs"></li>
+                                <li class="hidden-xs">
+                                    <a href="${bundle.spaceLocation}/app/">
+                                        <span class="fa fa-dashboard fa-fw"></span>
+                                        <span>${i18n.translate('Management Console')}</span>
+                                    </a>
+                                </li>
+                                <li class="divider hidden-xs"></li>
+                                <li>
+                                    <a href="${bundle.spaceLocation}/app/logout">
+                                        <span class="fa fa-sign-out fa-fw"></span>
+                                        <span>${i18n.translate('Logout')}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+                <li class="dropdown">
+                    <a id="linkMenu" href="#" class="dropdown-toggle  hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="hidden-xs fa fa-th fa-fw"></span>
+                    </a>
+                    <ul class="dropdown-menu show-xs" aria-labelledby="linkMenu">
+                        <li>
+                            <a href="${bundle.spaceLocation}">
+                                ${i18n.translate('Home')}
+                            </a>
+                        </li>
+                        <c:catch var="headerNavigationError">
+                            <c:forEach items="${BundleHelper.headerNavigation}" var="link">
+                                <li>
+                                    <a href="${link.path}">${i18n.translate(link.name)}</a>
+                                </li>
+                            </c:forEach>
+                        </c:catch>
+                        <c:if test="${headerNavigationError ne null}">
+                            <li class="alert alert-danger">${i18n.translate('Error building header navigation. The value of the \"Header Navigation List\" attribute contains invalid JSON.')}</li>
+                        </c:if>
+                        <c:if test="${identity.spaceAdmin}">
+                            <li class="divider hidden-xs"></li>
+                            <li class="dropdown-header">${i18n.translate('KAPPS')}</li>                                    
+                            <c:forEach items="${space.kapps}" var="kapp" begin="0" end="8">
+                                <li><a href="${bundle.spaceLocation}/${kapp.slug}">${i18n.translate(kapp.name)}</a></li>
+                            </c:forEach>
+                        </c:if>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
-    
-    <h2 class="kapp-title">
-        Admin Console <if test="${not empty currentKapp}"><a href="${bundle.spaceLocation}/${currentKapp.slug}" target="_blank"><small> ${currentKapp.name}</small></a></if>
-    </h2>
-    
-    <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-            <c:choose>
-                <c:when test="${identity.anonymous}">
-                    <a href="${bundle.spaceLocation}/app/login">
-                        <div class="account">
-                            <span class="fa fa-sign-in fa-fw"></span>
-                            Login
-                        </div>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="account">
-                            <span class="fa fa-user fa-fw"></span>
-                            <span>${text.escape(identity.displayName)}</span>
-                            <span class="fa fa-caret-down"></span>
-                        </div>
-                    </a>
-                </c:otherwise>
-            </c:choose>
-            <ul class="dropdown-menu">
-                <c:if test="${not identity.anonymous}">
-                    <li><a href="${bundle.spaceLocation}/app/"><i class="fa fa-dashboard fa-fw"></i> Management Console</a></li>
-                    <c:if test="${identity.spaceAdmin}">
-                        <li><a href="${bundle.kappLocation}?setup"><i class="fa fa-cogs fa-fw"></i> Kapp Setup</a></li>
-                    </c:if>
-                    <li class="divider"></li>
-                    <li><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
-                    <li><a href="${bundle.spaceLocation}/app/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-                </c:if>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"  aria-haspopup="true" aria-expanded="false">
-                Help
-                <span class="fa fa-caret-down fa-fw"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li class="dropdown-header">Kinetic Community</li>
-                <c:if test="${not empty form}">
-                    <c:forEach var="link" items="${AdminHelper.getCommunityLinks(form)}">
-                        <li><a href="${link.href}" target="_blank">${link.name}</a></li>
-                    </c:forEach>
-                </c:if>
-                <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">${kapp.name} Setup Help</a></li>
-                <li class="divider"></li>
-                <c:if test="${not empty currentKapp && not empty form}">
-                    <c:forEach var="link" items="${AdminHelper.getFormHelpLinks(currentKapp,form.slug)}">
-                        <li><a href="${link.href}" target="_blank">${link.name}</a></li>
-                    </c:forEach>
-                </c:if>
-                <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">About ${kapp.name}</a></li>
-            </ul>
-        </li>
-    </ul>
 </nav>

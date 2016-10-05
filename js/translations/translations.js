@@ -19,11 +19,12 @@
                     var pageLength = $(table).data("page-length") || 25;
                     var dom = $(table).data("dom") 
                         || data.data.length > pageLength 
-                            ? "<'dt-title'f>t<'pull-right'p>i"
+                            ? "<'dt-title'>ft<'pull-right'p>i"
                             : ($(table).find("tbody tr").length > 0
-                                ? "<'dt-title'f>ti"
+                                ? "<'dt-title'>fti"
                                 : "<'dt-title'>t");
                     records = $.extend(data, {
+                        autoWidth: false,
                         pageLength: pageLength,
                         dom: dom,
                         language: {
@@ -310,13 +311,13 @@
                         title: "Locale",
                         data: "locale",
                         class: "locale",
-                        width: "10%"
+                        width: "40px"
                     },
                     {
                         title: "Context",
                         data: "context",
                         class: "context",
-                        width: "15%"
+                        width: "80px"
                     },
                     {
                         title: "Key",
@@ -334,10 +335,11 @@
                         searchable: false,
                         defaultContent: "<div class=\"btn-group pull-right\" role=\"group\"><button class=\"edit-translation-btn btn btn-xs btn-default\" type=\"button\"><span class=\"fa fa-pencil\"></span></button><button class=\"delete-translation-btn btn btn-xs btn-danger\" type=\"button\"><span class=\"fa fa-times\"></span></button></div>",
                         class: "actions",
-                        width: "8%"
+                        width: "44px"
                     }
                 ],
                 data: [],
+                autoWidth: false,
                 paging: false,
                 dom: "<'dt-title'f>ti",
                 language: {
@@ -484,6 +486,7 @@
                             ? "<'dt-title'f>ti"
                             : "<'dt-title'>t");
             var options = {
+                autoWidth: false,
                 dom: dom,
                 pageLength: pageLength,
                 language: {

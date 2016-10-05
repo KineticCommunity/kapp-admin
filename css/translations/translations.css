@@ -51,4 +51,5 @@ a.pending-publish {
   border-top-left-radius: 0;
   border-top: none;
   width: 100%;
+  white-space: normal;
 }

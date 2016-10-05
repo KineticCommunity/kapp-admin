@@ -3,62 +3,47 @@
 <%@include file="bundle/router.jspf" %>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <bundle:variable name="head">
-        <title>Admin Console</title>
-    </bundle:variable>
     
-    <br/>
+    <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
+                
+    <div class="page-header">
+        <h3 class="text-center">
+            Welcome to the <strong>Admin Console</strong>
+        </h3>
+        <p class="text-center">
+            Please select a console component below.
+        </p>
+    </div>
 
-    <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
-    <c:set var="consoles" value="${empty currentKapp ? AdminHelper.getActiveConsoles() : AdminHelper.getActiveConsolesForKapp(currentKapp)}" scope="request" />
-    
     <div class="row">
-        <div class="${empty currentKapp ? 'col-xs-8 col-xs-offset-2' : 'col-xs-10'} ">
-            <c:choose>
-                <c:when test="${empty consoles}">
-                    <div class="alert alert-info">
-                        <h4>There are no configured admin consoles<c:if test="${not empty currentKapp}"> for the ${currentKapp.name} Kapp</c:if>.</h4>
-                        <c:choose>
-                            <c:when test="${!identity.spaceAdmin}">
-                                <p>Please contact your administrator.</p>
-                            </c:when>
-                            <c:otherwise>
-                                <p>TODO: Instructions for setting up the consoles.</p>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach var="console" items="${consoles}">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong>${console.name}</strong>
-                            </div>
-                            <div class="panel-body">
-                                <p>${console.description}</p>
-                                <c:if test="${empty currentKapp}">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Kapp</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="activeKapp" items="${AdminHelper.getActiveKappsForConsole(console)}">
-                                                <tr>
-                                                    <td>
-                                                        <a href="${bundle.kappLocation}/${console.slug}?kapp=${activeKapp.slug}">${activeKapp.name}</a>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </c:if>
-                            </div>
+        <div class="col-xs-12">
+            <div class="card-container-xs-12 card-container-sm-6 card-container-md-4">
+                <c:set var="consoles" value="${AdminHelper.getActiveConsoles()}" scope="request" />
+                <c:choose>
+                    <c:when test="${not empty consoles}">
+                        <c:forEach var="console" items="${consoles}">
+                            <a class="card-xs card-secondary card-subtle" href="${bundle.kappLocation}/${console.slug}">
+                                <div class="card-title">${console.name}</div>
+                                <div class="card-content">${console.description}</div>
+                            </a>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="alert alert-info">
+                            There are no Admin Console Components available for you.
                         </div>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
     </div>
+
+    <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+    <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+    <bundle:variable name="aside">
+    
+    </bundle:variable>
+    <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
+    
 </bundle:layout>

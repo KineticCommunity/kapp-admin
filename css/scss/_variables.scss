@@ -1,0 +1,75 @@
+// Colors
+// --------------------------------------
+
+$primary: #F18F01;
+$primary-complement: #ffffff;
+$secondary: #99C24D;
+$secondary-complement: #ffffff;
+$tertiary: #048BA8;
+$tertiary-complement: #ffffff;
+$lightestgray: #F1F1F1;
+$lightgray: #BBC0C2;
+$gray: #8A9699;
+$darkgray: #6B7E83;
+$darkestgray: #4D686F;
+$black: #000000;
+$white: #ffffff;
+
+$text-color: #333333 !default; // Global text color on `<body>`.
+$link-color: $tertiary !default; // Global textual link color.
+$body-bg-color: $white !default; // Background color for `<body>`.
+$header-color: $white !default; // Background color for <nav>
+$header-text-color: #333333 !default; // Text color for <nav>
+$subheader-color: $tertiary !default; // Background color for <nav data-subnav>
+$subheader-text-color: $white !default; // Text color for <nav data-subnav>
+
+// Color Tint Function
+// --------------------------------------
+
+// If average RGB value of $color is > 128, tint will darken $color by $percentage (or if $percentage is negative, lighten $color by abs($percentage))
+// If average RGB value of $color is <= 128, tint will lighten $color by $percentage (or if $percentage is negative, darken $color by abs($percentage))
+@function tint($color, $percentage){
+    @return if(
+        (red($color) + green($color) + blue($color)) / 3 > 128, 
+        if($percentage > 0, darken($color, abs($percentage)), lighten($color, abs($percentage))),
+        if($percentage > 0, lighten($color, abs($percentage)), darken($color, abs($percentage)))
+    );
+}
+
+// Color Subtle Function
+// --------------------------------------
+
+// Returns the $color with the $lightness and $alpha specified
+@function subtle($color, $percentage, $alpha: 1){
+    @return hsla(hue($color), saturation($color), $percentage, $alpha);
+}
+
+
+// Scaffold
+// --------------------------------------
+
+$footer-height: 60px;
+
+
+// Typography
+// --------------------------------------
+
+$font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+$font-family-base:        $font-family-sans-serif !default;
+
+$font-size-base:          1.4rem !default; // Default font size. Equal to 14px.
+$line-height-base:        2rem !default; // Default line height. Equal to 20px.
+
+
+// Components
+// --------------------------------------
+
+$enable-rounded:            true;
+$border-radius-base:        0.4rem !default;
+
+$margin-increment: 0.5rem;
+$margin-count: 5;
+$padding-increment: 0.5rem;
+$padding-count: 5;

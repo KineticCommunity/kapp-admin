@@ -1,15 +1,11 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request" />
 <c:set var="currentStore" value="${kapp.getForm(param.store)}" scope="request" />
 
-<!-- Show page content only if Kapp & Store exist. Otherwise redirect to valid page. -->
+<!-- Show page content only if Store exist. Otherwise redirect to Datastore home page. -->
 <c:choose>
-    <c:when test="${empty currentKapp}">
-        <script>window.location.replace("${bundle.kappLocation}");</script>
-    </c:when>
     <c:when test="${empty currentStore}">
-        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?kapp=${currentKapp.slug}");</script>
+        <script>window.location.replace("${bundle.kappLocation}/${form.slug}");</script>
     </c:when>
     <c:otherwise>
 
@@ -18,14 +14,16 @@
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/datastore/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
+            
+            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+            <bundle:variable name="breadcrumb">
+                <li><a href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
+                <li><a href="${bundle.kappLocation}/${form.slug}?&page=datastore/store&store=${currentStore.slug}" class="return-to-store">${currentStore.name}</a></li>
+                <li class="active">${not empty param.id ? 'Edit' : empty param.clone ? 'New' : 'Clone'}</li>
+            </bundle:variable>
+            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
     
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
-            
-            <ol class="breadcrumb">
-                <li><a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}">${form.name}</a></li>
-                <li><a href="${bundle.kappLocation}/${form.slug}?kapp=${param.kapp}&page=datastore/store&store=${currentStore.slug}" class="return-to-store">${currentStore.name}</a></li>
-                <li class="active ng-binding">${not empty param.id ? 'Edit' : empty param.clone ? 'New' : 'Clone'}</li>
-            </ol>
             
             <div class="page-header">
                 <h3>${not empty param.id ? 'Edit ' : empty param.clone ? 'New ' : 'Clone '}${currentStore.name} Record</h3>
@@ -44,10 +42,9 @@
     
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
-                <h3>${currentStore.name}</h3>
-                <p>
-                    ${currentStore.description}
-                </p>
+                <h3>${form.name}</h3>
+                <h4>${currentStore.name}</h4>
+                <p>${currentStore.description}</p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             

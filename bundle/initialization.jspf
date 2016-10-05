@@ -56,7 +56,7 @@
 <%-- AdminHelper --%>
 <%@include file="AdminHelper.jspf"%>
 <%
-    AdminHelper adminHelper = new AdminHelper(request, kapp, bundle);
+    AdminHelper adminHelper = new AdminHelper(request);
     request.setAttribute("AdminHelper", adminHelper);
 %>
 
@@ -70,6 +70,13 @@
 <%@include file="GroupHelper.jspf"%>
 <%
     request.setAttribute("GroupHelper", new GroupHelper(request, space));
+%>
+
+<%-- ProfileHelper --%>
+<%@include file="ProfileHelper.jspf"%>
+<%
+    ProfileHelper profileHelper = new ProfileHelper(request);
+    request.setAttribute("ProfileHelper", profileHelper);
 %>
 
 <%-- SearchHelper --%>

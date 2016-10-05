@@ -43,51 +43,35 @@
         <bundle:yield name="head"/>
     </head>
     <body>
-        <div class="task-wrapper">
-            <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
+        <div class="view-port">
             <c:set var="aside"><bundle:yield name="aside"/></c:set>
+<%--             <c:import url="${space.bundleBase}/${space.bundlePath}/partials/header.jsp" charEncoding="UTF-8"/> --%>
             <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
-            <section class="content">
-                <div class="container-fluid main-inner">
-                    <div class="row">
-                        <c:if test="${not empty currentKapp}">
-                            <div class="col-xs-2 sidebar">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <c:forEach var="console" items="${AdminHelper.getActiveConsolesForKapp(currentKapp)}">
-                                        <li class="${form.slug eq console.slug || form.getAttributeValue('Console Slug') eq console.slug ? 'active' : ''}">
-                                            <a href="${bundle.kappLocation}/${console.slug}?kapp=${currentKapp.slug}">${console.name}</a>
-                                        </li>
-                                    </c:forEach>
-                                </ul>
-                            </div>
-                        </c:if>
-                        <div class="${empty currentKapp ? 'col-xs-12' : 'col-xs-10'} tab-content">
-                            <div class="row">
-                                <div class="col-xs-12 tab-content">
-                                    <div class="row">
-                                        <c:choose>
-                                            <c:when test="${not empty aside}">
-                                                <div class="col-xs-9 content-main">
-                                                    <bundle:yield/>
-                                                </div>
-                                                <div class="col-xs-3 sidebar pull-right">
-                                                    <bundle:yield name="aside"/>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="col-xs-12 content-main">
-                                                    <bundle:yield/>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
+            <c:import url="${bundle.path}/partials/subheader.jsp" charEncoding="UTF-8"/>
+            <div class="container main-inner">
+                <div class="row">
+                    <div class="col-xs-12 tab-content">
+                        <div class="row">
+                            <c:choose>
+                                <c:when test="${not empty aside}">
+                                    <div class="col-sm-9 content-main">
+                                        <bundle:yield/>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="col-sm-3 hidden-xs aside pull-right">
+                                        <bundle:yield name="aside"/>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="col-xs-12 content-main">
+                                        <bundle:yield/>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                 </div>
-            </section>
-                        
+            </div>
+<%--             <c:import url="${space.bundleBase}/${space.bundlePath}/partials/footer.jsp" charEncoding="UTF-8"/> --%>
             <c:import url="${bundle.path}/partials/footer.jsp" charEncoding="UTF-8"/>
         </div>
     </body>

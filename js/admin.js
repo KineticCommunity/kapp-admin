@@ -6,7 +6,22 @@
      *--------------------------------------------------------------------------------------------*/
     $(function() {
         
-        
+        /**
+         * Add aside toggle and remember toggle state.
+         */
+        var asideSection = $("div.aside");
+        if (asideSection.length){
+            var asideToggle = $("<div>", {class: "aside-toggle"})
+                .on("click", function(){
+                    asideSection.closest("div.row").toggleClass("aside-closed");
+                    sessionStorage.setItem("hideAside_" + window.location.pathname, 
+                                           asideSection.closest("div.row").hasClass("aside-closed") ? "hide" : null);
+                })
+                .prependTo(asideSection);
+            if (sessionStorage.getItem("hideAside_" + window.location.pathname) === "hide"){
+                asideSection.closest("div.row").addClass("aside-closed");
+            }
+        }
         
     });
 

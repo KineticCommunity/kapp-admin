@@ -105,14 +105,14 @@
             <json:property name="title" value="Locale"/>
             <json:property name="data" value="locale"/>
             <json:property name="class" value="locale"/>
-            <json:property name="width" value="10%"/>
+            <json:property name="width" value="40px"/>
         </json:object>
         <c:if test="${contextColumn eq true}">
             <json:object>
                 <json:property name="title" value="Context"/>
                 <json:property name="data" value="context"/>
                 <json:property name="class" value="context"/>
-                <json:property name="width" value="15%"/>
+                <json:property name="width" value="80px"/>
             </json:object>
         </c:if>
         <c:if test="${keyColumn ne false}">
@@ -128,7 +128,7 @@
             <json:property name="orderable" value="${false}"/>
             <json:property name="searchable" value="${false}"/>
             <json:property name="defaultContent" value=""/>
-            <json:property name="width" value="3%"/>
+            <json:property name="width" value="10px"/>
         </json:object>
         <json:object>
             <json:property name="title" value="Translation"/>
@@ -141,7 +141,7 @@
             <json:property name="searchable" value="${false}"/>
             <json:property name="class" value="actions"/>
             <json:property name="defaultContent" value="<div class=\"btn-group pull-right\" role=\"group\"><button class=\"edit-translation-btn btn btn-xs btn-default\" type=\"button\"><span class=\"fa fa-pencil\"></span></button><button class=\"delete-translation-btn btn btn-xs btn-danger\" type=\"button\"><span class=\"fa fa-times\"></span></button></div>"/>
-            <json:property name="width" value="8%"/>
+            <json:property name="width" value="44px"/>
         </json:object>
     </json:array>
     <json:array name="data">

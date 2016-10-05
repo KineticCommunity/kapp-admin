@@ -3,94 +3,42 @@
     public static class AdminHelper {
     
         private Bundle adminBundle;
+        private Space space;
         private Kapp adminKapp;
         private BundleSubmissionComponent submissionComponent;
         
         // Map for storing datastore records
         private Map<String, List<Submission>> datastoreRecords = new HashMap<>();
         
-        public AdminHelper(HttpServletRequest request, Kapp kapp, Bundle bundle){
-            this.adminKapp = kapp;
-            this.adminBundle = bundle;
+        public AdminHelper(HttpServletRequest request){
+            this.adminBundle = (Bundle)request.getAttribute("bundle"); 
+            this.space = (Space)request.getAttribute("space");
+            this.adminKapp = (Kapp)request.getAttribute("kapp");
             this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
-        }
-        
-        public List<Kapp> getActiveKapps(){
-            // Get all Admin Consoles
-            List<Form> consoles = adminKapp.getFormsByType("Console");
-            // Create a set of slugs for all Kapps which have at least 1 associated Sonsole
-            Set<String> activeKappSlugs = new HashSet<>();
-            for (Form console : consoles){
-                activeKappSlugs.addAll(console.getAttributeValues("Kapp Slug"));
-            }
-            // Creat and return a list of Kapps for each slug found above
-            List<Kapp> activeKapps = new ArrayList<>();
-            for (Kapp kapp : this.adminKapp.getSpace().getKapps()){
-                if (activeKappSlugs.contains(kapp.getSlug())){
-                    activeKapps.add(kapp);
-                }
-            }
-            return activeKapps;
-        }
-        
-        public List<Kapp> getActiveKappsForConsole(Form console){
-            // Get all Kapps that are associated to the given Sonsole
-            List<Kapp> activeKapps = new ArrayList<>();
-            for (Kapp kapp : this.adminKapp.getSpace().getKapps()){
-                if (console.hasAttributeValue("Kapp Slug", kapp.getSlug())){
-                    activeKapps.add(kapp);
-                }
-            }
-            return activeKapps;
         }
     
         public List<Form> getActiveConsoles(){
-            // Filter Sonsoles to only those have are active for at least 1 Kapp
+            // Filter Consoles to only those with an Active status
             List<Form> activeConsoles = new ArrayList<>();
             for (Form console : adminKapp.getFormsByType("Console")){
-                if (console.hasAttribute("Kapp Slug")){
-                    activeConsoles.add(console);
-                }
-            }
-            return activeConsoles;
-        }
-        
-        public List<Form> getActiveConsolesForKapp(Kapp kapp){
-            // Get all Admin Consoles that are associated to the given Kapp
-            List<Form> activeConsoles = new ArrayList<>();
-            for (Form console : adminKapp.getFormsByType("Console")){
-                if (console.hasAttributeValue("Kapp Slug", kapp.getSlug())){
+                if (Text.equals("Active", console.getStatus())){
                     activeConsoles.add(console);
                 }
             }
             return activeConsoles;
         }
 
-        public List<HelpLink> getCommunityLinks(Form form){
+        public List<HelpLink> getHelpLinks(Form form){
             // Create container to hold links
             List<HelpLink> communityLinks = new ArrayList<>();
             // Loop over the form's community link attributes
-            for ( String json : form.getAttributeValues("Community Link") ){
+            for ( String json : form.getAttributeValues("Help Link") ){
                 // Get value of attribute and parse into JSON
                 LinkedHashMap communityLink = (LinkedHashMap)Json.parse(json);
                 // Add link to result list
                 communityLinks.add(new HelpLink((String)communityLink.get("name"), (String)communityLink.get("url")));
             }
             return communityLinks;
-        }
-
-        public List<HelpLink> getFormHelpLinks(Kapp kapp, String consoleSlug){
-            // Create container to hold links
-            List<HelpLink> formHelpLinks = new ArrayList<>();
-            // Loop over the kapp's form
-            for ( Form form : this.adminKapp.getFormsByType("Help") ){
-                if( form.hasAttributeValue("Kapp Slug",kapp.getSlug()) && form.hasAttributeValue("Console Slug", consoleSlug) ){
-                    String path = this.adminBundle.getKappLocation() + "/" + form.getSlug();
-                    String name = form.hasAttribute("Display Name") ? form.getAttributeValue("Display Name") : form.getName();
-                    formHelpLinks.add(new HelpLink(name, path));
-                }
-            }
-            return formHelpLinks;
         }
 
         /**

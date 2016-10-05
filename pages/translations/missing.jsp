@@ -1,16 +1,12 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
 <c:set var="i18nKapp" value="${space.getKapp(text.escape(param.slug))}" scope="request" />
-<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
-<c:set var="i18nKappUrl" value="${i18nBaseUrl}&slug=${text.escape(param.slug)}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}" scope="request" />
+<c:set var="i18nKappUrl" value="${i18nBaseUrl}?slug=${text.escape(param.slug)}" scope="request" />
 <c:set var="i18nApiUrl" value="${bundle.spaceLocation}/app/apis/translations/v1/kapps/${i18nKapp.slug}" scope="request" />
 
-<!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
+<!-- Show page content only if selected Kapp exists. -->
 <c:choose>
-    <c:when test="${empty currentKapp}">
-        <script>window.location.replace("${bundle.kappLocation}");</script>
-    </c:when>
     <c:when test="${empty i18nKapp}">
         <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
@@ -114,17 +110,9 @@
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/translations/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
-
-            <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
-            <c:if test="${pendingChanges.size() > 0}">
-                <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
-                    <span class="fa fa-lg fa-cloud-upload"></span>
-                    <span>There are ${pendingChanges.size()} translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
-                </a>
-            </c:if>
-            
-            <ol class="breadcrumb">
+            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+            <bundle:variable name="breadcrumb">
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/kapp">${text.escape(i18nKapp.name)}</a></li>
                 <c:if test="${contextBreadCrumb}">
@@ -137,7 +125,17 @@
                     <li><a href="${i18nKappUrl}&page=translations/locale&locale=${text.escape(param.locale)}">${text.escape(param.locale)}</a></li>
                 </c:if>
                 <li class="active">Missing</li>
-            </ol>
+            </bundle:variable>
+            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+
+            <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
+            
+            <c:if test="${pendingChanges.size() > 0}">
+                <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
+                    <span class="fa fa-lg fa-cloud-upload"></span>
+                    <span>There are ${pendingChanges.size()} translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
+                </a>
+            </c:if>
             
             <div class="page-header">
                 <div class="row">

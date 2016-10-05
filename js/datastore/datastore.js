@@ -65,8 +65,8 @@
                             contentType: "application/json",
                             success: function(data, textStatus, jqXHR){
                                 // Define url to redirect to
-                                var redirectUrl = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
-                                        + "&page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
+                                var redirectUrl = bundle.kappLocation() + "/" + self.data("console-slug")
+                                        + "?page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
                                 // Get bridge dropdown
                                 var bridgeSelect = form.find("select#datastore-bridge");
                                 
@@ -193,8 +193,8 @@
                 },
                 success: function(data, textStatus, jqXHR){
                     // Define url so we can reload
-                    var reloadUrl = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
-                            + "&page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
+                    var reloadUrl = bundle.kappLocation() + "/" + self.data("console-slug")
+                            + "?page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
                     // Get bridge dropdown
                     var bridgeSelect = form.find("select#datastore-bridge");
                     
@@ -336,7 +336,7 @@
                     },
                     footer: function(element, actions) {
                         element.addClass("text-right").append(
-                            $("<button>", {class: "btn btn-default"}).text("Close").on("click", function(){
+                            $("<button>", {class: "btn btn-default"}).text("Done").on("click", function(){
                                 actions.dismiss();
                             })
                         );
@@ -524,11 +524,11 @@
             $("table#datastore-records-table").on("click", "button.edit", function(e){
                 // On click of edit button, send user to record page for editing current row
                 var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + consoleSlug + "?kapp=" + kappSlug + "&page=datastore/record&store=" + datastoreSlug + "&id=" + data.ID;
+                location.href = bundle.kappLocation() + "/" + consoleSlug + "?page=datastore/record&store=" + datastoreSlug + "&id=" + data.ID;
             }).on("click", "button.clone", function(e){
                 // On click of edit button, send user to record page for cloning current row
                 var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + consoleSlug + "?kapp=" + kappSlug + "&page=datastore/record&store=" + datastoreSlug + "&clone=" + data.ID;
+                location.href = bundle.kappLocation() + "/" + consoleSlug + "?page=datastore/record&store=" + datastoreSlug + "&clone=" + data.ID;
             }).on("click", "button.delete", function(e){
                 // On click of delete button, confirm that the user is sure they want to delete
                 var self = $(this);

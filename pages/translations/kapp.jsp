@@ -1,16 +1,12 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
 <c:set var="i18nKapp" value="${space.getKapp(text.escape(param.slug))}" scope="request" />
-<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
-<c:set var="i18nKappUrl" value="${i18nBaseUrl}&slug=${text.escape(param.slug)}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}" scope="request" />
+<c:set var="i18nKappUrl" value="${i18nBaseUrl}?slug=${text.escape(param.slug)}" scope="request" />
 <c:set var="i18nApiUrl" value="${bundle.spaceLocation}/app/apis/translations/v1/kapps/${i18nKapp.slug}" scope="request" />
 
-<!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
+<!-- Show page content only if selected Kapp exists. -->
 <c:choose>
-    <c:when test="${empty currentKapp}">
-        <script>window.location.replace("${bundle.kappLocation}");</script>
-    </c:when>
     <c:when test="${empty i18nKapp}">
         <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
@@ -28,6 +24,13 @@
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/translations/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
+            
+            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+            <bundle:variable name="breadcrumb">
+                <li><a href="${i18nBaseUrl}">${form.name}</a></li>
+                <li class="active">${text.escape(i18nKapp.name)}</li>
+            </bundle:variable>
+            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
 
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
@@ -38,16 +41,12 @@
                 </a>
             </c:if>
             
-            <ol class="breadcrumb">
-                <li><a href="${i18nBaseUrl}">Translations</a></li>
-                <li class="active">${text.escape(i18nKapp.name)}</li>
-            </ol>
-                
             <div class="page-header" data-clear-entry-table-states="${i18nKapp.slug}">
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
                             <span>${text.escape(i18nKapp.name)}</span>
+                            <small>Translations</small>
                             <div class="pull-right">
                                 <a class="btn btn-sm btn-primary" href="${i18nApiUrl}/translations.csv">
                                     <span class="fa fa-download fa-fw"></span> Export
