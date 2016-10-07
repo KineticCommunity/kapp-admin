@@ -30,6 +30,39 @@
     Identity identity = (Identity)request.getAttribute("identity");
 %>
 
+<%-- Create paths for headers and footers which can be shared. --%>
+<%  
+    String headerBundlePath = space.getBundleBase() + "/";
+    if (kapp != null && kapp.hasAttribute("Header Bundle Path")){
+        headerBundlePath += kapp.getAttributeValue("Header Bundle Path");
+    }
+    else if (space.hasAttribute("Header Bundle Path")){
+        headerBundlePath += space.getAttributeValue("Header Bundle Path");
+    }
+    else if (kapp != null){
+        headerBundlePath += kapp.getBundlePath();
+    }
+    else {
+        headerBundlePath += space.getBundlePath();
+    }
+    request.setAttribute("headerBundlePath", headerBundlePath);
+    
+    String footerBundlePath = space.getBundleBase() + "/";
+    if (kapp != null && kapp.hasAttribute("Footer Bundle Path")){
+        footerBundlePath += kapp.getAttributeValue("Footer Bundle Path");
+    }
+    else if (space.hasAttribute("Footer Bundle Path")){
+        footerBundlePath += space.getAttributeValue("Footer Bundle Path");
+    }
+    else if (kapp != null){
+        footerBundlePath += kapp.getBundlePath();
+    }
+    else {
+        footerBundlePath += space.getBundlePath();
+    }
+    request.setAttribute("footerBundlePath", footerBundlePath);
+%>
+
 <%-- Load helper(s) --%>
 <%
     request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());

@@ -89,3 +89,16 @@ section.page {
 div.embedded-form section.page form {
   padding: 0 0 2rem 0;
 }
+
+@media (max-width : 768px) { 
+  section.page {
+    form {
+      textarea {
+        width: 100%;
+      }
+      select, input[type="text"], input[type="password"] {
+        max-width: 100%;
+      }
+    }
+  }
+}

@@ -87,14 +87,14 @@
                             
                     <div class="col-xs-12">
                         <c:if test="${missingTranslations.size() > 0}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                href="${i18nKappUrl}&page=translations/missing&context=${text.escape(param.context)}&key=${text.escape(param.key)}">
                                 <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Missing ${missingTranslations.size()} Translations
                             </a>
                         </c:if>
                         <c:if test="${translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                href="${i18nKappUrl}&page=translations/unexpectedContext">
                                 Unexpected Context
                             </a>
@@ -104,12 +104,12 @@
             </div>          
             
             <div class="row entries-container">
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
                         <thead>
                             <tr>
                                 <th>Key</th>
-                                <th data-orderable="false" style="width:8%"></th>
+                                <th data-orderable="false" style="width:8%;min-width:75px;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -136,7 +136,7 @@
                     </table>
                     <br />
                 </div>
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" data-state-save="true" 
                            id="key_${i18nKapp.slug}_${text.escape(param.context)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&context=${text.escape(param.context)}&key=${text.escape(param.key)}"
@@ -159,6 +159,41 @@
             <br />  
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>The table displays all the translations for the selected key, which is shown above the table.</p>
+                <p>To export the translations, click the <b class="nowrap"><span class="fa fa-download"></span> Export</b> button.</p>
+                <hr class="border-color-white" />
+                <p>
+                    To add new translation entries for the selected key, click the 
+                    <b class="nowrap"><span class="fa fa-plus"></span> Add Entries</b> button.
+                </p>
+                <p>To edit the <u>key</u>, click the edit <span class="fa fa-pencil"></span> button next to the key.</p>
+                <p>To delete the <u>key</u> and all of its translations, click the delete <span class="fa fa-times"></span> button next to the key.</p>
+                <p>To edit a translation, click the edit <span class="fa fa-pencil"></span> button next to the translation.</p>
+                <p>
+                    To delete a translation, click the delete <span class="fa fa-times"></span> button next to the translation. 
+                    If the delete button is disabled, the key is a placeholder and cannot be deleted. 
+                </p>
+                <div class="m-l-2">
+                    <p>
+                        Placeholders are keys that are known to exist and are therefore 
+                        being displayed to show the user what keys may need to be translated.
+                    </p>
+                </div>
+                <hr class="border-color-white" />
+                <p><b>
+                    <span class="fa fa-info-circle"></span> After translations are updated or deleted, 
+                    they will need to be published before they are available within the application. 
+                    A publish <span class="fa fa-cloud-upload"></span> banner will appear at the top of the page 
+                    to notify you when translations are waiting to be published.
+                </b></p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

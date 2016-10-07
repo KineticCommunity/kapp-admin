@@ -46,55 +46,59 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <table class="table table-hover groups-table groups-table-flat"> 
-                        <thead>
-                            <tr>
-                                <th>Group Name</th>
-                                <th>Status</th>
-                                <th>Parent Path</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${groupsFlat}" var="group">
+                    <div class="overflow-auto">
+                        <table class="table groups-table groups-table-hierarchy open"> 
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Group Name
+                                        <div class="btn-group table-hierarchy-option pull-right">
+                                            <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
+                                                <span class="fa fa-compress fa-fw"></span> Collapse All
+                                            </button>
+                                            <button class="btn btn-xs btn-subtle expand-all" title="Expand All">
+                                                <span class="fa fa-expand fa-fw"></span> Expand All
+                                            </button>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <tr>
                                     <td>
-                                        <a href="${bundle.kappLocation}/${form.slug}?&page=groups/group&group=${group.id}">${group.displayName}</a>
+                                        <ul>
+                                            <c:forEach items="${groupsHierarchy}" var="group">
+                                                <c:set var="groupIterator" value="${group}" scope="request"/>
+                                                <jsp:include page="../../partials/groups/groupDisplayList.jsp"/>
+                                            </c:forEach>
+                                        </ul>
                                     </td>
-                                    <td><span class="label label-info">${text.titlelize(group.status)}</span></td>
-                                    <td class="parent-cell" data-toggle="tooltip" title="${group.parentPathString}">${group.parentPathString}</td>
-                                    </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                    <table class="table groups-table groups-table-hierarchy open"> 
-                        <thead>
-                            <tr>
-                                <th>
-                                    Group Name
-                                    <div class="btn-group table-hierarchy-option pull-right">
-                                        <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
-                                            <span class="fa fa-compress fa-fw"></span> Collapse All
-                                        </button>
-                                        <button class="btn btn-xs btn-subtle expand-all" title="Expand All">
-                                            <span class="fa fa-expand fa-fw"></span> Expand All
-                                        </button>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <ul>
-                                        <c:forEach items="${groupsHierarchy}" var="group">
-                                            <c:set var="currentGroup" value="${group}" scope="request"/>
-                                            <jsp:include page="../../partials/groups/groupDisplayList.jsp"/>
-                                        </c:forEach>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overflow-auto">
+                        <table class="table table-hover groups-table groups-table-flat"> 
+                            <thead>
+                                <tr>
+                                    <th style="width:45%;">Group Name</th>
+                                    <th style="width:10%;">Status</th>
+                                    <th style="width:45%;">Parent Path</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${groupsFlat}" var="group">
+                                    <tr>
+                                        <td>
+                                            <a href="${bundle.kappLocation}/${form.slug}?&page=groups/group&group=${group.id}">${group.displayName}</a>
+                                        </td>
+                                        <td><span class="label label-info">${text.titlelize(group.status)}</span></td>
+                                        <td class="parent-cell" data-toggle="tooltip" title="${group.parentPathString}">${group.parentPathString}</td>
+                                        </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -108,7 +112,7 @@
         <p>${form.description}</p>
         <hr class="border-color-white" />
         <p>To create a new group, click the <b class="nowrap"><span class="fa fa-plus"></span> Create Group</b> button.</p>
-        <p>To manage a group and its members, click the name of the Group.</p>
+        <p>To manage a group and its members, click the name of the group.</p>
         <hr class="border-color-white" />
         <p>
             Use the buttons in the header to change the layout between 

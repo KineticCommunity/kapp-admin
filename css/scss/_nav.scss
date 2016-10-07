@@ -4,6 +4,9 @@
 
 /* Nav Pills Elements
  *-------------------------------------- */
+.nav-pills {
+  border-bottom: 2px solid $primary;
+}
 .nav-pills > li > span.title {
   position: relative;
   display: block;

@@ -44,16 +44,7 @@
             </div>
                                     
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="bs-callout bs-callout-info">
-                        An <b>Unexpected Context</b> occurs when there are 
-                        translation entries with contexts the system is not 
-                        expecting. This can occur if a form slug is changed, 
-                        a form with translations is deleted, or invalid data is 
-                        imported.
-                    </div>
-                </div>
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" data-table-dom
                            data-empty-message="No unexpected contexts."> 
                         <thead>
@@ -87,6 +78,23 @@
             <br />
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>
+                    An <b>Unexpected Context</b> occurs when there are translation entries with contexts the system is not expecting. 
+                    This can occur if a form slug is changed, a form with translations is deleted, or invalid data is imported.
+                </p>
+                <p>
+                    To rename an unexpected context, click the <b class="nowrap"><span class="fa fa-pencil-square-o"></span> Rename Context</b> button 
+                    and complete the dialog. All translations in the unexpected context will be moved to the new context and merged with any 
+                    existing translations in that context.
+                </p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

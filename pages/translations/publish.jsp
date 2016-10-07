@@ -52,7 +52,7 @@
             </div>
             
             <div class="row entries-container">
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" 
                            data-table-dom data-table-name="Changes Pending Publish"
                            data-empty-message="No translations waiting to be published."> 
@@ -74,20 +74,20 @@
                                             ${text.escape(change.getLocaleCode())}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="context">
                                         <span class="btn-xs btn-subtle" data-tooltip title=${change.getContextName()}>
                                             <span class="ellipsis">${text.escape(change.getContextName())}</span>
                                         </span>
                                     </td>
-                                    <td class="ellipsis">
+                                    <td class="key ellipsis">
                                         <a href="${i18nKappUrl}&page=translations/key&context=${text.escape(change.getContextName())}&key=${text.escape(change.getKey())}">
                                             ${text.escape(change.getKey())}
                                         </a>
                                     </td>
-                                    <td class="ellipsis">
+                                    <td class="translation ellipsis">
                                         ${text.escape(change.getSourceValue())}
                                     </td>
-                                    <td class="ellipsis">
+                                    <td class="translation ellipsis">
                                         ${text.escape(change.getPendingValue())}
                                     </td>
                                     <td>
@@ -114,6 +114,17 @@
             </div>
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>The table displays all the additions, updates, and deletions that have been made and are waiting to get published.</p>
+                <p>Publishing the changes will make them available in the application.</p>
+                <p>To publish the changes, click the <b class="nowrap"><span class="fa fa-cloud-upload"></span> Publish</b> button.</p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

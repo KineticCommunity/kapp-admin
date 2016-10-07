@@ -4,7 +4,7 @@
 <nav class="navbar navbar-default" id="bundle-subheader">
     <div class="container">
         <div class="row">
-            <div class="col-sm-10">
+            <div class="col-sm-10 breadcrumbs">
                 <ol class="breadcrumb">
                     <li>
                         <a href="/kinetic/scaffold/admin">
@@ -17,8 +17,8 @@
                     <bundle:yield name="breadcrumb"/>
                 </ol>
             </div>
-            <div class="col-sm-2 text-right">
-                <ul class="unstyled additional-menu">
+            <div class="col-sm-2 text-right additional-menu">
+                <ul class="unstyled">
                     <li>
                         <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"  aria-haspopup="true" aria-expanded="false">
                             Help

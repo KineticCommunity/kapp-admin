@@ -15,7 +15,7 @@ table.groups-table-hierarchy tbody tr td li {
     margin: 6px 0 6px 6px;
 }
 table.groups-table-hierarchy tbody tr td ul {
-    margin-left: 20px;
+    margin-left: 18px;
 }
 table.groups-table-hierarchy tbody tr td li.group-item {
     position: relative;
@@ -59,9 +59,6 @@ table.groups-table-flat tbody tr td.parent-cell {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-table.groups-table-flat tbody tr td {
-    max-width: 0;
-}
 span.table-view-buttons span {
     padding: 5px;
     cursor: pointer;
@@ -79,6 +76,9 @@ div.groups-tab-content {
     background: transparent;
 }
 
+div.groups-tab-content div.group-form-container {
+    margin-top: 20px;
+}
 div.groups-tab-content div.group-form-container span.edit-parent-path {
     color: #00427E;
     padding: 5px;
@@ -86,6 +86,9 @@ div.groups-tab-content div.group-form-container span.edit-parent-path {
 div.groups-tab-content div.group-form-container span.edit-parent-path:hover {
     cursor: pointer;
     color: #0061b9;
+}
+div.groups-tab-content div.page-header {
+    margin: 10px 0;
 }
 
 div.parent-path-item div.parent-path-item {
@@ -115,81 +118,8 @@ strong.current-group-name:empty::before {
     content: "Group Name";
 }
 
-
-
-
-
-table.dataTable thead th {
-    position: relative;
-    background-image: none !important;
-}
-table.dataTable thead th.all,
-table.dataTable tbody td.all {
-    min-width: 82px; 
-    width: 82px; 
-    text-align: center;
-}
-table.dataTable thead th.sorting:after,
-table.dataTable thead th.sorting_asc:after,
-table.dataTable thead th.sorting_desc:after {
-    position: absolute;
-    top: 10px;
-    right: 8px;
-    display: block;
-    font-family: FontAwesome;
-}
-table.dataTable thead th.sorting:after {
-    content: "\f0dc";
-    font-size: 0.8em;
-    padding-top: 0.12em;
-}
-table.dataTable thead th.sorting_asc:after {
-    top: 8px;
-    content: "\f160";
-}
-table.dataTable thead th.sorting_desc:after {
-    top: 8px;
-    content: "\f161";
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before {
-    position: absolute;
-    display: block;
-    border: none;
-    background-color: transparent;
-    color: black;
-    box-shadow: none;
-    opacity: 0.5;
-    font-family: FontAwesome;
-    content: "\f067";
-    font-size: 0.8em;
-    padding-top: 0.15em;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before {
-    background-color: transparent;
-    content: "\f068";
-}   
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child {
-    padding: 8px 24px;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul {
-    width: 100%;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li:after {
-    visibility: hidden;
-    display: table;
-    content: " ";
-    clear: both;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span {
-    white-space: normal;
-    width: 49%;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-title {
-    text-align: right;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-data {
-    float: right;
-}
-table.dataTable.nowrap td:not(.all) {
-    white-space: normal;
+@media (max-width : 768px) { 
+  table.groups-table-hierarchy tbody tr td ul {
+    margin-left: 18px;
+  }
 }

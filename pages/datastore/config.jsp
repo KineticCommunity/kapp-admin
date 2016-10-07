@@ -69,29 +69,31 @@
         </fieldset>
         
         <c:if test="${not empty currentStore}">
-            <label for="column-table" class="text">Display Table Options</label> <small>(drag to order)</small>
-            <table class="table table-hover" id="column-table"> 
-                <thead>
-                    <tr>
-                        <th style="width:55%;">Field Name</th>
-                        <th style="width:15%;">Visible</th>
-                        <th style="width:15%;">Searchable</th>
-                        <th style="width:15%;">Sortable</th>
-                        <th style="width:15%;">Unique</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="column" items="${AdminHelper.getDatastoreColumns(currentStore, 'Datastore Configuration')}">
+            <label for="column-table" class="text">Display Table Options</label> <small class="hidden-xs">(drag to order)</small>
+            <div class="overflow-auto">
+                <table class="table table-hover" id="column-table"> 
+                    <thead>
                         <tr>
-                            <td class="column-name">${column.data}</td>
-                            <td class="column-visible"><input type="checkbox" ${column.visible ? 'checked' : ''}/></td>
-                            <td class="column-searchable"><input type="checkbox" ${column.searchable ? 'checked' : ''}/></td>
-                            <td class="column-orderable"><input type="checkbox" ${column.orderable ? 'checked' : ''}/></td>
-                            <td class="column-unique"><input type="checkbox" ${column.unique ? 'checked' : ''}/></td>
+                            <th style="width:55%;">Field Name</th>
+                            <th style="width:15%;">Visible</th>
+                            <th style="width:15%;">Searchable</th>
+                            <th style="width:15%;">Sortable</th>
+                            <th style="width:15%;">Unique</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="column" items="${AdminHelper.getDatastoreColumns(currentStore, 'Datastore Configuration')}">
+                            <tr>
+                                <td class="column-name">${column.data}</td>
+                                <td class="column-visible"><input type="checkbox" ${column.visible ? 'checked' : ''}/></td>
+                                <td class="column-searchable"><input type="checkbox" ${column.searchable ? 'checked' : ''}/></td>
+                                <td class="column-orderable"><input type="checkbox" ${column.orderable ? 'checked' : ''}/></td>
+                                <td class="column-unique"><input type="checkbox" ${column.unique ? 'checked' : ''}/></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </c:if>
         
         <c:if test="${not empty currentStore}">
@@ -121,84 +123,86 @@
         
         <c:if test="${not empty currentStore && not empty bridgeName}">
             <label for="column-table" class="text">Bridge Qualifications</label> <small>(Model & Mapping Name: <b>${bridgeModelName}</b>)</small>
-            <table class="table table-hover" id="qualification-table">
-                <thead>
-                    <tr>
-                        <th style="width:46%;">Qualification</th>
-                        <th style="width:18%;">Result Type</th>
-                        <th style="width:22%;">Parameters</th>
-                        <th style="width:14%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="qualification" items="${bridgeModel.qualifications}">
-                        <tr class="qualification-row">
-                            <td class="qual-name">${qualification.name}</td>
-                            <td class="qual-result-type">${qualification.resultType}</td>
-                            <td class="qual-params">
-                                <a class="qualification-modal-link" href="javascript:void(0);">Parameters (<span class="param-count">${fn:length(qualification.parameters)}</span>)</a>
-                                <div class="modal-params hide">
-                                    <table class="table table-hover" id="params-table"> 
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="parameter" items="${qualification.parameters}">
-                                                <tr>
-                                                    <td class="param-name" data-param-name="${parameter.name}">${parameter.name}</td>
-                                                    <td class="param-actions">
-                                                        <div class="btn-group pull-right">
-                                                            <button type="button" class="btn btn-xs btn-danger param-delete">
-                                                                <span class="fa fa-times fa-fw"></span>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                    <table class="table"> 
-                                        <tbody>
-                                            <tr>
-                                                <td class="param-add-value">
-                                                    <select class="input-sm form-control">
-                                                        <option value="Submission ID">Submission ID</option>
-                                                        <c:forEach var="field" items="${currentStore.pages[0].fields}">
-                                                            <option value="${field.name}">${field.name}</option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </td>
-                                                <td class="param-add-btn"><button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                            <td class="qual-actions">
-                                <div class="btn-group pull-right qual-actions">
-                                    <button type="button" class="btn btn-xs btn-default qual-edit">
-                                        <span class="fa fa-pencil fa-fw"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-danger qual-delete">
-                                        <span class="fa fa-times fa-fw"></span>
-                                    </button>
-                                </div>
-                                <div class="btn-group pull-right qual-edit-actions hide">
-                                    <button type="button" class="btn btn-xs btn-danger qual-cancel-edit">
-                                        <span class="fa fa-times fa-fw"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-success qual-save-edit">
-                                        <span class="fa fa-check fa-fw"></span>
-                                    </button>
-                                </div>
-                            </td>
+            <div class="overflow-auto">
+                <table class="table table-hover" id="qualification-table">
+                    <thead>
+                        <tr>
+                            <th style="width:46%;">Qualification</th>
+                            <th style="width:18%;">Result Type</th>
+                            <th style="width:22%;">Parameters</th>
+                            <th style="width:14%;min-width:75px;"></th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="qualification" items="${bridgeModel.qualifications}">
+                            <tr class="qualification-row">
+                                <td class="qual-name">${qualification.name}</td>
+                                <td class="qual-result-type">${qualification.resultType}</td>
+                                <td class="qual-params">
+                                    <a class="qualification-modal-link" href="javascript:void(0);">Parameters (<span class="param-count">${fn:length(qualification.parameters)}</span>)</a>
+                                    <div class="modal-params hide">
+                                        <table class="table table-hover" id="params-table"> 
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="parameter" items="${qualification.parameters}">
+                                                    <tr>
+                                                        <td class="param-name" data-param-name="${parameter.name}">${parameter.name}</td>
+                                                        <td class="param-actions">
+                                                            <div class="btn-group pull-right">
+                                                                <button type="button" class="btn btn-xs btn-danger param-delete">
+                                                                    <span class="fa fa-times fa-fw"></span>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                        <table class="table"> 
+                                            <tbody>
+                                                <tr>
+                                                    <td class="param-add-value">
+                                                        <select class="input-sm form-control">
+                                                            <option value="Submission ID">Submission ID</option>
+                                                            <c:forEach var="field" items="${currentStore.pages[0].fields}">
+                                                                <option value="${field.name}">${field.name}</option>
+                                                            </c:forEach>
+                                                        </select>
+                                                    </td>
+                                                    <td class="param-add-btn"><button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td class="qual-actions">
+                                    <div class="btn-group pull-right qual-actions">
+                                        <button type="button" class="btn btn-xs btn-default qual-edit">
+                                            <span class="fa fa-pencil fa-fw"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-xs btn-danger qual-delete">
+                                            <span class="fa fa-times fa-fw"></span>
+                                        </button>
+                                    </div>
+                                    <div class="btn-group pull-right qual-edit-actions hide">
+                                        <button type="button" class="btn btn-xs btn-danger qual-cancel-edit">
+                                            <span class="fa fa-times fa-fw"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-xs btn-success qual-save-edit">
+                                            <span class="fa fa-check fa-fw"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
             <table class="table" id="add-qualification-table"> 
                 <tbody>
                     <tr>

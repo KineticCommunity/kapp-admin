@@ -866,6 +866,7 @@
             contentType: "application/json",
             success: function(data, textStatus, jqXHR){
                 // Set up DataTable configuration object with export/import buttons
+                console.log(data);
                 records = $.extend(data, {
                     responsive: true,
                     pageLength: 25,

@@ -39,7 +39,7 @@
                 <c:set var="allMissingTranslations" 
                        value="${translationSnapshot.getMissingEntries(i18nKapp)}"/>
                 <c:if test="${allMissingTranslations.size() > 0}">
-                    <a class="btn btn-xs btn-warning" 
+                    <a class="btn btn-xs btn-warning m-t-1" 
                        href="${i18nKappUrl}&page=translations/missing">
                         <span class="fa fa-fw fa-exclamation-triangle"></span>
                         Missing ${allMissingTranslations.size()} Translations
@@ -75,12 +75,6 @@
                                                 ${TranslationLocale.get(localeCode).name}
                                             </c:otherwise>
                                         </c:choose>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-xs ${defaultLocaleCode eq localeCode ? 'btn-info' : 'btn-success'}" 
-                                           href="${i18nKappUrl}&page=translations/locale&locale=${localeCode}">
-                                            ${localeCode}
-                                        </a>
                                         <c:if test="${missingTranslations.size() > 0}">
                                             <a class="btn btn-xs btn-warning pull-right" 
                                                href="${i18nKappUrl}&page=translations/missing&locale=${localeCode}">
@@ -88,6 +82,12 @@
                                                 Missing ${missingTranslations.size()}
                                             </a>
                                         </c:if>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs ${defaultLocaleCode eq localeCode ? 'btn-info' : 'btn-success'}" 
+                                           href="${i18nKappUrl}&page=translations/locale&locale=${localeCode}">
+                                            ${localeCode}
+                                        </a>
                                     </td>
                                     <td>
                                         <c:if test="${defaultLocaleCode ne localeCode}">
@@ -130,6 +130,33 @@
             </div>
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>
+                    The <b>Enabled Locales</b> table displays the locales that have been enabled and will be available in this console. 
+                    These are the locales for which translation entries may be added.
+                </p>
+                <p>The <b>Default Locale</b> is the locale which will be used if a translation is not found in the user's preferred language.</p>
+                <hr class="border-color-white" />
+                <p>
+                    To enable a locale, select one from the dropdown list and click the 
+                    <b class="nowrap"><span class="fa fa-plus"></span> Enable Locale</b> button.
+                </p>
+                <p>
+                    To disable a locale, open the locale's actions menu <span class="fa fa-chevron-down"></span> 
+                    and select the <b>Disable Locale</b> action.
+                </p>                
+                <p>
+                    To change the default locale, open the actions menu <span class="fa fa-chevron-down"></span> 
+                    of the locale you want to be the default locale and select the <b>Make Default</b> action.
+                </p>
+                <p><span class="fa fa-info-circle"></span> The default locale does not have an actions menu. It cannot be disabled.</p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

@@ -176,6 +176,10 @@
                 return this.groupSubmission.getValue("Name");
             }
             
+            public String getDescription(){
+                return this.groupSubmission.getValue("Description");
+            }
+            
             public String getId(){
                 return this.groupSubmission.getId().toString();
             }

@@ -145,7 +145,7 @@
                     container: groupContainer,
                     created: function(data){
                         // When group is created, redirect to edit group page
-                        location.replace($("a.return-to-groups-console").attr("href") + "&page=groups/group&group=" + data.submission.id);
+                        location.replace($("a.return-to-groups-console").attr("href") + "?page=groups/group&group=" + data.submission.id);
                     },
                     loaded: function(form){
                         // Remove delete button since group doesn't yet exist, and reset button

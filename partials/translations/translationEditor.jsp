@@ -4,7 +4,7 @@
     <div class="col-xs-12">
         <h4>Edit Translation</h4>
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12 overflow-auto">
         <table class="table table-striped"> 
             <thead>
                 <tr>
@@ -24,7 +24,7 @@
             </tbody>
         </table>
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12 overflow-auto">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -38,7 +38,7 @@
             </tbody>
         </table>
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12 overflow-auto">
         <table class="table table-striped">
             <thead>
                 <tr>

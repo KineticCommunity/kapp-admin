@@ -33,6 +33,9 @@ body > div.view-port > div.container > div.row > div.tab-content > div.row > div
   display: table;
   clear: both;
 }
+body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 {
+  margin-top: 10px;
+}
 body > div.view-port > div.container > div.row > div.tab-content > div.row > div.aside {
   font-size: 1.26rem;
   line-height: 1.8rem;
@@ -147,8 +150,99 @@ pre {
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Tables
+ *   DataTables Overrides
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+table.dataTable thead th {
+  position: relative;
+  background-image: none !important;
+}
+
+table.dataTable thead th.actions,
+table.dataTable tbody td.actions {
+  min-width: 82px;
+  width: 82px;
+  text-align: center;
+}
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  display: block;
+  font-family: FontAwesome;
+}
+
+table.dataTable thead th.sorting:after {
+  content: "\f0dc";
+  font-size: 0.8em;
+  padding-top: 0.12em;
+}
+
+table.dataTable thead th.sorting_asc:after {
+  top: 8px;
+  content: "\f160";
+}
+
+table.dataTable thead th.sorting_desc:after {
+  top: 8px;
+  content: "\f161";
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before {
+  position: absolute;
+  display: block;
+  border: none;
+  background-color: transparent;
+  color: black;
+  box-shadow: none;
+  opacity: 0.5;
+  font-family: FontAwesome;
+  content: "\f067";
+  font-size: 0.8em;
+  padding-top: 0.15em;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before {
+  background-color: transparent;
+  content: "\f068";
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child {
+  padding: 8px 24px;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul {
+  width: 100%;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li:after {
+  visibility: hidden;
+  display: table;
+  content: " ";
+  clear: both;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span {
+  white-space: normal;
+  width: 49%;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-title {
+  overflow: hidden;
+  text-align: right;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-data {
+  float: right;
+  overflow: hidden;
+}
+
+table.dataTable.nowrap td:not(.all) {
+  white-space: actions;
+}
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -227,6 +321,14 @@ div.embedded-form section.page form {
   padding: 0 0 2rem 0;
 }
 
+@media (max-width: 768px) {
+  section.page form textarea {
+    width: 100%;
+  }
+  section.page form select, section.page form input[type="text"], section.page form input[type="password"] {
+    max-width: 100%;
+  }
+}
 /* Form Button Styles
  *-------------------------------------- */
 button, input[type='submit'], input[type='button'], .btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-link, .btn-default, .btn-subtle {
@@ -514,7 +616,7 @@ nav#bundle-subheader ol.breadcrumb li {
 nav#bundle-subheader ol.breadcrumb li h4 {
   margin: 0;
 }
-nav#bundle-subheader ul.additional-menu {
+nav#bundle-subheader div.additional-menu ul:not(.dropdown-menu) {
   position: relative;
   margin-bottom: 0;
   padding: 15px 20px;
@@ -601,8 +703,20 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
   nav#bundle-subheader div#sub-header ul li a {
     color: #ffffff;
   }
-  nav#bundle-subheader ul.additional-menu {
-    padding: 0 0 10px 0;
+  nav#bundle-subheader div.breadcrumbs {
+    display: inline-block;
+  }
+  nav#bundle-subheader div.additional-menu {
+    float: right;
+  }
+  nav#bundle-subheader div.additional-menu > ul:not(.dropdown-menu) {
+    padding: 10px 5px;
+  }
+  nav#bundle-subheader ol.breadcrumb {
+    padding: 10px 5px;
+  }
+  nav#bundle-subheader ol.breadcrumb > li {
+    display: block;
   }
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -610,6 +724,10 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Nav Pills Elements
  *-------------------------------------- */
+.nav-pills {
+  border-bottom: 2px solid #F18F01;
+}
+
 .nav-pills > li > span.title {
   position: relative;
   display: block;
@@ -2069,6 +2187,14 @@ ul.unstyled {
 
 .display-inline-block {
   display: inline-block;
+}
+
+.overflow-auto {
+  overflow-x: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }
 
 /* Empty states

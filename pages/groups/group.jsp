@@ -70,7 +70,7 @@
             
                 <c:if test="${not empty currentGroup}"> 
                     <div role="tabpanel" class="tab-pane" id="members">
-                        <div class="page-header">
+                        <div class="page-header clearfix">
                             <h4>
                                 Members 
                                 <small> of ${currentGroup.displayName}</small>
@@ -104,9 +104,6 @@
                                                 <td class="username" data-membership-id="${member.id}">${member.username}</td>
                                                 <td>
                                                     <div class="btn-group pull-right">
-<%--                                                                 <a class="btn btn-xs btn-default edit" href="${bundle.kappLocation}/${form.slug}?page=groups/member&group=${currentGroup.id}&member=${member.id}"> --%>
-<!--                                                                     <span class="fa fa-pencil fa-fw"></span> -->
-<!--                                                                 </a> -->
                                                         <a class="btn btn-xs btn-primary delete" href="javascript:void(0);">
                                                             <span class="fa fa-times fa-fw"></span>
                                                         </a>
@@ -121,7 +118,7 @@
                     </div>
                     
                     <div role="tabpanel" class="tab-pane" id="subgroups">
-                        <div class="page-header">
+                        <div class="page-header clearfix">
                             <h4>
                                 Subgroups 
                                 <small> of ${currentGroup.displayName}</small>
@@ -142,35 +139,37 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="table groups-table groups-table-hierarchy open"> 
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Group Name
-                                                <div class="btn-group table-hierarchy-option pull-right">
-                                                    <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
-                                                        <span class="fa fa-compress fa-fw"></span> Collapse All
-                                                    </button>
-                                                    <button class="btn btn-xs btn-subtle expand-all" title="Expand All">
-                                                        <span class="fa fa-expand fa-fw"></span> Expand All
-                                                    </button>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <ul>
-                                                    <c:forEach items="${currentGroup.subgroups}" var="subgroup">
-                                                        <c:set var="currentGroup" value="${subgroup}" scope="request"/>
-                                                        <jsp:include page="../../partials/groups/groupDisplayList.jsp"/>
-                                                    </c:forEach>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="overflow-auto">
+                                    <table class="table groups-table groups-table-hierarchy open"> 
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Group Name
+                                                    <div class="btn-group table-hierarchy-option pull-right">
+                                                        <button class="btn btn-xs btn-subtle collapse-all" title="Collapse All">
+                                                            <span class="fa fa-compress fa-fw"></span> Collapse All
+                                                        </button>
+                                                        <button class="btn btn-xs btn-subtle expand-all" title="Expand All">
+                                                            <span class="fa fa-expand fa-fw"></span> Expand All
+                                                        </button>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <ul>
+                                                        <c:forEach items="${currentGroup.subgroups}" var="subgroup">
+                                                            <c:set var="groupIterator" value="${subgroup}" scope="request"/>
+                                                            <jsp:include page="../../partials/groups/groupDisplayList.jsp"/>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -183,5 +182,47 @@
     <div class="group-data-json hide">${json.toString(GroupHelper.getGroupsFlattenedJson())}</div>
 
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+    <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+    <bundle:variable name="aside">
+        <h3>${form.name}</h3>
+        <h4>${not empty currentGroup ? currentGroup.displayName : 'New Group'}</h4>
+        <p>${currentGroup.description}</p>
+        <hr class="border-color-white" />
+        <c:choose>
+            <c:when test="${not empty currentGroup}">
+                <p>The <b>General</b> tab allows you to update the details of the group.</p>
+                <div class="p-l-2">
+                    <p>
+                        To change the parent of the group, click the edit <b><span class="fa fa-pencil"></span></b> button.
+                        Then use the remove <b><span class="fa fa-times"></span></b> button and the 
+                        <b class="nowrap"><span class="fa fa-plus"></span> Add Parent</b> button to update the parent path. 
+                    </p>
+                    <p>To delete a group, click the <b>Delete Group</b> link.</p>
+                    <p><span class="fa fa-exclamation-circle"></span> You may not delete a group that has subgroups.</p>
+                </div>
+                <hr class="border-color-white" />
+                <p>The <b>Members</b> tab allows you to manage the members of this group.</p>
+                <div class="p-l-2">
+                    <p>To add a member, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Member</b> button.</p>
+                    <p>To remove a member, click the remove <b><span class="fa fa-times"></span></b> button.</p>
+                </div>
+                <hr class="border-color-white" />
+                <p>The <b>Subgroups</b> tab allows you to see the subgroups of this group.</p>
+                <div class="p-l-2">
+                    <p>To create a new subgroup, click the <b class="nowrap"><span class="fa fa-plus"></span> Create Subgroup</b> button.</p>
+                    <p>To manage a subgroup and its members, click the name of the subgroup.</p>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <p>
+                    To change the parent of the group, click the edit <b><span class="fa fa-pencil"></span></b> button.
+                    Then use the remove <b><span class="fa fa-times"></span></b> button and the 
+                    <b class="nowrap"><span class="fa fa-plus"></span> Add Parent</b> button to update the parent path. 
+                </p>
+            </c:otherwise>
+        </c:choose>
+    </bundle:variable>
+    <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
 
 </bundle:layout>

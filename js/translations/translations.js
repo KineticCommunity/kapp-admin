@@ -19,7 +19,7 @@
                     var pageLength = $(table).data("page-length") || 25;
                     var dom = $(table).data("dom") 
                         || data.data.length > pageLength 
-                            ? "<'dt-title'>ft<'pull-right'p>i"
+                            ? "<'dt-title'>ftpi"
                             : ($(table).find("tbody tr").length > 0
                                 ? "<'dt-title'>fti"
                                 : "<'dt-title'>t");

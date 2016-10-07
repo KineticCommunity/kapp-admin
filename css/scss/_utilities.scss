@@ -113,6 +113,12 @@ ul.unstyled {
 .display-inline-block {
   display: inline-block;
 }
+.overflow-auto {
+  overflow-x: auto;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
 
 /* Empty states
  *-------------------------------------- */

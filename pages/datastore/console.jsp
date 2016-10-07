@@ -39,30 +39,32 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <table class="table table-hover datastore-list-table"> 
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${kapp.getFormsByType('Datastore')}" var="datastore">
+                    <div class="overflow-auto">
+                        <table class="table table-hover datastore-list-table"> 
+                            <thead>
                                 <tr>
-                                    <td><a href="${bundle.kappLocation}/${form.slug}?page=datastore/store&store=${datastore.slug}">${datastore.name}</a></td>
-                                    <td>${datastore.description}</td>
-                                    <td>
-                                        <div class="btn-group pull-right">
-                                            <a class="btn btn-xs btn-default" href="${bundle.kappLocation}/${form.slug}?page=datastore/config&store=${datastore.slug}">
-                                                <span class="fa fa-cog fa-fw"></span>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th></th>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${kapp.getFormsByType('Datastore')}" var="datastore">
+                                    <tr>
+                                        <td><a href="${bundle.kappLocation}/${form.slug}?page=datastore/store&store=${datastore.slug}">${datastore.name}</a></td>
+                                        <td>${datastore.description}</td>
+                                        <td>
+                                            <div class="btn-group pull-right">
+                                                <a class="btn btn-xs btn-default" href="${bundle.kappLocation}/${form.slug}?page=datastore/config&store=${datastore.slug}">
+                                                    <span class="fa fa-cog fa-fw"></span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </c:otherwise>
             </c:choose>
         </div>

@@ -32,7 +32,7 @@
                             <small>Categories</small>
                             <div class="pull-right">
                                 <button class="btn btn-primary pull-right add-category btn-sm">
-                                    <span class="fa fa-plus-circle"></span> Add Category
+                                    <span class="fa fa-plus"></span> Add Category
                                 </button>
                             </div>
                         </h3>
@@ -88,7 +88,7 @@
                                                 <label for="category-name" class="control-label">Category Slug</label>
                                                 <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
                                                 <button class="btn btn-success btn-sm edit-category">Save</button>
-                                                <button class="btn btn-primary add-subcategory btn-sm pull-right"><span class="fa fa-plus-circle"></span> Add Subcategory</button>
+                                                <button class="btn btn-primary add-subcategory btn-sm pull-right"><span class="fa fa-plus"></span> Add Subcategory</button>
                                             </div>
                                         </div> 
                                     </div>
@@ -123,6 +123,18 @@
             </div>
             
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${currentKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>To add a new root category, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Category</b> button.</p>
+                <p>To update a category, select a category by clicking on it.</p>
+                <p>To add a subcategory to a selected category, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Subcategory</b> button.</p>
+                <p>You can drag categories to sort them and reorganize the hierarchy.</p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

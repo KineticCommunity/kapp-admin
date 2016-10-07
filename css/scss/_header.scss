@@ -36,7 +36,7 @@ nav#bundle-subheader{
     }
   }
   
-  ul.additional-menu {
+  div.additional-menu ul:not(.dropdown-menu) {
     position: relative;
     margin-bottom: 0;
     padding: 15px 20px;
@@ -128,8 +128,23 @@ nav#bundle-subheader{
       color: $white;
     }
     
-    ul.additional-menu {
-      padding: 0 0 10px 0;
+    div.breadcrumbs {
+      display: inline-block;
+    }
+    
+    div.additional-menu {
+      float: right;
+      
+      > ul:not(.dropdown-menu) {
+        padding: 10px 5px;
+      }
+    }
+    
+    ol.breadcrumb {
+      padding: 10px 5px;
+      > li {
+        display: block;
+      }
     }
   }
 }

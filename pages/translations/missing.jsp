@@ -152,7 +152,7 @@
                     </div>
                     <c:if test="${empty keyBreadCrumb}">
                         <div class="col-xs-12">
-                            <select class="change-locale pull-right">
+                            <select class="change-locale pull-right m-t-1">
                                 <option value="${i18nKappUrl}&page=translations/missing${contextUrlParam}">All Locales</option>
                                 <c:forEach var="localeCode" 
                                            items="${empty contextBreadCrumb 
@@ -187,7 +187,7 @@
                         <br />
                     </div>
                 </c:if>
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" data-state-save="true"
                            id="missing_${i18nKapp.slug}_${text.escape(param.context)}_${text.escape(param.locale)}"
                            data-table-source="${missingTranslationsDataUrl}"
@@ -210,6 +210,47 @@
             <br />
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <c:choose>
+                    <c:when test="${text.isNotBlank(param.context) && text.isNotBlank(param.key)}">
+                        <p>The table displays all the <b>missing</b> translations for the selected key, which is shown above the table.</p>
+                    </c:when>
+                    <c:when test="${text.isNotBlank(param.context) && text.isNotBlank(param.locale)}">
+                        <p>
+                            The table displays all the <b>missing</b> translations for the <b>${param.context}</b> context
+                            and <b class="nowrap">${TranslationLocale.get(param.locale).name} | ${param.locale}</b> locale.
+                        </p>
+                    </c:when>
+                    <c:when test="${text.isNotBlank(param.context)}">
+                        <p>The table displays all the <b>missing</b> translations for the <b>${param.context}</b> context.</p>
+                    </c:when>
+                    <c:when test="${text.isNotBlank(param.locale)}">
+                        <p>The table displays all the <b>missing</b> translations for the <b class="nowrap">${TranslationLocale.get(param.locale).name} | ${param.locale}</b> locale.</p>
+                    </c:when>
+                    <c:otherwise>
+                        <p>The table displays all the <b>missing</b> translations.</p>
+                    </c:otherwise>
+                </c:choose>
+                <p>
+                    Translations are considered missing if the existing keys are not translated in every available language. 
+                    Translations in the default language are never considered missing, as they default to the key.
+                </p>
+                <p>To export the translations, click the <b class="nowrap"><span class="fa fa-download"></span> Export</b> button.</p>
+                <p>To edit a translation, click the edit <span class="fa fa-pencil"></span> button.</p>
+                <hr class="border-color-white" />
+                <p><b>
+                    <span class="fa fa-info-circle"></span> After translations are updated or deleted, 
+                    they will need to be published before they are available within the application. 
+                    A publish <span class="fa fa-cloud-upload"></span> banner will appear at the top of the page 
+                    to notify you when translations are waiting to be published.
+                </b></p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         
