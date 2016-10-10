@@ -1165,9 +1165,13 @@
         }
         
         private Map<String,Object> doApiRequest(String url, Object data, boolean isCreate) throws Exception {
+            // The host variable is set for a terminating ssl proxy possible environment.
+            String host = (request.getHeader("x-forwarded-host") == null)
+                ? request.getServerName()
+                : request.getHeader("x-forwarded-host");
             // Build the URL
             StringBuilder requestUrl = new StringBuilder();
-            requestUrl.append(request.getScheme()).append("://").append(request.getServerName());
+            requestUrl.append(request.getScheme()).append("://").append(host);
             if (request.getServerPort() != 80 && request.getServerPort() != 443) {
                 requestUrl.append(":").append(request.getServerPort());
             }
@@ -1191,7 +1195,7 @@
             for (Cookie cookie : request.getCookies()) {
                 BasicClientCookie basicClientCookie = 
                     new BasicClientCookie(cookie.getName(), cookie.getValue());
-                basicClientCookie.setDomain(request.getServerName());
+                basicClientCookie.setDomain(host);
                 cookieStore.addCookie(basicClientCookie);
             }
             HttpClient httpClient = HttpClientBuilder.create()
