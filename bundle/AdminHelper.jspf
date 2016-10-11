@@ -82,7 +82,7 @@
             for (LinkedHashMap config : configuration){
                 // If field is defined in the config attribute
                 if (fieldElements.containsKey(config.get("data"))){
-                    // Add type of filed to the config object
+                    // Add type of field to the config object
                     config.put("renderType", fieldElements.get(config.get("data")).getRenderType());
                     // Remove the field from the list
                     fieldElements.remove(config.get("data"));

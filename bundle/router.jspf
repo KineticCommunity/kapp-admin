@@ -1,10 +1,19 @@
+<%-- AUTHENTICATION REQUIRED AND USER IS ANONYMOUS --%>
 <%
-    // String to store the path to the JSP that the response should be delegated to
-    String delegateJsp = null;
+    if (kapp == null && identity.isAnonymous() && !"Yes".equalsIgnoreCase(space.getAttributeValue("Allow Anonymous"))) {
+        response.sendRedirect(bundle.getSpaceLocation()+"/app/login");
+        return;
+    } else if (kapp != null && identity.isAnonymous() && !"Yes".equalsIgnoreCase(kapp.getAttributeValue("Allow Anonymous"))) {
+        response.sendRedirect(bundle.getSpaceLocation()+"/app/login?kapp="+kapp.getSlug());
+        return;
+    }
 %>
 
+<%-- String to store the path to the JSP that the response should be delegated to --%>
+<% String delegateJsp = null; %>
+
 <%-- USER PROFILE DETAILS EXIST CHECK --%>
-<%
+<%--
     if (!identity.isAnonymous() && !profileHelper.isProfileRecordExists()) {
         try {
             delegateJsp = profileHelper.getProfilePath();
@@ -24,7 +33,7 @@
         // Return so that no further JSP processing occurs
         return;
     }
-%>
+--%>
 
 <%-- INVALID CONFIGURATION ROUTING --%>
 <%

@@ -880,7 +880,9 @@
                             exportOptions: {
                                 modifier: {
                                     search: "none"
-                                }
+                                },
+                                columns: ":not(.ignore-export)",
+                                orthogonal: "export"
                             }
                         },
                         {
@@ -890,17 +892,29 @@
                         }
                     ]
                 });
-                $.each(_.where(records.columns, {renderType: "date"}), function(i, col){
-                    col.render = $.fn.dataTable.render.moment("date", "ll", bundle.config.userLocale);
-                });
-                $.each(_.where(records.columns, {renderType: "datetime"}), function(i, col){
-                    col.render = $.fn.dataTable.render.moment("datetime", "lll", bundle.config.userLocale);
-                });
-                $.each(_.where(records.columns, {renderType: "time"}), function(i, col){
-                    col.render = $.fn.dataTable.render.moment("time", "LT", bundle.config.userLocale);
-                });
-                $.each(_.where(records.columns, {renderType: "checkbox"}), function(i, col){
-                    col.render = $.fn.dataTable.render.checkbox();
+                $.each(records.columns, function(i, col){
+                    switch(col.renderType){
+                        case "date":
+                            col.render = $.fn.dataTable.render.moment("date", "ll", bundle.config.userLocale);
+                            break;
+                        case "datetime":
+                            col.render = $.fn.dataTable.render.moment("datetime", "lll", bundle.config.userLocale);
+                            break;
+                        case "time":
+                            col.render = $.fn.dataTable.render.moment("time", "LT", bundle.config.userLocale);
+                            break;
+                        case "checkbox":
+                            col.render = $.fn.dataTable.render.checkbox();
+                            break;
+                        case "attachment":
+                            col.render = $.fn.dataTable.render.attachment(col.data);
+                            break;
+                        case "text":
+                        case "dropdown":
+                        case "radio":
+                            col.render = $.fn.dataTable.render.text();
+                            break;
+                    }
                 });
                 // Build DataTable
                 datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);

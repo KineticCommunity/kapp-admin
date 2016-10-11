@@ -8,9 +8,9 @@
   <json:array name="columns">
     <json:object>
       <json:property name="title" value=""/>
-      <json:property name="defaultContent" value=""/>
+      <json:property name="defaultContent" value="&nbsp;"/>
       <json:property name="visible" value="${true}"/>
-      <json:property name="class" value="control all"/>
+      <json:property name="class" value="control ignore-export all"/>
       <json:property name="orderable" value="${false}"/>
     </json:object>
     <c:forEach var="field" items="${fields}" varStatus="status">
@@ -35,7 +35,7 @@
       <json:property name="title" value=""/>
       <json:property name="data" value=""/>
       <json:property name="visible" value="${true}"/>
-      <json:property name="class" value="actions all"/>
+      <json:property name="class" value="actions ignore-export all"/>
       <json:property name="orderable" value="${false}"/>
       <json:property name="defaultContent" value="<div class=\"btn-group datastore-btns\"><button class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></button><button class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></button><button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button></div> "/>
     </json:object>

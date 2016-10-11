@@ -40,7 +40,17 @@
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
     
-    
+    /**
+     * Add jQuery functions for encoding and decoding HTML
+     */
+    jQuery.extend({
+        htmlEncode: function(value){
+            return $("<div>").text(value).html();
+        },
+        htmlDecode: function(value){
+            return $("<div>").html(value).text();
+        }
+    });
     
     /*----------------------------------------------------------------------------------------------
      * BUNDLE.CONFIG OVERWRITES
@@ -61,7 +71,7 @@
     }
     
     /*----------------------------------------------------------------------------------------------
-     * DEFINE RENDERERS FOR DATATABLES FOR FIELD TYPES
+     * DEFINE RENDERERS FOR DATATABLES FOR VARIOUS FIELD RENDER TYPES
      *--------------------------------------------------------------------------------------------*/
     
     /**
@@ -87,16 +97,16 @@
             to = from;
         }
         if ( locale == null ){
-            locale = 'en';
+            locale = "en";
         }
         return function ( d, type, row ){
-            if (d == null || d.length <= 0){
+            if (type === "export" || d == null || d.length <= 0){
                 return d;
             }
             var m = window.moment(d, from, locale, true);
             // Order and type get a number value from Moment, everything else
             // sees the rendered value
-            return m.format(type === 'sort' || type === 'type' ? 'x' : to);
+            return m.format(type === "sort" || type === "type" ? "x" : to);
         };
     };
     
@@ -105,7 +115,73 @@
      */
     $.fn.dataTable.render.checkbox = function(){
         return function ( d, type, row ){
-            return d.replace(/^\[(.*)\]$/, "$1");
+            if (type === "export"){
+                return $.htmlEncode(d);
+            }
+            var data = null;
+            if (d){
+                try {
+                    data = JSON.parse(d);
+                } catch (e){}
+            }
+            if (data){
+                var result = "<ul>";
+                _.each(data, function(v, i){
+                    result += "<li>" + $.htmlEncode(v) + "</li>"
+                });
+                result += "</ul>";
+                return result;
+            }
+            return d;
+        };
+    };
+    
+    /**
+     * Renderer for formatting attachments.
+     */
+    $.fn.dataTable.render.attachment = function(fieldName){
+        return function ( d, type, row ){
+            if (type === "export"){
+                return d;
+            }
+            var data = null;
+            if (d){
+                try {
+                    data = JSON.parse(d);
+                } catch (e){}
+            }
+            if (data){
+                var result = "";
+                for (var i = 0; i < data.length; i++){
+                    if (result.length > 0){
+                        result += "<br>";
+                    }
+                    if (type === "display"){
+                        var url = bundle.spaceLocation() 
+                                + "/submissions/" 
+                                + row.ID
+                                + "/files/"
+                                + encodeURIComponent(fieldName)
+                                + "/" + i + "/"
+                                + encodeURIComponent(data[i].name);
+                        result += "<a href=\"" + url + "\">" + $.htmlEncode(data[i].name) + "</a>";
+                    }
+                    else {
+                        result += data[i].name;
+                    }
+                }
+                return result;
+            }
+            return d;   
+        };
+    };
+    
+    /**
+     * Renderer for formatting text (encode any HTML).
+     */
+    $.fn.dataTable.render.text = function(){
+        return function ( d, type, row ){
+            return $.htmlEncode(d);
         };
     };
          

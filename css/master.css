@@ -164,6 +164,11 @@ table.dataTable tbody td.actions {
   text-align: center;
 }
 
+table.dataTable tbody td ul {
+  margin-bottom: 0;
+  padding-left: 16px;
+}
+
 table.dataTable thead th.sorting:after,
 table.dataTable thead th.sorting_asc:after,
 table.dataTable thead th.sorting_desc:after {
@@ -190,8 +195,16 @@ table.dataTable thead th.sorting_desc:after {
   content: "\f161";
 }
 
+table.dataTable.dtr-inline.collapsed thead th.control,
+table.dataTable.dtr-inline.collapsed tbody td.control,
+table.dataTable.dtr-inline.collapsed tbody td.control:first-child {
+  width: 14px;
+  padding-left: 8px;
+}
+
 table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before {
   position: absolute;
+  left: 8px;
   display: block;
   border: none;
   background-color: transparent;
@@ -199,14 +212,13 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before {
   box-shadow: none;
   opacity: 0.5;
   font-family: FontAwesome;
-  content: "\f067";
-  font-size: 0.8em;
+  content: "\f0da";
   padding-top: 0.15em;
 }
 
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before {
   background-color: transparent;
-  content: "\f068";
+  content: "\f0d7";
 }
 
 table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child {
@@ -240,7 +252,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > s
 }
 
 table.dataTable.nowrap td:not(.all) {
-  white-space: actions;
+  white-space: normal;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

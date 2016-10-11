@@ -22,6 +22,8 @@
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
+        <%-- Set User Locale into bundle object. --%>
+        <script>bundle.config.userLocale = '${locale}';</script>
         <bundle:scriptpack>
             <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
             <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
