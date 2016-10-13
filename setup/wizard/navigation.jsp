@@ -5,8 +5,7 @@
             class="btn btn-md btn-subtle pull-right">
         <b>${SetupHelper.isWizardLastStep(param.step) ? 'Finish ' : 'Next '}<span class="fa fa-caret-right"></span><b>
     </a>
-    <button href="${bundle.kappLocation}?setup=wizard&step=${SetupHelper.getWizardNextStep(param.step)}" 
-            class="btn btn-md btn-primary save-configuration">
+    <button class="btn btn-md btn-primary save-configuration">
         <b><span class="fa fa-floppy-o"></span> Save Configuration<b>
     </button>
     <a href="${bundle.kappLocation}?setup=wizard&step=${SetupHelper.getWizardPreviousStep(param.step)}" 

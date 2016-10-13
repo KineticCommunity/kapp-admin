@@ -108,6 +108,9 @@
                     spaceAttributes.attributes = _.reject(data.space.attributes, function(attr){ return attr.values.length == 0; })
                 },
                 error: function(jqXHR, textStatus, errorThrown){
+                    try { 
+                        errorThrown = JSON.parse(jqXHR.responseText).error; 
+                    } catch(e){}
                     attributeErrors.push("Failed to retrieve Space Attributes. (" + errorThrown + ")");
                 }
             }));
@@ -121,6 +124,9 @@
                     kappAttributes.attributes = _.reject(data.kapp.attributes, function(attr){ return attr.values.length == 0; })
                 },
                 error: function(jqXHR, textStatus, errorThrown){
+                    try { 
+                        errorThrown = JSON.parse(jqXHR.responseText).error; 
+                    } catch(e){}
                     attributeErrors.push("Failed to retrieve Kapp Attributes. (" + errorThrown + ")");
                 }
             }));
@@ -149,6 +155,9 @@
                             dataType: "json",
                             contentType: "application/json",
                             error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
                                 attributeErrors.push("Failed to create new " + def.level.charAt(0).toUpperCase() + def.level.slice(1) + " Attribute Definition with name: \"" + def.name +"\". (" + errorThrown + ")");
                             }
                         }));
@@ -162,6 +171,9 @@
                             dataType: "json",
                             contentType: "application/json",
                             error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
                                 attributeErrors.push("Failed to update Space Attribute Values. (" + errorThrown + ")");
                             }
                         }));
@@ -174,6 +186,9 @@
                             dataType: "json",
                             contentType: "application/json",
                             error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
                                 attributeErrors.push("Failed to update Kapp Attribute Values. (" + errorThrown + ")");
                             }
                         }));
@@ -276,6 +291,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         bridgeErrors.push("Failed to create new Bridge with name: \"" + bridge.name + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -289,6 +307,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         bridgeErrors.push("Failed to create new Bridge Model with name: \"" + model.name + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -312,6 +333,9 @@
                             dataType: "json",
                             contentType: "application/json",
                             error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
                                 bridgeErrors.push("Failed to create new Bridge Mapping with name: \"" + mapping.name + "\" for Model: \"" + mapping.modelName + "\". (" + errorThrown + ")");
                             }
                         }));
@@ -360,6 +384,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         categoryErrors.push("Failed to create new Category with slug: \"" + category.slug + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -408,6 +435,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         formTypeErrors.push("Failed to create new Form Type with name: \"" + formType.name + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -455,6 +485,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         formErrors.push("Failed to create new Form with slug: \"" + form.slug + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -529,6 +562,9 @@
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
+                    try { 
+                        errorThrown = JSON.parse(jqXHR.responseText).error; 
+                    } catch(e){}
                     securityErrors.push("Failed to retrieve Kapp Security Policies. (" + errorThrown + ")");
                 }
             }));
@@ -552,6 +588,9 @@
                             dataType: "json",
                             contentType: "application/json",
                             error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
                                 securityErrors.push("Failed to create new Security Policy Definition with name: \"" + securityPolicyDefinition.name + "\". (" + errorThrown + ")");
                             }
                         }));
@@ -565,6 +604,9 @@
                             dataType: "json",
                             contentType: "application/json",
                             error: function(jqXHR, textStatus, errorThrown){
+                                try { 
+                                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                                } catch(e){}
                                 securityErrors.push("Failed to update Kapp Security Policies. (" + errorThrown + ")");
                             }
                         }));
@@ -619,6 +661,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         webhookErrors.push("Failed to create new Space Webhook with name: \"" + webhook.name + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -631,6 +676,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         webhookErrors.push("Failed to create new Kapp Webhook with name: \"" + webhook.name + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -679,6 +727,9 @@
                     dataType: "json",
                     contentType: "application/json",
                     error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
                         formErrors.push("Failed to create new Form in the Admin Kapp with slug: \"" + form.slug + "\". (" + errorThrown + ")");
                     }
                 }));
@@ -729,6 +780,9 @@
                     container.html(data);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
+                    try { 
+                        errorThrown = JSON.parse(jqXHR.responseText).error; 
+                    } catch(e){}
                     error = "Failed to reload the page. Please refresh. (" + errorThrown +")<br>" + error;
                 },
                 complete: function(){

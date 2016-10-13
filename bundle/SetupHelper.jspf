@@ -24,9 +24,10 @@
         private Kapp kapp;
         private Kapp adminKapp;
         private Form form;
+        private Identity identity;
         
         private boolean exists; // Does a configuration exist in setup.json
-        private boolean configured; // Is the Kapp configured
+        private boolean configured; // Is the Kapp configured (true if Kapp Configuration Status attribute exists)
         private boolean valid; // Is the Kapp configuration valid
         private boolean adminRequired; // Is the Admin Kapp required by this Kapp
         private boolean adminExists; // Does the Admin Kapp exist
@@ -62,6 +63,7 @@
             this.space = (Space)request.getAttribute("space");
             this.kapp = (Kapp)request.getAttribute("kapp");
             this.form = (Form)request.getAttribute("form");
+            this.identity = (Identity)request.getAttribute("identity");
             
             // If Kapp Configuration Status exists, Kapp has been configured
             this.configured = this.kapp != null && this.kapp.hasAttribute("Kapp Configuration Status");
@@ -317,8 +319,8 @@
                     }
                 }
                 
-                // Forms
-                if (configuration.get("forms") != null){
+                // Forms (only check if space admin which has access to all forms)
+                if (identity.isSpaceAdmin() && configuration.get("forms") != null){
                     for (LinkedHashMap<String, Object> form : (List<LinkedHashMap>)configuration.get("forms")){
                         ConfigForm configForm = new ConfigForm(form, this.kapp);
                         // Add to configuration
@@ -334,8 +336,8 @@
                     }
                 }
                 
-                // Admin Kapp Requirement
-                if (configuration.get("adminKapp") != null){
+                // Admin Kapp Requirement (only check if space admin which has access to all forms and kapps)
+                if (identity.isSpaceAdmin() && configuration.get("adminKapp") != null){
                     // If adminKapp property exists, set that configuration exists and Admin Kapp is required
                     this.exists = true;
                     this.adminRequired = true;
