@@ -30,12 +30,11 @@
 /* Missing Attributes
  *-------------------------------------- */
 .no-data{
-  border: 1px solid #999;
-  border-radius: 3px;
   line-height: 140%;
-  margin-bottom: 20px;
-  padding: 1em;
-  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 3px;
+  background-color: $lightestgray;
   position: relative;
   border: 1px solid transparent;
   h3{

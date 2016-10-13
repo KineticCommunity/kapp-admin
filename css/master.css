@@ -1699,12 +1699,11 @@ a.card-tertiary.card-subtle:hover > .card-action, a.card-tertiary.card-subtle:fo
 /* Missing Attributes
  *-------------------------------------- */
 .no-data {
-  border: 1px solid #999;
-  border-radius: 3px;
   line-height: 140%;
-  margin-bottom: 20px;
-  padding: 1em;
-  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 3px;
+  background-color: #F1F1F1;
   position: relative;
   border: 1px solid transparent;
 }

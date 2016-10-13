@@ -11,48 +11,66 @@
             <bundle:script src="${bundle.location}/setup/setup.js" />
         </bundle:scriptpack>    
     </bundle:variable>
-    <div class="no-data">
-        <h2>
-            ${kapp.name} Kapp Setup
-        </h2>
+    <div class="setup">
         <c:choose>
             <c:when test="${!identity.spaceAdmin}">
                 <c:choose>
                     <c:when test="${!SetupHelper.isConfigured() || !SetupHelper.isValid() || SetupHelper.isMissingAttributes()}">
-                        <div class="alert alert-danger">
-                            <h4>The setup for this application is not complete.</h4>
-                            <p>Please contact your administrator.</p>
+                        <div class="alert alert-danger text-center">
+                            <h4>
+                                <span class="fa fa-exclamation-triangle"></span>
+                                <span>The ${kapp.name} Kapp Setup has not been completed.</span>
+                            </h4>
+                            <p>Please contact an administrator.</p>
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="alert alert-danger">
-                            <h4>You do not have access to this page.</h4>
+                        <div class="alert alert-danger text-center">
+                            <h4>
+                                <span class="fa fa-ban"></span>
+                                <span>You do not have access to the ${kapp.name} Kapp Setup.</span>
+                            </h4>
+                            <p>
+                                Only administrators may access this page. 
+                                Click <a href="${bundle.kappLocation}">here</a> to return to the Admin Kapp home page.
+                            </p>
                         </div>
                     </c:otherwise>
                 </c:choose>
             </c:when>
             <c:otherwise>
-                <p class="${!SetupHelper.isValid() ? 'alert alert-danger' : ''}">
-                    <c:if test="${!SetupHelper.isValid()}"><span class="fa fa-exclamation-triangle"></span></c:if>
-                    This Kapp is ${SetupHelper.isValid() ? 'configured' : '<b>NOT</b> configured properly'}. 
+                <h2 class="text-center">
+                    ${kapp.name} Kapp Setup
+                </h2>
+                <p class="${!SetupHelper.isValid() || !SetupHelper.isConfigured() ? 'alert alert-danger' : ''} text-center">
+                    <c:if test="${!SetupHelper.isValid() || !SetupHelper.isConfigured()}"><span class="fa fa-exclamation-triangle"></span></c:if>
+                    This Kapp is ${!SetupHelper.isValid() || !SetupHelper.isConfigured() ? '<b>NOT</b> configured properly' : 'configured'}. 
                     To update the configuration, visit the <a href="${bundle.kappLocation}?setup=wizard">Setup Wizard</a>.
                 </p>
+                <c:if test="${SetupHelper.isMissingAttributes()}">
+                    <p class="alert alert-danger text-center">
+                        <span class="fa fa-exclamation-triangle"></span>
+                        This Kapp is missing required attribute values. 
+                    </p>
+                </c:if>
                 
                 <c:if test="${SetupHelper.isAdminRequired()}">
                     <c:choose>
                         <c:when test="${!SetupHelper.isAdminExists()}">
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger text-center">
                                 <p>
                                     <span class="fa fa-exclamation-triangle"></span>
-                                    This Kapp requires the Admin Kapp, which is not installed. Please install the Admin Kapp.
+                                    This Kapp requires the Admin Kapp, which is not installed. 
+                                    Please install the Admin Kapp first before configuring this Kapp.
                                 </p>
                             </div>
                         </c:when>
                         <c:when test="${!SetupHelper.isAdminValid()}">
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger text-center">
                                 <p>
                                     <span class="fa fa-exclamation-triangle"></span>
-                                    This Kapp requires the Admin Kapp, which is not configured properly. Please configure the Admin Kapp.
+                                    This Kapp requires the Admin Kapp, which is not configured properly. 
+                                    Please configure the Admin Kapp first before configuring this Kapp.
                                 </p>
                             </div>
                         </c:when>

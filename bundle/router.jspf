@@ -1,11 +1,16 @@
 <%-- AUTHENTICATION REQUIRED AND USER IS ANONYMOUS --%>
 <%
-    if (kapp == null && identity.isAnonymous() && !"Yes".equalsIgnoreCase(space.getAttributeValue("Allow Anonymous"))) {
-        response.sendRedirect(bundle.getSpaceLocation()+"/app/login");
-        return;
-    } else if (kapp != null && identity.isAnonymous() && !"Yes".equalsIgnoreCase(kapp.getAttributeValue("Allow Anonymous"))) {
-        response.sendRedirect(bundle.getSpaceLocation()+"/app/login?kapp="+kapp.getSlug());
-        return;
+    if (identity.isAnonymous()) {
+        if (kapp == null && !space.hasAttributeValue("Allow Anonymous", "Yes")) {
+            response.sendRedirect(bundle.getSpaceLocation()+"/app/login");
+            return;
+        } else if (kapp != null && form == null && !kapp.hasAttributeValue("Allow Anonymous", "Yes")) {
+            response.sendRedirect(bundle.getSpaceLocation()+"/app/login?kapp="+kapp.getSlug());
+            return;
+        } else if (kapp != null && form != null && !form.hasAttributeValue("Allow Anonymous", "Yes")) {
+            response.sendRedirect(bundle.getSpaceLocation()+"/app/login?kapp="+kapp.getSlug());
+            return;
+        }
     }
 %>
 
