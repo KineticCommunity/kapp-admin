@@ -47,7 +47,7 @@
     <body>
         <div class="view-port">
             <c:set var="aside"><bundle:yield name="aside"/></c:set>
-            <c:import url="${headerBundlePath}/partials/header.jsp" charEncoding="UTF-8"/>
+            <c:import url="${headerPath}/partials/header.jsp" charEncoding="UTF-8"/>
             <c:import url="${bundle.path}/partials/subheader.jsp" charEncoding="UTF-8"/>
             <div class="container main-inner">
                 <div class="row">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <c:import url="${footerBundlePath}/partials/footer.jsp" charEncoding="UTF-8"/>
+            <c:import url="${footerPath}/partials/footer.jsp" charEncoding="UTF-8"/>
         </div>
     </body>
 </html>

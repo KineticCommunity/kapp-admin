@@ -7,7 +7,7 @@
             <div class="col-sm-10 breadcrumbs">
                 <ol class="breadcrumb">
                     <li>
-                        <a href="/kinetic/scaffold/admin">
+                        <a href="${bundle.kappLocation}">
                             <h4>
                                 <span class="fa ${kapp.getAttributeValue('Icon')}"></span>
                                 <span>${kapp.name}</span>
