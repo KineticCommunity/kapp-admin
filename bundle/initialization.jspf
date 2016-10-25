@@ -33,6 +33,8 @@
 
 <%-- Create paths for headers and footers which can be shared. --%>
 <%  
+    String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
+
     String headerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
     if (kapp != null && kapp.hasAttribute("Header Bundle Path")){
         headerBundlePath = kapp.getAttributeValue("Header Bundle Path");
@@ -42,7 +44,7 @@
     }
     request.setAttribute("headerBundlePath", headerBundlePath);
     request.setAttribute("headerPath", space.getBundleBase() + "/" + headerBundlePath);
-    request.setAttribute("headerLocation", "/kinetic" + space.getBundleBase() + "/" + headerBundlePath);
+    request.setAttribute("headerLocation", contextPath + space.getBundleBase() + "/" + headerBundlePath);
     
     String footerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
     if (kapp != null && kapp.hasAttribute("Footer Bundle Path")){
@@ -53,7 +55,7 @@
     }
     request.setAttribute("footerBundlePath", footerBundlePath);
     request.setAttribute("footerPath", space.getBundleBase() + "/" + footerBundlePath);
-    request.setAttribute("footerLocation", "/kinetic" + space.getBundleBase() + "/" + footerBundlePath);
+    request.setAttribute("footerLocation", contextPath + space.getBundleBase() + "/" + footerBundlePath);
 %>
 
 <%-- Load helper(s) --%>
