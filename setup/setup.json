@@ -400,8 +400,8 @@
                             "elements": [
                                 {
                                     "type": "field",
-                                    "name": "Group Id",
-                                    "label": "Group Id",
+                                    "name": "Group Name",
+                                    "label": "Group Name",
                                     "key": "f3",
                                     "defaultValue": null,
                                     "defaultResourceName": null,

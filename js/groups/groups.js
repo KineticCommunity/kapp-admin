@@ -176,7 +176,7 @@
                     updated: function(data){
                         // When updated, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
-                                data.submission.values["Group Id"], 
+                                data.submission.values["Group Name"], 
                                 true);
                         // Redirect back to list of members
                         location.href = $("a.return-to-current-group").attr("href") + "#members";
@@ -198,14 +198,14 @@
                     created: function(data){
                         // When created, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
-                                data.submission.values["Group Id"], 
+                                data.submission.values["Group Name"], 
                                 true);
                         // Redirect back to list of members
                         location.href = $("a.return-to-current-group").attr("href") + "#members";
                     },
                     loaded: function(form){
                         // Pre-populate the groupId field
-                        form.getFieldByName("Group Id").value(groupName);
+                        form.getFieldByName("Group Name").value(groupName);
                         // Bind event for reset button to refresh the page
                         $(form.element()).find("button.cancel-membership").on("click", function(){
                             location.href = $("a.return-to-current-group").attr("href") + "#members";
@@ -549,7 +549,7 @@
     /**
      * Updates the user's Group attributes to add/remove the appropriate groups based on membership
      */
-    function updateUserMembership(username, groupId, isActive){
+    function updateUserMembership(username, groupName, isActive){
         // Perform ajax call to api to get the user's attributes
         $.ajax({
             method: "GET",
@@ -566,16 +566,16 @@
                 // If Group attribute exists, check if it needs to be updated
                 if (groupAttributes){
                     // If membership is active and doesn't exist
-                    if (isActive && !_.contains(groupAttributes.values, groupId)){
+                    if (isActive && !_.contains(groupAttributes.values, groupName)){
                         // Add the group id to the user
-                        groupAttributes.values.push(groupId);
+                        groupAttributes.values.push(groupName);
                         // Set flag to true to perform save
                         saveRequired = true;
                     }
                     // If membership is not active but exists, remove it
-                    else if (!isActive && _.contains(groupAttributes.values, groupId)){
+                    else if (!isActive && _.contains(groupAttributes.values, groupName)){
                         // Remove the group Id from the user
-                        groupAttributes.values = _.without(groupAttributes.values, groupId);
+                        groupAttributes.values = _.without(groupAttributes.values, groupName);
                         // Set flag to true to perform save
                         saveRequired = true;
                     }
@@ -585,7 +585,7 @@
                     // Add a new Group attribute object to attributes array
                     attributes.push({
                         name: "Group",
-                        values: [groupId]
+                        values: [groupName]
                     });
                     // Set flag to true to perform save
                     saveRequired = true;
