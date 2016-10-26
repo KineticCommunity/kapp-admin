@@ -26,7 +26,7 @@
                    data-table-dom data-table-name="Kapps"> 
                 <thead>
                     <tr>
-                        <th>Kapp</th>
+                        <th>Kapp Name</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -22,7 +22,7 @@
                 <c:choose>
                     <c:when test="${not empty consoles}">
                         <c:forEach var="console" items="${consoles}">
-                            <a class="card-xs card-secondary card-subtle" href="${bundle.kappLocation}/${console.slug}">
+                            <a class="card-xs card-primary card-subtle" href="${bundle.kappLocation}/${console.slug}">
                                 <div class="card-title">${console.name}</div>
                                 <div class="card-content">${console.description}</div>
                             </a>

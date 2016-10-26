@@ -24,7 +24,7 @@
                 <span class="fa fa-list fa-fw" data-table="flat"></span>
             </span>
             <div class="pull-right">
-                <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?page=groups/group">
+                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=groups/group">
                     <span class="fa fa-plus fa-fw"></span> Create Group
                 </a>
             </div>

@@ -72,7 +72,7 @@
                         <h3>
                             <span>${text.escape(param.context)}</span>
                             <c:if test="${!translationSnapshot.getExpectedContextNames(i18nKapp).contains(param.context) || text.startsWith(param.context, 'custom.')}">
-                                <small class="text-primary">
+                                <small class="text-tertiary">
                                     <span class="fa fa-pencil-square-o fa-fw rename-context-button" 
                                           data-tooltip title="Rename Context" 
                                           data-context-name="${text.escape(param.context)}">
@@ -91,7 +91,7 @@
                                                value="${i18nApiUrl}/translationContexts/${text.escape(param.context)}/translations.csv${localeUrlApiParam}"/>
                                     </c:otherwise>
                                 </c:choose>
-                                <a class="btn btn-sm btn-primary" href="${exportUrl}">
+                                <a class="btn btn-sm btn-tertiary" href="${exportUrl}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
                                 <a class="btn btn-sm btn-default" 

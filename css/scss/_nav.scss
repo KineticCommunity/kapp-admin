@@ -5,13 +5,13 @@
 /* Nav Pills Elements
  *-------------------------------------- */
 .nav-pills {
-  border-bottom: 2px solid $primary;
+  border-bottom: 2px solid $tertiary;
 }
 .nav-pills > li > span.title {
   position: relative;
   display: block;
   border-radius: 0;
-  color: $secondary;
+  color: $primary;
   opacity: 0.7;
   font-size: 85%;
   text-transform: uppercase;
@@ -28,12 +28,12 @@
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: $primary-complement;
-  background-color: $primary;
+  color: $tertiary-complement;
+  background-color: $tertiary;
   border: none;
 }
 .nav-pills > li > a:hover {
-  color: $primary;
+  color: $tertiary;
   background-color: $lightestgray;
   border: none;
 }

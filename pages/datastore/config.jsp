@@ -26,10 +26,10 @@
                     <a class="btn btn-sm btn-default" href="${bundle.kappLocation}/${form.slug}?page=datastore/store&store=${currentStore.slug}">
                         <span class="fa fa-database fa-fw"></span>Records
                     </a>
-                    <a class="btn btn-sm btn-primary" href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${currentStore.slug}/builder" target="_blank">
+                    <a class="btn btn-sm btn-tertiary" href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${currentStore.slug}/builder" target="_blank">
                         <span class="fa fa-mouse-pointer fa-fw"></span>Builder
                     </a>
-                    <a class="btn btn-sm btn-primary" href="javascript:location.reload(true);">
+                    <a class="btn btn-sm btn-tertiary" href="javascript:location.reload(true);">
                         <span class="fa fa-refresh fa-fw"></span>
                     </a>
                 </div>

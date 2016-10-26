@@ -57,7 +57,7 @@
                             <span>${TranslationLocale.get(param.locale).name}</span>
                             <small>Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-primary" 
+                                <a class="btn btn-sm btn-tertiary" 
                                    href="${i18nApiUrl}/translations.csv?locale=${text.escape(param.locale)}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>

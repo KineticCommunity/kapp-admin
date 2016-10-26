@@ -75,7 +75,7 @@
                                 Members 
                                 <small> of ${currentGroup.displayName}</small>
                                 <div class="pull-right">
-                                    <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?page=groups/member&group=${currentGroup.id}">
+                                    <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=groups/member&group=${currentGroup.id}">
                                         <span class="fa fa-plus fa-fw"></span> Add Member
                                     </a>
                                 </div>
@@ -104,7 +104,7 @@
                                                 <td class="username" data-membership-id="${member.id}">${member.username}</td>
                                                 <td>
                                                     <div class="btn-group pull-right">
-                                                        <a class="btn btn-xs btn-primary delete" href="javascript:void(0);">
+                                                        <a class="btn btn-xs btn-tertiary delete" href="javascript:void(0);">
                                                             <span class="fa fa-times fa-fw"></span>
                                                         </a>
                                                     </div>
@@ -123,7 +123,7 @@
                                 Subgroups 
                                 <small> of ${currentGroup.displayName}</small>
                                 <div class="pull-right">
-                                    <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?page=groups/group&parent=${currentGroup.id}">
+                                    <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=groups/group&parent=${currentGroup.id}">
                                         <span class="fa fa-plus fa-fw"></span> Create Subgroup
                                     </a>
                                 </div>

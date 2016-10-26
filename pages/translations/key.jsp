@@ -74,7 +74,7 @@
                                                value="${i18nApiUrl}/translationContexts/${text.escape(param.context)}/translations.csv?key=${text.escape(param.key)}"/>
                                     </c:otherwise>
                                 </c:choose>
-                                <a class="btn btn-sm btn-primary" href="${exportUrl}">
+                                <a class="btn btn-sm btn-tertiary" href="${exportUrl}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
                                 <a class="btn btn-sm btn-default" 

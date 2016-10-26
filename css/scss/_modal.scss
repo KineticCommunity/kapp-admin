@@ -12,24 +12,24 @@
 /* Modal Content */
 .kd-modal-content {
   position: relative;
-  background-color: subtle($secondary, 95%);
+  background-color: subtle($primary, 95%);
   margin: auto;
   margin-top: 60px;
   padding: 0;
-  border: 1px solid subtle($secondary, 75%);
+  border: 1px solid subtle($primary, 75%);
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 /* Modal Header */
 .kd-modal-header {
   padding: 2px 16px;
-  color: $secondary;
+  color: $primary;
 
   h4 {
     text-transform: none;
   }
   h1, h2, h3, h4, h5, h6 {
-    border-bottom: 1px solid subtle($secondary, 75%);
+    border-bottom: 1px solid subtle($primary, 75%);
   }
 }
 
@@ -43,7 +43,7 @@
       padding: 0.5em;
     }
     &.table-hover tbody tr:hover {
-      background-color: subtle($secondary, 90%);
+      background-color: subtle($primary, 90%);
     }
   }
 }
@@ -51,8 +51,8 @@
 /* Modal Footer */
 .kd-modal-footer {
   padding: 6px 16px;
-  background-color: subtle($secondary, 85%);
-  border-top: 1px solid subtle($secondary, 75%);
+  background-color: subtle($primary, 85%);
+  border-top: 1px solid subtle($primary, 75%);
 }
 
 @media (max-width: 767px) {

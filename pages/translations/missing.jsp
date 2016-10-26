@@ -144,7 +144,7 @@
                             <span>${pageTitle}</span>
                             <small>Missing Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-primary" href="${exportUrl}">
+                                <a class="btn btn-sm btn-tertiary" href="${exportUrl}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
                             </div>

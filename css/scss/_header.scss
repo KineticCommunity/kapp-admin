@@ -23,7 +23,7 @@ nav#bundle-subheader{
   
   ol.breadcrumb {
     margin-bottom: 0;
-    padding: 15px 20px;
+    padding: 15px 20px 15px 0;
     background-color: transparent;
     
     li {
@@ -39,7 +39,7 @@ nav#bundle-subheader{
   div.additional-menu ul:not(.dropdown-menu) {
     position: relative;
     margin-bottom: 0;
-    padding: 15px 20px;
+    padding: 15px 0 15px 20px;
   }
   
   ul.dropdown-menu > li {
@@ -136,12 +136,12 @@ nav#bundle-subheader{
       float: right;
       
       > ul:not(.dropdown-menu) {
-        padding: 10px 5px;
+        padding: 10px 0 10px 5px;
       }
     }
     
     ol.breadcrumb {
-      padding: 10px 5px;
+      padding: 10px 5px 10px 0;
       > li {
         display: block;
       }

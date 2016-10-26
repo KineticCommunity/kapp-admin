@@ -48,10 +48,10 @@
                             <span>${text.escape(i18nKapp.name)}</span>
                             <small>Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-primary" href="${i18nApiUrl}/translations.csv">
+                                <a class="btn btn-sm btn-tertiary" href="${i18nApiUrl}/translations.csv">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <button class="btn btn-sm btn-primary import-translations-btn fileinput-button">
+                                <button class="btn btn-sm btn-tertiary import-translations-btn fileinput-button">
                                     <span class="fa fa-upload fa-fw"></span> Import
                                     <input id="fileupload" type="file" accept=".csv"/>
                                 </button>

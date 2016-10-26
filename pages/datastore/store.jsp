@@ -28,7 +28,7 @@
                 <h3>
                     ${currentStore.name} <small> Records</small>
                     <div class="pull-right datastore-records-table-buttons">
-                        <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?page=datastore/record&store=${currentStore.slug}">
+                        <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=datastore/record&store=${currentStore.slug}">
                             <span class="fa fa-plus fa-fw"></span> Add Record
                         </a>
                         <input class="hide" accept=".csv" id="datastore-records-import" type="file">

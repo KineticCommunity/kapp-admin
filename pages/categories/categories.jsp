@@ -31,7 +31,7 @@
                             <span>${text.escape(currentKapp.name)}</span>
                             <small>Categories</small>
                             <div class="pull-right">
-                                <button class="btn btn-primary pull-right add-category btn-sm">
+                                <button class="btn btn-tertiary pull-right add-category btn-sm">
                                     <span class="fa fa-plus"></span> Add Category
                                 </button>
                             </div>
@@ -88,7 +88,7 @@
                                                 <label for="category-name" class="control-label">Category Slug</label>
                                                 <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
                                                 <button class="btn btn-success btn-sm edit-category">Save</button>
-                                                <button class="btn btn-primary add-subcategory btn-sm pull-right"><span class="fa fa-plus"></span> Add Subcategory</button>
+                                                <button class="btn btn-tertiary add-subcategory btn-sm pull-right"><span class="fa fa-plus"></span> Add Subcategory</button>
                                             </div>
                                         </div> 
                                     </div>

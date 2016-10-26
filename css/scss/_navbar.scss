@@ -17,7 +17,7 @@ nav.navbar.navbar-default[data-subnav] {
 /* Navbar Brand color
  *-------------------------------------- */
 .navbar-default .navbar-brand {
-  color: $primary;
+  color: $tertiary;
 }
 
 /* Navbar Form
@@ -73,7 +73,7 @@ nav.navbar.navbar-default[data-subnav] {
 
 .tt-suggestion.tt-cursor,.tt-suggestion:hover {
   color: #fff;
-  background-color: $primary;
+  background-color: $tertiary;
 }
 
 .tt-suggestion p {

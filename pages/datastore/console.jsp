@@ -20,7 +20,7 @@
         <h3>
             ${form.name}
             <div class="pull-right">
-                <a class="btn btn-sm btn-primary" href="${bundle.kappLocation}/${form.slug}?page=datastore/config">
+                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=datastore/config">
                     <span class="fa fa-plus fa-fw"></span> Create Datastore
                 </a>
             </div>

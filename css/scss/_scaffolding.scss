@@ -36,8 +36,8 @@ body > div.view-port > div.container {
       
       > div.aside {
         @include font-size-line-height($font-size-base*0.9, $line-height-base*0.9);
-        border-left: 6px solid $tertiary;
-        background-color: subtle($tertiary, 94%);
+        border-left: 6px solid $secondary;
+        background-color: subtle($secondary, 94%);
         
         > div.aside-toggle {
           cursor: pointer;
