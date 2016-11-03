@@ -12,7 +12,6 @@
         <link rel="icon" type="image/png" href="${bundle.location}/images/favicon-32x32.png" sizes="32x32">
         <link rel="icon" type="image/png" href="${bundle.location}/images/favicon-96x96.png" sizes="96x96">
         <link rel="shortcut icon" href="${bundle.location}/images/favicon.ico" type="image/x-icon"/>
-        <title>Admin Console<c:if test="${not empty form}"> | ${form.name}</c:if></title>
         <app:headContent/>
         <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
@@ -42,6 +41,11 @@
         <bundle:scriptpack minify="false">
             <bundle:script src="${bundle.location}/libraries/moment/moment-with-locales.min.js"/>
         </bundle:scriptpack>
+        <c:set var="pageTitle"><bundle:yield name="pageTitle"/></c:set>
+        <title>
+           ${text.join([not empty pageTitle ? pageTitle : text.defaultIfBlank(form.name, kapp.name), space.name], ' - ')}
+           ${space.hasAttribute('Page Title Brand') ? text.join([' | ', space.getAttributeValue('Page Title Brand')]) : ''}
+        </title>
         <bundle:yield name="head"/>
     </head>
     <body>

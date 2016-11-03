@@ -1,9 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <bundle:layout page="layouts/layout.jsp">
-    <bundle:variable name="head">
-        <title>${text.escape(space.name)} Reset Password</title>
-    </bundle:variable>
+    <bundle:variable name="pageTitle">Reset Password</bundle:variable>
 
     <c:choose>
         <c:when test="${param.confirmation == null}">

@@ -1,9 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <bundle:layout page="layouts/layout.jsp">
-    <bundle:variable name="head">
-        <title>${text.escape(kapp.name)} Login</title>
-    </bundle:variable>
+    <bundle:variable name="pageTitle">Login</bundle:variable>
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">

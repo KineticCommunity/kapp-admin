@@ -3,8 +3,8 @@
 
 <bundle:layout page="layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
+    <bundle:variable name="pageTitle">${text.escape(form.name)}</bundle:variable>
     <bundle:variable name="head">
-        <title>Admin Console<c:if test="${not empty form}"> | ${text.escape(form.name)}</c:if></title>
         <app:formHeadContent/>
     </bundle:variable>
     
