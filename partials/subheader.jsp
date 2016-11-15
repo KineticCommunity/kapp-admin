@@ -8,10 +8,8 @@
                 <ol class="breadcrumb">
                     <li>
                         <a href="${bundle.kappLocation}">
-                            <h4>
-                                <span class="fa ${kapp.getAttributeValue('Icon')}"></span>
-                                <span>${kapp.name}</span>
-                            </h4>
+                            <span class="fa ${kapp.getAttributeValue('Icon')}"></span>
+                            <span>${kapp.name}</span>
                         </a>
                     </li>
                     <bundle:yield name="breadcrumb"/>

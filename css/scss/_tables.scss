@@ -12,6 +12,18 @@ table.dataTable tbody td.actions {
     width: 82px; 
     text-align: center;
 }
+table.dataTable thead th.actions-sm,
+table.dataTable tbody td.actions-sm {
+    min-width: 55px; 
+    width: 55px; 
+    text-align: center;
+}
+table.dataTable thead th.actions-xs,
+table.dataTable tbody td.actions-xs {
+    min-width: 28px; 
+    width: 28px; 
+    text-align: center;
+}
 table.dataTable tbody td ul {
     margin-bottom: 0;
     padding-left: 16px;

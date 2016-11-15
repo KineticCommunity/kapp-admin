@@ -164,6 +164,20 @@ table.dataTable tbody td.actions {
   text-align: center;
 }
 
+table.dataTable thead th.actions-sm,
+table.dataTable tbody td.actions-sm {
+  min-width: 55px;
+  width: 55px;
+  text-align: center;
+}
+
+table.dataTable thead th.actions-xs,
+table.dataTable tbody td.actions-xs {
+  min-width: 28px;
+  width: 28px;
+  text-align: center;
+}
+
 table.dataTable tbody td ul {
   margin-bottom: 0;
   padding-left: 16px;
@@ -258,18 +272,22 @@ table.dataTable.nowrap td:not(.all) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-input[type='text'], input[type='password'], textarea, select {
+input[type='text'], input[type='password'], textarea, select, span.input-group-addon {
   border-radius: 0.4rem;
-  padding: 0.2rem 0.6rem;
+  padding: 0.4rem 1rem;
   border: 0.1rem solid rgba(0, 0, 0, 0.4);
   outline: none;
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus, select:focus {
+input[type='text']:focus, input[type='password']:focus, textarea:focus, select:focus, span.input-group-addon:focus {
   border-color: #8A9699;
 }
 
-input[type='text'], input[type='password'], select {
+input[type='text'], input[type='password'], select, span.input-group-addon {
   height: 2.6rem;
+}
+
+input[type='text'], input[type='password'], textarea, select {
+  width: 100%;
 }
 
 section.page form {
@@ -278,6 +296,7 @@ section.page form {
   font-weight: 400;
   overflow: hidden;
   background: #ffffff;
+  overflow: visible;
   /* Required asterisk after label */
   /* Attachment files
    *-------------------------------------- */
@@ -813,47 +832,6 @@ nav.navbar.navbar-default[data-subnav] {
   height: auto;
   border: 1px solid rgba(0, 0, 0, 0.25);
   outline: none;
-}
-
-/* Navbar Typeahead
- *-------------------------------------- */
-.tt-query {
-  -webkit-box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, 0.075);
-  -moz-box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 0.1rem 0.1rem rgba(0, 0, 0, 0.075);
-}
-
-.tt-hint {
-  color: #999;
-}
-
-.tt-menu {
-  /* used to be tt-dropdown-menu in older versions */
-  width: 160px;
-  margin-top: 0;
-  padding: .4rem 0;
-  background-color: #fff;
-  border: .1rem solid #ccc;
-  border: 0.1rem solid rgba(0, 0, 0, 0.2);
-  border-radius: 0;
-  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-}
-
-.tt-suggestion {
-  cursor: pointer;
-  padding: 0.3rem 2rem;
-  line-height: 2.4;
-}
-
-.tt-suggestion.tt-cursor, .tt-suggestion:hover {
-  color: #fff;
-  background-color: #F18F01;
-}
-
-.tt-suggestion p {
-  margin: 0;
 }
 
 /* Navbar Brand 

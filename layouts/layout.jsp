@@ -19,6 +19,7 @@
             <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
             <bundle:style src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.css"/>
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
+            <bundle:style src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
         <%-- Set User Locale into bundle object. --%>
@@ -33,7 +34,8 @@
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
-            <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.min.js"/>
+            <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.js"/>
+            <bundle:script src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.js"/>
             <bundle:script src="${bundle.location}/js/admin.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>

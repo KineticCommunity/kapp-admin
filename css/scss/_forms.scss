@@ -2,9 +2,9 @@
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-input[type='text'], input[type='password'], textarea, select {
+input[type='text'], input[type='password'], textarea, select, span.input-group-addon {
   @include border-radius();
-  padding: 0.2rem 0.6rem;
+  padding: 0.4rem 1rem;
   border: 0.1rem solid rgba($black, 0.4);
   outline: none;
   &:focus {
@@ -13,8 +13,12 @@ input[type='text'], input[type='password'], textarea, select {
 }
 
 
-input[type='text'], input[type='password'], select {    
+input[type='text'], input[type='password'], select, span.input-group-addon {    
   height: 2.6rem;
+}
+
+input[type='text'], input[type='password'], textarea, select {    
+  width: 100%;
 }
 
 section.page {
@@ -24,6 +28,7 @@ section.page {
     font-weight: 400;
     overflow: hidden;
     background: $white;
+    overflow: visible;
     /* Required asterisk after label */
     .checkbox.required label:first-child:after,
     .radio.required label:first-child:after,
