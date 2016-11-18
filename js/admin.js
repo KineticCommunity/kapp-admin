@@ -23,6 +23,20 @@
             }
         }
         
+        /**
+         * Clear all saved DataTable states if on the home page.
+         */
+        $("div#admin-console-home").each(function(){
+            Object.keys(window.localStorage).forEach(function(key){
+                var re = new RegExp("^DataTables_.*?" + window.location.pathname + ".*");
+                console.log(key, re.test(key));
+                if (re.test(key)) {
+                    window.localStorage.removeItem(key);
+                }
+            });
+        });
+        
+        
     });
 
     /*----------------------------------------------------------------------------------------------
@@ -39,6 +53,20 @@
     /*----------------------------------------------------------------------------------------------
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
+    
+    /**
+     * Returns an Object with keys/values for each of the url parameters.
+     * 
+     * @returns {Object}
+     */
+    admin.getUrlParameters = function(param) {
+        var searchString = window.location.search.substring(1), params = searchString.split("&"), hash = {};
+        for (var i = 0; i < params.length; i++) {
+            var val = params[i].split("=");
+            hash[unescape(val[0])] = unescape(val[1]);
+        }
+        return param ? hash[param] : hash;
+    };
     
     /**
      * Add jQuery functions for encoding and decoding HTML

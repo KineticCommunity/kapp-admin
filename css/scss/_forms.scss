@@ -21,6 +21,11 @@ input[type='text'], input[type='password'], textarea, select {
   width: 100%;
 }
 
+label.required-field:after {
+  content: '*';
+  color: red;
+}
+
 section.page {
   form {
     margin-left: 0;

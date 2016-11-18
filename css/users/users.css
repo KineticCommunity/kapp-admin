@@ -1,0 +1,13 @@
+/* CSS Specific to the User Management Console*/
+tr.child td span.dtr-data {
+  word-break: break-all;
+}
+div.row.user-details > div {
+  margin-bottom: 15px;
+}
+div.row.user-details > div > table {
+  margin-bottom: 0px;
+}
+table td.group-name {
+  word-break: break-all;
+}

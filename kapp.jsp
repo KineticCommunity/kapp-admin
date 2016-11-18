@@ -6,7 +6,7 @@
     
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
                 
-    <div class="page-header">
+    <div class="page-header" id="admin-console-home">
         <h3 class="text-center">
             Welcome to the <strong>Admin Console</strong>
         </h3>

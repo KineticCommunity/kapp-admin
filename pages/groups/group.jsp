@@ -104,7 +104,7 @@
                                                 <td class="username" data-membership-id="${member.id}">${member.username}</td>
                                                 <td>
                                                     <div class="btn-group pull-right">
-                                                        <a class="btn btn-xs btn-tertiary delete" href="javascript:void(0);">
+                                                        <a class="btn btn-xs btn-danger delete" href="javascript:void(0);">
                                                             <span class="fa fa-times fa-fw"></span>
                                                         </a>
                                                     </div>
