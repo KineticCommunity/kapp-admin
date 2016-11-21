@@ -65,10 +65,8 @@
         public static List<LinkedHashMap> getDatastoreColumns(Form datastore, String configurationAttributeName){
             LinkedHashMap<String, Element> fieldElements = new LinkedHashMap<>();
             for (Page page : datastore.getPages()){
-                for (Element element : page.getElements()){
-                    if (Element.Types.FIELD.equals(element.getType())){
-                        fieldElements.put(element.getName(), element);
-                    }
+                for (Element element : getFieldElements(page.getElements())){
+                    fieldElements.put(element.getName(), element);
                 }
             }
             
@@ -103,6 +101,19 @@
                 columns.add(newColumn);
             }
             return columns;
+        }
+        
+        private static List<Element> getFieldElements(List<Element> elements){
+            List<Element> fieldElements = new ArrayList<Element>();
+            for(Element element : elements){
+                if (Element.Types.FIELD.equals(element.getType())){
+                    fieldElements.add(element);
+                }
+                else if (Element.Types.SECTION.equals(element.getType())){
+                    fieldElements.addAll(getFieldElements(element.getElements()));
+                }
+            }
+            return fieldElements;
         }
         
         public List<Submission> getDatastoreRecords(Form datastore){

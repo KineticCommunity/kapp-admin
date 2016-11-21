@@ -276,8 +276,15 @@
     
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
     <bundle:variable name="aside">
-<%--         <h3>${form.name}</h3> --%>
-<%--         <h4>${not empty currentUser ? currentUser.username : 'New User'}</h4> --%>
+        <h3>${form.name}</h3>
+        <h4>${not empty currentUser ? currentUser.username : 'New User'}</h4>
+        <hr class="border-color-white" />
+        <p>
+            Please visit Space Administration to define new 
+            <a href="${bundle.spaceLocation}/app/#/admin/attributeDefinitions/User" target="_blank">User Attribute Definitions</a> and new
+            <a href="${bundle.spaceLocation}/app/#/admin/attributeDefinitions/User" target="_blank">Profile Attribute Definitions</a>.
+        </p>
+        
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     
