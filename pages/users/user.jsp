@@ -276,8 +276,8 @@
     
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
     <bundle:variable name="aside">
-        <h3>${form.name}</h3>
-        <h4>${not empty currentUser ? currentUser.username : 'New User'}</h4>
+<%--         <h3>${form.name}</h3> --%>
+<%--         <h4>${not empty currentUser ? currentUser.username : 'New User'}</h4> --%>
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     

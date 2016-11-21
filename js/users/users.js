@@ -21,6 +21,7 @@
         });
         
         $("button.save-user-btn").on("click", userManagement.saveUser);
+        $("a.download-import-template").on("click", userManagement.downloadUserImportTemplate);
     });
 
     /*----------------------------------------------------------------------------------------------
@@ -438,13 +439,21 @@
             records.push(newUser);
         });
         
-        // Clear and destroy table and show notification that import is happening
-        userManagement.userDataTable.destroy();
-        userManagement.userTable.empty()
+        if (records.length > 0){
+            // Clear and destroy table and show notification that import is happening
+            userManagement.userDataTable.destroy();
+            userManagement.userTable.empty()
             .append($("<tr>")
-                .append($("<td>").addClass("alert alert-info")
-                    .append($("<span>").addClass("fa fa-cog fa-spin"))
-                    .append(" Importing users")));
+                    .append($("<td>").addClass("alert alert-info")
+                            .append($("<span>").addClass("fa fa-cog fa-spin"))
+                            .append(" Importing users")));
+        }
+        else {
+            input.closest("div.users-table-buttons").notifie({
+                anchor: "h3",
+                message: "The file you selected doe not contain any data."
+            });
+        }
         
         // Create counters to keep track of when ajax calls complete
         var statusCounters = {
@@ -543,15 +552,18 @@
             success: function(data){
                 var options = userManagement.buildUserListTableOptions(data, table.data("space-name"));
                 userManagement.userDataTable = table.DataTable(options);
+                // Add event handler for edit button
+                userManagement.userTable.off("click", "button.edit-user-btn")
+                                        .on("click", "button.edit-user-btn", function(e){
+                    // On click of edit button, send user to page for editing current user
+                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
+                    location.href = encodeURI(bundle.kappLocation() 
+                            + "/" + userManagement.userTable.data("console-slug") 
+                            + "?page=users/user&username=" + data.username);
+                });
                 // Append the import/export buttons to the buttons section on the page
                 userManagement.userDataTable.buttons().nodes().each(function(){
                     $("div.users-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
-                });
-                // Add event handler for edit button
-                userManagement.userTable.off().on("click", "button.edit-user-btn", function(e){
-                    // On click of edit button, send user to page for editing current user
-                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
-                    location.href = bundle.kappLocation() + "/" + userManagement.userTable.data("console-slug") + "?page=users/user&username=" + data.username;
                 });
             },
             error: function(jqXHR, textStatus, errorThrown){
@@ -626,6 +638,36 @@
             ],
             pageLength: 25
         };
+    };
+    
+    userManagement.downloadUserImportTemplate = function(e){
+        var table = $("<table>").DataTable({
+            columns: [
+                {title: "Display Name", data: "displayName"},
+                {title: "Username", data: "username"},
+                {title: "Enabled", data: "enabled"},
+                {title: "Groups", data: "groups"},
+                {title: "Email", data: "email"}
+            ],
+            data: [{
+                displayName: "DELETE THIS ROW BEFORE IMPORTING",
+                username: "",
+                enabled: "TRUE or FALSE",
+                groups: "[\"Group 1\",\"Group 2\",\"Group N\"]",
+                email: ""
+            }],
+            buttons: [{
+                extend: "csv",
+                filename: userManagement.userTable.data("space-name") + " Users - Import Template",
+                exportOptions: {
+                    modifier: { search: "none" },
+                    columns: ":not(.ignore-export)",
+                    orthogonal: "export"
+                }
+            }],
+            dom: 'B'
+        });
+        table.buttons().trigger("click");
     };
     
     
