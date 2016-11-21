@@ -272,30 +272,21 @@ table.dataTable.nowrap td:not(.all) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-input[type='text'], input[type='password'], textarea, select, span.input-group-addon {
+input[type='text'], input[type='password'], textarea, select, span.input-group-addon, .form-control {
   border-radius: 0.4rem;
   padding: 0.4rem 1rem;
-  border: 0.1rem solid rgba(0, 0, 0, 0.4);
+  border: 0.1rem solid rgba(0, 0, 0, 0.2);
   outline: none;
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus, select:focus, span.input-group-addon:focus {
+input[type='text']:focus, input[type='password']:focus, textarea:focus, select:focus, span.input-group-addon:focus, .form-control:focus {
   border-color: #8A9699;
 }
 
-input[type='text'], input[type='password'], select, span.input-group-addon {
-  height: 2.6rem;
+input[type='text'], input[type='password'], select, span.input-group-addon, .form-control {
+  height: 2.8rem;
 }
 
-input[type='text'], input[type='password'], textarea, select {
-  width: 100%;
-}
-
-label.required-field:after {
-  content: '*';
-  color: red;
-}
-
-section.page form {
+section.page form, .form-style {
   margin-left: 0;
   padding: 2.4rem;
   font-weight: 400;
@@ -306,13 +297,20 @@ section.page form {
   /* Attachment files
    *-------------------------------------- */
 }
+section.page form input[type='text'], section.page form input[type='password'], section.page form textarea, section.page form select, .form-style input[type='text'], .form-style input[type='password'], .form-style textarea, .form-style select {
+  width: 100%;
+}
 section.page form .checkbox.required label:first-child:after,
 section.page form .radio.required label:first-child:after,
-section.page form .form-group.required label:after {
+section.page form .form-group.required label:after,
+section.page form label.required-field:after, .form-style .checkbox.required label:first-child:after,
+.form-style .radio.required label:first-child:after,
+.form-style .form-group.required label:after,
+.form-style label.required-field:after {
   content: '*';
   color: red;
 }
-section.page form label {
+section.page form label, .form-style label {
   /* Make the label a block */
   color: rgba(0, 0, 0, 0.75);
   display: block;
@@ -320,36 +318,37 @@ section.page form label {
   font-weight: 600;
 }
 section.page form .radio label:first-child,
-section.page form .checkbox label:first-child {
+section.page form .checkbox label:first-child, .form-style .radio label:first-child,
+.form-style .checkbox label:first-child {
   padding-left: 0;
 }
-section.page form .file-table {
+section.page form .file-table, .form-style .file-table {
   display: table;
   margin: 0px;
   padding: 0px;
 }
-section.page form .file-table .file-header {
+section.page form .file-table .file-header, .form-style .file-table .file-header {
   display: table-header-group;
 }
-section.page form .file-table .file-header span {
+section.page form .file-table .file-header span, .form-style .file-table .file-header span {
   background-color: #F1F1F1;
 }
-section.page form .file-table .file-container {
+section.page form .file-table .file-container, .form-style .file-table .file-container {
   display: table-row-group;
 }
-section.page form .file-table .file-row {
+section.page form .file-table .file-row, .form-style .file-table .file-row {
   display: table-row;
 }
-section.page form .file-table .file-row > span {
+section.page form .file-table .file-row > span, .form-style .file-table .file-row > span {
   list-style: none;
   display: table-cell;
   border: 1px solid #000;
   padding: 0.3rem 1.2rem;
 }
-section.page form .file-table .file-row > span:not(:first-child) {
+section.page form .file-table .file-row > span:not(:first-child), .form-style .file-table .file-row > span:not(:first-child) {
   border-left: none;
 }
-section.page form .file-table .file-row:not(:first-child) > span {
+section.page form .file-table .file-row:not(:first-child) > span, .form-style .file-table .file-row:not(:first-child) > span {
   border-top: none;
 }
 
@@ -367,7 +366,7 @@ div.embedded-form section.page form {
 }
 /* Form Button Styles
  *-------------------------------------- */
-button, input[type='submit'], input[type='button'], .btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-link, .btn-default, .btn-subtle {
+button, input[type='submit'], input[type='button'], .btn, section.page form button, .form-style button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-link, .btn-default, .btn-subtle {
   -webkit-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
 }
@@ -427,12 +426,12 @@ button, input[type='submit'], input[type='button'], .btn, section.page form butt
 
 .btn-tertiary {
   background-color: #F18F01;
-  border-color: #be7101;
+  border-color: #d88001;
   color: #FFFFFF;
 }
 .btn-tertiary:hover {
-  background-color: #be7101;
-  border-color: #8b5301;
+  background-color: #d88001;
+  border-color: #be7101;
   color: #FFFFFF;
 }
 

@@ -57,11 +57,11 @@
                             <span>${TranslationLocale.get(param.locale).name}</span>
                             <small>Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-tertiary" 
+                                <a class="btn btn-sm btn-default" 
                                    href="${i18nApiUrl}/translations.csv?locale=${text.escape(param.locale)}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <a class="btn btn-sm btn-default" 
+                                <a class="btn btn-sm btn-tertiary" 
                                    href="${i18nKappUrl}&page=translations/add&locale=${text.escape(param.locale)}">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>

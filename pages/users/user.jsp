@@ -36,16 +36,16 @@
         <c:if test="${empty currentUser}">
             <div class="col-xs-12">
                 <label for="username" class="control-label required-field">${i18n.translate('Username')}</label>
-                <input id="username" name="username" class="form-control" value="${param.username}">
+                <input type="text" id="username" name="username" class="form-control" value="${param.username}">
             </div>
         </c:if>
         <div class="col-xs-12">
             <label for="displayName" class="control-label">${i18n.translate('Display Name')}</label>
-            <input id="displayName" name="displayName" class="form-control" value="${currentUser.displayName}">
+            <input type="text" id="displayName" name="displayName" class="form-control" value="${currentUser.displayName}">
         </div>
         <div class="col-xs-12">
             <label for="email" class="control-label">${i18n.translate('Email')}</label>
-            <input id="email" name="email" class="form-control" value="${currentUser.email}">
+            <input type="text" id="email" name="email" class="form-control" value="${currentUser.email}">
         </div>
         <div class="col-xs-12">
             <label for="displayName" class="control-label">${i18n.translate('Preferred Language')}</label>

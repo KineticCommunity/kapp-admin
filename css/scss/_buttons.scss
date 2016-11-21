@@ -79,12 +79,12 @@ button, input[type='submit'], input[type='button'], .btn  {
   @extend .btn;
   
   background-color: $tertiary;
-  border-color: darken($tertiary, 10%);
+  border-color: darken($tertiary, 5%);
   color: $tertiary-complement;
   
   &:hover {
-    background-color: tint($tertiary, 10%);
-    border-color: darken(tint($tertiary, 10%), 10%);
+    background-color: tint($tertiary, 5%);
+    border-color: darken(tint($tertiary, 5%), 5%);
     color: $tertiary-complement;
   }
 }

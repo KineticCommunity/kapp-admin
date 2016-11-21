@@ -42,7 +42,7 @@
                             <span>Publish Translations</span>
                             <small>${text.escape(i18nKapp.name)}</small>
                             <div class="pull-right">
-                                <button class="btn btn-sm btn-default publish-btn" ${pendingChanges.size() <= 0 ? 'disabled' : ''}>
+                                <button class="btn btn-sm btn-tertiary publish-btn" ${pendingChanges.size() <= 0 ? 'disabled' : ''}>
                                     <span class="fa fa-cloud-upload fa-fw"></span> Publish
                                 </button>
                             </div>

@@ -74,10 +74,10 @@
                                                value="${i18nApiUrl}/translationContexts/${text.escape(param.context)}/translations.csv?key=${text.escape(param.key)}"/>
                                     </c:otherwise>
                                 </c:choose>
-                                <a class="btn btn-sm btn-tertiary" href="${exportUrl}">
+                                <a class="btn btn-sm btn-default" href="${exportUrl}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <a class="btn btn-sm btn-default" 
+                                <a class="btn btn-sm btn-tertiary" 
                                    href="${i18nKappUrl}&page=translations/add&context=${text.escape(param.context)}&key=${text.escape(param.key)}">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>
