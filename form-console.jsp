@@ -3,10 +3,24 @@
 
 <bundle:layout page="layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
-    <bundle:variable name="pageTitle">${text.escape(form.name)}</bundle:variable>
     <bundle:variable name="head">
         <app:formHeadContent/>
     </bundle:variable>
+    
+    <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+    <bundle:variable name="breadcrumb">
+        <c:forEach items="${AdminHelper.getFormDefinedConsoleBreadcrumbs(form)}" var="breadcrumb" varStatus="status">
+            <c:choose>
+                <c:when test="${!status.last}">
+                    <li><a href="${breadcrumb.href}">${breadcrumb.name}</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li class="active">${breadcrumb.name}</li>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+    </bundle:variable>
+    <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
     
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     <section class="page" data-page="${page.name}">

@@ -1176,7 +1176,7 @@
                 if (q.length > 0){ q += " AND "; }
                 q += "values[" + uniqueConfiguration[i].data + "] = "
                         + (field.value() && field.value().length 
-                                ? "\"" + field.value() + "\"" 
+                                ? "\"" + field.value().replace(/(["\\])/g, "\\$1") + "\"" 
                                 : "null");
             }
             else {
@@ -1188,7 +1188,7 @@
         }
         $.ajax({
             mathod: "GET",
-            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions?q=" + q,
+            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions?q=" + encodeURIComponent(q),
             dataType: "json",
             contentType: "application/json",
             success: function(result, textStatus, jqXHR){
