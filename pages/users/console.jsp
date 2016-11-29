@@ -49,6 +49,13 @@
             </table>
         </div>
     </div>
+    
+    <div class="users-table-actions-template hide">
+        <div class="btn-group pull-right" role="group">
+            <button class="edit-user-btn btn btn-xs btn-default" type="button"><span class="fa fa-pencil fa-fw"></span></button>
+            <button class="clone-user-btn btn btn-xs btn-success" type="button"><span class="fa fa-clone fa-fw"></span></button>
+        </div>
+    </div>
 
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
     

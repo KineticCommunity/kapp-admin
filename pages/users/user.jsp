@@ -1,14 +1,25 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:if test="${text.isNotBlank(param.username)}">
-    <c:catch var="userNotFound">
-        <bundle:request method="get"
-                        url="${bundle.apiPath}/users/${text.escape(param.username)}?include=attributes%2CprofileAttributes"
-                        var="user"
-                        scope="request" />
-        <c:set var="currentUser" value="${not empty user ? json.parse(user).user : null}" scope="request" />
-    </c:catch>
-</c:if>
+<c:choose>
+    <c:when test="${text.isNotBlank(param.username)}">
+        <c:catch var="userNotFound">
+            <bundle:request method="get"
+                            url="${bundle.apiPath}/users/${text.escape(param.username)}?include=attributes%2CprofileAttributes"
+                            var="user"
+                            scope="request" />
+            <c:set var="currentUser" value="${not empty user ? json.parse(user).user : null}" scope="request" />
+        </c:catch>
+    </c:when>
+    <c:when test="${text.isNotBlank(param.clone)}">
+        <c:catch var="cloneNotFound">
+            <bundle:request method="get"
+                            url="${bundle.apiPath}/users/${text.escape(param.clone)}?include=attributes%2CprofileAttributes"
+                            var="clone"
+                            scope="request" />
+            <c:set var="cloneUser" value="${not empty clone ? json.parse(clone).user : null}" scope="request" />
+        </c:catch>
+    </c:when>
+</c:choose>
 <c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
@@ -20,7 +31,7 @@
     <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
     <bundle:variable name="breadcrumb">
         <li><a href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
-        <li class="active">${empty currentUser ? 'New User' : currentUser.username}</li>
+        <li class="active">${not empty currentUser ? currentUser.username : (not empty cloneUser ? 'Clone User' : 'New User')}</li>
     </bundle:variable>
     <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
 
@@ -28,7 +39,8 @@
 
     <div class="page-header">
         <h3>
-            ${not empty currentUser ? currentUser.username : 'New User'}  
+            ${not empty currentUser ? currentUser.username : (not empty cloneUser ? 'Clone User' : 'New User')}
+            <c:if test="${not empty cloneUser}"><small> ${cloneUser.username}</small></c:if>
         </h3>
     </div>
 
@@ -53,13 +65,13 @@
                 <option></option>
                 <c:forEach var="optionLocale" items="${i18n.getSystemLocales(pageContext.request.locales)}">
                     <option value="${i18n.getLocaleCode(optionLocale)}" 
-                            ${i18n.getLocaleCode(optionLocale) == currentUser.preferredLocale ? 'selected' : ''}
+                            ${i18n.getLocaleCode(optionLocale) == text.defaultIfBlank(currentUser.preferredLocale, cloneUser.preferredLocale) ? 'selected' : ''}
                         >${text.escape(i18n.getLocaleNameGlobalized(optionLocale))}</option>
                 </c:forEach>
             </select>
         </div>
         <div class="col-xs-6">
-            <input id="enabled" name="enabled" type="checkbox" ${currentUser.enabled ? 'checked' : ''}>
+            <input id="enabled" name="enabled" type="checkbox" ${not empty currentUser ? (currentUser.enabled ? 'checked' : '') : (cloneUser.enabled ? 'checked' : '')}>
             <label for="enabled" class="control-label">${i18n.translate('Enabled?')}</label>
         </div>
         <div class="col-xs-6">
@@ -70,7 +82,7 @@
             <label class="control-label">${i18n.translate('Groups')}</label>
             <table class="table table-hover" data-user-groups-table> 
                 <tbody>
-                    <c:forEach items="${currentUser.attributes}" var="attribute">
+                    <c:forEach items="${not empty currentUser ? currentUser.attributes : cloneUser.attributes}" var="attribute">
                         <c:if test="${attribute.name eq 'Group'}">
                             <c:forEach items="${attribute.values}" var="group">
                                 <tr>
@@ -133,7 +145,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${currentUser.attributes}" var="attribute">
+                    <c:forEach items="${not empty currentUser ? currentUser.attributes : cloneUser.attributes}" var="attribute">
                         <c:if test="${attribute.name ne 'Group'}">
                             <c:forEach items="${attribute.values}" var="value">
                                 <tr>
@@ -206,7 +218,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${currentUser.profileAttributes}" var="attribute">
+                    <c:forEach items="${not empty currentUser ? currentUser.profileAttributes : cloneUser.profileAttributes}" var="attribute">
                         <c:forEach items="${attribute.values}" var="value">
                             <tr>
                                 <td class="attribute-name">${attribute.name}</td>
@@ -277,7 +289,10 @@
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
     <bundle:variable name="aside">
         <h3>${form.name}</h3>
-        <h4>${not empty currentUser ? currentUser.username : 'New User'}</h4>
+        <h4>
+            ${not empty currentUser ? currentUser.username : (not empty cloneUser ? 'Clone User' : 'New User')}
+            <c:if test="${not empty cloneUser}"><small> ${cloneUser.username}</small></c:if>
+        </h4>
         <hr class="border-color-white" />
         <p>
             Please visit Space Administration to define new 

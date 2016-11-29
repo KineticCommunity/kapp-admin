@@ -561,6 +561,15 @@
                             + "/" + userManagement.userTable.data("console-slug") 
                             + "?page=users/user&username=" + data.username);
                 });
+                // Add event handler for clone button
+                userManagement.userTable.off("click", "button.clone-user-btn")
+                                        .on("click", "button.clone-user-btn", function(e){
+                    // On click of clone button, send user to page for cloning selected user
+                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
+                    location.href = encodeURI(bundle.kappLocation() 
+                            + "/" + userManagement.userTable.data("console-slug") 
+                            + "?page=users/user&clone=" + data.username);
+                });
                 // Append the import/export buttons to the buttons section on the page
                 userManagement.userDataTable.buttons().nodes().each(function(){
                     $("div.users-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
@@ -610,8 +619,8 @@
                     render: $.fn.dataTable.render.text()
                 },
                 {
-                    defaultContent: "<div class=\"btn-group pull-right\" role=\"group\"><button class=\"edit-user-btn btn btn-xs btn-default\" type=\"button\"><span class=\"fa fa-pencil\"></span></button></div>",
-                    class: "actions-xs all ignore-export",
+                    defaultContent: $("div.users-table-actions-template").html(),
+                    class: "actions-sm all ignore-export",
                     orderable: false,
                     searchable: false
                 }
