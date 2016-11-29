@@ -139,19 +139,26 @@
                                 <td class="qual-name">${qualification.name}</td>
                                 <td class="qual-result-type">${qualification.resultType}</td>
                                 <td class="qual-params">
-                                    <a class="qualification-modal-link" href="javascript:void(0);">Parameters (<span class="param-count">${fn:length(qualification.parameters)}</span>)</a>
+                                    <c:set var="parameterMap" 
+                                           value="${AdminHelper.getQualificationParameterMapWithValues(qualification.parameters, 
+                                                                                                       bridgeMapping.getQualificationMapping(qualification.name).query)}" />
+                                    <a class="qualification-modal-link" href="javascript:void(0);">Parameters (<span class="param-count">${fn:length(parameterMap)}</span>)</a>
                                     <div class="modal-params hide">
                                         <table class="table table-hover" id="params-table"> 
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
+                                                    <th>Value*</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="parameter" items="${qualification.parameters}">
+                                                <c:forEach var="parameter" items="${parameterMap}">
                                                     <tr>
-                                                        <td class="param-name" data-param-name="${parameter.name}">${parameter.name}</td>
+                                                        <td class="param-name" data-param-name="${parameter.key}">${parameter.key}</td>
+                                                        <td class="param-value">
+                                                            <input class="input-sm form-control" placeholder="Optional" value="${text.escape(parameter.value)}"/>
+                                                        </td>
                                                         <td class="param-actions">
                                                             <div class="btn-group pull-right">
                                                                 <button type="button" class="btn btn-xs btn-danger param-delete">
@@ -168,7 +175,9 @@
                                                 <tr>
                                                     <td class="param-add-value">
                                                         <select class="input-sm form-control">
-                                                            <option value="Submission ID">Submission ID</option>
+                                                            <c:if test="${text.equals(qualification.resultType, 'Single')}">
+                                                                <option value="Submission ID">Submission ID</option>
+                                                            </c:if>
                                                             <c:forEach var="field" items="${currentStore.pages[0].fields}">
                                                                 <option value="${field.name}">${field.name}</option>
                                                             </c:forEach>
@@ -177,6 +186,13 @@
                                                     <td class="param-add-btn"><button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
                                                 </tr>
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2" class="disclaimer">
+                                                        *If a value is entered, the value will be used directly in the query instead of becoming a parameter for the bridged resource.
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </td>
@@ -240,7 +256,7 @@
         <a class="qualification-modal-link" href="javascript:void(0);">Parameters (<span class="param-count"></span>)</a>
         <div class="modal-params hide">
             <table class="table table-hover" id="params-table"> 
-                <thead><tr><th>Name</th><th></th></tr></thead>
+                <thead><tr><th>Name</th><th>Value*</th><th></th></tr></thead>
                 <tbody></tbody>
             </table>
             <table class="table"> 
@@ -248,6 +264,7 @@
                     <tr>
                         <td class="param-add-value">
                             <select class="input-sm form-control">
+                                <option value="Submission ID">Submission ID</option>
                                 <c:forEach var="field" items="${currentStore.pages[0].fields}">
                                     <option value="${field.name}">${field.name}</option>
                                 </c:forEach>
@@ -256,8 +273,34 @@
                         <td class="param-add-btn"><button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="disclaimer">
+                            *If a value is entered, the value will be used directly in the query instead of becoming a parameter for the bridged resource.
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
+    </div>
+    <div class="hidden-qual-params-row-template hide">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="param-name" data-param-name="{{parameterName}}">{{parameterName}}</td>
+                    <td class="param-value">
+                        <input class="input-sm form-control" placeholder="Optional" value="{{parameterValue}}"/>
+                    </td>
+                    <td class="param-actions">
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-xs btn-danger param-delete">
+                                <span class="fa fa-times fa-fw"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="hidden-qual-actions-template hide">
         <div class="btn-group pull-right qual-actions">

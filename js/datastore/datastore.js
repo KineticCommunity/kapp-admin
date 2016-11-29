@@ -302,6 +302,16 @@
         if ($("table#qualification-table").length){
             
             /**
+             * Remove duplicate parameters
+             */
+            $("table#qualification-table div.modal-params").each(function(i, modalParams){
+                $(modalParams).find("table#params-table td.param-name").each(function(j, td){
+                    $(modalParams).find("td.param-add-value select").val("")
+                                  .find("option[value='" + $(td).text() + "']").remove();
+                });
+            });
+            
+            /**
              * Event handler for parameters link which builds and destroys the modal, keeping the data hidden in the dom.
              */
             $("table#qualification-table").on("click", "a.qualification-modal-link", function(e){
@@ -317,6 +327,10 @@
                             .appendTo(element)
                             // Event handler for delete parameter button
                             .on("click", "td.param-actions button.param-delete", function(e){
+                                var paramName = $(this).closest("tr").find("td.param-name").text();
+                                console.log(paramName);
+                                modalBody.find("td.param-add-value select").append($("<option>", {value: paramName}).append(paramName));
+                                console.log(modalBody.find("td.param-add-value select").get(0));
                                 $(this).closest("tr").remove();
                             })
                             // Event handler for add parameter button
@@ -324,13 +338,12 @@
                                 // Get new parameter name
                                 var paramName = $(this).closest("tr").find("td.param-add-value select").val();
                                 // If parameter doesn't already exist, add it
-                                if (modalBody.find("table#params-table td.param-name[data-param-name=\""+paramName+"\"]").length <= 0){
-                                    modalBody.find("table#params-table tbody").append($("<tr>")
-                                            .append($("<td>", {class: "param-name", "data-param-name": paramName}).text(paramName))
-                                            .append($("<td>", {class: "param-actions"})
-                                                    .append($("<div>", {class: "btn-group pull-right"})
-                                                            .append($("<button>", {type: "button", class: "btn btn-xs btn-danger param-delete"})
-                                                                    .append($("<span>", {class: "fa fa-times fa-fw"}))))));
+                                if (paramName){
+                                    var template = _.template($("div.hidden-qual-params-row-template > table > tbody").html());
+                                    modalBody.find("table#params-table tbody")
+                                             .append(template({parameterName: paramName, parameterValue: null}));
+                                    modalBody.find("td.param-add-value select").val("")
+                                             .find("option[value='" + paramName + "']").remove();
                                 }
                             });
                     },
@@ -372,6 +385,9 @@
                 }
                 else {
                     var newQualParams = $("div.hidden-qual-params-template").clone();
+                    if (qualResultType != 'Single'){
+                        newQualParams.find("td.param-add-value select option[value='Submission ID']").remove();
+                    }
                     newQualParams.find("span.param-count").text("0");
                     var newQualRow = $("<tr>", {class: "qualification-row"})
                                 .append($("<td>", {class: "qual-name"}).text(qualName))
@@ -462,6 +478,18 @@
                     // Hide edit action buttons and show standard action buttons
                     row.find("div.qual-edit-actions").addClass("hide");
                     row.find("div.qual-actions").removeClass("hide");
+                }
+                if (row.find("td.qual-result-type").text() === 'Single' 
+                        && row.find("div.modal-params td.param-add-value select option[value='Submission ID']").length <= 0){
+                    row.find("div.modal-params td.param-add-value select")
+                       .prepend($("<option>", {value: "Submission ID"}).append("Submission ID"));
+                }
+                else if (row.find("td.qual-result-type").text() !== 'Single'){
+                    if (row.find("div.modal-params td.param-add-value select option[value='Submission ID']").length > 0){
+                        row.find("div.modal-params td.param-add-value select option[value='Submission ID']").remove();
+                    }
+                    row.find("div.modal-params td.param-name[data-param-name='Submission ID']").closest("tr").remove();
+                    row.find("a.qualification-modal-link span.param-count").text(row.find("table#params-table tbody tr").length);
                 }
             });
         }
@@ -702,6 +730,8 @@
     bundle.adminDatastore = bundle.adminDatastore || {};
     // Create a scoped alias to simplify references to your namespace
     var datastore = bundle.adminDatastore;
+    
+    _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
 
     /*----------------------------------------------------------------------------------------------
      * COMMON FUNCTIONS
@@ -778,9 +808,11 @@
         qualificationTable.find("tbody tr.qualification-row").each(function(i, tr){
             var parameters = new Array();
             $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
-                parameters.push({
-                    name: $(trParam).find("td.param-name").text()
-                });
+                if ($(trParam).find("td.param-value input").val().trim().length <= 0){
+                    parameters.push({
+                        name: $(trParam).find("td.param-name").text()
+                    });
+                }
             });
             data.qualifications.push({
                 name: $(tr).find("td.qual-name").text(),
@@ -823,14 +855,20 @@
         
         // Add all qualifications with query
         qualificationTable.find("tbody tr.qualification-row").each(function(i, tr){
-            var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=999";
+            var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=1000";
+            var isSingle = $(tr).find("td.qual-result-type").text() === "Single";
+            // Submission ID can only be used for Single type qualifications and can not have kappSlug and formSlug in the query
+            var submissionIdParam = isSingle ? $(tr).find("td.qual-params table#params-table tbody tr td.param-name[data-param-name='Submission ID']").text() : null;
+            if (isSingle && $(tr).find("td.qual-params table#params-table tbody tr td.param-name[data-param-name='Submission ID']").length){
+                var tdParamName = $(tr).find("td.qual-params table#params-table tbody tr td.param-name[data-param-name='Submission ID']");
+                var paramValue = tdParamName.siblings("td.param-value").find("input").val().trim();
+                query = "id=" + (paramValue.replace(/([\\])/g, "\\$1") || "${parameters('" + tdParamName.text() + "')}");
+            }
             $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
                 var paramName = $(trParam).find("td.param-name").text();
+                var paramValue = $(trParam).find("td.param-value input").val().trim();
                 if (paramName !== "Submission ID"){
-                    query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
-                }
-                else {
-                    query += "&id=${parameters('" + paramName + "')}";
+                    query += "&values[" + paramName + "]=" + (paramValue.replace(/([\\])/g, "\\$1") || "${parameters('" + paramName + "')}"); 
                 }
             });
             data.qualifications.push({

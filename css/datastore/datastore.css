@@ -1,4 +1,9 @@
 /* CSS Specific to the Datastore Console*/
 tr.column-table-placeholder {
-    background-color: whitesmoke;
+  background-color: whitesmoke;
+}
+tfoot td.disclaimer {
+  font-size: 85%;
+  font-style: italic;
+  color: #777777;
 }

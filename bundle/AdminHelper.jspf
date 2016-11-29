@@ -1,4 +1,6 @@
 <%@page import="com.kineticdata.core.web.bundles.PaginatedList" %>
+<%@page import="java.util.regex.Matcher" %>
+<%@page import="java.util.regex.Pattern" %>
 <%!
     public static class AdminHelper {
     
@@ -193,6 +195,28 @@
             Map<String, String[]> searchOptions = new HashMap<>();
             searchOptions.put("limit", new String[]{"1000"});
             return searchOptions;
+        }
+        
+        public Map<String, String> getQualificationParameterMapWithValues(List<BridgeModelQualificationParameter> parameters, String query){
+            Map<String, String> parameterMap = new TreeMap<String, String>();
+            for (BridgeModelQualificationParameter parameter : parameters){
+                parameterMap.put(parameter.getName(), null);
+            }
+            for (String queryPart : Text.splitRegex(query, "&(?=[^&]+?=)")){
+                Pattern pattern = Pattern.compile("^values\\[(.+?)\\]=(?!\\$\\{)(.+?)$");
+                Matcher matcher = pattern.matcher(queryPart);
+                if (matcher.find()){
+                    parameterMap.put(matcher.group(1), Text.replace(matcher.group(2), "\\\\", "\\"));
+                }
+                else {
+                    Pattern idPattern = Pattern.compile("^id=(?!\\$\\{)(.+?)$");
+                    Matcher idMatcher = idPattern.matcher(queryPart);
+                    if (idMatcher.find()){
+                        parameterMap.put("Submission ID", Text.replace(idMatcher.group(1), "\\\\", "\\"));
+                    }
+                }
+            }
+            return parameterMap;
         }
         
         

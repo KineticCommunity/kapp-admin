@@ -98,13 +98,6 @@
     request.setAttribute("GroupHelper", new GroupHelper(request, space));
 %>
 
-<%-- ProfileHelper --%>
-<%@include file="ProfileHelper.jspf"%>
-<%
-    ProfileHelper profileHelper = new ProfileHelper(request);
-    request.setAttribute("ProfileHelper", profileHelper);
-%>
-
 <%-- SearchHelper --%>
 <%@include file="SearchHelper.jspf"%>
 <%
