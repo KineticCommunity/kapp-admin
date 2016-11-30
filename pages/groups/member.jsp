@@ -30,6 +30,16 @@
                 <h3>
                     ${empty currentMember ? 'New Member' : 'Member: '}${currentMember.username}
                 </h3>
+                <c:if test="${not empty currentGroup}">
+                    <h6>
+                        <c:forEach items="${currentGroup.getParentPath()}" var="parent" varStatus="status">
+                            <a href="${bundle.kappLocation}/${form.slug}?page=groups/group&group=${parent.id}">${parent.displayName}</a>
+                            <c:if test="${!status.last}">${GroupHelper.getPathDelimiter()}</c:if> 
+                        </c:forEach>
+                        ${GroupHelper.getPathDelimiter()} 
+                        <b>${currentGroup.displayName}</b>
+                    </h6>
+                </c:if>
             </div>
             
             <div class="row">

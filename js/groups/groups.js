@@ -186,6 +186,14 @@
                         $(form.element()).find("button.cancel-membership").on("click", function(){
                             location.href = $("a.return-to-current-group").attr("href") + "#members";
                         });
+                        form.page().on('submit', {
+                            execute: function(e, actions){
+                                if ($.isEmptyObject(e.constraints)){
+                                    actions.stop();
+                                    checkDuplicateMembership(form, memberContainer, actions);
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -209,6 +217,14 @@
                         // Bind event for reset button to refresh the page
                         $(form.element()).find("button.cancel-membership").on("click", function(){
                             location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        });
+                        form.page().on('submit', {
+                            execute: function(e, actions){
+                                if ($.isEmptyObject(e.constraints)){
+                                    actions.stop();
+                                    checkDuplicateMembership(form, memberContainer, actions);
+                                }
+                            }
                         });
                     }
                 });
@@ -609,6 +625,36 @@
             error: function(jqXHR, textStatus, errorThrown){
                 // Console log an error if we couldn't find the user
                 console.log("Error Updating User Group Attribute: User Not Found [" + errorThrown + "]");
+            }
+        });
+    }
+    
+    /**
+     * Check if duplicate record already exists
+     */
+    function checkDuplicateMembership(form, memberContainer, actions){
+        var q = "values[Group Name] = \"" + form.getFieldByName("Group Name").value() + "\" AND "
+                + "values[Username] = \"" + form.getFieldByName("Username").value() + "\"";
+        $.ajax({
+            mathod: "GET",
+            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/group-membership/submissions?q=" + encodeURIComponent(q),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(result, textStatus, jqXHR){
+                if (_.reject(result.submissions, {id: form.submission().id()}).length > 0){
+                    memberContainer.notifie({
+                        message: "User " + form.getFieldByName("Username").value() 
+                            + " is already a member of the " + form.getFieldByName("Group Name").value() + " group."
+                    });
+                }
+                else {
+                    actions.continue();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                memberContainer.notifie({
+                    message: "Failed to save due to error in duplicate membership check: " + errorThrown
+                });
             }
         });
     }
