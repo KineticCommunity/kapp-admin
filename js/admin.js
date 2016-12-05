@@ -29,7 +29,6 @@
         $("div#admin-console-home").each(function(){
             Object.keys(window.localStorage).forEach(function(key){
                 var re = new RegExp("^DataTables_.*?" + window.location.pathname + ".*");
-                console.log(key, re.test(key));
                 if (re.test(key)) {
                     window.localStorage.removeItem(key);
                 }
@@ -66,6 +65,22 @@
             hash[unescape(val[0])] = unescape(val[1]);
         }
         return param ? hash[param] : hash;
+    };
+    
+    /**
+     * Generates a UUID
+     */
+    admin.generateUUID = function(){
+        var d = new Date().getTime();
+        if(window.performance && typeof window.performance.now === "function"){
+            d += performance.now(); //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
     };
     
     /**
@@ -211,6 +226,45 @@
         return function ( d, type, row ){
             return $.htmlEncode(d);
         };
+    };
+    
+    /**
+     * Function to add renderers to a list of columns with renderType propertiesfor DataTables
+     */
+    admin.addDataTableRenderers = function(columns, renderers){
+        renderers = renderers || {};
+        $.each(columns, function(i, col){
+            switch(col.renderType){
+                case "date":
+                    col.render = renderers.date || $.fn.dataTable.render.moment("date", "ll", bundle.config.userLocale);
+                    break;
+                case "datetime":
+                    col.render = renderers.datetime || $.fn.dataTable.render.moment("datetime", "lll", bundle.config.userLocale);
+                    break;
+                case "time":
+                    col.render = renderers.time || $.fn.dataTable.render.moment("time", "LT", bundle.config.userLocale);
+                    break;
+                case "checkbox":
+                    col.render = renderers.checkbox || $.fn.dataTable.render.checkbox();
+                    break;
+                case "attachment":
+                    col.render = renderers.attachment || $.fn.dataTable.render.attachment(col.data);
+                    break;
+                case "text":
+                    col.render = renderers.text || $.fn.dataTable.render.text();
+                    break;
+                case "dropdown":
+                    col.render = renderers.dropdown || $.fn.dataTable.render.text();
+                    break;
+                case "radio":
+                    col.render = renderers.radio || $.fn.dataTable.render.text();
+                    break;
+                default: 
+                    if (renderers[col.renderType]){
+                        col.render = renderers[col.renderType];
+                    }
+            }
+        });
     };
          
 })($, _);

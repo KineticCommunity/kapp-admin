@@ -1,3 +1,4 @@
+<%@page import="com.google.common.primitives.Ints" %>
 <%@page import="com.kineticdata.core.web.bundles.PaginatedList" %>
 <%@page import="java.util.regex.Matcher" %>
 <%@page import="java.util.regex.Pattern" %>
@@ -8,6 +9,7 @@
         private Space space;
         private Kapp adminKapp;
         private BundleSubmissionComponent submissionComponent;
+        private org.slf4j.Logger logger;
         
         // Map for storing datastore records
         private Map<String, List<Submission>> datastoreRecords = new HashMap<>();
@@ -21,6 +23,7 @@
             this.space = (Space)request.getAttribute("space");
             this.adminKapp = (Kapp)request.getAttribute("kapp");
             this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
+            this.logger = (org.slf4j.Logger)request.getAttribute("logger");
         }
     
         public List<Form> getActiveConsoles(){
@@ -87,7 +90,7 @@
          * DATASTORE CONSOLE HELPER FUNCTIONS
          *----------------------------------------------------------------------------------------*/
         
-        public static List<LinkedHashMap> getDatastoreColumns(Form datastore, String configurationAttributeName){
+        public List<LinkedHashMap> getDatastoreColumns(Form datastore, String configurationAttributeName){
             LinkedHashMap<String, Element> fieldElements = new LinkedHashMap<>();
             for (Page page : datastore.getPages()){
                 for (Element element : getFieldElements(page.getElements())){
@@ -128,19 +131,6 @@
             return columns;
         }
         
-        private static List<Element> getFieldElements(List<Element> elements){
-            List<Element> fieldElements = new ArrayList<Element>();
-            for(Element element : elements){
-                if (Element.Types.FIELD.equals(element.getType())){
-                    fieldElements.add(element);
-                }
-                else if (Element.Types.SECTION.equals(element.getType())){
-                    fieldElements.addAll(getFieldElements(element.getElements()));
-                }
-            }
-            return fieldElements;
-        }
-        
         public List<Submission> getDatastoreRecords(Form datastore){
             return getDatastoreRecords(datastore, 0, 0, true);
         }
@@ -159,7 +149,7 @@
                 // Clear current data so we only store records for one datastore at a time
                 this.datastoreRecords.clear();
                 List<Submission> submissions = new ArrayList<>();
-                Map<String, String[]> parameters = maxLimitQueryParameters();
+                Map<String, String[]> parameters = buildQueryParameters();
                 PaginatedList<Submission> page;
                 do {
                     page = this.submissionComponent.searchByForm(datastore, parameters);
@@ -191,12 +181,6 @@
             return submissions.subList(offset, pageEnd);
         }
         
-        private Map<String, String[]> maxLimitQueryParameters() {
-            Map<String, String[]> searchOptions = new HashMap<>();
-            searchOptions.put("limit", new String[]{"1000"});
-            return searchOptions;
-        }
-        
         public Map<String, String> getQualificationParameterMapWithValues(List<BridgeModelQualificationParameter> parameters, String query){
             Map<String, String> parameterMap = new TreeMap<String, String>();
             for (BridgeModelQualificationParameter parameter : parameters){
@@ -218,7 +202,80 @@
             }
             return parameterMap;
         }
+                
         
+        /*-----------------------------------------------------------------------------------------
+         * ROBOT CONSOLE HELPER FUNCTIONS
+         *----------------------------------------------------------------------------------------*/
+        
+        public List<LinkedHashMap> getRobotColumns(Form form){
+            List<Element> fieldElements = new ArrayList<>();
+            for (Page page : form.getPages()){
+                for (Element element : getFieldElements(page.getElements())){
+                    if (element.getRenderAttributes().get("dt-visible") != null){
+                        fieldElements.add(element);
+                    }
+                }
+            }
+            
+            TreeMap<Integer, List<LinkedHashMap>> orderedColumns = new TreeMap<>();
+            for (Element element : fieldElements){
+                Map<String,String> renderAttributes = element.getRenderAttributes();
+                LinkedHashMap<String, Object> newColumn = new LinkedHashMap<>();
+                newColumn.put("data", element.getName());
+                newColumn.put("title", element.getName());
+                newColumn.put("renderType", element.getRenderType());
+                newColumn.put("visible", Text.equals(renderAttributes.get("dt-visible"), "true"));
+                newColumn.put("searchable", Text.equals(Text.defaultIfBlank(renderAttributes.get("dt-searchable"), "true"), "true"));
+                newColumn.put("orderable", Text.equals(Text.defaultIfBlank(renderAttributes.get("dt-orderable"), "true"), "true"));
+                Integer columnOrder = Ints.tryParse(Text.defaultIfBlank(renderAttributes.get("dt-column-order"), String.valueOf(Integer.MAX_VALUE)));
+                if (!orderedColumns.containsKey(columnOrder)){
+                    orderedColumns.put(columnOrder, new ArrayList<LinkedHashMap>());
+                }
+                orderedColumns.get(columnOrder).add(newColumn);
+            }
+            //If executions, add column with no data as default sort for the page, so the data remains sorted by the server
+            if (Text.equals(form.getSlug(), "robot-executions")){
+                LinkedHashMap<String, Object> newColumn = new LinkedHashMap<>();
+                newColumn.put("data", "_empty");
+                newColumn.put("title", "");
+                newColumn.put("visible", false);
+                newColumn.put("searchable", false);
+                newColumn.put("orderable", true);
+                newColumn.put("defaultOrder", "desc");
+                if (!orderedColumns.containsKey(Integer.MAX_VALUE)){
+                    orderedColumns.put(Integer.MAX_VALUE, new ArrayList<LinkedHashMap>());
+                }
+                orderedColumns.get(Integer.MAX_VALUE).add(newColumn); 
+            }
+            
+            List<LinkedHashMap> columns = new ArrayList<>();
+            for (List<LinkedHashMap> cols : orderedColumns.values()){
+                columns.addAll(cols);       
+            }
+            return columns;
+        }
+        
+        public PaginatedList<Submission> getRobotDefinitions(){
+            Map<String, String[]> parameters = buildQueryParameters();
+            return getSubmissions(adminKapp.getForm("robot-definitions"), parameters, false);
+        }
+
+        public PaginatedList<Submission> getRobotSchedules(String robotId){
+            Map<String, String[]> parameters = buildQueryParameters();
+            parameters.put("values[Robot ID]", new String[] {robotId});
+            return getSubmissions(adminKapp.getForm("robot-schedules"), parameters, false);
+        }
+        
+        public PaginatedList<Submission> getRobotExecutions(Integer limit, String pageToken, String robotId, String scheduleId){
+            Map<String, String[]> parameters = buildQueryParameters(limit, pageToken);
+            parameters.put("include", new String[] {"createdAt"});
+            parameters.put("values[Robot ID]", new String[] {robotId});
+            if (Text.isNotBlank(scheduleId)){
+                parameters.put("values[Schedule ID]", new String[] {scheduleId});
+            }
+            return getSubmissions(adminKapp.getForm("robot-executions"), parameters, true);
+        }
         
         /*-----------------------------------------------------------------------------------------
          * TRANSLATIONS CONSOLE HELPER FUNCTIONS
@@ -233,6 +290,54 @@
                 locales.put(TranslationLocale.get(localeCode).getName(), localeCode);
             }
             return new ArrayList<String>(locales.values());
+        }
+        
+        /*-----------------------------------------------------------------------------------------
+         * GENERIC PRIVATE HELPER FUNCTIONS
+         *----------------------------------------------------------------------------------------*/
+         
+        private Map<String, String[]> buildQueryParameters() {
+            return buildQueryParameters(null, null);
+        }
+        private Map<String, String[]> buildQueryParameters(Integer limit) {
+            return buildQueryParameters(limit, null);
+        }
+        private Map<String, String[]> buildQueryParameters(String pageToken) {
+            return buildQueryParameters(null, pageToken);
+        }
+        private Map<String, String[]> buildQueryParameters(Integer limit, String pageToken) {
+            Map<String, String[]> searchOptions = new HashMap<>();
+            searchOptions.put("limit", new String[]{limit != null ? String.valueOf(limit) : "1000"});
+            if (Text.isNotBlank(pageToken)){
+                searchOptions.put("pageToken", new String[]{pageToken});
+            }
+            return searchOptions;
+        }
+        
+        private PaginatedList<Submission> getSubmissions(Form form, Map<String, String[]> parameters, boolean paginate){
+            PaginatedList<Submission> submissions = new PaginatedList<>();
+            PaginatedList<Submission> page;
+            do {
+                page = this.submissionComponent.searchByForm(form, parameters);
+                submissions.addAll(page);
+                parameters.put("pageToken", new String[]{page.getNextPageToken()});
+            } 
+            while (!paginate && Text.isNotBlank(page.getNextPageToken()));
+            submissions.setNextPageToken(page.getNextPageToken());
+            return submissions;
+        }
+         
+        private List<Element> getFieldElements(List<Element> elements){
+            List<Element> fieldElements = new ArrayList<Element>();
+            for(Element element : elements){
+                if (Element.Types.FIELD.equals(element.getType())){
+                    fieldElements.add(element);
+                }
+                else if (Element.Types.SECTION.equals(element.getType())){
+                    fieldElements.addAll(getFieldElements(element.getElements()));
+                }
+            }
+            return fieldElements;
         }
     }
 %>

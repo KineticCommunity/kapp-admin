@@ -12,7 +12,7 @@
     <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
     <bundle:variable name="breadcrumb">
         <li><a class="return-to-groups-console" href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
-        <li class="active ng-binding">${empty currentGroup ? 'New Group' : currentGroup.displayName}</li>
+        <li class="active">${empty currentGroup ? 'New Group' : currentGroup.displayName}</li>
     </bundle:variable>
     <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
 

@@ -1,0 +1,9 @@
+/* CSS Specific to the Robot Console*/
+div.robots-tab-content div.robot-form-container,
+div.robot-schedules-tab-content div.robot-schedule-form-container {
+    margin-top: 20px;
+}
+div.robots-tab-content div.page-header,
+div.robot-schedules-tab-content div.page-header {
+    margin: 10px 0;
+}
