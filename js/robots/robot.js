@@ -301,11 +301,13 @@
                     location.replace($("a.return-to-robots-console").attr("href") + "?page=robots/schedule&schedule=" + data.submission.id + "&robot=" + container.data("robot-submission-id"));
                 },
                 loaded: function(form){
+                    // Add Robot ID to schedule
+                    form.getFieldByName("Robot ID").value(container.data("robot-id"));
                     // Remove delete button since group doesn't yet exist, and reset button
                     container.find("button.delete-schedule, button.reset-schedule").remove();
                     // Bind event for cancel button to go back to robot listing page
                     $(form.element()).find("button.cancel-schedule").on("click", function(){
-                        location.href = $("a.return-to-robots-console").attr("href");
+                        location.href = $("a.return-to-robot-definition").attr("href");
                     });
                 }
             });

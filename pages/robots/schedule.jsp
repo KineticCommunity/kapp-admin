@@ -35,7 +35,7 @@
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
             <bundle:variable name="breadcrumb">
                 <li><a class="return-to-robots-console" href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
-                <li><a href="${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${currentRobot.id}#schedules">${currentRobot.values['Name']}</a></li>
+                <li><a class="return-to-robot-definition" href="${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${currentRobot.id}#schedules">${currentRobot.values['Name']}</a></li>
                 <li class="active">${empty currentSchedule ? 'New Schedule' : currentSchedule.values['Schedule Name']}</li>
             </bundle:variable>
             <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
@@ -68,7 +68,8 @@
                     <div class="tab-content robot-schedules-tab-content">
                     
                         <div role="tabpanel" class="tab-pane active" id="general">
-                            <div class="robot-schedule-form-container embedded-form" data-robot-schedule-id="${currentSchedule.id}" data-robot-submission-id="${currentRobot.id}">
+                            <div class="robot-schedule-form-container embedded-form" data-robot-schedule-id="${currentSchedule.id}" 
+                                 data-robot-submission-id="${currentRobot.id}" data-robot-id="${currentRobot.values['Robot ID']}">
                                 <div class="alert alert-info">
                                     <span class="fa fa-spinner fa-spin"></span>
                                     Loading
