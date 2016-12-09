@@ -1034,11 +1034,12 @@
                         .append($("<tr>")
                             .append($("<td>").addClass("alert alert-info")
                                 .append($("<span>").addClass("fa fa-cog fa-spin"))
-                                .append(" Importing records")));
+                                .append(" Importing " + importData.length + " records")));
                     
                     // Create counters to keep track of when ajax calls complete
                     var statusCounters = {
                         totalRows: importData.length,
+                        startedRows: 0,
                         processedRows: 0,
                         createdRows: 0,
                         createErrors: 0,
@@ -1050,7 +1051,14 @@
                     // Iterate through each row in the imported csv. Delay with set timeout to allow for loader to be rendered.
                     window.setTimeout(function(){
                         _.each(importData, function(row){
-                            processSingleDatastoreRecord(row, datastoreSlug, importInput, statusCounters);
+                            (function processDelay(row, datastoreSlug, importInput, statusCounters) {
+                                if(statusCounters.startedRows - statusCounters.processedRows > 100){
+                                    setTimeout(function(){ processDelay(row, datastoreSlug, importInput, statusCounters); }, 1000);
+                                }
+                                else {
+                                    processSingleDatastoreRecord(row, datastoreSlug, importInput, statusCounters);
+                                }
+                            })(row, datastoreSlug, importInput, statusCounters);
                         });
                     }, 0);
                 }
@@ -1098,6 +1106,9 @@
                 dataType: "json",
                 data: JSON.stringify({values: row}),
                 contentType: "application/json",
+                beforeSend: function(){
+                    statusCounters.startedRows++;
+                },
                 success: function(data, textStatus, jqXHR){
                     statusCounters.createdRows++;
                     statusCounters.processedRows++;
@@ -1119,6 +1130,9 @@
                 dataType: "json",
                 data: JSON.stringify({values: row}),
                 contentType: "application/json",
+                beforeSend: function(){
+                    statusCounters.startedRows++;
+                },
                 success: function(data, textStatus, jqXHR){
                     statusCounters.updatedRows++;
                     statusCounters.processedRows++;

@@ -106,10 +106,15 @@
     bundle.config.renderers = bundle.config.renderers || {};
     bundle.config.renderers.fieldConstraintViolations = function(form, fieldConstraintViolations) {
         _.each(fieldConstraintViolations, function(value, key){
-            $(form.getFieldByName(key).wrapper()).notifie({
+            var fieldWrapper = $(form.getFieldByName(key).wrapper());
+            var notifieOptions = {
                 message: value.join("<br>"),
                 exitEvents: "click"
-            });
+            };
+            if (fieldWrapper.data("notifie-anchor")){
+                notifieOptions.anchor = fieldWrapper.data("notifie-anchor"); 
+            }
+            fieldWrapper.notifie(notifieOptions);
         });
     }
     
