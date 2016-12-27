@@ -1,9 +1,58 @@
 /* CSS Specific to the Robot Console*/
 div.robots-tab-content div.robot-form-container,
 div.robot-schedules-tab-content div.robot-schedule-form-container {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 div.robots-tab-content div.page-header,
 div.robot-schedules-tab-content div.page-header {
-    margin: 10px 0;
+  margin: 10px 0;
+}
+
+section[data-recurrence-interval-section] {
+  border-collapse: separate;
+  display: table;
+  position: relative;
+  margin-bottom: 15px;
+}
+section[data-recurrence-interval-section] > div[data-element-type=content] {
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+  display: table-cell;
+}
+section[data-recurrence-interval-section] > div[data-element-type=content] p {
+  margin: 0 5px 0 0;
+}
+section[data-recurrence-interval-section] > div[data-element-type=wrapper] {
+  display: table-cell;
+  width: 25%;
+}
+section[data-recurrence-interval-section] > div[data-element-type=wrapper]:last-child {
+  width: 75%;
+}
+section[data-recurrence-interval-section] > div[data-element-type=wrapper] label {
+  display: none;
+}
+
+div[data-label-hidden] label:first-child{
+  display: none;
+}
+div.checkbox[data-recurrence-checkbox] label:not(:first-child),
+div.radio[data-recurrence-radio] label:not(:first-child) {
+  display: inline-block;
+  padding: 1px 6px 1px 26px;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #F1F1F1;
+  border-radius: 10px;
+  border: 1px solid #BBC0C2;
+  margin-bottom: 3px;
+  min-width: 62px;
+}
+
+@media (max-width : 768px) { 
+  div.checkbox[data-recurrence-checkbox] label:not(:first-child),
+  div.radio[data-recurrence-radio] label:not(:first-child) {
+    display: block;
+  }
 }

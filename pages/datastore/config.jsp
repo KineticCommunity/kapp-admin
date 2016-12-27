@@ -122,7 +122,7 @@
         </fieldset>
         
         <c:if test="${not empty currentStore && not empty bridgeName}">
-            <label for="column-table" class="text">Bridge Qualifications</label> <small>(Model & Mapping Name: <b>${bridgeModelName}</b>)</small>
+            <label for="qualification-table" class="text">Bridge Qualifications</label> <small>(Model & Mapping Name: <b>${bridgeModelName}</b>)</small>
             <div class="overflow-auto">
                 <table class="table table-hover" id="qualification-table">
                     <thead>

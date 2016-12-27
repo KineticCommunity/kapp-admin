@@ -188,7 +188,7 @@
                 dataType: "json",
                 data: JSON.stringify(fieldData),
                 contentType: "application/json",
-                beforeSend: function(jqXHR, settings){
+                beforeSend: function(jqXHR, settings){  
                     self.prop("disabled", true);
                 },
                 success: function(data, textStatus, jqXHR){
@@ -493,122 +493,54 @@
                 }
             });
         }
+        
+        /**
+         * Show notice if datastore form has been updated and config page is stale
+         */
+        if ($("button#update-datastore[data-datastore-slug]").length){
+            // Check everytime window comes into focus
+            $(window).on("focus", function(e){
+                console.log("focus");
+                var datastoreSlug = $("button#update-datastore[data-datastore-slug]").data("datastore-slug");
+                $.ajax({
+                    method: "GET",
+                    url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "?include=fields",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data, textStatus, jqXHR){
+                        var status = new Object();
+                        var stale = false;
+                        $.each(data.form.fields, function(i, field){
+                            status[field.name] = !status[field.name]; 
+                        });
+                        $("table#column-table tbody td.column-name").each(function(){
+                            status[$(this).text()] = !status[$(this).text()];
+                        });
+                        $.each(status, function(k, v){
+                            if (v){
+                                stale = true;
+                            }
+                        });
+                        console.log(status);
+                        console.log(stale);
+                        if (stale && $("div.content-main a.stale-fields").length <= 0){
+                            $("div.content-main").prepend(
+                                $("<a>", {href: "javascript:window.location.reload()", class: "stale-fields btn btn-info"}).append(
+                                    $("<span>", {class: "fa fa-lg fa-refresh"}).html("&nbsp;"),
+                                    $("<span>").text("This datastore's form has been updated. Click here to reload the page in order to see the latest fields.")
+                                )
+                            );
+                        }
+                        else if (!stale && $("div.content-main a.stale-fields").length > 0){
+                            $("div.content-main a.stale-fields").remove();
+                        }
+                    }
+                });
+            });
+        }
                 
         /** END *** DATASTORE/CONFIG PAGE *** DOCUMENT READY CODE *********************************/
         
-        /******************************************************************************************
-         ** START *** DATASTORE/STORE PAGE *** DOCUMENT READY CODE
-         ** Displays the stored records.
-         ******************************************************************************************/
-        
-        // Run below code only if table#datastore-records-table exists
-        if ($("table#datastore-records-table").length){
-            var consoleSlug = $("table#datastore-records-table").data("console-slug");
-            var kappSlug = $("table#datastore-records-table").data("kapp-slug");
-            var datastoreSlug = $("table#datastore-records-table").data("datastore-slug");
-            
-            /**
-             * Load the records for the current store
-             */
-            loadDatastoreRecords(datastoreSlug);
-            
-            /**
-             * Add functionality for importing CSV files
-             */
-            $("input#datastore-records-import").on("change", function(e){
-                var importInput = $(this);
-                // Get files from file input
-                var fileList = importInput.prop("files");
-                // If file uploaded
-                if (fileList.length > 0){
-                    // Get first file
-                    var file = fileList.item(0);
-                    // If not CSV file
-                    if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
-                        importInput.closest("div.datastore-records-table-buttons").notifie({
-                            anchor: "h3",
-                            message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
-                            exitEvents: "mouseup"
-                        });
-                    }
-                    else {
-                        // Initialize FileReader
-                        var reader = new FileReader();
-                        // Setup onload function which will process the import
-                        reader.onload = function(e){
-                            processDatastoreRecordsImport($.csv.toObjects(e.target.result), datastoreSlug, importInput);
-                        }
-                        // Read file
-                        reader.readAsText(file);
-                    }
-                }
-                // Reset file input value to empty string to allow on change  to fire on the same file if needed
-                importInput.val("");
-            });
-            
-            /**
-             * Event handlers for edit, clone, and delete buttons for the records table
-             */
-            $("table#datastore-records-table").on("click", "button.edit", function(e){
-                // On click of edit button, send user to record page for editing current row
-                var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + consoleSlug + "?page=datastore/record&store=" + datastoreSlug + "&id=" + data.ID;
-            }).on("click", "button.clone", function(e){
-                // On click of edit button, send user to record page for cloning current row
-                var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + consoleSlug + "?page=datastore/record&store=" + datastoreSlug + "&clone=" + data.ID;
-            }).on("click", "button.delete", function(e){
-                // On click of delete button, confirm that the user is sure they want to delete
-                var self = $(this);
-                // Get selected row data
-                var row = datastore.datastoreRecordsTable.row($(this).closest("tr"));
-                var data = row.data();
-                // Build confirmation dialog
-                var confirmDelete = new KD.Modal({
-                    header: "<h3>Confirm Delete</h3>",
-                    body: "Are you sure you want to delete this record?",
-                    footer: function(element, actions) {
-                        element.addClass("text-right").append(
-                            $("<button>", {class: "btn btn-success", tabindex: 2}).text("Yes").on("click", actions.accept),
-                            $("<button>", {class: "btn btn-link", tabindex: 1}).text("Cancel").on("click", actions.dismiss)
-                        );
-                    },
-                    size: "sm",
-                    backdrop: true,
-                    backdropclose: true,
-                    keyboardclose: true,
-                    renderCallback: false,
-                    accept: function(){
-                        // On acceptance of confirmation dialog, call api to delete record
-                        $.ajax({
-                            url: bundle.apiLocation() + "/submissions/" + data.ID,
-                            method: 'DELETE',
-                            dataType: "json",
-                            contentType: "application/json",
-                            beforeSend: function(jqXHR, settings){
-                                self.prop("disabled", true);
-                            },
-                            success: function(response, textStatus, jqXHR){
-                                // Remove row and redraw table on success
-                                row.remove().draw();
-                            },
-                            error: function(jqXHR, textStatus, errorThrown){
-                                self.notifie({
-                                    anchor: "table",
-                                    message: "An error occurred while deleting the record: " + errorThrown
-                                });
-                            }
-                       });
-                    }
-                });
-                // Show confirmation dialog
-                confirmDelete.show();
-                // Blur delete button
-                $(this).blur();
-            });
-        }
-        
-        /** END *** DATASTORE/STORE PAGE *** DOCUMENT READY CODE *********************************/
         
         /******************************************************************************************
          ** START *** DATASTORE/RECORD PAGE *** DOCUMENT READY CODE
@@ -885,333 +817,7 @@
     
     /** END *** DATASTORE/CONFIG PAGE *** HELPER METHODS ******************************************/
     
-    /**********************************************************************************************
-     ** START *** DATASTORE/STORE PAGE *** HELPER METHODS
-     ** Displays the stored records.
-     **********************************************************************************************/
-    
-    /**
-     * Loads the records for the current datastore and displays them in a DataTable
-     * 
-     * @param datastoreSlug Slug of datastore from which to fetch records.
-     */
-    function loadDatastoreRecords(datastoreSlug){
-        // Ajax call to get the records
-        $.ajax({
-            mathod: "GET",
-            url: bundle.kappLocation() + "?partial=" + "datastore/records.json&store=" + datastoreSlug,
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data, textStatus, jqXHR){
-                // Set up DataTable configuration object with export/import buttons
-                console.log(data);
-                records = $.extend(data, {
-                    responsive: true,
-                    pageLength: 25,
-                    stateSave: true,
-                    buttons: [
-                        {
-                            extend: "csv",
-                            text: "Export CSV",
-                            className: "btn-sm",
-                            filename: $("table#datastore-records-table").data("datastore-name") + " Datastore",
-                            exportOptions: {
-                                modifier: {
-                                    search: "none"
-                                },
-                                columns: ":not(.ignore-export)",
-                                orthogonal: "export"
-                            }
-                        },
-                        {
-                            text: "Import CSV",
-                            className: "btn-sm",
-                            action: importDatastoreRecords
-                        }
-                    ]
-                });
-                $.each(records.columns, function(i, col){
-                    switch(col.renderType){
-                        case "date":
-                            col.render = $.fn.dataTable.render.moment("date", "ll", bundle.config.userLocale);
-                            break;
-                        case "datetime":
-                            col.render = $.fn.dataTable.render.moment("datetime", "lll", bundle.config.userLocale);
-                            break;
-                        case "time":
-                            col.render = $.fn.dataTable.render.moment("time", "LT", bundle.config.userLocale);
-                            break;
-                        case "checkbox":
-                            col.render = $.fn.dataTable.render.checkbox();
-                            break;
-                        case "attachment":
-                            col.render = $.fn.dataTable.render.attachment(col.data);
-                            break;
-                        case "text":
-                        case "dropdown":
-                        case "radio":
-                            col.render = $.fn.dataTable.render.text();
-                            break;
-                    }
-                });
-                // Build DataTable
-                datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
-                // Append the import/export buttons to the buttons section on the page
-                datastore.datastoreRecordsTable.buttons().nodes().each(function(){
-                    $("div.datastore-records-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                $("table#datastore-records-table").empty().notifie({
-                    message: "Failed to load records for the datastore.<br>" + errorThrown
-                });
-            }
-        });
-    }
-    
-    /**
-     * If browser supports File API, begin import process. Otherwise throw error.
-     */
-    function importDatastoreRecords(){
-        // Check if File API is available
-        if (window.File && window.FileReader && window.FileList) {
-            $("input#datastore-records-import").trigger("click");
-        }
-        else {
-            $("div.datastore-records-table-buttons").notifie({
-                anchor: "h3",
-                message: "Your browser does not support the import feature. Please use a newer browser."
-            });
-        }
-    }
-    
-    /**
-     * Save each row of data as a submission for the given Datastore.
-     * 
-     * @param importData Array of Objects to be saved.
-     * @param datastoreSlug Slug of datastore into which this data should be imported.
-     * @param importInput jQuery instance of file input element.
-     */
-    function processDatastoreRecordsImport(importData, datastoreSlug, importInput){
-        /** Retrieve all fields in the datastore **/
-        $.ajax({
-            method: 'GET',
-            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "?include=fields",
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data, textStatus, jqXHR){
-                /** Convert fields to a map to check if file has valid headers **/
-                var fieldMap = $.extend(_.object(_.map(data.form.fields, function(field){
-                    return [field.name, true];
-                })), {"Datastore Record ID": true, "": true});
-                // Create array to store invalid headers
-                var invalidHeaders = new Array();
-                // Get first row (any row can be used since headers are the keys of the row object)
-                var headerRow = importData[0];
-                // For each row, check if all passed in headers match existing fields
-                _.each(headerRow, function(val, key){
-                    // If field doesn't exist, save field in invalidHeaders array
-                    if (!fieldMap[key]){ 
-                        invalidHeaders.push(key);
-                    }
-                });
-                
-                /** If invalid headers found, throw error **/
-                if (invalidHeaders.length){
-                    importInput.closest("div.datastore-records-table-buttons").notifie({
-                        anchor: "h3",
-                        message: "Invalid CSV file. " 
-                            + invalidHeaders.length + " of the headers in the CSV file do not match an existing field on this datastore. <br/>"
-                            + "Invalid headers: " + invalidHeaders.join(", "),
-                        exitEvents: "mouseup"
-                    });
-                }
-                /** If headers are valid, process import **/
-                else {
-                    // Clear and destroy table and show notification that import is happening
-                    bundle.adminDatastore.datastoreRecordsTable.destroy();
-                    $("table#datastore-records-table").empty()
-                        .append($("<tr>")
-                            .append($("<td>").addClass("alert alert-info")
-                                .append($("<span>").addClass("fa fa-cog fa-spin"))
-                                .append(" Importing " + importData.length + " records")));
-                    
-                    // Create counters to keep track of when ajax calls complete
-                    var statusCounters = {
-                        totalRows: importData.length,
-                        startedRows: 0,
-                        processedRows: 0,
-                        createdRows: 0,
-                        createErrors: 0,
-                        updatedRows: 0,
-                        updateErrors: 0,
-                        failedRows: new Array()
-                    };
-                    
-                    // Iterate through each row in the imported csv. Delay with set timeout to allow for loader to be rendered.
-                    window.setTimeout(function(){
-                        _.each(importData, function(row){
-                            (function processDelay(row, datastoreSlug, importInput, statusCounters) {
-                                if(statusCounters.startedRows - statusCounters.processedRows > 100){
-                                    setTimeout(function(){ processDelay(row, datastoreSlug, importInput, statusCounters); }, 1000);
-                                }
-                                else {
-                                    processSingleDatastoreRecord(row, datastoreSlug, importInput, statusCounters);
-                                }
-                            })(row, datastoreSlug, importInput, statusCounters);
-                        });
-                    }, 0);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                importInput.closest("div.datastore-records-table-buttons").notifie({
-                    anchor: "h3",
-                    message: "An error occurred while importing records: " + errorThrown,
-                    exitEvents: "mouseup"
-                });
-            }
-        });
-    }
-    
-    /**
-     * Save a single row of data.
-     * Update the row if Datastore Record ID is passed in, otherwise create a new row.
-     *  
-     * @param row Data to save.
-     * @param datastoreSlug Slug of datastore into which this data should be saved.
-     * @param importInput jQuery instance of file input element.
-     * @param statusCounters Object for keeping track of multiple ajax calls.
-     */
-    function processSingleDatastoreRecord(row, datastoreSlug, importInput, statusCounters){
-        // Variable to store Record ID if doing an update
-        var datastoreRecordID = false;
-        // If Datastore Record ID property exists, save it if it's not empty, and remove from row object
-        if (row.hasOwnProperty("Datastore Record ID")){
-            if (row["Datastore Record ID"] != null && row["Datastore Record ID"].trim().length > 0){
-                datastoreRecordID = row["Datastore Record ID"];
-            }
-            // Delete since we are passing the row as the data to the API and this is not a real field
-            delete row["Datastore Record ID"];
-        }
-        // Remove any empty title rows (which are generated in the export due to the buttons column)
-        if (row.hasOwnProperty("")){
-            delete row[""];
-        }
-        // If Submission ID doesn't exist, create a new record
-        if (!datastoreRecordID){
-            // Create new record
-            $.ajax({
-                method: "POST",
-                url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions",
-                dataType: "json",
-                data: JSON.stringify({values: row}),
-                contentType: "application/json",
-                beforeSend: function(){
-                    statusCounters.startedRows++;
-                },
-                success: function(data, textStatus, jqXHR){
-                    statusCounters.createdRows++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": "", "ERROR": errorThrown}));
-                    statusCounters.createErrors++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                }
-            });
-        }
-        else {
-            // Update record
-            $.ajax({
-                method: "PUT",
-                url: bundle.apiLocation() + "/submissions/" + datastoreRecordID,
-                dataType: "json",
-                data: JSON.stringify({values: row}),
-                contentType: "application/json",
-                beforeSend: function(){
-                    statusCounters.startedRows++;
-                },
-                success: function(data, textStatus, jqXHR){
-                    statusCounters.updatedRows++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": datastoreRecordID, "ERROR": errorThrown}));
-                    statusCounters.updateErrors++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                }
-            });
-        }
-    }
-    
-    /**
-     * Check if all ajax calls for import have completed.
-     * If they have, show results.  
-     * 
-     * @param statusCounters
-     * @param importInput
-     * @param datastoreSlug
-     */
-    function calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug){
-        if (statusCounters.processedRows == statusCounters.totalRows){
-            var msg = $("<div>");
-            msg.append($("<div>").append($("<span>", {class: "fa fa-fw"}))
-                    .append(statusCounters.processedRows + " records were processed."));
-            if (statusCounters.createdRows > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
-                        .append(statusCounters.createdRows + " records were created successfully."));
-            }
-            if (statusCounters.createErrors > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-times fa-fw"}))
-                        .append(statusCounters.createErrors + " records failed to save."));
-            }
-            if (statusCounters.updatedRows > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
-                        .append(statusCounters.updatedRows + " records were updated successfully."));
-            }
-            if (statusCounters.updateErrors > 0){
-                msg.append($("<div>", {class: "strong"}).append($("<span>", {class: "fa fa-times fa-fw"}))
-                        .append(statusCounters.updateErrors + " records failed to update."));
-            }
-            if (statusCounters.failedRows.length > 0){
-                var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
-                var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
-                var failures = {
-                    columns: _.map(_.keys(statusCounters.failedRows[0]), function(key){return {title: key, data: key};}),
-                    data: statusCounters.failedRows,
-                    dom: 'B',
-                    buttons: [
-                        {
-                            extend: "csv",
-                            text: "Export CSV of Failed Rows",
-                            className: "btn-sm export-failures",
-                            filename: $("table#datastore-records-table").data("datastore-name") + " Datastore - Failed Import Rows",
-                            exportOptions: {
-                                modifier: {
-                                    search: "none"
-                                }
-                            }
-                        }
-                    ]
-                };
-                var failureTable = table.DataTable(failures);
-                msg.append($("<div>").addClass("pull-right").append(failureTable.buttons().container()));
-            }
-            importInput.closest("div.datastore-records-table-buttons").notifie({
-                severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
-                anchor: "h3",
-                message: msg
-            });
-            loadDatastoreRecords(datastoreSlug);
-        }
-    }
-    
-    /** END *** DATASTORE/STORE PAGE *** HELPER METHODS ******************************************/
-    
+   
     /**********************************************************************************************
      ** START *** DATASTORE/RECORD PAGE *** HELPER METHODS
      ** Loads a specific datastore subform for adding, cloning, or editing records.

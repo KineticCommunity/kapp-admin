@@ -131,54 +131,19 @@
             return columns;
         }
         
-        public List<Submission> getDatastoreRecords(Form datastore){
-            return getDatastoreRecords(datastore, 0, 0, true);
-        }
-        
-        public List<Submission> getDatastoreRecords(Form datastore, boolean refresh){
-            return getDatastoreRecords(datastore, 0, 0, refresh);
-        }
-        
-        public List<Submission> getDatastoreRecords(Form datastore, int pageSize, int offset){
-            return getDatastoreRecords(datastore, pageSize, offset, false);
-        }
-        
-        public List<Submission> getDatastoreRecords(Form datastore, int pageSize, int offset, boolean refresh){
-            // If get from database is requested, or data wasn't previously fetched, get/reload data
-            if (refresh || !this.datastoreRecords.containsKey(datastore.getSlug())){
-                // Clear current data so we only store records for one datastore at a time
-                this.datastoreRecords.clear();
-                List<Submission> submissions = new ArrayList<>();
-                Map<String, String[]> parameters = buildQueryParameters();
-                PaginatedList<Submission> page;
-                do {
-                    page = this.submissionComponent.searchByForm(datastore, parameters);
-                    submissions.addAll(page);
-                    parameters.put("pageToken", new String[]{page.getNextPageToken()});
-                } 
-                while (Text.isNotBlank(page.getNextPageToken()));
-                this.datastoreRecords.put(datastore.getSlug(), submissions);
+        public PaginatedList<Submission> getDatastoreRecords(Form form, Map<String, String> query, String pageToken){
+            Map<String, String[]> parameters = buildQueryParameters(1000, pageToken);
+            for (Map.Entry<String, String> q : query.entrySet()){
+                parameters.put(q.getKey(), new String[] {q.getValue()});
             }
-            
-            // Get records from Map
-            List<Submission> submissions = this.datastoreRecords.get(datastore.getSlug());
-            
-            // If offset is invalid, set to zero
-            if (offset < 0){
-                offset = 0;
+            PaginatedList<Submission> submissions = getSubmissions(form, parameters, true);
+            if (Text.isNotBlank(submissions.getNextPageToken())){
+                parameters.put("pageToken", new String[]{submissions.getNextPageToken()});
+                PaginatedList<Submission> moreSubmissions = getSubmissions(form, parameters, true);
+                submissions.addAll(moreSubmissions);
+                submissions.setNextPageToken(moreSubmissions.getNextPageToken());
             }
-            // If offset is after the last result, return empty list
-            if (offset >= submissions.size()){
-                return new ArrayList<Submission>();
-            }
-            // Set pageEnd initially to end of list
-            int pageEnd = submissions.size();
-            // If pageSize is valid and offset + pageSize <= size of results list, set new pageEnd
-            if (pageSize > 0 && (offset + pageSize) <= submissions.size()){
-                pageEnd = offset + pageSize;
-            }
-            // Return a sublist of Submissions objects stored in submissions List
-            return submissions.subList(offset, pageEnd);
+            return submissions;
         }
         
         public Map<String, String> getQualificationParameterMapWithValues(List<BridgeModelQualificationParameter> parameters, String query){
@@ -202,7 +167,6 @@
             }
             return parameterMap;
         }
-                
         
         /*-----------------------------------------------------------------------------------------
          * ROBOT CONSOLE HELPER FUNCTIONS

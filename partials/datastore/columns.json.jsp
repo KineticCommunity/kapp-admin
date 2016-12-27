@@ -40,14 +40,6 @@
       <json:property name="defaultContent" value="<div class=\"btn-group datastore-btns\"><button class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></button><button class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></button><button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button></div> "/>
     </json:object>
   </json:array>
-  <json:array name="data" var="formSubmission" items="${AdminHelper.getDatastoreRecords(currentStore)}">
-    <json:object>
-      <c:forEach var="field" items="${fields}">
-        <json:property name="${field.data}" value="${formSubmission.values[field.data]}"/>
-      </c:forEach>
-      <json:property name="ID" value="${formSubmission.id}"/>
-    </json:object>
-  </json:array>
   <json:array name="order">
     <json:array>
       <json:property value="${orderColumn}"/>

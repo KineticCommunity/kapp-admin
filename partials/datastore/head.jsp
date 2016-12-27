@@ -6,4 +6,9 @@
 </bundle:stylepack>
 <bundle:scriptpack>
     <bundle:script src="${bundle.location}/js/datastore/datastore.js" />
+    <bundle:script src="${bundle.location}/js/datastore/datastoreStore.js" />
 </bundle:scriptpack>
+<script>
+    bundle.adminDatastore.consoleSlug = "${form.slug}";
+    bundle.adminDatastore.kappSlug = "${kapp.slug}";
+</script>

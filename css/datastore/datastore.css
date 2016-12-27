@@ -7,3 +7,36 @@ tfoot td.disclaimer {
   font-style: italic;
   color: #777777;
 }
+a.stale-fields {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top: none;
+  width: 100%;
+  white-space: normal;
+}
+div#datastore-records-criteria-display .badge {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+  margin-right: 5px;
+}
+div#datastore-records-criteria-display .badge:not(.reset){
+  background-color: #eee;
+  color: #777777;
+  font-weight: normal;
+}
+div#datastore-records-criteria-display .badge:not(.reset) *:not(:last-child){
+  margin-right: 3px;
+}
+div#datastore-records-criteria-display .badge:not(.reset) .field:after{
+  content: ":";
+}
+div#datastore-records-criteria-display .badge.reset,
+div#datastore-records-criteria-display .badge:not(.reset) span.fa-times {
+  cursor: pointer;
+}
+div#datastore-records-criteria-display .badge:not(.reset) span.fa-times {
+  color: #d9534f;
+}
+div#datastore-records-criteria-display .badge.reset:only-child {
+  display: none;
+}
