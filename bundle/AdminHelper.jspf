@@ -131,6 +131,19 @@
             return columns;
         }
         
+        public List<LinkedHashMap> getDatastoreColumnsAlphabetically(Form datastore, String configurationAttributeName){
+            List<LinkedHashMap> columns = getDatastoreColumns(datastore, configurationAttributeName);
+            // Sort alphabetically by title
+            Collections.sort(columns, new Comparator<LinkedHashMap>(){ 
+                public int compare(LinkedHashMap one, LinkedHashMap two) { 
+                    String titleOne = (String)one.get("title");
+                    String titleTwo = (String)two.get("title");
+                    return titleOne.compareTo(titleTwo);    
+                } 
+            });
+            return columns;
+        }
+        
         public PaginatedList<Submission> getDatastoreRecords(Form form, Map<String, String> query, String pageToken){
             Map<String, String[]> parameters = buildQueryParameters(1000, pageToken);
             for (Map.Entry<String, String> q : query.entrySet()){

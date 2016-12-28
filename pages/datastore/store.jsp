@@ -62,7 +62,7 @@
                         <span class="input-group-addon">Field</span>
                         <select class="form-control">
                             <option />
-                            <c:forEach var="col" items="${AdminHelper.getDatastoreColumns(currentStore, 'Datastore Configuration')}">
+                            <c:forEach var="col" items="${AdminHelper.getDatastoreColumnsAlphabetically(currentStore, 'Datastore Configuration')}">
                                 <option value="${col.data}" data-render-type="${col.renderType}">${col.data}</option>
                             </c:forEach>
                         </select>
@@ -82,7 +82,8 @@
                 </div>
                 
                 <div class="col-xs-12">
-                    <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="datastore-records-table">
+                    <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
+                           id="datastore-records-table-${currentStore.slug}" data-datastore-records-table>
                         <tr>
                             <td class="alert alert-info">
                                 <span class="fa fa-spinner fa-spin"></span>

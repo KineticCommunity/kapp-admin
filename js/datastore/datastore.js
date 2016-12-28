@@ -14,7 +14,12 @@
         // If on console page
         if ($("table.datastore-list-table").length){
             // Clear DataTables attribute from local storage to remove save state of datastores
-            window.localStorage.removeItem("DataTables_datastore-records-table_" + window.location.pathname);
+            Object.keys(window.localStorage).forEach(function(key){
+                var re = new RegExp("^DataTables_datastore-records-table.*?" + window.location.pathname + ".*");
+                if (re.test(key)) {
+                    window.localStorage.removeItem(key);
+                }
+            });
         }
         
         /** END *** DATASTORE/CONSOLE PAGE *** DOCUMENT READY CODE *********************************/

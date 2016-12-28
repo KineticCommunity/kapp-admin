@@ -6,7 +6,7 @@
      *--------------------------------------------------------------------------------------------*/
     $(function() {
         
-        $("table#datastore-records-table").each(function(i,table){
+        $("table[data-datastore-records-table]").each(function(i,table){
             ds.store.loadTable($(table));
         });
 
