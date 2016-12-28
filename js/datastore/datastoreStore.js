@@ -384,6 +384,11 @@
                 }
                 /** If headers are valid, process import **/
                 else {
+                    // Close any top level alerts
+                    importInput.closest("div.datastore-records-table-buttons").notifie({
+                        anchor: "h3",
+                        exit: true
+                    });
                     // Clear and destroy table and show notification that import is happening
                     ds.store.table.DataTable().destroy();
                     ds.store.table.empty()
