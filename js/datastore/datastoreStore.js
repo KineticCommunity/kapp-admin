@@ -150,7 +150,8 @@
                     initComplete: function(settings, json){
                         // If data returns a nextPageToken or has a pageToken or query, then it's a large volume datastore
                         ds.store.table.data("nextPageToken", json._nextPageToken || null);
-                        if (json._nextPageToken || ds.store.table.data("pageToken") || ds.store.table.data("query")){
+                        if (json._nextPageToken || ds.store.table.data("pageToken") 
+                                || (ds.store.table.data("query") && !$.isEmptyObject(ds.store.table.data("query")))){
                             ds.store.initLargeVolume(json);
                         }
                         // Append the import/export buttons to the buttons section on the page
