@@ -166,6 +166,10 @@
             var memberId = memberContainer.data("member-id");
             var memberUsername = memberContainer.data("member-username");
             var groupName = memberContainer.data("group-name");
+            var redirectCallback = function(){
+                // Redirect back to list of members
+                location.href = $("a.return-to-current-group").attr("href") + "#members";
+            };
             
             // If memberId exists, update the member
             if (memberId){
@@ -177,9 +181,8 @@
                         // When updated, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
                                 data.submission.values["Group Name"], 
-                                true);
-                        // Redirect back to list of members
-                        location.href = $("a.return-to-current-group").attr("href") + "#members";
+                                true,
+                                redirectCallback);
                     },
                     loaded: function(form){
                         // Bind event for reset button to refresh the page
@@ -207,9 +210,8 @@
                         // When created, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
                                 data.submission.values["Group Name"], 
-                                true);
-                        // Redirect back to list of members
-                        location.href = $("a.return-to-current-group").attr("href") + "#members";
+                                true,
+                                redirectCallback);
                     },
                     loaded: function(form){
                         // Pre-populate the groupId field
@@ -266,9 +268,13 @@
                         contentType: "application/json",
                         success: function(data, textStatus, jqXHR){
                             // On success, update user attributes
-                            updateUserMembership(membershipUsername, groupName, false);
-                            // Remove row from table
-                            memberRow.remove();
+                            updateUserMembership(membershipUsername, 
+                                    groupName, 
+                                    false, 
+                                    function(){
+                                        // Remove row from table
+                                        memberRow.remove();
+                                    });
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             // On error, show error in modal
@@ -565,7 +571,7 @@
     /**
      * Updates the user's Group attributes to add/remove the appropriate groups based on membership
      */
-    function updateUserMembership(username, groupName, isActive){
+    function updateUserMembership(username, groupName, isActive, callback){
         // Perform ajax call to api to get the user's attributes
         $.ajax({
             method: "GET",
@@ -618,13 +624,18 @@
                         error: function(jqXHR, textStatus, errorThrown){
                             // On error, console log an error. We've already redirected so there's nothing we can do.
                             console.log("Error Updating User Group Attribute: Save Failed [" + errorThrown + "]");
-                        }
+                        },
+                        complete: callback
                     });
+                }
+                else {
+                    callback.call();
                 }
             },
             error: function(jqXHR, textStatus, errorThrown){
                 // Console log an error if we couldn't find the user
                 console.log("Error Updating User Group Attribute: User Not Found [" + errorThrown + "]");
+                callback.call();
             }
         });
     }
