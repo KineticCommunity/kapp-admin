@@ -333,9 +333,7 @@
                             // Event handler for delete parameter button
                             .on("click", "td.param-actions button.param-delete", function(e){
                                 var paramName = $(this).closest("tr").find("td.param-name").text();
-                                console.log(paramName);
                                 modalBody.find("td.param-add-value select").append($("<option>", {value: paramName}).append(paramName));
-                                console.log(modalBody.find("td.param-add-value select").get(0));
                                 $(this).closest("tr").remove();
                             })
                             // Event handler for add parameter button
@@ -505,7 +503,6 @@
         if ($("button#update-datastore[data-datastore-slug]").length){
             // Check everytime window comes into focus
             $(window).on("focus", function(e){
-                console.log("focus");
                 var datastoreSlug = $("button#update-datastore[data-datastore-slug]").data("datastore-slug");
                 $.ajax({
                     method: "GET",
@@ -526,8 +523,6 @@
                                 stale = true;
                             }
                         });
-                        console.log(status);
-                        console.log(stale);
                         if (stale && $("div.content-main a.stale-fields").length <= 0){
                             $("div.content-main").prepend(
                                 $("<a>", {href: "javascript:window.location.reload()", class: "stale-fields btn btn-info"}).append(
