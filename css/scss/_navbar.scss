@@ -1,0 +1,53 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Navbar
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ 
+nav.navbar.navbar-default {
+  background-color: $header-color;
+  color: $header-text-color;
+  border: none;
+}
+
+nav.navbar.navbar-default[data-subnav] {
+  background-color: $subheader-color;
+  color: $subheader-text-color;
+  border: none;
+}
+
+/* Navbar Brand color
+ *-------------------------------------- */
+.navbar-default .navbar-brand {
+  color: $tertiary;
+}
+
+/* Navbar Form
+ *-------------------------------------- */
+.navbar-form {
+    overflow: auto;
+}
+.navbar-form .form-control {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+.navbar-form .form-group {
+    display: inline;
+}
+
+.navbar-form form{
+  background: none;
+  margin-left: 0;
+  padding: 0;
+  font-weight: 400;
+  overflow: hidden;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+/* Navbar Search height fix*/
+.navbar-form form .form-group > .form-control {
+  padding: 0.6rem 1.2rem;
+  margin-right: 1rem;
+  height: auto;
+  border: 1px solid rgba($black, 0.25);
+  outline: none;
+}

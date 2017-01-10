@@ -11,7 +11,7 @@
             <bundle:script src="${bundle.location}/setup/setup.js" />
         </bundle:scriptpack>    
     </bundle:variable>
-    <div class="no-data">
+    <div class="setup">
         <c:choose>
             <c:when test="${!identity.spaceAdmin}">
                 <c:choose>

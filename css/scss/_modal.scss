@@ -5,30 +5,31 @@
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 2000;
+  z-index: 10;
   background-color: rgba(0,0,0,0.5);
 }
 
 /* Modal Content */
 .kd-modal-content {
   position: relative;
-  background-color: #fefefe;
+  background-color: subtle($primary, 95%);
   margin: auto;
-  margin-top: 50px;
+  margin-top: 60px;
   padding: 0;
-  border: 1px solid #888;
-  @include border-radius(6px);
+  border: 1px solid subtle($primary, 75%);
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 /* Modal Header */
 .kd-modal-header {
   padding: 2px 16px;
-  background-color: transparent;
-  color: #333;
-  border-bottom: 1px solid #e5e5e5;
+  color: $primary;
+
   h4 {
     text-transform: none;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    border-bottom: 1px solid subtle($primary, 75%);
   }
 }
 
@@ -41,19 +42,21 @@
     th, td {
       padding: 0.5em;
     }
-    tbody tr {
-      cursor: pointer;
-      &:hover {
-        background-color: lighten($black, 75%);
-      }
+    &.table-hover tbody tr:hover {
+      background-color: subtle($primary, 90%);
     }
   }
 }
 
 /* Modal Footer */
 .kd-modal-footer {
-  padding: 8px 16px;
-  background-color: transparent;
-  color: #333;
-  border-top: 1px solid #e5e5e5;
+  padding: 6px 16px;
+  background-color: subtle($primary, 85%);
+  border-top: 1px solid subtle($primary, 75%);
+}
+
+@media (max-width: 767px) {
+  .kd-modal-content {
+    width: 90% !important;
+  }
 }

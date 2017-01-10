@@ -27,6 +27,12 @@
                 <bundle:yield name="head"/>
                 <app:formHeadContent/>
             </bundle:variable>
+            <%--
+                Pass along the breadcrumb variable which is used by the subheader
+            --%>
+            <bundle:variable name="breadcrumb">
+                <bundle:yield name="breadcrumb"/>
+            </bundle:variable>
             <%-- 
                 Yield to the form body content. 
             --%>

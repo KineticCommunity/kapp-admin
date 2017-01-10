@@ -1,16 +1,12 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
 <c:set var="i18nKapp" value="${space.getKapp(text.escape(param.slug))}" scope="request" />
-<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
-<c:set var="i18nKappUrl" value="${i18nBaseUrl}&slug=${text.escape(param.slug)}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}" scope="request" />
+<c:set var="i18nKappUrl" value="${i18nBaseUrl}?slug=${text.escape(param.slug)}" scope="request" />
 <c:set var="i18nApiUrl" value="${bundle.spaceLocation}/app/apis/translations/v1/kapps/${i18nKapp.slug}" scope="request" />
 
-<!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
+<!-- Show page content only if selected Kapp exists. -->
 <c:choose>
-    <c:when test="${empty currentKapp}">
-        <script>window.location.replace("${bundle.kappLocation}");</script>
-    </c:when>
     <c:when test="${empty i18nKapp}">
         <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
@@ -28,6 +24,13 @@
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/translations/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
+            
+            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+            <bundle:variable name="breadcrumb">
+                <li><a href="${i18nBaseUrl}">${form.name}</a></li>
+                <li class="active">${text.escape(i18nKapp.name)}</li>
+            </bundle:variable>
+            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
 
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
@@ -38,25 +41,21 @@
                 </a>
             </c:if>
             
-            <ol class="breadcrumb">
-                <li><a href="${i18nBaseUrl}">Translations</a></li>
-                <li class="active">${text.escape(i18nKapp.name)}</li>
-            </ol>
-                
             <div class="page-header" data-clear-entry-table-states="${i18nKapp.slug}">
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
                             <span>${text.escape(i18nKapp.name)}</span>
+                            <small>Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-primary" href="${i18nApiUrl}/translations.csv">
+                                <a class="btn btn-sm btn-default" href="${i18nApiUrl}/translations.csv">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <button class="btn btn-sm btn-primary import-translations-btn fileinput-button">
+                                <button class="btn btn-sm btn-default import-translations-btn fileinput-button">
                                     <span class="fa fa-upload fa-fw"></span> Import
                                     <input id="fileupload" type="file" accept=".csv"/>
                                 </button>
-                                <a class="btn btn-sm btn-default" 
+                                <a class="btn btn-sm btn-tertiary" 
                                    href="${i18nKappUrl}&page=translations/add">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>
@@ -68,7 +67,7 @@
                         <c:set var="allMissingTranslations" 
                                value="${translationSnapshot.getMissingEntries(i18nKapp)}"/>
                         <c:if test="${allMissingTranslations.size() > 0}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                href="${i18nKappUrl}&page=translations/missing">
                                 <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Missing ${allMissingTranslations.size()} Translations
@@ -78,7 +77,7 @@
                         <c:set var="unexpectedContexts" 
                                value="${translationSnapshot.getUnexpectedContextNames(i18nKapp)}"/>
                         <c:if test="${unexpectedContexts.size() > 0}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                href="${i18nKappUrl}&page=translations/unexpectedContext">
                                 <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Found ${unexpectedContexts.size()} Unexpected Contexts
@@ -88,7 +87,7 @@
                         <c:set var="unexpectedLocales" 
                                value="${translationSnapshot.getUnexpectedLocaleCodes()}"/>
                         <c:if test="${unexpectedLocales.size() > 0}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                href="${i18nKappUrl}&page=translations/unexpectedLocale">
                                 <span class="fa fa-fw fa-exclamation-triangle"></span>
                                 Found ${unexpectedLocales.size()} Unexpected Locales
@@ -109,11 +108,8 @@
                                 <th style="width:15%;">Default Locale</th>
                                 <th>
                                     Enabled Locales
-                                    <a class="btn btn-xs btn-default pull-right" 
-                                       href="${i18nKappUrl}&page=translations/locales">
-                                        <span class="fa fa-cog fa-fw"></span> Manage Locales
-                                    </a>
                                 </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,6 +151,13 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
+                                <td class="text-right">
+                                    <a class="btn btn-xs btn-default pull-right" 
+                                       href="${i18nKappUrl}&page=translations/locales">
+                                        <span class="fa fa-cog fa-fw"></span>
+                                        <span class="hidden-xs">Manage Locales</span>
+                                    </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -165,7 +168,7 @@
             
             <div class="row">
 
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" 
                            data-table-dom data-table-name="Core Contexts"> 
                         <thead>
@@ -229,7 +232,7 @@
             <hr /><br />
             
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" 
                            data-table-dom data-table-name="Form Contexts"
                            data-empty-message="No form contexts found. Add forms to your Kapp to see form contexts."> 
@@ -279,7 +282,7 @@
             <hr /><br />
             
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" 
                            data-table-dom data-table-name="Custom Contexts"
                            data-empty-message="No custom contexts found. You may create custom contexts below."> 
@@ -324,13 +327,13 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td style="width:75%;">
+                                <td class="col-xs-12 col-sm-9">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-addon custom-context-prefix">custom.</span>
                                         <input type="text" class="form-control custom-context-name" placeholder="Custom Context Name">
                                     </div>
                                 </td>
-                                <td style="width:25%;" class="text-right">
+                                <td class="text-right col-xs-12 col-sm-3">
                                     <button class="btn btn-sm btn-success add-custom-context-btn" type="button" disabled>
                                         <span class="fa fa-plus"></span>
                                         Add Custom Context
@@ -343,6 +346,54 @@
             </div>
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>A <b>context</b> is a collection of translations that applies in a specific situation. All translations exist within a context.</p>
+                <p>A locale is considered <b>available</b> for a certain context if at least one translation entry exists for that locale.</p>
+                <p>
+                    Translations are considered <b>missing</b> if the existing keys are not translated in every available language. 
+                    Translations in the default language are never considered missing, as they default to the key.
+                </p>
+                <hr class="border-color-white" />
+                <p>To export all translations for this Kapp, click the <b class="nowrap"><span class="fa fa-download"></span> Export</b> button.</p>
+                <p>To import translations for this Kapp, click the <b class="nowrap"><span class="fa fa-upload"></span> Import</b> button.</p>
+                <p>To add new translation entries, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Entries</b> button.</p>
+                <p>
+                    To view all the translations for a context, click on the context name. 
+                    To view the translations for a context and a specific locale, click on the locale label in the Available Locales column.
+                </p>
+                <hr class="border-color-white" />
+                <p>The <b>Locales</b> table displays the default and enabled locales for this Kapp.</p>
+                <div class="p-l-2">
+                    <p>To manage the locales, click the <b class="nowrap"><span class="fa fa-cog"></span> Manage Locales</b> button.</p>
+                    <p>To view all the translations for a locale, click on the locale label in the Locales table.</p>
+                </div>
+                <hr class="border-color-white" />
+                <p>The <b>Core Contexts</b> table displays the built in contexts.</p>
+                <div class="p-l-2">
+                    <p>
+                        The <b>shared</b> context stores translations that are shared by all other contexts. 
+                        Every other context inherits the translations from the shared context for keys that are not translated in the local context.
+                    </p>
+                    <p>The <b>bundle</b> context stores translations that are used on the portal pages.</p>
+                </div>
+                <hr class="border-color-white" />
+                <p>The <b>Form Contexts</b> table displays the contexts for every form in the Kapp.</p>
+                <div class="p-l-2">
+                    <p>Every form has its own context that stores translations specific to that form.</p>
+                </div>
+                <hr class="border-color-white" />
+                <p>The <b>Custom Contexts</b> table displays any special contexts that have been created by an administrator.</p>
+                <div class="p-l-2">
+                    <p>To create a custom context, enter a name for the context and click the <b class="nowrap"><span class="fa fa-plus"></span> Add Custom Context</b> button.</p>
+                    <p>Custom contexts must be explicitely referenced when building any application components which require these translations.</p>
+                </div>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

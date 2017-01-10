@@ -145,7 +145,7 @@
                     container: groupContainer,
                     created: function(data){
                         // When group is created, redirect to edit group page
-                        location.replace($("a.return-to-groups-console").attr("href") + "&page=groups/group&group=" + data.submission.id);
+                        location.replace($("a.return-to-groups-console").attr("href") + "?page=groups/group&group=" + data.submission.id);
                     },
                     loaded: function(form){
                         // Remove delete button since group doesn't yet exist, and reset button
@@ -166,6 +166,10 @@
             var memberId = memberContainer.data("member-id");
             var memberUsername = memberContainer.data("member-username");
             var groupName = memberContainer.data("group-name");
+            var redirectCallback = function(){
+                // Redirect back to list of members
+                location.href = $("a.return-to-current-group").attr("href") + "#members";
+            };
             
             // If memberId exists, update the member
             if (memberId){
@@ -176,15 +180,22 @@
                     updated: function(data){
                         // When updated, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
-                                data.submission.values["Group Id"], 
-                                true);
-                        // Redirect back to list of members
-                        location.href = $("a.return-to-current-group").attr("href") + "#members";
+                                data.submission.values["Group Name"], 
+                                true,
+                                redirectCallback);
                     },
                     loaded: function(form){
                         // Bind event for reset button to refresh the page
                         $(form.element()).find("button.cancel-membership").on("click", function(){
                             location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        });
+                        form.page().on('submit', {
+                            execute: function(e, actions){
+                                if ($.isEmptyObject(e.constraints)){
+                                    actions.stop();
+                                    checkDuplicateMembership(form, memberContainer, actions);
+                                }
+                            }
                         });
                     }
                 });
@@ -198,17 +209,24 @@
                     created: function(data){
                         // When created, update user attributes
                         updateUserMembership(data.submission.values["Username"], 
-                                data.submission.values["Group Id"], 
-                                true);
-                        // Redirect back to list of members
-                        location.href = $("a.return-to-current-group").attr("href") + "#members";
+                                data.submission.values["Group Name"], 
+                                true,
+                                redirectCallback);
                     },
                     loaded: function(form){
                         // Pre-populate the groupId field
-                        form.getFieldByName("Group Id").value(groupName);
+                        form.getFieldByName("Group Name").value(groupName);
                         // Bind event for reset button to refresh the page
                         $(form.element()).find("button.cancel-membership").on("click", function(){
                             location.href = $("a.return-to-current-group").attr("href") + "#members";
+                        });
+                        form.page().on('submit', {
+                            execute: function(e, actions){
+                                if ($.isEmptyObject(e.constraints)){
+                                    actions.stop();
+                                    checkDuplicateMembership(form, memberContainer, actions);
+                                }
+                            }
                         });
                     }
                 });
@@ -250,9 +268,13 @@
                         contentType: "application/json",
                         success: function(data, textStatus, jqXHR){
                             // On success, update user attributes
-                            updateUserMembership(membershipUsername, groupName, false);
-                            // Remove row from table
-                            memberRow.remove();
+                            updateUserMembership(membershipUsername, 
+                                    groupName, 
+                                    false, 
+                                    function(){
+                                        // Remove row from table
+                                        memberRow.remove();
+                                    });
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             // On error, show error in modal
@@ -549,7 +571,7 @@
     /**
      * Updates the user's Group attributes to add/remove the appropriate groups based on membership
      */
-    function updateUserMembership(username, groupId, isActive){
+    function updateUserMembership(username, groupName, isActive, callback){
         // Perform ajax call to api to get the user's attributes
         $.ajax({
             method: "GET",
@@ -566,16 +588,16 @@
                 // If Group attribute exists, check if it needs to be updated
                 if (groupAttributes){
                     // If membership is active and doesn't exist
-                    if (isActive && !_.contains(groupAttributes.values, groupId)){
+                    if (isActive && !_.contains(groupAttributes.values, groupName)){
                         // Add the group id to the user
-                        groupAttributes.values.push(groupId);
+                        groupAttributes.values.push(groupName);
                         // Set flag to true to perform save
                         saveRequired = true;
                     }
                     // If membership is not active but exists, remove it
-                    else if (!isActive && _.contains(groupAttributes.values, groupId)){
+                    else if (!isActive && _.contains(groupAttributes.values, groupName)){
                         // Remove the group Id from the user
-                        groupAttributes.values = _.without(groupAttributes.values, groupId);
+                        groupAttributes.values = _.without(groupAttributes.values, groupName);
                         // Set flag to true to perform save
                         saveRequired = true;
                     }
@@ -585,7 +607,7 @@
                     // Add a new Group attribute object to attributes array
                     attributes.push({
                         name: "Group",
-                        values: [groupId]
+                        values: [groupName]
                     });
                     // Set flag to true to perform save
                     saveRequired = true;
@@ -602,13 +624,48 @@
                         error: function(jqXHR, textStatus, errorThrown){
                             // On error, console log an error. We've already redirected so there's nothing we can do.
                             console.log("Error Updating User Group Attribute: Save Failed [" + errorThrown + "]");
-                        }
+                        },
+                        complete: callback
                     });
+                }
+                else {
+                    callback.call();
                 }
             },
             error: function(jqXHR, textStatus, errorThrown){
                 // Console log an error if we couldn't find the user
                 console.log("Error Updating User Group Attribute: User Not Found [" + errorThrown + "]");
+                callback.call();
+            }
+        });
+    }
+    
+    /**
+     * Check if duplicate record already exists
+     */
+    function checkDuplicateMembership(form, memberContainer, actions){
+        var q = "values[Group Name] = \"" + form.getFieldByName("Group Name").value() + "\" AND "
+                + "values[Username] = \"" + form.getFieldByName("Username").value() + "\"";
+        $.ajax({
+            mathod: "GET",
+            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/group-membership/submissions?q=" + encodeURIComponent(q),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(result, textStatus, jqXHR){
+                if (_.reject(result.submissions, {id: form.submission().id()}).length > 0){
+                    memberContainer.notifie({
+                        message: "User " + form.getFieldByName("Username").value() 
+                            + " is already a member of the " + form.getFieldByName("Group Name").value() + " group."
+                    });
+                }
+                else {
+                    actions.continue();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                memberContainer.notifie({
+                    message: "Failed to save due to error in duplicate membership check: " + errorThrown
+                });
             }
         });
     }

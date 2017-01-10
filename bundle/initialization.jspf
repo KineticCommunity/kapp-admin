@@ -1,13 +1,11 @@
 <%-- Load Java libraries, Kinetic models & Identity --%>
 <%@page pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@page import="com.kineticdata.core.authentication.Identity" %>
+<%@page import="com.kineticdata.core.i18n.translations.*" %>
 <%@page import="com.kineticdata.core.models.*" %>
 <%@page import="com.kineticdata.core.web.bundles.Bundle" %>
 <%@page import="com.kineticdata.core.web.bundles.BundleSubmissionComponent" %>
-<%@page import="com.kineticdata.core.authentication.Identity" %>
-<%@page import="com.kineticdata.core.i18n.translations.*" %>
-<%@page import="java.time.ZoneId"%>
 <%@page import="java.util.*" %>
-<%@page import="org.slf4j.Logger" %>
 
 <%-- Bundle Java libraries --%>
 <%@page import="com.kineticdata.bundles.*" %>
@@ -31,6 +29,33 @@
     Identity identity = (Identity)request.getAttribute("identity");
 %>
 
+<%-- Create paths for headers and footers which can be shared. --%>
+<%  
+    String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
+
+    String headerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
+    if (kapp != null && kapp.hasAttribute("Header Bundle Path")){
+        headerBundlePath = kapp.getAttributeValue("Header Bundle Path");
+    }
+    else if (space.hasAttribute("Header Bundle Path")){
+        headerBundlePath = space.getAttributeValue("Header Bundle Path");
+    }
+    request.setAttribute("headerBundlePath", headerBundlePath);
+    request.setAttribute("headerPath", space.getBundleBase() + "/" + headerBundlePath);
+    request.setAttribute("headerLocation", contextPath + space.getBundleBase() + "/" + headerBundlePath);
+    
+    String footerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
+    if (kapp != null && kapp.hasAttribute("Footer Bundle Path")){
+        footerBundlePath = kapp.getAttributeValue("Footer Bundle Path");
+    }
+    else if (space.hasAttribute("Footer Bundle Path")){
+        footerBundlePath = space.getAttributeValue("Footer Bundle Path");
+    }
+    request.setAttribute("footerBundlePath", footerBundlePath);
+    request.setAttribute("footerPath", space.getBundleBase() + "/" + footerBundlePath);
+    request.setAttribute("footerLocation", contextPath + space.getBundleBase() + "/" + footerBundlePath);
+%>
+
 <%-- Load helper(s) --%>
 <%
     request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
@@ -38,7 +63,7 @@
     request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
 %>
 
-<%-- I18NHelper --%>
+<%-- I18nHelper --%>
 <%@include file="I18nHelper.jspf"%>
 <%
     I18nHelper i18nHelper = new I18nHelper(request);
@@ -57,7 +82,7 @@
 <%-- AdminHelper --%>
 <%@include file="AdminHelper.jspf"%>
 <%
-    AdminHelper adminHelper = new AdminHelper(request, kapp, bundle);
+    AdminHelper adminHelper = new AdminHelper(request);
     request.setAttribute("AdminHelper", adminHelper);
 %>
 

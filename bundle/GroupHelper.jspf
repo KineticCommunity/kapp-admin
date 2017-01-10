@@ -176,6 +176,10 @@
                 return this.groupSubmission.getValue("Name");
             }
             
+            public String getDescription(){
+                return this.groupSubmission.getValue("Description");
+            }
+            
             public String getId(){
                 return this.groupSubmission.getId().toString();
             }
@@ -312,7 +316,7 @@
                 // Get all submissions from the group members form
                 Map<String, String[]> parameters = new HashMap<>();
                 parameters.put("limit", new String[]{"1000"});
-                parameters.put("values[Group Id]", new String[]{this.getName()});
+                parameters.put("values[Group Name]", new String[]{this.getName()});
                 PaginatedList<Submission> pageOfGroupMemberSubmissions;
                 do {
                     pageOfGroupMemberSubmissions = submissionComponent.searchByForm(groupMemberForm, parameters);
@@ -352,8 +356,8 @@
                 return this.groupMemberSubmission.getId().toString();
             }
             
-            public String getGroupId(){
-                return this.groupMemberSubmission.getValue("Group Id");
+            public String getGroupName(){
+                return this.groupMemberSubmission.getValue("Group Name");
             }
             
             public String get(String value){

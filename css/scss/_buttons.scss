@@ -4,119 +4,141 @@
 
 /* Form Button Styles
  *-------------------------------------- */
- 
-button, input[type='submit'], input[type='button'], .btn {
-  background-color: $gray;
-  color: $black;
-  display: inline-block;
-  padding: 0.2rem 1.2rem;
-  height: 2.6rem;
-  font-weight: 700;
-  text-align: center;
-  white-space: nowrap;
-  @include border-radius();
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 0.1rem solid transparent;
+
+button, input[type='submit'], input[type='button'], .btn  {
   -webkit-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
+}
+
+.btn-round {
+  height: 5rem;
+  width: 5rem;
+  font-weight: 400;
+  font-size: 3rem;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.btn-primary {
+  @extend .btn;
+  
+  background-color: $primary;
+  border-color: darken($primary, 10%);
+  color: $primary-complement;
   
   &:hover {
-    background-color: tint($grayLight, 10%);
+    background-color: tint($primary, 10%);
+    border-color: darken(tint($primary, 10%), 10%);
+    color: $primary-complement;
   }
+}
+
+.btn-primary-complement {
+  @extend .btn;
   
-  &.round {
-    height: 5rem;
-    width: 5rem;
-    font-weight: 400;
-    font-size: 3rem;
-    border-radius: 50%;
-    padding: 0;
+  background-color: $primary-complement;
+  border-color: darken($primary-complement, 10%);
+  color: $primary;
+  
+  &:hover {
+    background-color: tint($primary-complement, 10%);
+    border-color: darken(tint($primary-complement, 10%), 10%);
+    color: $primary;
   }
+}
 
-      display: inline-block;
-      padding: 0.2rem 1.2rem;
-      height: 2.6rem;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-      @include border-radius();
-      -ms-touch-action: manipulation;
-      touch-action: manipulation;
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      border: 0.1rem solid transparent;
-      -webkit-transition: all 0.15s ease-out;
-      transition: all 0.15s ease-out;
-      
-      &[data-button-type='previous-page']{
-        position: relative;
-        padding-left: 2.4rem;
-        background-color: $gray;
-        color: black;
-        &:hover {
-          background-color: tint($gray, 10%);
-        }
+.btn-secondary {
+  @extend .btn;
+  
+  background-color: $secondary;
+  border-color: darken($secondary, 10%);
+  color: $secondary-complement;
+  
+  &:hover {
+    background-color: tint($secondary, 10%);
+    border-color: darken(tint($secondary, 10%), 10%);
+    color: $secondary-complement;
+  }
+}
 
-      }
-      &[data-button-type='previous-page']:before {
-        font-family: 'FontAwesome';
-        font-weight: 400;
-        content: '\f053';
-        position: absolute;
-        top: 50%;
-        left: 0.8rem;
-        width: 1.4rem;
-        height: 1.4rem;
-        line-height: 1;
-        margin-top: -0.7rem;
-      }
-      
-      &[data-button-type='save']{
-        position: relative;
-        padding-left: 2.8rem;
-        background-color: tint($gray, -10%);
-        color: black;
-        &:hover {
-          background-color: $gray;
-        }
-      }
-      &[data-button-type='submit-page']{
-        position: relative;
-        padding-left: 2.8rem;
-        background-color: tint($gray, -10%);
-        color: black;
-        &:hover {
-          background-color: $gray;
-        }
-      }
-      &[data-button-type='save']:before {
-        font-family: 'FontAwesome';
-        font-weight: 400;
-        content: '\f0c7';
-        position: absolute;
-        top: 50%;
-        left: 1.2rem;
-        width: 1.4rem;
-        height: 1.4rem;
-        line-height: 1;
-        margin-top: -0.7rem;
-      }
-      
-      &[data-button-type='custom']{
-        background-color: $gray;
-        border-color: $gray;
-        color: black;
-        &:hover {
-          background-color: tint($gray, 5%);
-        }
-      }
+.btn-secondary-complement {
+  @extend .btn;
+  
+  background-color: $secondary-complement;
+  border-color: darken($secondary-complement, 10%);
+  color: $secondary;
+  
+  &:hover {
+    background-color: tint($secondary-complement, 10%);
+    border-color: darken(tint($secondary-complement, 10%), 10%);
+    color: $secondary;
+  }
+}
+
+.btn-tertiary {
+  @extend .btn;
+  
+  background-color: $tertiary;
+  border-color: darken($tertiary, 5%);
+  color: $tertiary-complement;
+  
+  &:hover {
+    background-color: tint($tertiary, 5%);
+    border-color: darken(tint($tertiary, 5%), 5%);
+    color: $tertiary-complement;
+  }
+}
+
+.btn-tertiary-complement {
+  @extend .btn;
+  
+  background-color: $tertiary-complement;
+  border-color: darken($tertiary-complement, 10%);
+  color: $tertiary;
+  
+  &:hover {
+    background-color: tint($tertiary-complement, 10%);
+    border-color: darken(tint($tertiary-complement, 10%), 10%);
+    color: $tertiary;
+  }
+}
+
+.btn-link {
+  @extend .btn;
+  
+  background-color: transparent;
+  border-color: transparent;
+  color: $link-color;
+  
+  &:hover {
+    color: tint($link-color, 15%);
+  }
+}
+
+.btn-default {
+  @extend .btn;
+  
+  background-color: #00427e;
+  border-color: darken(#00427e, 10%);
+  color: $white;
+  
+  &:hover {
+    background-color: tint(#00427e, 5%);
+    border-color: darken(tint(#00427e, 5%), 10%);
+    color: $white;
+  }
+}
+
+.btn-subtle {
+  @extend .btn;
+  
+  background-color: #E9E9E9;
+  border-color: darken(#E9E9E9, 10%);
+  color: $black;
+  
+  &:hover {
+    background-color: tint(#E9E9E9, 5%);
+    border-color: darken(tint(#E9E9E9, 5%), 10%);
+    color: $black;
+  }
 }

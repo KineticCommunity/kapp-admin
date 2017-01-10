@@ -191,6 +191,17 @@
          * SCRIPT PATH METHODS
          *----------------------------------------------------------------------------------------*/
         
+        /**
+         * This method is necessary to wrap ${i18n.scriptPath('...')} calls in the layout.jsp (which
+         * may be used to display a space that does not have the Admin kapp, and subsequently 
+         * the scriptPath(String ...) calls would error).
+         */
+        public boolean hasTranslationJs() {
+            // Kapp will not be null if the Admin Kapp is installed and configured for my space (the
+            // Admin Kapp translations are what is used to apply space display translations)
+            return kapp != null;
+        }
+        
         public String scriptPath(Form form) {
             // Get the bundle pack
             TranslationBundle bundle = snapshot.getBundle("form."+form.getSlug(), locale.getCode());
