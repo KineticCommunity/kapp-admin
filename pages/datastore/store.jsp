@@ -49,7 +49,7 @@
                         </h4>
                         <p>
                             The ${currentStore.name} Datastore contains too many records to display at one time. 
-                            Please enter additional search criteria to narrow down the results, 
+                            Please enter search criteria to narrow down the results, 
                             or use the buttons below the table to navigate between chunks of 2000 records.
                         </p>
                     </div>

@@ -72,7 +72,8 @@
             beforeSend: function(){
                 // Destroy table if it already exists
                 if ($.fn.DataTable.isDataTable(ds.store.table)){
-                    ds.store.table.empty().DataTable().destroy();
+                    ds.store.table.DataTable().destroy();
+                    ds.store.table.empty();
                     ds.store.table.append("<tr><td class=\"alert alert-info\"><span class=\"fa fa-spinner fa-spin\"></span>Loading</td>");
                 }
             },
@@ -160,7 +161,8 @@
                         });
                     },
                     language: {
-                        search: "Filter:"
+                        search: "Filter:",
+                        emptyTable: "No records found."
                     },
                     buttons: [
                         {
@@ -210,7 +212,7 @@
                 + " are shown in the table above."
         );
         $("div#datastore-records-chunk-pagination button.previous-chunk").prop("disabled", previousPageTokens.length <= 0);
-        $("div#datastore-records-chunk-pagination button.next-chunk").prop("disabled", json._nextPageToken.length <= 0);
+        $("div#datastore-records-chunk-pagination button.next-chunk").prop("disabled", json._nextPageToken == null || json._nextPageToken.length <= 0);
         
         // Update large volume search criteria display to show current query (needs to be rebuilt after a refresh)
         var query = ds.store.table.data("query") || {};
