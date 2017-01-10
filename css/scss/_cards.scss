@@ -1,0 +1,623 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Card Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.card-panel {
+  padding: 1rem;
+  margin: 0.5rem 0 1rem 0;
+  @include border-radius();
+  background-color: $white;
+}
+
+.card {
+  position: relative;
+  display: block;
+  float: left;
+  padding: 0.5rem;
+  width: 100%;
+  border-color: $lightgray;
+  
+  > * {
+    position: relative;
+    padding: 1rem;
+    margin: 0;
+    &.activator {
+      cursor: pointer;
+    }
+    &:not(.alert) {
+      background-color: $white;
+      border-left-width: 0.1rem;
+      border-left-style: solid;
+      border-left-color: inherit;
+      border-right-width: 0.1rem;
+      border-right-style: solid;
+      border-right-color: inherit;
+    }
+    
+  }
+  > :first-child {
+    @include border-top-radius();
+    &:not(.alert) {
+      border-top-width: 0.1rem;
+      border-top-style: solid;
+      border-top-color: inherit;
+    }
+  }
+  > :last-child {
+    @include border-bottom-radius();
+    &:not(.alert) {
+      border-bottom-width: 0.1rem;
+      border-bottom-style: solid;
+      border-bottom-color: inherit;
+    }
+  }
+  
+  > .card-title {
+    @include font-size-line-height(2.4rem, 2.4rem);
+    font-weight: bold;
+    border-bottom: 0.2rem solid rgba($lightgray, 0.5);
+    &.small {
+      @include font-size-line-height(1.8rem, 1.8rem);
+    }
+  }
+  
+  > .card-content {
+    overflow: hidden;
+    p {
+      margin: 0;
+    }
+    > .card-title {
+      @include font-size-line-height(2.4rem, 2.4rem);
+      font-weight: bold;
+      margin-bottom: 0.4em;
+      &.small {
+        @include font-size-line-height(1.8rem, 1.8rem);
+      }
+    }
+    &:after {
+      content: attr(data-card-overflow-cover);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      pointer-events: none;
+      @include vertical-gradient(rgba($white, 0), rgba($white, 1));
+    }
+  }
+  
+  > .card-action {
+    border-top: 0.1rem solid rgba($lightgray, 0.5);
+  }
+  
+  .fa {
+    padding-right: 0.5rem;
+  }
+}
+
+.card-primary {
+  border-color: $primary;
+  
+  > .card-title {
+    background-color: $primary;
+    color: $primary-complement;
+    border-bottom-color: rgba($primary, 0.5);
+    @include anchor($primary-complement, tint($primary-complement, 10%), none, none);
+  }
+  
+  > a.card-title {
+    display: block;
+    background-color: $primary;
+    color: $primary-complement;
+    border-bottom-color: rgba($primary, 0.5);
+    
+    &:hover,
+    &:focus {
+      background-color: tint($primary, 10%);
+      text-decoration: none;
+    }
+  }
+  
+  > .card-content {
+    > .card-title {
+      color: $primary;
+      @include anchor($primary, tint($primary, 10%), none, none);
+    }
+  }
+  
+  > .card-action {
+    background-color: subtle($primary, 95%);
+    border-top-color: rgba($primary, 0.5);
+  }
+  
+  &.card-subtle {
+    border-color: subtle($primary, 80%);
+    
+    > * {
+      background-color: subtle($primary, 95%);
+    }
+    
+    > .card-title {
+      color: $primary;
+      border-bottom: none;
+      @include anchor($primary, tint($primary, 10%), none, none);
+    }
+    
+    > .card-content:after {
+      @include vertical-gradient(subtle($primary, 95%, 0), subtle($primary, 95%, 1));
+    }
+    
+    > .card-action {
+      background-color: subtle($primary, 88%);
+      border-top-color: subtle($primary, 80%);
+    }
+  }
+}
+
+a.card-primary {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+  
+  &:not(.card-subtle):hover > .card-title,
+  &:not(.card-subtle):focus > .card-title {
+    background-color: tint($primary, 10%);
+  }
+  
+  &:not(.card-subtle) > .card-title {
+    border-bottom-color: rgba($primary, 0.5);
+    color: $primary-complement;
+    
+    &:hover,
+    &:focus {
+      color: $primary-complement;
+      text-decoration: none;
+    }
+  }
+  
+  > .card-content {
+    color: $text-color;
+    
+    &:hover,
+    &:focus {
+      color: $text-color;
+      text-decoration: none;
+    }
+    
+    > .card-title {
+      color: $primary;
+      
+      &:hover,
+      &:focus {
+        color: tint($primary-complement, 10%);
+        text-decoration: none;
+      }
+    }
+  }
+  
+  > .card-action {
+    color: $text-color;
+    
+    &:hover,
+    &:focus {
+      color: $text-color;
+      text-decoration: none;
+    }
+    
+    @include anchor($primary, tint($primary, 10%), none, underline);
+  }
+  
+  &.card-subtle {
+    &:hover > *,
+    &:focus > * {
+      background-color: tint(subtle($primary, 95%), 5%);
+    }
+  
+    &:hover > .card-title,
+    &:focus > .card-title {
+      color: tint($primary, 10%);
+    }    
+    
+    &:hover > .card-content:after,
+    &:focus > .card-content:after {
+      @include vertical-gradient(tint(subtle($primary, 95%, 0), 5%), tint(subtle($primary, 95%, 1), 5%));
+    }
+    
+    &:hover > .card-action,
+    &:focus > .card-action {
+      background-color: tint(subtle($primary, 88%), 5%);
+    }
+  }
+}
+
+.card-secondary {
+  border-color: $secondary;
+  
+  > .card-title {
+    background-color: $secondary;
+    color: $secondary-complement;
+    border-bottom-color: rgba($secondary, 0.5);
+    @include anchor($secondary-complement, tint($secondary-complement, 10%), none, none);
+  }
+  
+  > a.card-title {
+    display: block;
+    background-color: $secondary;
+    color: $secondary-complement;
+    border-bottom-color: rgba($secondary, 0.5);
+    
+    &:hover,
+    &:focus {
+      background-color: tint($secondary, 10%);
+      text-decoration: none;
+    }
+  }
+  
+  > .card-content {
+    > .card-title {
+      color: $secondary;
+      @include anchor($secondary, tint($secondary, 10%), none, none);
+    }
+  }
+  
+  > .card-action {
+    background-color: subtle($secondary, 95%);
+    border-top-color: rgba($secondary, 0.5);
+  }
+  
+  &.card-subtle {
+    border-color: subtle($secondary, 80%);
+    
+    > * {
+      background-color: subtle($secondary, 95%);
+    }
+    
+    > .card-title {
+      color: $secondary;
+      border-bottom: none;
+      @include anchor($secondary, tint($secondary, 10%), none, none);
+    }
+    
+    > .card-content:after {
+      @include vertical-gradient(subtle($secondary, 95%, 0), subtle($secondary, 95%, 1));
+    }
+    
+    > .card-action {
+      background-color: subtle($secondary, 88%);
+      border-top-color: subtle($secondary, 80%);
+    }
+  }
+}
+
+a.card-secondary {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+  
+  &:not(.card-subtle):hover > .card-title,
+  &:not(.card-subtle):focus > .card-title {
+    background-color: tint($secondary, 10%);
+  }
+  
+  &:not(.card-subtle) > .card-title {
+    border-bottom-color: rgba($secondary, 0.5);
+    color: $secondary-complement;
+    
+    &:hover,
+    &:focus {
+      color: $secondary-complement;
+      text-decoration: none;
+    }
+  }
+  
+  > .card-content {
+    color: $text-color;
+    
+    &:hover,
+    &:focus {
+      color: $text-color;
+      text-decoration: none;
+    }
+    
+    > .card-title {
+      color: $secondary;
+      
+      &:hover,
+      &:focus {
+        color: tint($secondary-complement, 10%);
+        text-decoration: none;
+      }
+    }
+  }
+  
+  > .card-action {
+    color: $text-color;
+    
+    &:hover,
+    &:focus {
+      color: $text-color;
+      text-decoration: none;
+    }
+    
+    @include anchor($secondary, tint($secondary, 10%), none, underline);
+  }
+  
+  &.card-subtle {
+    &:hover > *,
+    &:focus > * {
+      background-color: tint(subtle($secondary, 95%), 5%);
+    }
+  
+    &:hover > .card-title,
+    &:focus > .card-title {
+      color: tint($secondary, 10%);
+    }    
+    
+    &:hover > .card-content:after,
+    &:focus > .card-content:after {
+      @include vertical-gradient(tint(subtle($secondary, 95%, 0), 5%), tint(subtle($secondary, 95%, 1), 5%));
+    }
+    
+    &:hover > .card-action,
+    &:focus > .card-action {
+      background-color: tint(subtle($secondary, 88%), 5%);
+    }
+  }
+}
+
+.card-tertiary {
+  border-color: $tertiary;
+  
+  > .card-title {
+    background-color: $tertiary;
+    color: $tertiary-complement;
+    border-bottom-color: rgba($tertiary, 0.5);
+    @include anchor($tertiary-complement, tint($tertiary-complement, 10%), none, none);
+  }
+  
+  > a.card-title {
+    display: block;
+    background-color: $tertiary;
+    color: $tertiary-complement;
+    border-bottom-color: rgba($tertiary, 0.5);
+    
+    &:hover,
+    &:focus {
+      background-color: tint($tertiary, 10%);
+      text-decoration: none;
+    }
+  }
+  
+  > .card-content {
+    > .card-title {
+      color: $tertiary;
+      @include anchor($tertiary, tint($tertiary, 10%), none, none);
+    }
+  }
+  
+  > .card-action {
+    background-color: subtle($tertiary, 95%);
+    border-top-color: rgba($tertiary, 0.5);
+  }
+  
+  &.card-subtle {
+    border-color: subtle($tertiary, 80%);
+    
+    > * {
+      background-color: subtle($tertiary, 95%);
+    }
+    
+    > .card-title {
+      color: $tertiary;
+      border-bottom: none;
+      @include anchor($tertiary, tint($tertiary, 10%), none, none);
+    }
+    
+    > .card-content:after {
+      @include vertical-gradient(subtle($tertiary, 95%, 0), subtle($tertiary, 95%, 1));
+    }
+    
+    > .card-action {
+      background-color: subtle($tertiary, 88%);
+      border-top-color: subtle($tertiary, 80%);
+    }
+  }
+}
+
+a.card-tertiary {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+  
+  &:not(.card-subtle):hover > .card-title,
+  &:not(.card-subtle):focus > .card-title {
+    background-color: tint($tertiary, 10%);
+  }
+  
+  &:not(.card-subtle) > .card-title {
+    border-bottom-color: rgba($tertiary, 0.5);
+    color: $tertiary-complement;
+    
+    &:hover,
+    &:focus {
+      color: $tertiary-complement;
+      text-decoration: none;
+    }
+  }
+  
+  > .card-content {
+    color: $text-color;
+    
+    &:hover,
+    &:focus {
+      color: $text-color;
+      text-decoration: none;
+    }
+    
+    > .card-title {
+      color: $tertiary;
+      
+      &:hover,
+      &:focus {
+        color: tint($tertiary-complement, 10%);
+        text-decoration: none;
+      }
+    }
+  }
+  
+  > .card-action {
+    color: $text-color;
+    
+    &:hover,
+    &:focus {
+      color: $text-color;
+      text-decoration: none;
+    }
+    
+    @include anchor($tertiary, tint($tertiary, 10%), none, underline);
+  }
+  
+  &.card-subtle {
+    &:hover > *,
+    &:focus > * {
+      background-color: tint(subtle($tertiary, 95%), 5%);
+    }
+  
+    &:hover > .card-title,
+    &:focus > .card-title {
+      color: tint($tertiary, 10%);
+    }    
+    
+    &:hover > .card-content:after,
+    &:focus > .card-content:after {
+      @include vertical-gradient(tint(subtle($tertiary, 95%, 0), 5%), tint(subtle($tertiary, 95%, 1), 5%));
+    }
+    
+    &:hover > .card-action,
+    &:focus > .card-action {
+      background-color: tint(subtle($tertiary, 88%), 5%);
+    }
+  }
+}
+
+.card-xxs {
+  @extend .card;
+  > .card-content {
+    height: 6.5rem;
+  }
+}
+
+.card-xs {
+  @extend .card;
+  > .card-content {
+    height: 10.5rem;
+  }
+}
+
+.card-sm {
+  @extend .card;
+  > .card-content {
+    height: 14.5rem;
+  }
+}
+
+.card-md {
+  @extend .card;
+  > .card-content {
+    height: 18.5rem;
+  }
+}
+
+.card-lg {
+  @extend .card;
+  > .card-content {
+    height: 22.5rem;
+  }
+}
+
+.card-xl {
+  @extend .card;
+  > .card-content {
+    height: 26.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .card > .card-content {
+    height: auto;
+  }
+}
+
+
+.card-container, .card-container-xs, .card-container-xs-12 {
+  @include clearfix();
+  margin: 0 -0.5rem 1rem -0.5rem;
+}
+.card-container-xs-11 { @extend .card-container-xs; > .card { width: 91.66666667%; } }
+.card-container-xs-10 { @extend .card-container-xs; > .card { width: 83.33333333%; } }
+.card-container-xs-9 { @extend .card-container-xs; > .card { width: 75%; } }
+.card-container-xs-8 { @extend .card-container-xs; > .card { width: 66.66666667%; } }
+.card-container-xs-7 { @extend .card-container-xs; > .card { width: 58.33333333%; } }
+.card-container-xs-6 { @extend .card-container-xs; > .card { width: 50%; } }
+.card-container-xs-5 { @extend .card-container-xs; > .card { width: 41.66666667%; } }
+.card-container-xs-4 { @extend .card-container-xs; > .card { width: 33.33333333%; } }
+.card-container-xs-3 { @extend .card-container-xs; > .card { width: 25%; } }
+.card-container-xs-2 { @extend .card-container-xs; > .card { width: 16.66666667%; } }
+.card-container-xs-1 { @extend .card-container-xs; > .card { width: 8.33333333%; } }
+
+@media (min-width: 768px) {
+  .card-container-sm, .card-container-sm-12 {
+    @include clearfix();
+    margin: 0 -0.5rem 1rem -0.5rem;
+  }
+  .card-container-sm-11 { @extend .card-container-sm; > .card { width: 91.66666667%; } }
+  .card-container-sm-10 { @extend .card-container-sm; > .card { width: 83.33333333%; } }
+  .card-container-sm-9 { @extend .card-container-sm; > .card { width: 75%; } }
+  .card-container-sm-8 { @extend .card-container-sm; > .card { width: 66.66666667%; } }
+  .card-container-sm-7 { @extend .card-container-sm; > .card { width: 58.33333333%; } }
+  .card-container-sm-6 { @extend .card-container-sm; > .card { width: 50%; } }
+  .card-container-sm-5 { @extend .card-container-sm; > .card { width: 41.66666667%; } }
+  .card-container-sm-4 { @extend .card-container-sm; > .card { width: 33.33333333%; } }
+  .card-container-sm-3 { @extend .card-container-sm; > .card { width: 25%; } }
+  .card-container-sm-2 { @extend .card-container-sm; > .card { width: 16.66666667%; } }
+  .card-container-sm-1 { @extend .card-container-sm; > .card { width: 8.33333333%; } }
+}
+
+@media (min-width: 992px) {
+  .card-container-md, .card-container-md-12 {
+    @include clearfix();
+    margin: 0 -0.5rem 1rem -0.5rem;
+  }
+  .card-container-md-11 { @extend .card-container-md; > .card { width: 91.66666667%; } }
+  .card-container-md-10 { @extend .card-container-md; > .card { width: 83.33333333%; } }
+  .card-container-md-9 { @extend .card-container-md; > .card { width: 75%; } }
+  .card-container-md-8 { @extend .card-container-md; > .card { width: 66.66666667%; } }
+  .card-container-md-7 { @extend .card-container-md; > .card { width: 58.33333333%; } }
+  .card-container-md-6 { @extend .card-container-md; > .card { width: 50%; } }
+  .card-container-md-5 { @extend .card-container-md; > .card { width: 41.66666667%; } }
+  .card-container-md-4 { @extend .card-container-md; > .card { width: 33.33333333%; } }
+  .card-container-md-3 { @extend .card-container-md; > .card { width: 25%; } }
+  .card-container-md-2 { @extend .card-container-md; > .card { width: 16.66666667%; } }
+  .card-container-md-1 { @extend .card-container-md; > .card { width: 8.33333333%; } }
+}
+
+@media (min-width: 1200px) {
+  .card-container-lg, .card-container-lg-12 {
+    @include clearfix();
+    margin: 0 -0.5rem 1rem -0.5rem;
+  }
+  .card-container-lg-11 { @extend .card-container-lg; > .card { width: 91.66666667%; } }
+  .card-container-lg-10 { @extend .card-container-lg; > .card { width: 83.33333333%; } }
+  .card-container-lg-9 { @extend .card-container-lg; > .card { width: 75%; } }
+  .card-container-lg-8 { @extend .card-container-lg; > .card { width: 66.66666667%; } }
+  .card-container-lg-7 { @extend .card-container-lg; > .card { width: 58.33333333%; } }
+  .card-container-lg-6 { @extend .card-container-lg; > .card { width: 50%; } }
+  .card-container-lg-5 { @extend .card-container-lg; > .card { width: 41.66666667%; } }
+  .card-container-lg-4 { @extend .card-container-lg; > .card { width: 33.33333333%; } }
+  .card-container-lg-3 { @extend .card-container-lg; > .card { width: 25%; } }
+  .card-container-lg-2 { @extend .card-container-lg; > .card { width: 16.66666667%; } }
+  .card-container-lg-1 { @extend .card-container-lg; > .card { width: 8.33333333%; } }
+}

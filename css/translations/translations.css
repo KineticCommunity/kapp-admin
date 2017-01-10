@@ -1,7 +1,4 @@
 /* CSS Specific to the Translation Console*/
-table.dataTable {
-  table-layout: fixed;
-}
 table.table > tbody > tr:not(.full-text) > td.ellipsis,
 table.table > tbody > tr > td > span > span.ellipsis {
   overflow: hidden;
@@ -11,6 +8,7 @@ table.table > tbody > tr > td > span > span.ellipsis {
 table.table > tbody > tr > td > span {
   display: inline-block;
   max-width: 100%;
+  vertical-align: middle;
 }
 table.table > tbody > tr > td > span > span.ellipsis {
   display: block;
@@ -51,4 +49,27 @@ a.pending-publish {
   border-top-left-radius: 0;
   border-top: none;
   width: 100%;
+  white-space: normal;
+}
+
+@media (max-width : 767px) { 
+  table.table > thead > tr > th.references,
+  table.table > tbody > tr > td.references {
+    display: none;
+  }
+  table.table > tbody > tr > td.key.ellipsis,
+  table.table > tbody > tr > td.translation.ellipsis {
+    max-width: 300px;
+  }
+  table.table > tbody > tr > td.context > span > span.ellipsis {
+    max-width: 120px;
+  }
+}
+@media (min-width : 768px) { 
+  table.dataTable {
+    table-layout: fixed;
+  }
+  table[data-table-source] + .dataTables_paginate {
+    float: right;
+  }
 }

@@ -73,7 +73,7 @@
           "enabled": true,
           "renderType": "submit-page",
           "renderAttributes": {
-            "class": "btn btn-primary"
+            "class": "btn btn-tertiary"
           }
         },
         {

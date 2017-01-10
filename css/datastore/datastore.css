@@ -1,79 +1,42 @@
 /* CSS Specific to the Datastore Console*/
 tr.column-table-placeholder {
-    background-color: whitesmoke;
+  background-color: whitesmoke;
 }
-
-table.dataTable thead th {
-    position: relative;
-    background-image: none !important;
+tfoot td.disclaimer {
+  font-size: 85%;
+  font-style: italic;
+  color: #777777;
 }
-table.dataTable thead th.all,
-table.dataTable tbody td.all {
-    min-width: 82px; 
-    width: 82px; 
-    text-align: center;
+a.stale-fields {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top: none;
+  width: 100%;
+  white-space: normal;
 }
-table.dataTable thead th.sorting:after,
-table.dataTable thead th.sorting_asc:after,
-table.dataTable thead th.sorting_desc:after {
-    position: absolute;
-    top: 10px;
-    right: 8px;
-    display: block;
-    font-family: FontAwesome;
+div#datastore-records-criteria-display .badge {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+  margin-right: 5px;
 }
-table.dataTable thead th.sorting:after {
-    content: "\f0dc";
-    font-size: 0.8em;
-    padding-top: 0.12em;
+div#datastore-records-criteria-display .badge:not(.reset){
+  background-color: #eee;
+  color: #777777;
+  font-weight: normal;
 }
-table.dataTable thead th.sorting_asc:after {
-    top: 8px;
-    content: "\f160";
+div#datastore-records-criteria-display .badge:not(.reset) *:not(:last-child){
+  margin-right: 3px;
 }
-table.dataTable thead th.sorting_desc:after {
-    top: 8px;
-    content: "\f161";
+div#datastore-records-criteria-display .badge:not(.reset) .field:after{
+  content: ":";
 }
-table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before {
-    position: absolute;
-    display: block;
-    border: none;
-    background-color: transparent;
-    color: black;
-    box-shadow: none;
-    opacity: 0.5;
-    font-family: FontAwesome;
-    content: "\f067";
-    font-size: 0.8em;
-    padding-top: 0.15em;
+div#datastore-records-criteria-display .badge.reset,
+div#datastore-records-criteria-display .badge:not(.reset) span.fa-times {
+  cursor: pointer;
 }
-table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before {
-    background-color: transparent;
-    content: "\f068";
-}   
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child {
-    padding: 8px 24px;
+div#datastore-records-criteria-display .badge:not(.reset) span.fa-times {
+  color: #d9534f;
 }
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul {
-    width: 100%;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li:after {
-    visibility: hidden;
-    display: table;
-    content: " ";
-    clear: both;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span {
-    white-space: normal;
-    width: 49%;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-title {
-    text-align: right;
-}
-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-data {
-    float: right;
-}
-table.dataTable.nowrap td:not(.all) {
-    white-space: normal;
+div#datastore-records-criteria-display .badge.reset:only-child {
+  display: none;
 }

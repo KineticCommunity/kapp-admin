@@ -1,9 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <bundle:layout page="layouts/form.jsp">
-    <bundle:variable name="head">
-        <title>${text.escape(form.name)}</title>
-    </bundle:variable>
+    <bundle:variable name="pageTitle">Thank You</bundle:variable>
     <section class="page">
         <div class="page-header">
             <h1>${text.escape(form.name)}</h1>

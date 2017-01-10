@@ -2,9 +2,7 @@
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
 <bundle:layout page="layouts/form.jsp">
-    <bundle:variable name="head">
-        <title>${text.escape(form.name)}</title>
-    </bundle:variable>
+    <bundle:variable name="pageTitle">${text.escape(form.name)}</bundle:variable>
     <section class="page" data-page="${page.name}">
         <div class="page-header">
             <h3>${text.escape(form.name)}</h3>

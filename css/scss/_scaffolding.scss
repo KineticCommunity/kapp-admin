@@ -1,0 +1,98 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Global Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+html{
+  position: relative;
+  min-height: 100%;
+  // DO NOT CHANGE FONT-SIZE HERE! 10px base allows for ease of use with rem: 1rem = 10px, 1.4rem = 14px, 3.2rem = 32px, etc.
+  font-size: 10px;
+}
+
+body {
+  font-family: $font-family-base;
+  @include font-size-line-height();
+  color: $text-color;
+  background-color: $body-bg-color;
+  // Sticky footer space
+  margin-bottom: $footer-height;
+}
+
+body > div.view-port > div.container {
+  
+  > div.row > div.tab-content {
+    
+    > div.row {
+      > div.content-main {
+      
+        > div.page-header {
+            margin: 0 0 10px 0;
+            @include clearfix();
+            
+            > h3 {
+                margin-top: 10px;
+            }
+        }
+      }
+      
+      > div.aside {
+        @include font-size-line-height($font-size-base*0.9, $line-height-base*0.9);
+        border-left: 6px solid $secondary;
+        background-color: subtle($secondary, 94%);
+        
+        > div.aside-toggle {
+          cursor: pointer;
+          &:before, &:after {
+            font-family: FontAwesome;
+            position: absolute;
+            top: 25px;
+            left: -12px;
+          }
+          &:before {
+            content: "\f111";
+            color: $subheader-color;
+            font-size: 21px;
+          }
+          &:after {
+            content: "\f054";
+            color: subtle($subheader-color, 94%);
+            font-size: 12px;
+            left: -7px;
+          }
+        }
+      }
+      
+      &.aside-closed {
+        
+        > div.aside {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 6px;
+          height: 30px;
+          padding: 0;
+          
+          > *:not(.aside-toggle) {
+            display: none;
+          }
+          
+          > div.aside-toggle {
+            &:after {
+              content: "\f053";
+              left: -8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width : 768px) { 
+  body > div.view-port > div.container > div.row > div.tab-content > div.row.aside-closed > div.content-main {
+    width: 99%;
+  }
+}
+
+/* Links
+ *-------------------------------------- */
+@include anchor();

@@ -8,10 +8,28 @@
   1rem = 10px
 * ========================================================================== */
 
-@import "base";
+// Core variables and mixins
+@import "variables";
+@import "mixins";
 
-@import "fonts";
+// Core CSS
+@import "scaffolding";
+@import "type";
+@import "grid";
+@import "code";
+@import "tables";
 @import "forms";
-@import 'kinetic';
-@import 'temp';
-@import 'modal';
+@import "buttons";
+@import "lists";
+
+// Components
+@import "footer";
+@import "header";
+@import "nav";
+@import "navbar";
+@import "cards";
+@import "alerts";
+@import "modal";
+
+// Utility classes
+@import "utilities";

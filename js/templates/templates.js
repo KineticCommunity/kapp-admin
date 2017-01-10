@@ -1,1 +1,1 @@
-/* JS Specific to the Template Console */
+/* JS Specific to the [CONSOLE NAME] Console */

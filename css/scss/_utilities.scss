@@ -1,0 +1,217 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Utilities
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+/* Images
+ *-------------------------------------- */
+
+/* Add this class to an image to make it fit within it's fluid parent wrapper while maintaining aspect ratio. */
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Desaturates images to gray that need to be deemphasized */
+img.desaturate {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+          filter: gray;
+          filter: url('data:image/svg+xml;utf8,<svg version=\'1.1\' xmlns=\'http://www.w3.org/2000/svg\' height=\'0\'><filter id=\'greyscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\' /></filter></svg>#greyscale');
+}
+
+/* Twitter
+ *-------------------------------------- */
+#social-column{
+  background-color:#fff;
+  padding:1em;
+  border-top: 0.2rem solid rgba(179, 193, 196, 0.5);
+}
+#twitter-widget-0{
+  opacity: .5;
+}
+#twitter-widget-0:hover{
+  opacity: 1;
+}
+
+
+/* Padding
+ *-------------------------------------- */
+@for $incrementer from 0 through $padding-count{
+  .p-a-#{$incrementer}{
+    padding: $incrementer * $padding-increment !important;
+  }
+  .p-t-#{$incrementer}{
+    padding-top: $incrementer * $padding-increment !important;
+  }
+  .p-b-#{$incrementer}{
+    padding-bottom: $incrementer * $padding-increment !important;
+  }
+  .p-r-#{$incrementer}{
+    padding-right: $incrementer * $padding-increment !important;
+  }
+  .p-l-#{$incrementer}{
+    padding-left: $incrementer * $padding-increment !important;
+  }
+  .p-x-#{$incrementer}{
+    padding-right: $incrementer * $padding-increment !important;
+    padding-left: $incrementer * $padding-increment !important;
+  }
+  .p-y-#{$incrementer}{
+    padding-top: $incrementer * $padding-increment !important;
+    padding-bottom: $incrementer * $padding-increment !important;
+  }
+}
+
+/* Margin
+ *-------------------------------------- */
+@for $incrementer from 0 through $margin-count{
+  .m-a-#{$incrementer}{
+    margin: $incrementer * $margin-increment !important;
+  };
+  .m-t-#{$incrementer}{
+    margin-top: $incrementer * $margin-increment !important;
+  }
+  .m-b-#{$incrementer}{
+    margin-bottom: $incrementer * $margin-increment !important;
+  }
+  .m-r-#{$incrementer}{
+    margin-right: $incrementer * $margin-increment !important;
+  }
+  .m-l-#{$incrementer}{
+    margin-left:  $incrementer * $margin-increment !important;
+  }
+  .m-x-#{$incrementer}{
+    margin-right:  $incrementer * $margin-increment !important;
+    margin-left:  $incrementer * $margin-increment !important;
+  }
+  .m-y-#{$incrementer}{
+    margin-top: $incrementer * $margin-increment !important;
+    margin-bottom: $incrementer * $margin-increment !important;
+  }
+}
+
+/* List unstyled
+ *-------------------------------------- */
+ul.unstyled {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Display
+ *-------------------------------------- */
+.display-none {
+  display: none;
+}
+.display-inline {
+  display: inline;
+}
+.display-block {
+  display: block;
+}
+.display-inline-block {
+  display: inline-block;
+}
+.overflow-auto {
+  overflow-x: auto;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Empty states
+ *-------------------------------------- */
+.empty-state:not(:only-child) {
+  display: none;
+}
+
+/* Text
+ *-------------------------------------- */
+.nowrap {
+  white-space: nowrap;
+}
+
+/* Colors
+ *-------------------------------------- */
+.color-primary {
+  color: $primary;
+}
+.color-primary-complement {
+  color: $primary-complement;
+}
+.color-secondary {
+  color: $secondary;
+}
+.color-secondary-complement {
+  color: $secondary-complement;
+}
+.color-tertiary {
+  color: $tertiary;
+}
+.color-tertiary-complement {
+  color: $tertiary-complement;
+}
+.color-white {
+  color: $white;
+}
+.color-black {
+  color: $black;
+}
+.color-text {
+  color: $text-color;
+}
+.background-color-primary {
+  background-color: $primary;
+}
+.background-color-primary-complement {
+  background-color: $primary-complement;
+}
+.background-color-secondary {
+  background-color: $secondary;
+}
+.background-color-secondary-complement {
+  background-color: $secondary-complement;
+}
+.background-color-tertiary {
+  background-color: $tertiary;
+}
+.background-color-tertiary-complement {
+  background-color: $tertiary-complement;
+}
+.background-color-white {
+  background-color: $white;
+}
+.background-color-black {
+  background-color: $black;
+}
+.background-color-text {
+  background-color: $text-color;
+}
+.border-color-primary {
+  border-color: $primary;
+}
+.border-color-primary-complement {
+  border-color: $primary-complement;
+}
+.border-color-secondary {
+  border-color: $secondary;
+}
+.border-color-secondary-complement {
+  border-color: $secondary-complement;
+}
+.border-color-tertiary {
+  border-color: $tertiary;
+}
+.border-color-tertiary-complement {
+  border-color: $tertiary-complement;
+}
+.border-color-white {
+  border-color: $white;
+}
+.border-color-black {
+  border-color: $black;
+}
+.border-color-text {
+  border-color: $text-color;
+}

@@ -1,15 +1,16 @@
+div.setup,
 div.wizard {
   color: #000;
   position: relative;
+  padding: 1rem;
 }
+div.setup h2,
 div.wizard h2 {
   color: #666;
 }
+div.setup h3,
 div.wizard h3 {
   color: #333;
-}
-div.wizard a:not(.btn) {
-  color: #D95900;
 }
 
 div.single-add-restriction:not(:only-child) {

@@ -14,7 +14,12 @@
         // If on console page
         if ($("table.datastore-list-table").length){
             // Clear DataTables attribute from local storage to remove save state of datastores
-            window.localStorage.removeItem("DataTables_datastore-records-table_" + window.location.pathname);
+            Object.keys(window.localStorage).forEach(function(key){
+                var re = new RegExp("^DataTables_datastore-records-table.*?" + window.location.pathname + ".*");
+                if (re.test(key)) {
+                    window.localStorage.removeItem(key);
+                }
+            });
         }
         
         /** END *** DATASTORE/CONSOLE PAGE *** DOCUMENT READY CODE *********************************/
@@ -65,8 +70,8 @@
                             contentType: "application/json",
                             success: function(data, textStatus, jqXHR){
                                 // Define url to redirect to
-                                var redirectUrl = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
-                                        + "&page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
+                                var redirectUrl = bundle.kappLocation() + "/" + self.data("console-slug")
+                                        + "?page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
                                 // Get bridge dropdown
                                 var bridgeSelect = form.find("select#datastore-bridge");
                                 
@@ -188,13 +193,13 @@
                 dataType: "json",
                 data: JSON.stringify(fieldData),
                 contentType: "application/json",
-                beforeSend: function(jqXHR, settings){
+                beforeSend: function(jqXHR, settings){  
                     self.prop("disabled", true);
                 },
                 success: function(data, textStatus, jqXHR){
                     // Define url so we can reload
-                    var reloadUrl = bundle.kappLocation() + "/" + self.data("console-slug") + "?kapp=" + bundle.kappSlug() 
-                            + "&page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
+                    var reloadUrl = bundle.kappLocation() + "/" + self.data("console-slug")
+                            + "?page=" + self.data("console-slug") + "/config&store=" + data.form.slug;
                     // Get bridge dropdown
                     var bridgeSelect = form.find("select#datastore-bridge");
                     
@@ -302,6 +307,16 @@
         if ($("table#qualification-table").length){
             
             /**
+             * Remove duplicate parameters
+             */
+            $("table#qualification-table div.modal-params").each(function(i, modalParams){
+                $(modalParams).find("table#params-table td.param-name").each(function(j, td){
+                    $(modalParams).find("td.param-add-value select").val("")
+                                  .find("option[value='" + $(td).text() + "']").remove();
+                });
+            });
+            
+            /**
              * Event handler for parameters link which builds and destroys the modal, keeping the data hidden in the dom.
              */
             $("table#qualification-table").on("click", "a.qualification-modal-link", function(e){
@@ -317,6 +332,8 @@
                             .appendTo(element)
                             // Event handler for delete parameter button
                             .on("click", "td.param-actions button.param-delete", function(e){
+                                var paramName = $(this).closest("tr").find("td.param-name").text();
+                                modalBody.find("td.param-add-value select").append($("<option>", {value: paramName}).append(paramName));
                                 $(this).closest("tr").remove();
                             })
                             // Event handler for add parameter button
@@ -324,19 +341,18 @@
                                 // Get new parameter name
                                 var paramName = $(this).closest("tr").find("td.param-add-value select").val();
                                 // If parameter doesn't already exist, add it
-                                if (modalBody.find("table#params-table td.param-name[data-param-name=\""+paramName+"\"]").length <= 0){
-                                    modalBody.find("table#params-table tbody").append($("<tr>")
-                                            .append($("<td>", {class: "param-name", "data-param-name": paramName}).text(paramName))
-                                            .append($("<td>", {class: "param-actions"})
-                                                    .append($("<div>", {class: "btn-group pull-right"})
-                                                            .append($("<button>", {type: "button", class: "btn btn-xs btn-danger param-delete"})
-                                                                    .append($("<span>", {class: "fa fa-times fa-fw"}))))));
+                                if (paramName){
+                                    var template = _.template($("div.hidden-qual-params-row-template > table > tbody").html());
+                                    modalBody.find("table#params-table tbody")
+                                             .append(template({parameterName: paramName, parameterValue: null}));
+                                    modalBody.find("td.param-add-value select").val("")
+                                             .find("option[value='" + paramName + "']").remove();
                                 }
                             });
                     },
                     footer: function(element, actions) {
                         element.addClass("text-right").append(
-                            $("<button>", {class: "btn btn-default"}).text("Close").on("click", function(){
+                            $("<button>", {class: "btn btn-default"}).text("Done").on("click", function(){
                                 actions.dismiss();
                             })
                         );
@@ -372,6 +388,9 @@
                 }
                 else {
                     var newQualParams = $("div.hidden-qual-params-template").clone();
+                    if (qualResultType != 'Single'){
+                        newQualParams.find("td.param-add-value select option[value='Submission ID']").remove();
+                    }
                     newQualParams.find("span.param-count").text("0");
                     var newQualRow = $("<tr>", {class: "qualification-row"})
                                 .append($("<td>", {class: "qual-name"}).text(qualName))
@@ -463,124 +482,65 @@
                     row.find("div.qual-edit-actions").addClass("hide");
                     row.find("div.qual-actions").removeClass("hide");
                 }
+                if (row.find("td.qual-result-type").text() === 'Single' 
+                        && row.find("div.modal-params td.param-add-value select option[value='Submission ID']").length <= 0){
+                    row.find("div.modal-params td.param-add-value select")
+                       .prepend($("<option>", {value: "Submission ID"}).append("Submission ID"));
+                }
+                else if (row.find("td.qual-result-type").text() !== 'Single'){
+                    if (row.find("div.modal-params td.param-add-value select option[value='Submission ID']").length > 0){
+                        row.find("div.modal-params td.param-add-value select option[value='Submission ID']").remove();
+                    }
+                    row.find("div.modal-params td.param-name[data-param-name='Submission ID']").closest("tr").remove();
+                    row.find("a.qualification-modal-link span.param-count").text(row.find("table#params-table tbody tr").length);
+                }
+            });
+        }
+        
+        /**
+         * Show notice if datastore form has been updated and config page is stale
+         */
+        if ($("button#update-datastore[data-datastore-slug]").length){
+            // Check everytime window comes into focus
+            $(window).on("focus", function(e){
+                var datastoreSlug = $("button#update-datastore[data-datastore-slug]").data("datastore-slug");
+                $.ajax({
+                    method: "GET",
+                    url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "?include=fields",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data, textStatus, jqXHR){
+                        var status = new Object();
+                        var stale = false;
+                        $.each(data.form.fields, function(i, field){
+                            status[field.name] = !status[field.name]; 
+                        });
+                        $("table#column-table tbody td.column-name").each(function(){
+                            status[$(this).text()] = !status[$(this).text()];
+                        });
+                        $.each(status, function(k, v){
+                            if (v){
+                                stale = true;
+                            }
+                        });
+                        if (stale && $("div.content-main a.stale-fields").length <= 0){
+                            $("div.content-main").prepend(
+                                $("<a>", {href: "javascript:window.location.reload()", class: "stale-fields btn btn-info"}).append(
+                                    $("<span>", {class: "fa fa-lg fa-refresh"}).html("&nbsp;"),
+                                    $("<span>").text("This datastore's form has been updated. Click here to reload the page in order to see the latest fields.")
+                                )
+                            );
+                        }
+                        else if (!stale && $("div.content-main a.stale-fields").length > 0){
+                            $("div.content-main a.stale-fields").remove();
+                        }
+                    }
+                });
             });
         }
                 
         /** END *** DATASTORE/CONFIG PAGE *** DOCUMENT READY CODE *********************************/
         
-        /******************************************************************************************
-         ** START *** DATASTORE/STORE PAGE *** DOCUMENT READY CODE
-         ** Displays the stored records.
-         ******************************************************************************************/
-        
-        // Run below code only if table#datastore-records-table exists
-        if ($("table#datastore-records-table").length){
-            var consoleSlug = $("table#datastore-records-table").data("console-slug");
-            var kappSlug = $("table#datastore-records-table").data("kapp-slug");
-            var datastoreSlug = $("table#datastore-records-table").data("datastore-slug");
-            
-            /**
-             * Load the records for the current store
-             */
-            loadDatastoreRecords(datastoreSlug);
-            
-            /**
-             * Add functionality for importing CSV files
-             */
-            $("input#datastore-records-import").on("change", function(e){
-                var importInput = $(this);
-                // Get files from file input
-                var fileList = importInput.prop("files");
-                // If file uploaded
-                if (fileList.length > 0){
-                    // Get first file
-                    var file = fileList.item(0);
-                    // If not CSV file
-                    if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
-                        importInput.closest("div.datastore-records-table-buttons").notifie({
-                            anchor: "h3",
-                            message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
-                            exitEvents: "mouseup"
-                        });
-                    }
-                    else {
-                        // Initialize FileReader
-                        var reader = new FileReader();
-                        // Setup onload function which will process the import
-                        reader.onload = function(e){
-                            processDatastoreRecordsImport($.csv.toObjects(e.target.result), datastoreSlug, importInput);
-                        }
-                        // Read file
-                        reader.readAsText(file);
-                    }
-                }
-                // Reset file input value to empty string to allow on change  to fire on the same file if needed
-                importInput.val("");
-            });
-            
-            /**
-             * Event handlers for edit, clone, and delete buttons for the records table
-             */
-            $("table#datastore-records-table").on("click", "button.edit", function(e){
-                // On click of edit button, send user to record page for editing current row
-                var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + consoleSlug + "?kapp=" + kappSlug + "&page=datastore/record&store=" + datastoreSlug + "&id=" + data.ID;
-            }).on("click", "button.clone", function(e){
-                // On click of edit button, send user to record page for cloning current row
-                var data = datastore.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + consoleSlug + "?kapp=" + kappSlug + "&page=datastore/record&store=" + datastoreSlug + "&clone=" + data.ID;
-            }).on("click", "button.delete", function(e){
-                // On click of delete button, confirm that the user is sure they want to delete
-                var self = $(this);
-                // Get selected row data
-                var row = datastore.datastoreRecordsTable.row($(this).closest("tr"));
-                var data = row.data();
-                // Build confirmation dialog
-                var confirmDelete = new KD.Modal({
-                    header: "<h3>Confirm Delete</h3>",
-                    body: "Are you sure you want to delete this record?",
-                    footer: function(element, actions) {
-                        element.addClass("text-right").append(
-                            $("<button>", {class: "btn btn-success", tabindex: 2}).text("Yes").on("click", actions.accept),
-                            $("<button>", {class: "btn btn-link", tabindex: 1}).text("Cancel").on("click", actions.dismiss)
-                        );
-                    },
-                    size: "sm",
-                    backdrop: true,
-                    backdropclose: true,
-                    keyboardclose: true,
-                    renderCallback: false,
-                    accept: function(){
-                        // On acceptance of confirmation dialog, call api to delete record
-                        $.ajax({
-                            url: bundle.apiLocation() + "/submissions/" + data.ID,
-                            method: 'DELETE',
-                            dataType: "json",
-                            contentType: "application/json",
-                            beforeSend: function(jqXHR, settings){
-                                self.prop("disabled", true);
-                            },
-                            success: function(response, textStatus, jqXHR){
-                                // Remove row and redraw table on success
-                                row.remove().draw();
-                            },
-                            error: function(jqXHR, textStatus, errorThrown){
-                                self.notifie({
-                                    anchor: "table",
-                                    message: "An error occurred while deleting the record: " + errorThrown
-                                });
-                            }
-                       });
-                    }
-                });
-                // Show confirmation dialog
-                confirmDelete.show();
-                // Blur delete button
-                $(this).blur();
-            });
-        }
-        
-        /** END *** DATASTORE/STORE PAGE *** DOCUMENT READY CODE *********************************/
         
         /******************************************************************************************
          ** START *** DATASTORE/RECORD PAGE *** DOCUMENT READY CODE
@@ -702,6 +662,8 @@
     bundle.adminDatastore = bundle.adminDatastore || {};
     // Create a scoped alias to simplify references to your namespace
     var datastore = bundle.adminDatastore;
+    
+    _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
 
     /*----------------------------------------------------------------------------------------------
      * COMMON FUNCTIONS
@@ -778,9 +740,11 @@
         qualificationTable.find("tbody tr.qualification-row").each(function(i, tr){
             var parameters = new Array();
             $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
-                parameters.push({
-                    name: $(trParam).find("td.param-name").text()
-                });
+                if ($(trParam).find("td.param-value input").val().trim().length <= 0){
+                    parameters.push({
+                        name: $(trParam).find("td.param-name").text()
+                    });
+                }
             });
             data.qualifications.push({
                 name: $(tr).find("td.qual-name").text(),
@@ -823,14 +787,20 @@
         
         // Add all qualifications with query
         qualificationTable.find("tbody tr.qualification-row").each(function(i, tr){
-            var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=999";
+            var query = "kappSlug=" + bundle.kappSlug() + "&formSlug=" + form.slug + "&limit=1000";
+            var isSingle = $(tr).find("td.qual-result-type").text() === "Single";
+            // Submission ID can only be used for Single type qualifications and can not have kappSlug and formSlug in the query
+            var submissionIdParam = isSingle ? $(tr).find("td.qual-params table#params-table tbody tr td.param-name[data-param-name='Submission ID']").text() : null;
+            if (isSingle && $(tr).find("td.qual-params table#params-table tbody tr td.param-name[data-param-name='Submission ID']").length){
+                var tdParamName = $(tr).find("td.qual-params table#params-table tbody tr td.param-name[data-param-name='Submission ID']");
+                var paramValue = tdParamName.siblings("td.param-value").find("input").val().trim();
+                query = "id=" + (paramValue.replace(/([\\])/g, "\\$1") || "${parameters('" + tdParamName.text() + "')}");
+            }
             $(tr).find("td.qual-params table#params-table tbody tr").each(function(idx, trParam){
                 var paramName = $(trParam).find("td.param-name").text();
+                var paramValue = $(trParam).find("td.param-value input").val().trim();
                 if (paramName !== "Submission ID"){
-                    query += "&values[" + paramName + "]=${parameters('" + paramName + "')}";
-                }
-                else {
-                    query += "&id=${parameters('" + paramName + "')}";
+                    query += "&values[" + paramName + "]=" + (paramValue.replace(/([\\])/g, "\\$1") || "${parameters('" + paramName + "')}"); 
                 }
             });
             data.qualifications.push({
@@ -847,304 +817,7 @@
     
     /** END *** DATASTORE/CONFIG PAGE *** HELPER METHODS ******************************************/
     
-    /**********************************************************************************************
-     ** START *** DATASTORE/STORE PAGE *** HELPER METHODS
-     ** Displays the stored records.
-     **********************************************************************************************/
-    
-    /**
-     * Loads the records for the current datastore and displays them in a DataTable
-     * 
-     * @param datastoreSlug Slug of datastore from which to fetch records.
-     */
-    function loadDatastoreRecords(datastoreSlug){
-        // Ajax call to get the records
-        $.ajax({
-            mathod: "GET",
-            url: bundle.kappLocation() + "?partial=" + "datastore/records.json&store=" + datastoreSlug,
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data, textStatus, jqXHR){
-                // Set up DataTable configuration object with export/import buttons
-                records = $.extend(data, {
-                    responsive: true,
-                    pageLength: 25,
-                    stateSave: true,
-                    buttons: [
-                        {
-                            extend: "csv",
-                            text: "Export CSV",
-                            className: "btn-sm",
-                            filename: $("table#datastore-records-table").data("datastore-name") + " Datastore",
-                            exportOptions: {
-                                modifier: {
-                                    search: "none"
-                                }
-                            }
-                        },
-                        {
-                            text: "Import CSV",
-                            className: "btn-sm",
-                            action: importDatastoreRecords
-                        }
-                    ]
-                });
-                $.each(_.where(records.columns, {renderType: "date"}), function(i, col){
-                    col.render = $.fn.dataTable.render.moment("date", "ll", bundle.config.userLocale);
-                });
-                $.each(_.where(records.columns, {renderType: "datetime"}), function(i, col){
-                    col.render = $.fn.dataTable.render.moment("datetime", "lll", bundle.config.userLocale);
-                });
-                $.each(_.where(records.columns, {renderType: "time"}), function(i, col){
-                    col.render = $.fn.dataTable.render.moment("time", "LT", bundle.config.userLocale);
-                });
-                $.each(_.where(records.columns, {renderType: "checkbox"}), function(i, col){
-                    col.render = $.fn.dataTable.render.checkbox();
-                });
-                // Build DataTable
-                datastore.datastoreRecordsTable = $("table#datastore-records-table").DataTable(records);
-                // Append the import/export buttons to the buttons section on the page
-                datastore.datastoreRecordsTable.buttons().nodes().each(function(){
-                    $("div.datastore-records-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                $("table#datastore-records-table").empty().notifie({
-                    message: "Failed to load records for the datastore.<br>" + errorThrown
-                });
-            }
-        });
-    }
-    
-    /**
-     * If browser supports File API, begin import process. Otherwise throw error.
-     */
-    function importDatastoreRecords(){
-        // Check if File API is available
-        if (window.File && window.FileReader && window.FileList) {
-            $("input#datastore-records-import").trigger("click");
-        }
-        else {
-            $("div.datastore-records-table-buttons").notifie({
-                anchor: "h3",
-                message: "Your browser does not support the import feature. Please use a newer browser."
-            });
-        }
-    }
-    
-    /**
-     * Save each row of data as a submission for the given Datastore.
-     * 
-     * @param importData Array of Objects to be saved.
-     * @param datastoreSlug Slug of datastore into which this data should be imported.
-     * @param importInput jQuery instance of file input element.
-     */
-    function processDatastoreRecordsImport(importData, datastoreSlug, importInput){
-        /** Retrieve all fields in the datastore **/
-        $.ajax({
-            method: 'GET',
-            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "?include=fields",
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data, textStatus, jqXHR){
-                /** Convert fields to a map to check if file has valid headers **/
-                var fieldMap = $.extend(_.object(_.map(data.form.fields, function(field){
-                    return [field.name, true];
-                })), {"Datastore Record ID": true, "": true});
-                // Create array to store invalid headers
-                var invalidHeaders = new Array();
-                // Get first row (any row can be used since headers are the keys of the row object)
-                var headerRow = importData[0];
-                // For each row, check if all passed in headers match existing fields
-                _.each(headerRow, function(val, key){
-                    // If field doesn't exist, save field in invalidHeaders array
-                    if (!fieldMap[key]){ 
-                        invalidHeaders.push(key);
-                    }
-                });
-                
-                /** If invalid headers found, throw error **/
-                if (invalidHeaders.length){
-                    importInput.closest("div.datastore-records-table-buttons").notifie({
-                        anchor: "h3",
-                        message: "Invalid CSV file. " 
-                            + invalidHeaders.length + " of the headers in the CSV file do not match an existing field on this datastore. <br/>"
-                            + "Invalid headers: " + invalidHeaders.join(", "),
-                        exitEvents: "mouseup"
-                    });
-                }
-                /** If headers are valid, process import **/
-                else {
-                    // Clear and destroy table and show notification that import is happening
-                    bundle.adminDatastore.datastoreRecordsTable.destroy();
-                    $("table#datastore-records-table").empty()
-                        .append($("<tr>")
-                            .append($("<td>").addClass("alert alert-info")
-                                .append($("<span>").addClass("fa fa-cog fa-spin"))
-                                .append(" Importing records")));
-                    
-                    // Create counters to keep track of when ajax calls complete
-                    var statusCounters = {
-                        totalRows: importData.length,
-                        processedRows: 0,
-                        createdRows: 0,
-                        createErrors: 0,
-                        updatedRows: 0,
-                        updateErrors: 0,
-                        failedRows: new Array()
-                    };
-                    
-                    // Iterate through each row in the imported csv. Delay with set timeout to allow for loader to be rendered.
-                    window.setTimeout(function(){
-                        _.each(importData, function(row){
-                            processSingleDatastoreRecord(row, datastoreSlug, importInput, statusCounters);
-                        });
-                    }, 0);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                importInput.closest("div.datastore-records-table-buttons").notifie({
-                    anchor: "h3",
-                    message: "An error occurred while importing records: " + errorThrown,
-                    exitEvents: "mouseup"
-                });
-            }
-        });
-    }
-    
-    /**
-     * Save a single row of data.
-     * Update the row if Datastore Record ID is passed in, otherwise create a new row.
-     *  
-     * @param row Data to save.
-     * @param datastoreSlug Slug of datastore into which this data should be saved.
-     * @param importInput jQuery instance of file input element.
-     * @param statusCounters Object for keeping track of multiple ajax calls.
-     */
-    function processSingleDatastoreRecord(row, datastoreSlug, importInput, statusCounters){
-        // Variable to store Record ID if doing an update
-        var datastoreRecordID = false;
-        // If Datastore Record ID property exists, save it if it's not empty, and remove from row object
-        if (row.hasOwnProperty("Datastore Record ID")){
-            if (row["Datastore Record ID"] != null && row["Datastore Record ID"].trim().length > 0){
-                datastoreRecordID = row["Datastore Record ID"];
-            }
-            // Delete since we are passing the row as the data to the API and this is not a real field
-            delete row["Datastore Record ID"];
-        }
-        // Remove any empty title rows (which are generated in the export due to the buttons column)
-        if (row.hasOwnProperty("")){
-            delete row[""];
-        }
-        // If Submission ID doesn't exist, create a new record
-        if (!datastoreRecordID){
-            // Create new record
-            $.ajax({
-                method: "POST",
-                url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions",
-                dataType: "json",
-                data: JSON.stringify({values: row}),
-                contentType: "application/json",
-                success: function(data, textStatus, jqXHR){
-                    statusCounters.createdRows++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": "", "ERROR": errorThrown}));
-                    statusCounters.createErrors++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                }
-            });
-        }
-        else {
-            // Update record
-            $.ajax({
-                method: "PUT",
-                url: bundle.apiLocation() + "/submissions/" + datastoreRecordID,
-                dataType: "json",
-                data: JSON.stringify({values: row}),
-                contentType: "application/json",
-                success: function(data, textStatus, jqXHR){
-                    statusCounters.updatedRows++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": datastoreRecordID, "ERROR": errorThrown}));
-                    statusCounters.updateErrors++;
-                    statusCounters.processedRows++;
-                    calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
-                }
-            });
-        }
-    }
-    
-    /**
-     * Check if all ajax calls for import have completed.
-     * If they have, show results.  
-     * 
-     * @param statusCounters
-     * @param importInput
-     * @param datastoreSlug
-     */
-    function calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug){
-        if (statusCounters.processedRows == statusCounters.totalRows){
-            var msg = $("<div>");
-            msg.append($("<div>").append($("<span>", {class: "fa fa-fw"}))
-                    .append(statusCounters.processedRows + " records were processed."));
-            if (statusCounters.createdRows > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
-                        .append(statusCounters.createdRows + " records were created successfully."));
-            }
-            if (statusCounters.createErrors > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-times fa-fw"}))
-                        .append(statusCounters.createErrors + " records failed to save."));
-            }
-            if (statusCounters.updatedRows > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
-                        .append(statusCounters.updatedRows + " records were updated successfully."));
-            }
-            if (statusCounters.updateErrors > 0){
-                msg.append($("<div>", {class: "strong"}).append($("<span>", {class: "fa fa-times fa-fw"}))
-                        .append(statusCounters.updateErrors + " records failed to update."));
-            }
-            if (statusCounters.failedRows.length > 0){
-                var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
-                var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
-                var failures = {
-                    columns: _.map(_.keys(statusCounters.failedRows[0]), function(key){return {title: key, data: key};}),
-                    data: statusCounters.failedRows,
-                    dom: 'B',
-                    buttons: [
-                        {
-                            extend: "csv",
-                            text: "Export CSV of Failed Rows",
-                            className: "btn-sm export-failures",
-                            filename: $("table#datastore-records-table").data("datastore-name") + " Datastore - Failed Import Rows",
-                            exportOptions: {
-                                modifier: {
-                                    search: "none"
-                                }
-                            }
-                        }
-                    ]
-                };
-                var failureTable = table.DataTable(failures);
-                msg.append($("<div>").addClass("pull-right").append(failureTable.buttons().container()));
-            }
-            importInput.closest("div.datastore-records-table-buttons").notifie({
-                severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
-                anchor: "h3",
-                message: msg
-            });
-            loadDatastoreRecords(datastoreSlug);
-        }
-    }
-    
-    /** END *** DATASTORE/STORE PAGE *** HELPER METHODS ******************************************/
-    
+   
     /**********************************************************************************************
      ** START *** DATASTORE/RECORD PAGE *** HELPER METHODS
      ** Loads a specific datastore subform for adding, cloning, or editing records.
@@ -1161,7 +834,7 @@
                 if (q.length > 0){ q += " AND "; }
                 q += "values[" + uniqueConfiguration[i].data + "] = "
                         + (field.value() && field.value().length 
-                                ? "\"" + field.value() + "\"" 
+                                ? "\"" + field.value().replace(/(["\\])/g, "\\$1") + "\"" 
                                 : "null");
             }
             else {
@@ -1173,7 +846,7 @@
         }
         $.ajax({
             mathod: "GET",
-            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions?q=" + q,
+            url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms/" + datastoreSlug + "/submissions?q=" + encodeURIComponent(q),
             dataType: "json",
             contentType: "application/json",
             success: function(result, textStatus, jqXHR){

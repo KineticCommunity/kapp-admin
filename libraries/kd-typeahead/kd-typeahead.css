@@ -1,0 +1,47 @@
+/** KD - Twitter Typeahead CSS Overrides**/
+.twitter-typeahead, .typeahead, .empty-message  {
+    width: 100%;
+    float:left;
+}
+.twitter-typeahead input[type] {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.tt-menu {
+    background: white;
+    width: 100%;
+    border: 1px solid lightgray;
+    max-height: 150px;
+    overflow-y: auto;
+}
+.tt-suggestion {
+    overflow: hidden;
+    display: table;
+    width: 100%;
+    padding: 10px 10px;
+    border-bottom: 1px solid #e9ecf2;
+    position: relative;
+    padding: 8px;
+}
+.tt-details {
+    min-height: 60px;
+    padding-left: 60px;
+}
+.tt-suggestion:hover,
+.tt-suggestion.is-active {
+    color: #fff;
+    background: #0088CC;
+    cursor: pointer;
+    border-color: #f5f8fa;
+}
+.tt-attribute {
+    font-weight: 700;
+    display: inline-block;
+}
+.empty-message {
+    position: relative;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+}

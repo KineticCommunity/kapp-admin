@@ -1,16 +1,12 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
 <c:set var="i18nKapp" value="${space.getKapp(text.escape(param.slug))}" scope="request" />
-<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
-<c:set var="i18nKappUrl" value="${i18nBaseUrl}&slug=${text.escape(param.slug)}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}" scope="request" />
+<c:set var="i18nKappUrl" value="${i18nBaseUrl}?slug=${text.escape(param.slug)}" scope="request" />
 <c:set var="i18nApiUrl" value="${bundle.spaceLocation}/app/apis/translations/v1/kapps/${i18nKapp.slug}" scope="request" />
 
-<!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
+<!-- Show page content only if selected Kapp exists. -->
 <c:choose>
-    <c:when test="${empty currentKapp}">
-        <script>window.location.replace("${bundle.kappLocation}");</script>
-    </c:when>
     <c:when test="${empty i18nKapp}">
         <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
@@ -62,25 +58,9 @@
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/translations/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
-
-            <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
-            <c:choose>
-                <c:when test="${pendingChanges.size() > 0}">
-                    <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
-                        <span class="fa fa-lg fa-cloud-upload"></span>
-                        <span>There are ${pendingChanges.size()}<span class="plus-placeholder"></span> translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info hide">
-                        <span class="fa fa-lg fa-cloud-upload"></span>
-                        <span>Your newly added translations are waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
-                    </a>
-                </c:otherwise>
-            </c:choose>
-            
-            <ol class="breadcrumb">
+            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+            <bundle:variable name="breadcrumb">
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/kapp">${text.escape(i18nKapp.name)}</a></li>
                 <c:if test="${contextAndLocaleBreadCrumb}">
@@ -100,7 +80,25 @@
                     <li><a href="${i18nKappUrl}&page=translations/locale${localeUrlParam}">${text.escape(param.locale)}</a></li>
                 </c:if>
                 <li class="active">Add</li>                
-            </ol>
+            </bundle:variable>
+            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+
+            <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
+            
+            <c:choose>
+                <c:when test="${pendingChanges.size() > 0}">
+                    <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info">
+                        <span class="fa fa-lg fa-cloud-upload"></span>
+                        <span>There are ${pendingChanges.size()}<span class="plus-placeholder"></span> translations waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${i18nKappUrl}&page=translations/publish" class="pending-publish btn btn-info hide">
+                        <span class="fa fa-lg fa-cloud-upload"></span>
+                        <span>Your newly added translations are waiting to be published in the ${text.escape(i18nKapp.name)} Kapp.</span>
+                    </a>
+                </c:otherwise>
+            </c:choose>
             
             <div class="page-header">
                 <div class="row">
@@ -115,14 +113,14 @@
                     <div class="col-xs-12">
                         <c:if test="${(contextBreadCrumb || contextAndLocaleBreadCrumb)
                                       && translationSnapshot.getUnexpectedContextNames(i18nKapp).contains(param.context)}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                href="${i18nKappUrl}&page=translations/unexpectedContext">
                                 Unexpected Context
                             </a>
                         </c:if>
                         <c:if test="${(localeBreadCrumb || contextAndLocaleBreadCrumb)
                                       && translationSnapshot.getUnexpectedLocaleCodes().contains(param.locale)}">
-                            <a class="btn btn-xs btn-warning" 
+                            <a class="btn btn-xs btn-warning m-t-1" 
                                 href="${i18nKappUrl}&page=translations/unexpectedLocale">
                                 Unexpected Locale
                             </a>
@@ -133,7 +131,7 @@
             
             <div class="entries-container">
                 <div class="row add-entry-container bs-callout bs-callout-info">
-                    <div class="col-xs-12">
+                    <div class="col-xs-12 overflow-auto">
                         <table class="table"> 
                             <thead>
                                 <tr>
@@ -217,9 +215,9 @@
                         </div>
                     </div>
                 </div>
-
+                <br />
                 <div class="row new-entries-container">
-                    <div class="col-xs-12">
+                    <div class="col-xs-12 overflow-auto">
                         <table class="table table-hover table-striped" 
                                data-table-name="Translation Entries"
                                data-add-entries-table data-context="${param.context}"
@@ -237,12 +235,39 @@
                     </div>
                 </div>
             </div>
-
-            <c:import url="${bundle.path}/partials/translations/translationEditor.jsp" charEncoding="UTF-8"/>
             
             <br />  
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>
+                    To create new translation entries, fill out the fields on the left and click the 
+                    <b class="nowrap"><span class="fa fa-check"></span> Save Translation Entry</b> button. 
+                </p>
+                <p>The <b>Translation Entries</b> table will show any new translations you have added.</p>
+                <p>
+                    To edit a translation you added, click the edit <span class="fa fa-pencil"></span> button. 
+                    This will populate the data into the fields on the left for you to modify and save again.
+                </p>
+                <p>To delete  a translation you added, click the delete <span class="fa fa-times"></span> button.</p>
+                <hr class="border-color-white" />
+                <p>
+                    <span class="fa fa-info-circle"></span> Reloading this page will empty the Translation Entries table. 
+                    However, the entries have all been saved at this point and will appear on their respective context and locale pages.
+                </p>
+                <p><b>
+                    <span class="fa fa-info-circle"></span> After translations are added, they will need to 
+                    be published before they are available within the application. 
+                    A publish <span class="fa fa-cloud-upload"></span> banner will appear at the top of the page 
+                    to notify you when translations are waiting to be published.
+                </b></p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         

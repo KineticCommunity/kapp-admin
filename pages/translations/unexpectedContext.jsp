@@ -1,16 +1,12 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="currentKapp" value="${space.getKapp(text.escape(param.kapp))}" scope="request" />
 <c:set var="i18nKapp" value="${space.getKapp(text.escape(param.slug))}" scope="request" />
-<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}?kapp=${text.escape(param.kapp)}" scope="request" />
-<c:set var="i18nKappUrl" value="${i18nBaseUrl}&slug=${text.escape(param.slug)}" scope="request" />
+<c:set var="i18nBaseUrl" value="${bundle.kappLocation}/${form.slug}" scope="request" />
+<c:set var="i18nKappUrl" value="${i18nBaseUrl}?slug=${text.escape(param.slug)}" scope="request" />
 <c:set var="i18nApiUrl" value="${bundle.spaceLocation}/app/apis/translations/v1/kapps/${i18nKapp.slug}" scope="request" />
 
-<!-- Show page content only if Kapp exists. Otherwise redirect to valid page. -->
+<!-- Show page content only if selected Kapp exists. -->
 <c:choose>
-    <c:when test="${empty currentKapp}">
-        <script>window.location.replace("${bundle.kappLocation}");</script>
-    </c:when>
     <c:when test="${empty i18nKapp}">
         <script>window.location.replace("${i18nBaseUrl}");</script>
     </c:when>
@@ -25,14 +21,16 @@
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/translations/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
-
-            <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
-            <ol class="breadcrumb">
+            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+            <bundle:variable name="breadcrumb">
                 <li><a href="${i18nBaseUrl}">Translations</a></li>
                 <li><a href="${i18nKappUrl}&page=translations/kapp">${text.escape(i18nKapp.name)}</a></li>
                 <li class="active">Unexpected Contexts</li>
-            </ol>
+            </bundle:variable>
+            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+
+            <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
                 <div class="row">
@@ -46,16 +44,7 @@
             </div>
                                     
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="bs-callout bs-callout-info">
-                        An <b>Unexpected Context</b> occurs when there are 
-                        translation entries with contexts the system is not 
-                        expecting. This can occur if a form slug is changed, 
-                        a form with translations is deleted, or invalid data is 
-                        imported.
-                    </div>
-                </div>
-                <div class="col-xs-12">
+                <div class="col-xs-12 overflow-auto">
                     <table class="table table-hover table-striped" data-table-dom
                            data-empty-message="No unexpected contexts."> 
                         <thead>
@@ -89,6 +78,23 @@
             <br />
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+            <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+            <bundle:variable name="aside">
+                <h3>${form.name}</h3>
+                <h4>${i18nKapp.name}</h4>
+                <hr class="border-color-white" />
+                <p>
+                    An <b>Unexpected Context</b> occurs when there are translation entries with contexts the system is not expecting. 
+                    This can occur if a form slug is changed, a form with translations is deleted, or invalid data is imported.
+                </p>
+                <p>
+                    To rename an unexpected context, click the <b class="nowrap"><span class="fa fa-pencil-square-o"></span> Rename Context</b> button 
+                    and complete the dialog. All translations in the unexpected context will be moved to the new context and merged with any 
+                    existing translations in that context.
+                </p>
+            </bundle:variable>
+            <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
         </bundle:layout>
         
