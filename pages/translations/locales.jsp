@@ -58,9 +58,9 @@
                            data-empty-message="No enabled locales found. Please enable locales using the dropdown below.">
                         <thead>
                             <tr>
-                                <th style="width:45%;">Name</th>
+                                <th style="width:50%;">Name</th>
                                 <th style="width:45%;">Code</th>
-                                <th data-orderable="false" style="width:10%;"></th>
+                                <th data-orderable="false" style="width:5%;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,11 +92,11 @@
                                         </c:if>
                                     </td>
                                     <td>
-                                        <button class="btn btn-xs btn-danger disable-locale-btn"><span class="fa fa-times"></span></button>
                                         <c:if test="${defaultLocaleCode ne localeCode}">
                                             <div class="dropdown more-actions pull-right">
                                                 <span data-toggle="dropdown" class="fa fa-chevron-down"></span>
                                                 <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                                                    <li><a class="disable-locale-btn">Disable Locale</a></li>
                                                     <li><a class="default-locale-btn">Make Default</a></li>
                                                 </ul>
                                             </div>
@@ -111,14 +111,14 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td style="width:45%;">
+                                <td style="width:50%;">
                                     <select class="form-control input-sm enable-locale">
                                         <c:forEach var="localeCode" items="${AdminHelper.sortLocaleCodesByName(translationSnapshot.disabledLocaleCodes)}">
                                             <option value="${localeCode}">${TranslationLocale.get(localeCode).name}</option>
                                         </c:forEach>
                                     </select>
                                 </td>
-                                <td style="width:40%;" class="locale-code-cell"></td>
+                                <td style="width:35%;" class="locale-code-cell"></td>
                                 <td style="width:15%;" class="text-right">
                                     <button class="btn btn-sm btn-success enable-locale-btn" type="button" disabled>
                                         <span class="fa fa-plus"></span>

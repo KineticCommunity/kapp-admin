@@ -76,6 +76,8 @@ sorted to the top):
 #### I18nHelper Summary
 `new I18nHelper(HttpServletRequest request)`  
 `new I18nHelper(HttpServletRequest request, Locale defaultLocale)`  
+`getEnabledLocales()`  
+`getEnabledLocales(Kapp kapp)`  
 `getLocale()`  
 `getLocaleCode(Locale locale)`  
 `getLocaleNameGlobalized(Locale locale)`  

@@ -50,7 +50,7 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <a class="btn btn-xs btn-warning" 
-                                                   href="{i18nBaseUrl}&page=translations/locales&slug=${kapp.slug}">
+                                                   href="${i18nBaseUrl}&page=translations/locales&slug=${kapp.slug}">
                                                     <span class="fa fa-exclamation-triangle fa-fw"></span> Not Set
                                                 </a>
                                             </c:otherwise>

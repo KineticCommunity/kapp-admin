@@ -115,10 +115,12 @@
         }
         
         public static List<LinkedHashMap> getDatastoreColumns(Form datastore, String configurationAttributeName){
-            LinkedHashMap<String, Field> fields = new LinkedHashMap<>();
+            LinkedHashMap<String, Element> fieldElements = new LinkedHashMap<>();
             for (Page page : datastore.getPages()){
-                for (Field field : page.getFields()){
-                    fields.put(field.getName(), field);
+                for (Element element : page.getElements()){
+                    if (Element.Types.FIELD.equals(element.getType())){
+                        fieldElements.put(element.getName(), element);
+                    }
                 }
             }
             
@@ -130,19 +132,26 @@
             
             List<LinkedHashMap> columns = new ArrayList<>();
             for (LinkedHashMap config : configuration){
-                if (fields.containsKey(config.get("data"))){
-                    fields.remove(config.get("data"));
+                // If field is defined in the config attribute
+                if (fieldElements.containsKey(config.get("data"))){
+                    // Add type of filed to the config object
+                    config.put("renderType", fieldElements.get(config.get("data")).getRenderType());
+                    // Remove the field from the list
+                    fieldElements.remove(config.get("data"));
+                    // Add config object to columns list
                     columns.add(config);
                 }
             }
-            for (Field field : fields.values()){
+            // For all fields not in the config attribute, add them to columns list
+            for (Element element : fieldElements.values()){
                 LinkedHashMap<String, Object> newColumn = new LinkedHashMap<>();
-                newColumn.put("data", field.getName());
-                newColumn.put("title", field.getName());
+                newColumn.put("data", element.getName());
+                newColumn.put("title", element.getName());
+                newColumn.put("renderType", element.getRenderType());
                 newColumn.put("visible", true);
                 newColumn.put("searchable", true);
                 newColumn.put("orderable", true);
-                //newColumn.put("unique", false);
+                newColumn.put("unique", false);
                 columns.add(newColumn);
             }
             return columns;

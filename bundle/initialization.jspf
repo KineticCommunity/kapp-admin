@@ -27,6 +27,7 @@
     Bundle bundle = (Bundle)request.getAttribute("bundle"); 
     Space space = (Space)request.getAttribute("space");
     Kapp kapp = (Kapp)request.getAttribute("kapp");
+    Form form = (Form)request.getAttribute("form");
     Identity identity = (Identity)request.getAttribute("identity");
 %>
 
