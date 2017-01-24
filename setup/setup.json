@@ -1440,6 +1440,28 @@
                     "name": "Admins"
                 }
             ]
+        },
+        {
+            "name": "System Management",
+            "anonymous": false,
+            "description": "Allows for management of Space Attributes.",
+            "pages": [
+                {
+                  "advanceCondition": null,
+                  "displayCondition": null,
+                  "displayPage": "pages/system-management/console.jsp",
+                  "elements": [],
+                  "events": [],
+                  "name": "System Management",
+                  "renderType": "submittable",
+                  "type": "page"
+                }
+            ],
+            "securityPolicies": [],
+            "slug": "system-management",
+            "status": "Active",
+            "submissionLabelExpression": "${form('name')} ${form('slug')}",
+            "type": "Console"
         }
     ]
 }
