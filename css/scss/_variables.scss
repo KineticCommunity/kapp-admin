@@ -1,12 +1,12 @@
 // Colors
 // --------------------------------------
 
-$primary: #99C24D;
+$primary: #313E47;
 $primary-complement: #FFFFFF;
-$secondary: #048BA8;
+$secondary: #6F7E82;
 $secondary-complement: #FFFFFF;
-$tertiary: #F18F01;
-$tertiary-complement: #FFFFFF;
+$tertiary: #1594C4;
+$tertiary-complement: #ffffff;
 $lightestgray: #F1F1F1;
 $lightgray: #BBC0C2;
 $gray: #8A9699;
@@ -30,7 +30,7 @@ $subheader-text-color: $white !default; // Text color for <nav data-subnav>
 // If average RGB value of $color is <= 128, tint will lighten $color by $percentage (or if $percentage is negative, darken $color by abs($percentage))
 @function tint($color, $percentage){
     @return if(
-        (red($color) + green($color) + blue($color)) / 3 > 128, 
+        (red($color) + green($color) + blue($color)) / 3 > 128,
         if($percentage > 0, darken($color, abs($percentage)), lighten($color, abs($percentage))),
         if($percentage > 0, lighten($color, abs($percentage)), darken($color, abs($percentage)))
     );
