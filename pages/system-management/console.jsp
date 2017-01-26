@@ -20,7 +20,12 @@
     
     <div class="page-header">
         <h3>
-            ${text.escape(form.name)}
+            <span>${form.name}</span>
+            <div class="pull-right">
+                <button class="btn btn-small btn-success pull-right update-system-btn">
+                    Update System
+                </button>
+            </div>
         </h3>
     </div>
     
@@ -74,13 +79,10 @@
                     <!-- Build up Background Image Attributes-->
                     <c:forEach items="${spaceAttributeDefinitions}" var="attribute">
                         <c:if test="${fn:containsIgnoreCase(attribute.name, 'Background Image')}">
-                            <!-- Build up Color Attributes-->
                             <div class="m-b-2">
                                 <label class="control-label">${i18n.translate(attribute.name)}</label>
                                 <span id="helpBlock-${attribute.name}" class="help-block">${space.getSpaceAttributeDefinition(attribute.name).description}</span>
-                                <label class="btn btn-default btn-file">
-                                    Browse <input name="${attribute.name}" aria-describedby="helpBlock-${attribute.name}" value="${space.getAttributeValue(attribute.name)}" type="file" class="hidden">
-                                </label>
+                                <input name="${attribute.name}" aria-describedby="helpBlock-${attribute.name}" class="form-control" value="${space.getAttributeValue(attribute.name)}" >
                             </div>
                         </c:if>
                     </c:forEach>
@@ -148,13 +150,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 text-right">
-            <button class="btn btn-success update-system-btn" type="button">${i18n.translate('Update System')}</button>
-            <a class="btn btn-link" type="button" href="${bundle.kappLocation}/${form.slug}">${i18n.translate('Cancel')}</a>
-        </div>
-    </div>
-
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
     
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
@@ -162,8 +157,8 @@
         <h3>${form.name}</h3>
         <p>${form.description}</p>
         <hr class="border-color-white" />
-        <p>To create a new robot, click the <b class="nowrap"><span class="fa fa-plus"></span> Create Robot</b> button.</p>
-        <p>To manage a robot and its schedules or view its executions, click the edit <b><span class="fa fa-pencil"></span></b> button.</p>
+        <p>Theming options drive overall look and feel of the system. Primary and Secondary colors should be HEX values (ex #000000). The Background Image should be either an internet accessable url to an image, or the path to an image in your environments web bundle.</p>
+        <p>Workflow Options at the System Level will typically be overridden by Options (attributes) set within a specific form or Kapp.</p>
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     

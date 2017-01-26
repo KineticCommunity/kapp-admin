@@ -1462,6 +1462,28 @@
             "status": "Active",
             "submissionLabelExpression": "${form('name')} ${form('slug')}",
             "type": "Console"
+        },
+        {
+            "name": "Form Management",
+            "anonymous": false,
+            "description": "Console for managing forms within the system.",
+            "pages": [
+                {
+                  "advanceCondition": null,
+                  "displayCondition": null,
+                  "displayPage": "pages/form-management/console.jsp",
+                  "elements": [],
+                  "events": [],
+                  "name": "Form Management",
+                  "renderType": "submittable",
+                  "type": "page"
+                }
+            ],
+            "securityPolicies": [],
+            "slug": "form-management",
+            "status": "Active",
+            "submissionLabelExpression": "${form('name')} ${form('slug')}",
+            "type": "Console"
         }
     ]
 }
