@@ -27,7 +27,6 @@
     Kapp kapp = (Kapp)request.getAttribute("kapp");
     Form form = (Form)request.getAttribute("form");
     Identity identity = (Identity)request.getAttribute("identity");
-    Filestore filestore = (Filestore)request.getAttribute("filestore");
 %>
 
 <%-- Create paths for headers and footers which can be shared. --%>
@@ -109,42 +108,4 @@
 <%@include file="SubmissionHelper.jspf"%>
 <%
     request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
-%>
-
-<%-- FilehubHelper --%>
-<%@include file="FilehubHelper.jspf"%>
-<%
-    // Declare the filehubHelper, which is referenced in the router.jspf file
-    FilehubHelper filehubHelper = null;
-    // If the request is scoped to a specific Kapp (space display pages are not)
-    if (kapp != null && kapp.hasAttribute("Filehub Url")) {
-        // Initialize the filehub helper
-        filehubHelper = new FilehubHelper(kapp.getAttributeValue("Filehub Url"));
-
-        // Initialize the "Example" filestore
-        if (kapp.hasAttribute("Example Filestore Slug")) {
-            filehubHelper.addFilestore(
-                kapp.getAttributeValue("Example Filestore Slug"),
-                kapp.getAttributeValue("Example Filestore Key"),
-                kapp.getAttributeValue("Example Filestore Secret"),
-                new FilehubHelper.Authorizer() {
-                    @Override public boolean canAccess(HttpServletRequest request) {
-                        return true;
-                    }
-                },
-                new FilehubHelper.PathBuilder() {
-                    @Override public String buildPath(HttpServletRequest request) {
-                        //return request.getParameter("path");
-                        String path = request.getParameter("form")+
-                            "/"+request.getParameter("entry")+
-                            "/"+request.getParameter("field");
-                        if (request.getParameter("filename") != null) {
-                            path += "/"+request.getParameter("filename");
-                        }
-                        return path;
-                    }
-                }
-            );
-        }
-    }
 %>

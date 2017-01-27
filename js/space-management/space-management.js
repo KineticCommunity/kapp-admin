@@ -19,7 +19,7 @@
     var adminProfiles = bundle.adminProfiles;
     
     // Private namesapce for system management
-    var formManagement = new Object();
+    var systemManagement = new Object();
     _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
 
     /*----------------------------------------------------------------------------------------------

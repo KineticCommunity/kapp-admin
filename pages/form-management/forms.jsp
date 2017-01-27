@@ -41,8 +41,8 @@
             </div>
             
             <div class="row">
-                <div class="col-xs-12">
-                    <table class="table table-hover table-striped" 
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-sm table-hover table-striped" 
                            data-table-dom data-table-name="Forms"> 
                         <thead>
                             <tr>
@@ -52,7 +52,7 @@
                                 <th>Approval Form</th>
                                 <th>Task SLA</th>
                                 <th>Task Form</th>
-                                <th>Task Assignee Group</th>
+                                <th>Task Assignee Team</th>
                                 <th>Task Assignee Id</th>
                             </tr>
                         </thead>
@@ -81,10 +81,8 @@
                 <h3>${form.name}</h3>
                 <h4>${currentKapp.name}</h4>
                 <hr class="border-color-white" />
-                <p>To add a new root category, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Category</b> button.</p>
-                <p>To update a category, select a category by clicking on it.</p>
-                <p>To add a subcategory to a selected category, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Subcategory</b> button.</p>
-                <p>You can drag categories to sort them and reorganize the hierarchy.</p>
+                <p>This is a listing of all forms in the <b class="nowrap">${currentKapp.name} </b> Kapp.</p>
+                <p>To update a form's attributes click the link to the form in the first column.</p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             

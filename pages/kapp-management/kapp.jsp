@@ -3,9 +3,9 @@
 
 <!-- Set Varibles Needed To Build DOM Elements -->
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
-<c:set var="currentObj" value="${space.getKapp(param.kapp).getForm(param.form)}" scope="request"/>
+<c:set var="currentObj" value="${space.getKapp(param.kapp)}" scope="request"/>
 <c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
-<c:set var="attributeDefinitions" value="${currentKapp.formAttributeDefinitions}" scope="request"/>
+<c:set var="attributeDefinitions" value="${currentKapp.kappAttributeDefinitions}" scope="request"/>
 
 <!-- Show page content only if selected Kapp exists. -->
 <c:choose>
@@ -17,13 +17,12 @@
         <bundle:layout page="${bundle.path}/layouts/layout.jsp">
             <!-- Imports js and css specific to this console. -->
             <bundle:variable name="head">
-                <c:import url="${bundle.path}/partials/form-management/head.jsp" charEncoding="UTF-8"/>
+                <c:import url="${bundle.path}/partials/kapp-management/head.jsp" charEncoding="UTF-8"/>
             </bundle:variable>
             
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
             <bundle:variable name="breadcrumb">
                 <li><a href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
-                <li><a href="${bundle.kappLocation}/${form.slug}/?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
                 <li class="active">${text.escape(currentObj.name)}</li>
             </bundle:variable>
             <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
@@ -37,8 +36,8 @@
                             <span>${text.escape(currentKapp.name)}</span>
                             <small>${text.escape(currentObj.name)}</small>
                             <div class="pull-right">
-                                <button data-objecttype="Form" data-ajaxpath="/kapps/${currentKapp.slug}/forms/${currentObj.slug}" class="btn btn-small btn-success pull-right update-object-btn">
-                                    Update Form
+                                <button data-objecttype="Form" data-ajaxpath="/kapps/${currentKapp.slug}" class="btn btn-small btn-success pull-right update-object-btn">
+                                    Update Kapp
                                 </button>
                             </div>
                         </h3>
@@ -132,12 +131,7 @@
                     Here you can find modify different properties for this form including Workflow Options, Categorizations and the forms Description.
                 </p>
                 <p>
-                    They system was designed to be hierarchical so that properties configured at the form level (this level) override properties set at the Kapp and Space level. Properties configured here will be used within the workflow rules and will ignore settings configured at the Kapp and Space level. If routing rules are not configured here, rules set at the Kapp or Space level will be used.
-                <p>
-                    You can modify the fields on this form by opening the 
-                    <a target="_blank" data-toggle="tooltip" data-placement="bottom" title="Modify this form" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentObj.slug}/builder">
-                        <i class="fa fa-cog" aria-hidden="true"></i>Form Builder
-                    </a>
+                    They system was designed to be hierarchical so that properties configured at the kapp level (this level) override properties set at the Space level. Properties configured here will be used within the workflow rules and will ignore settings configured at the Space level. If routing rules are not configured here, rules set at the Space level will be used.
                 </p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->

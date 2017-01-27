@@ -5,7 +5,7 @@
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
-        <c:import url="${bundle.path}/partials/form-management/head.jsp" charEncoding="UTF-8"/>
+        <c:import url="${bundle.path}/partials/kapp-management/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
     
     <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
@@ -32,7 +32,7 @@
                 <tbody>
                     <c:forEach var="kapp" items="${space.kapps}">
                         <tr>
-                            <td><a href="${i18nBaseUrl}?page=form-management/forms&kapp=${kapp.slug}">${text.escape(kapp.name)}</a></td>
+                            <td><a href="${i18nBaseUrl}?page=kapp-management/kapp&kapp=${kapp.slug}">${text.escape(kapp.name)}</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -47,7 +47,7 @@
         <h3>${form.name}</h3>
         <p>${form.description}</p>
         <hr class="border-color-white" />
-        <p>To manage a Kapp's forms, click the name of the Kapp.</p>
+        <p>To manage a Kapp's attributes, click the name of the Kapp.</p>
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     
