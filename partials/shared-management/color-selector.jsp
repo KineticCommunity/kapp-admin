@@ -3,7 +3,7 @@
 
 <div class="attribute m-b-2">
     <label class="control-label">${i18n.translate(thisAttribute.name)}</label>
-    <span id="helpBlock-${thisAttribute.name}" class="help-block">${currentObj.getSpaceAttributeDefinition(thisAttribute.name).description}</span>
+    <span id="helpBlock-${thisAttribute.name}" class="help-block">${thisAttribute.description}</span>
     <div class="input-group colorpicker-component">
         <input aria-describedby="helpBlock-${thisAttribute.name}" type="text" name="${thisAttribute.name}" class="attributeValue form-control" value="${currentObj.getAttributeValue(thisAttribute.name)}" placeholder="This should be a HEX value">
         <span class="input-group-addon"><i></i></span>

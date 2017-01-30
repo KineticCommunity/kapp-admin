@@ -65,6 +65,21 @@
                         <div class="panel-heading">${i18n.translate('Display Options')}</div>
                         <div class="panel-body">
 
+                            <!-- Build up Requested For Selector-->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Request For Others')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/request-for-others-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+
+                            <!-- Build up Description Input-->
+                            <div class="formDescription m-b-2">
+                                <label class="control-label">${i18n.translate("Form Description")}</label>
+                                <span id="helpBlock-formDescription" class="help-block">${i18n.translate("The Form Description helps users find the form they're looking for.")}</span>
+                                <textarea aria-describedby="helpBlock-formDescription" type="text" name="${currentObj.description}" class="form-control" value="${currentObj.description}">${currentObj.description}</textarea>
+                            </div>
+
                             <!-- Build up Icon Selector-->
                             <c:forEach items="${attributeDefinitions}" var="attribute">
                                 <c:if test="${fn:containsIgnoreCase(attribute.name, 'Icon')}">
@@ -95,6 +110,14 @@
                                 <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Group')}">
                                     <c:set scope="request" var="thisAttribute" value="${attribute}"/>
                                     <c:import url="${bundle.path}/partials/shared-management/team-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+
+                            <!-- Build up Team Assignee Id Selector -->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Id')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/team-assignee-selector.jsp" charEncoding="UTF-8" />
                                 </c:if>
                             </c:forEach>
 

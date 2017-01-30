@@ -2,8 +2,8 @@
 <%@include file="../../bundle/initialization.jspf" %>
 
 <div class="attribute m-b-2">
-    <label class="control-label">Default ${i18n.translate(fn:substringBefore(thisAttribute.name, 'Slug'))} Name</label>
-    <span id="helpBlock-${thisAttribute.name}" class="help-block">${currentKapp.getFormAttributeDefinition(thisAttribute.name).description}</span>
+    <label class="control-label">${i18n.translate(fn:substringBefore(thisAttribute.name, 'Slug'))} Name</label>
+    <span id="helpBlock-${thisAttribute.name}" class="help-block">${thisAttribute.description}</span>
     <select name="${thisAttribute.name}" class="attributeValue form-control" value="${currentObj.getAttributeValue(thisAttribute.name)}">
         <option/>
         <c:forEach items="${space.getKapp(space.getAttributeValue('Queue Kapp Slug')).forms}" var="form">

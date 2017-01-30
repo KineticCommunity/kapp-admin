@@ -10,6 +10,26 @@
             ]
         }
     ],
+    "kappAttributeDefinitions": [
+        {
+            "name": "Icon",
+            "allowsMultiple": false,
+            "required": false,
+            "description": "Font Awesome Icon representing this Kapp in portal pages.",
+            "values": [
+                "fa-gear"
+            ]
+        },
+        {
+            "name": "Kapp Description",
+            "allowsMultiple": false,
+            "required": false,
+            "description": "Description of what users do within this Kapp.",
+            "values": [
+                "The Admin Console allows System Admins to configure and manage different functions of the system."
+            ]
+        }
+    ],
     "formAttributeDefinitions": [
         {
             "name": "Datastore Configuration",

@@ -107,7 +107,7 @@
 
                             <!-- Build up Form Selector -->
                             <c:forEach items="${attributeDefinitions}" var="attribute">
-                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Form Slug')}">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Task Form Slug') || fn:containsIgnoreCase(attribute.name, 'Approval Form Slug')}">
                                     <c:set scope="request" var="thisAttribute" value="${attribute}"/>
                                     <c:import url="${bundle.path}/partials/shared-management/form-selector.jsp" charEncoding="UTF-8" />
                                 </c:if>

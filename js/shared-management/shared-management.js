@@ -18,6 +18,11 @@
         if($('.attribute input[name="Approver"]').length > 0){
             sharedManagement.buildApprovalDOM();
         }
+
+        // Bind Team Assignee events
+        if($('.attribute input[name="Task Assignee Group"]').length > 0){
+            //sharedManagement.buildTaskAssigneeDOM();
+        }
         
 
      });
@@ -63,15 +68,16 @@
             attributes[name] = [value];
         });
 
-        // Add the Attributes to the Space Object 
+        // Add the Attributes to the Space Object if they have a value
         object.attributes = $.map(attributes, function(value, key){
-            return {name: key, values: value};
+            if (!_.isEmpty(value[0])) return {name: key, values: value};  
         });
 
         // Handle Additional Form Properties like Description and Categories
         if(type === "Form"){
-            var categories = new Object();
-            var description = ""
+            //var categories = new Object();
+            var description = $('.formDescription textarea').val();
+            object['description'] = description;
         }
 
         // Update the Space
@@ -108,6 +114,47 @@
                 });
             }
         });
+    }
+
+    sharedManagement.buildTaskAssigneeDOM = function(){
+        // Build Variables to hold Team and Assignee Elements
+        var taskTeamElement = $('.attribute select[name="Task Assignee Group"]');
+        var taskAssigneeElement = $('#teamAssigneeId');
+
+        // If a team is selected on page load, get its members and  
+        // build / show the Assignee Selector
+        if (!_.isEmpty(taskTeamElement.val())) {
+            var options = getMembershipOptions(taskTeamElement.val());
+            taskAssigneeElement.closest('select').html(options).parent().show();
+        }
+
+        // Bind Listner to the Team selector and bind change function to get members
+        taskTeamElement.change(function(){
+            var teamName = $(this).val();
+            var options = getMembershipOptions(teamName);
+            taskAssigneeElement.closest('select').html(options).parent().show();
+        });
+
+        // Function that gets team members and returns <options> Elements.
+        function getMembershipOptions(teamName){
+            var options = $('');
+            // GET team members
+            $.ajax({
+                method: "get",
+                url: encodeURI(bundle.apiLocation() + "/teams/" + teamName),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    // data.members.each(function(i,v){
+                    //     options.append('<option value=""></option>')
+                    // });
+                    // return options;
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    console.log("error getting team memberships");
+                }
+            });
+        }
     }
 
     // Function for Building up the Approval Options for the Approver Attribute

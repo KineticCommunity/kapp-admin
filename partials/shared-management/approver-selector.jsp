@@ -3,7 +3,7 @@
 
 <div class="attribute m-b-2">
     <label class="control-label">${i18n.translate(thisAttribute.name)}</label>
-    <span id="helpBlock-${thisAttribute.name}" class="help-block">${currentKapp.getFormAttributeDefinition(thisAttribute.name).description}</span>   
+    <span id="helpBlock-${thisAttribute.name}" class="help-block">${thisAttribute.description}</span>   
     <input name="${thisAttribute.name}" style="display:none;" class="attributeValue form-control" value="${currentObj.getAttributeValue(thisAttribute.name)}">
 
     <!-- Build Up Radio Button's to Drive Approval Type -->
