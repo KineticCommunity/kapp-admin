@@ -107,15 +107,15 @@
 
                             <!-- Build up Team Selector -->
                             <c:forEach items="${attributeDefinitions}" var="attribute">
-                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Group')}">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Team')}">
                                     <c:set scope="request" var="thisAttribute" value="${attribute}"/>
                                     <c:import url="${bundle.path}/partials/shared-management/team-selector.jsp" charEncoding="UTF-8" />
                                 </c:if>
                             </c:forEach>
 
-                            <!-- Build up Team Assignee Id Selector -->
+                            <!-- Build up Team Assignee Individual Selector -->
                             <c:forEach items="${attributeDefinitions}" var="attribute">
-                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Id')}">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Individual')}">
                                     <c:set scope="request" var="thisAttribute" value="${attribute}"/>
                                     <c:import url="${bundle.path}/partials/shared-management/team-assignee-selector.jsp" charEncoding="UTF-8" />
                                 </c:if>

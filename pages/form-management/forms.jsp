@@ -53,7 +53,7 @@
                                 <th>Task SLA</th>
                                 <th>Task Form</th>
                                 <th>Task Assignee Team</th>
-                                <th>Task Assignee Id</th>
+                                <th>Task Assignee Individual</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,8 +65,8 @@
                                     <td>${form.getAttributeValue('Approval Form Slug')}</td>
                                     <td>${form.getAttributeValue('Task Days Due')}</td>
                                     <td>${form.getAttributeValue('Task Form')}</td>
-                                    <td>${form.getAttributeValue('Task Assignee Group')}</td>
-                                    <td>${form.getAttributeValue('Task Assignee Id')}</td>
+                                    <td>${form.getAttributeValue('Task Assignee Team')}</td>
+                                    <td>${form.getAttributeValue('Task Assignee Individual')}</td>
                                 </tr>
                             </c:forEach>
                         </tbody>

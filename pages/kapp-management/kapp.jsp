@@ -91,7 +91,7 @@
 
                             <!-- Build up Team Selector -->
                             <c:forEach items="${attributeDefinitions}" var="attribute">
-                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Group')}">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Team')}">
                                     <c:set scope="request" var="thisAttribute" value="${attribute}"/>
                                     <c:import url="${bundle.path}/partials/shared-management/team-selector.jsp" charEncoding="UTF-8" />
                                 </c:if>

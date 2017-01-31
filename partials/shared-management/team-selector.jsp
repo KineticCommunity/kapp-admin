@@ -6,12 +6,12 @@
     <span id="helpBlock-${thisAttribute.name}" class="help-block">${thisAttribute.description}</span>
     <select name="${thisAttribute.name}" class="attributeValue form-control" value="${currentObj.getAttributeValue(thisAttribute.name)}">
         <option/>
-        <c:forEach items="${groupList}" var="group">
+        <c:forEach items="${space.teams}" var="team">
             <c:set var="selected" value=""/>
-            <c:if test="${group.name eq currentObj.getAttributeValue(thisAttribute.name)}">
+            <c:if test="${team.name eq currentObj.getAttributeValue(thisAttribute.name)}">
                 <c:set var="selected" value="selected"/>
             </c:if>
-            <option ${selected} value="${group.name}">${group.name}</option>
+            <option ${selected} value="${team.name}">${team.name}</option>
         </c:forEach>
     </select>
 </div>

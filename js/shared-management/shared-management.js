@@ -20,8 +20,8 @@
         }
 
         // Bind Team Assignee events
-        if($('.attribute input[name="Task Assignee Group"]').length > 0){
-            //sharedManagement.buildTaskAssigneeDOM();
+        if($('.attribute input[name="Task Assignee Team"]').length > 0){
+            sharedManagement.buildTaskAssigneeDOM();
         }
         
 
@@ -118,40 +118,61 @@
 
     sharedManagement.buildTaskAssigneeDOM = function(){
         // Build Variables to hold Team and Assignee Elements
-        var taskTeamElement = $('.attribute select[name="Task Assignee Group"]');
-        var taskAssigneeElement = $('#teamAssigneeId');
+        var taskTeamElement = $('.attribute select[name="Task Assignee Team"]');
+        var taskAssigneeElement = $('#teamAssigneeId select');
 
         // If a team is selected on page load, get its members and  
         // build / show the Assignee Selector
         if (!_.isEmpty(taskTeamElement.val())) {
-            var options = getMembershipOptions(taskTeamElement.val());
-            taskAssigneeElement.closest('select').html(options).parent().show();
+            getMembershipOptions(taskTeamElement.val());
         }
 
         // Bind Listner to the Team selector and bind change function to get members
         taskTeamElement.change(function(){
             var teamName = $(this).val();
-            var options = getMembershipOptions(teamName);
-            taskAssigneeElement.closest('select').html(options).parent().show();
+            taskAssigneeElement.parent().hide();
+            getMembershipOptions(teamName);
         });
 
         // Function that gets team members and returns <options> Elements.
         function getMembershipOptions(teamName){
-            var options = $('');
+            // Remove Current Options
+            taskAssigneeElement.find('option').remove();
             // GET team members
             $.ajax({
                 method: "get",
-                url: encodeURI(bundle.apiLocation() + "/teams/" + teamName),
+                url: encodeURI(bundle.apiLocation() + "/teams"),
                 dataType: "json",
                 contentType: "application/json",
                 success: function(data){
-                    // data.members.each(function(i,v){
-                    //     options.append('<option value=""></option>')
-                    // });
-                    // return options;
+                    teamObj = _.find(data.teams, function(team) {
+                        return team.name === teamName; 
+                    })
+
+                    if(!_.isEmpty(teamObj)){
+                        $.ajax({
+                            method: "get",
+                            url: encodeURI(bundle.apiLocation() + "/teams/" + teamObj.slug + "?include=memberships.user.details"),
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function(data){
+                                var memberships = data.team.memberships;
+                                if(!_.isEmpty(memberships)){
+                                    taskAssigneeElement.append($('<option/>'));
+                                    $.each(memberships,function(){
+                                        taskAssigneeElement.append($('<option/>').val(this.user.username).text(this.user.displayName))
+                                    });
+                                    taskAssigneeElement.parent().show();
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown){
+                                console.log("error getting team memberships");
+                            }
+                        });
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    console.log("error getting team memberships");
+                    console.log("error getting team while finding memberships");
                 }
             });
         }

@@ -31,12 +31,12 @@
             <span class="help-block">Select a Team to send Approvals to</span>
             <select class="approvalSelector form-control">
                 <option/>
-                <c:forEach items="${groupList}" var="group">
+                <c:forEach items="${space.teams}" var="team">
                     <c:set var="selected" value=""/>
-                    <c:if test="${group.name eq currentObj.getAttributeValue(thisAttribute.name)}">
+                    <c:if test="${team.name eq currentObj.getAttributeValue(thisAttribute.name)}">
                         <c:set var="selected" value="selected"/>
                     </c:if>
-                    <option ${selected} value="${group.name}">${group.name}</option>
+                    <option ${selected} value="${team.name}">${team.name}</option>
                 </c:forEach>
             </select>
         </div>
