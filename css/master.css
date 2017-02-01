@@ -71,10 +71,10 @@ body > div.view-port > div.container > div.row > div.tab-content > div.row.aside
 /* Links
  *-------------------------------------- */
 a {
-  color: #6F7E82;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none; }
   a:hover, a:focus {
-    color: #97a3a6;
+    color: rgba(217, 217, 217, 0.8);
     text-decoration: underline; }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -370,9 +370,9 @@ button, input[type='submit'], input[type='button'], .btn, section.page form butt
 .btn-link {
   background-color: transparent;
   border-color: transparent;
-  color: #6F7E82; }
+  color: rgba(255, 255, 255, 0.8); }
   .btn-link:hover {
-    color: #97a3a6; }
+    color: rgba(217, 217, 217, 0.8); }
 
 .btn-default {
   background-color: #00427e;
@@ -511,7 +511,7 @@ footer {
 nav#bundle-header {
   margin-bottom: 0;
   background-color: #ffffff;
-  color: #333333;
+  color: rgba(255, 255, 255, 0.5);
   border: none; }
   nav#bundle-header ul.dropdown-menu > li.sublink > a {
     padding-left: 3.5rem;
@@ -658,7 +658,7 @@ nav#bundle-subheader {
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 nav.navbar.navbar-default {
   background-color: #ffffff;
-  color: #333333;
+  color: rgba(255, 255, 255, 0.5);
   border: none; }
 
 nav.navbar.navbar-default[data-subnav] {
