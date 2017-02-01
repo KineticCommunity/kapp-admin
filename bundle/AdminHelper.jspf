@@ -316,5 +316,28 @@
             }
             return fieldElements;
         }
+
+         /*-----------------------------------------------------------------------------------------
+         * SYSTEM MANAGEMENT CONSOLE HELPER FUNCTIONS
+         *----------------------------------------------------------------------------------------*/
+        
+        /**
+         * Sorts the given list of locale codes by the name of the locale and returns a list of codes
+         */
+        public List<LinkedHashMap> getRegisteredImages(){
+            Map<String, String[]> parameters = buildQueryParameters();
+            PaginatedList<Submission> registeredImageSubmissions = submissionComponent.searchByForm(adminKapp.getForm("registered-images"), parameters);
+
+            List<LinkedHashMap> images = new ArrayList<>();
+
+            for (Submission imageSubmission : registeredImageSubmissions){
+                LinkedHashMap image = new LinkedHashMap();
+                image.put("name", imageSubmission.getValue("Image Name"));
+                image.put("url", imageSubmission.getValue("Image URL"));
+                images.add(image);
+            }
+            
+            return images;
+        }
     }
 %>
