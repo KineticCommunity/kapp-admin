@@ -77,7 +77,7 @@
                     <c:forEach items="${attributeDefinitions}" var="attribute">
                         <c:if test="${fn:containsIgnoreCase(attribute.name, 'Background Image')}">
                             <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/shared-management/plaintext-input.jsp" charEncoding="UTF-8" />
+                            <c:import url="${bundle.path}/partials/shared-management/background-selector.jsp" charEncoding="UTF-8" />
                         </c:if>
                     </c:forEach>
                 </div>
