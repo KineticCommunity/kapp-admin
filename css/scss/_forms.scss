@@ -2,106 +2,267 @@
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-input[type='text'], input[type='password'], textarea, select, span.input-group-addon, .form-control {
-  @include border-radius();
-  padding: 0.4rem 1rem;
-  border: 0.1rem solid rgba($black, 0.2);
-  outline: none;
+input[type='text'], input[type='password'], textarea, select {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  background: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(207, 207, 207);
+  border-image: initial;
+  outline: 0px;
+  padding: 0.2rem 0.8rem;
+  @include border-radius(3px);
   &:focus {
     border-color: $gray;
   }
 }
 
-input[type='text'], input[type='password'], select, span.input-group-addon, .form-control {    
-  height: 2.8rem;
+input[type='text'], input[type='password'], select {
+  line-height: 2.4rem;
 }
 
-section.page form, .form-style {
-  margin-left: 0;
-  padding: 2.4rem;
-  font-weight: 400;
-  overflow: hidden;
-  background: $white;
-  overflow: visible;
-  
-  input[type='text'], input[type='password'], textarea, select {    
-    width: 100%;
+input:disabled, select:disabled,
+textarea:disabled, checkbox:disabled,
+radio:disabled {
+  color: $text-color !important;
+}
+    
+input[readonly], 
+input.form-control[readonly], 
+select[readonly], 
+select.form-control[readonly], 
+textarea[readonly], 
+textarea.form-control[readonly], 
+div.form-control {
+  border-color: rgb(223, 223, 223);
+  background-color: rgb(248, 248, 248);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  cursor: default;
+}
+
+.input-group-addon {
+  border-color: rgb(207, 207, 207);
+}
+
+.form-group.required label:after {
+  content: '*';
+  color: red;
+}
+.form-group:after {
+  content:" ";
+  display:block;
+  clear:both;
+}
+
+label {
+  color: $darkgray;
+  @include font-size(1.4rem);
+  font-weight: 600;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  small {
+    font-weight: normal;
+    font-style: italic;
   }
-  
-  /* Required asterisk after label */
-  .checkbox.required label:first-child:after,
-  .radio.required label:first-child:after,
-  .form-group.required label:after,
-  label.required-field:after{
-    content: '*';
-    color: red;
-  }
-  
+}
+input[type=radio] + label,
+input[type=checkbox] + label {
+  display: inline-block;
+}
+label.field-label {
+  padding: 0;
+  width: 100%;
+}
+.radio label, .checkbox label {
+  margin-bottom: 0;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+.radio label:first-child:not(.field-label),
+.checkbox label:first-child:not(.field-label) {
+  margin-right: 2rem;
+  margin-left: 1rem;
+}
+
+.section-container{
+  border-bottom: 1px solid $primary-complement;
+  padding-bottom: 2rem;
+}
+
+/* Requested For search display
+ *-------------------------------------- */
+.requested-for-display-name {
   label {
-    /* Make the label a block */
-    color: rgba($black, 0.75);
-    display: block;
-    @include font-size(1.4rem);
-    font-weight: 600;
-  }
-  
-  .radio label:first-child,
-  .checkbox label:first-child {
+    color: $primary;
     padding-left: 0;
   }
-  
-  button {
-    @extend .btn;
+  span.fa.fa-edit {
+    cursor: pointer;
   }
-  
-  /* Attachment files
-   *-------------------------------------- */
-  .file-table {
-    display: table;
-    margin: 0px;
-    padding: 0px;
-    
-    .file-header {
-      display: table-header-group;
-      span {
-        background-color: $lightestgray;
-      }
+  .display-info {
+    padding: 0;
+  }
+}
+
+.tt-menu {
+  background-color: $white;
+  padding: .5rem;
+  border: 1px solid $lightestgray;
+  .fa.pull-left {
+    margin: 0;
+  }
+}
+.tt-input {
+  min-height: 3rem;
+  border: 1px solid $lightgray;
+  width: 35rem;
+}
+
+/* Section Page > Form
+ *-------------------------------------- */
+section.page {
+  form {
+    margin-left: 0;
+    font-weight: 400;
+    overflow: hidden;
+    padding: 1rem 1rem 2rem 1rem;
+    background-color: $white;
+    @include border-radius(6px);
+    h1{
+      padding:0 0 1rem;
     }
-    
-    .file-container {
-      display: table-row-group;
+    .section-container{
+      display: block;
+      margin-bottom: 2rem;
     }
-  
-    .file-row {
-      display: table-row;
-      > span {
-        list-style:none;
-        display: table-cell;
-        border: 1px solid #000;
-        padding: 0.3rem 1.2rem;
-        &:not(:first-child) {
-          border-left: none;
+
+    .radio label:not(.field-label), .checkbox label:not(.field-label) {
+      margin-right: 1rem;
+      margin-left: .1rem;
+    }
+    button {
+      @extend .btn;
+
+      &[data-button-type='previous-page']{
+        position: relative;
+        padding-left: 2.4rem;
+        background-color: $gray;
+        color: black;
+        &:hover {
+          background-color: tint($gray, 10%);
         }
       }
-      &:not(:first-child) > span {
-        border-top: none;
+      &[data-button-type='previous-page']:before {
+        font-family: 'FontAwesome';
+        font-weight: 400;
+        content: '\f053';
+        position: absolute;
+        top: 50%;
+        left: 0.8rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1;
+        margin-top: -0.7rem;
+      }
+
+      &[data-button-type='save']{
+        position: relative;
+        padding-left: 2.8rem;
+        background-color: tint($lightgray, -10%);
+        color: black;
+        &:hover {
+          background-color: $lightgray;
+        }
+      }
+      &[data-button-type='save']:before {
+        font-family: 'FontAwesome';
+        font-weight: 400;
+        content: '\f0c7';
+        position: absolute;
+        top: 50%;
+        left: 1.2rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1;
+        margin-top: -0.7rem;
+      }
+
+      &[data-button-type='custom']{
+        background-color: $white;
+        border-color: $lightgray;
+        color: black;
+        &:hover {
+          background-color: tint($white, 5%);
+        }
+      }
+    }
+
+    /* Attachment files
+     *-------------------------------------- */
+    .attachment {
+      background-color: $white;
+      @include border-radius(6px);
+      padding: .5rem 1rem;
+      width: 70%;
+      clear: both;
+      label {
+        margin-bottom: .5rem;
+        border: none;
+        &:after {
+          font-family: 'FontAwesome';
+          content:"\f093;";
+          display:block;
+          clear:both;
+        }
+      }
+      label:after {
+        content:" ";
+        display:block;
+        clear:both;
+      }
+    }
+    .file-table {
+      display: table;
+      margin: 0px;
+      padding: 0px;
+
+      .file-header {
+        display: table-header-group;
+        color: $darkgray;
+      }
+      .file-row {
+        display: table-row;
+        > span {
+          display: table-cell;
+          padding: .5rem;
+          > a {
+            padding: 0 .5rem;
+          }
+        }
+      }
+      .file-container {
+        display: table-row-group;
       }
     }
   }
 }
 
-div.embedded-form section.page form {
-  padding: 0 0 2rem 0;
-}
+/* Media Queries
+ *-------------------------------------- */
 
-@media (max-width : 768px) { 
+@media (max-width: 991px) {
+  label.field-label {
+    width: 100%;
+  }
   section.page {
     form {
-      textarea {
+      .attachment {
         width: 100%;
-      }
-      select, input[type="text"], input[type="password"] {
-        max-width: 100%;
       }
     }
   }

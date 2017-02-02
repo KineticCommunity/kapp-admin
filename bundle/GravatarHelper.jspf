@@ -1,0 +1,47 @@
+<%@page import="com.kineticdata.bundles.Text"%>
+<%@page import="java.security.MessageDigest"%>
+<%@page import="java.util.Formatter" %>
+<%! 
+    public static class GravatarHelper {
+    
+        private HttpServletRequest request;
+        private Identity identity;
+        
+        public GravatarHelper(HttpServletRequest request) {
+            this.request = request;
+            this.identity = (Identity)request.getAttribute("identity");
+        }
+        
+        public String get() {
+            return this.get(null);
+        }
+        
+        public String get(String size) {
+            return get(this.identity.getEmail(), size);
+        }
+
+        public String get(String email, String size) {
+            int imgSize = 0;
+            try {imgSize = Integer.parseInt(size);} catch(NumberFormatException e){}
+            String emailHash = "00000000000000000000000000000000";
+            try {
+                if (Text.isNotBlank(email)){
+                    emailHash = javax.xml.bind.DatatypeConverter.printHexBinary(
+                            MessageDigest.getInstance("MD5").digest(
+                                    email.toLowerCase().trim().getBytes("UTF-8"))
+                            ).trim().toLowerCase();
+                }
+            }
+            catch (Exception e){}
+            
+            return "<img class=\"gravatarimg" + (imgSize > 0 ? imgSize : "") +"\""
+                    + " width=\"" + imgSize + "px\""
+                    + " height=\"" + imgSize + "px\""                    
+                    + " src=\"https://www.gravatar.com/avatar/"
+                    + emailHash 
+                    + "?s=" 
+                    + (imgSize > 0 ? imgSize*2 : "") 
+                    + "&d=mm\" alt=\"\">";
+        }
+    }
+%>

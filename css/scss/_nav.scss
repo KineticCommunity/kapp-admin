@@ -2,25 +2,110 @@
  *   Navs
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+nav#bundle-subheader{
+  margin-bottom: 0;
+  background-color: $subheader-color;
+  color: $subheader-text-color;
+  border: none;
+  border-bottom: 1px solid #e5e5e5;
+  border-radius: 0;
+  min-height: 4rem;
+  
+  @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
+  
+  ol.breadcrumb {
+    margin-bottom: 0;
+    padding: 1rem 1rem 1rem 0;
+    background-color: transparent;
+    
+    li {
+        color: fade-out($subheader-text-color, 0.25);
+        position: relative;
+        
+        h4 {
+          margin: 0;
+        }
+    }
+  }
+  
+  div.additional-menu ul:not(.dropdown-menu) {
+    position: relative;
+    margin-bottom: 0;
+    padding: 1rem 0 1rem 2rem;
+  }
+  
+  ul.dropdown-menu > li {
+    @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
+  }
+}
+
+/* Media Queries
+ *-------------------------------------- */
+
+@media (max-width : 768px) { 
+  nav#bundle-subheader{
+    li a {
+      background: transparent;
+    }
+
+    div#sub-header {
+      position: absolute;
+      z-index: 2000;
+      width: 100%;
+      background-color: rgba($black, 0.85);
+    }
+    div#sub-header ul li{
+      display: inline-block;
+      float: left;
+
+    }
+    div#sub-header ul li.active a{
+      background: transparent;
+    }
+    div#sub-header ul li a{
+      color: $white;
+    }
+    
+    div.breadcrumbs {
+      display: inline-block;
+    }
+    
+    div.additional-menu {
+      float: right;
+      
+      > ul:not(.dropdown-menu) {
+        padding: 10px 0 10px 5px;
+      }
+    }
+    
+    ol.breadcrumb {
+      padding: 10px 5px 10px 0;
+    }
+  }
+}
+
+/* Nav Tabs Elements
+ *-------------------------------------- */
+.nav-tabs {
+  li a {
+    color: $gray;
+  }
+  li.active a,
+  li.active > a:hover,
+  li.active > a:focus, {
+    background-color: transparent;
+    color: $tertiary;
+    border: none;
+    font-weight: bold;
+    border-bottom: 2px solid $tertiary;
+  }
+}
+
 /* Nav Pills Elements
  *-------------------------------------- */
-.nav-pills {
-  border-bottom: 2px solid $tertiary;
-}
-.nav-pills > li > span.title {
-  position: relative;
-  display: block;
-  border-radius: 0;
-  color: $primary;
-  opacity: 0.7;
-  font-size: 85%;
-  text-transform: uppercase;
-  font-weight: bold;
-  padding: .5rem 1rem;
-}
 .nav-pills > li > a {
   border-radius: 0;
-  color: $text-color;
+  color: $black;
   padding: 1rem 1.6rem;
 }
 
@@ -28,12 +113,19 @@
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: $tertiary-complement;
-  background-color: $tertiary;
-  border: none;
+  color: $primary;
+  background-color: transparent;
+  border-color: transparent;
+  border-bottom: 0.4rem solid $primary;
 }
 .nav-pills > li > a:hover {
-  color: $tertiary;
-  background-color: $lightestgray;
-  border: none;
+  color: rgb(66, 139, 202);
+  background-color: transparent;
+  border-color: transparent;
+  border-bottom: 0.4rem solid rgba($primary, 0.5);
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: transparent;
 }

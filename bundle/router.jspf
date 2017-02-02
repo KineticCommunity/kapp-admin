@@ -2,6 +2,7 @@
 <%
     // If the request is scoped to a specific Kapp (space display pages are not)
     if (kapp != null) {
+        SetupHelper setupHelper = (SetupHelper)request.getAttribute("SetupHelper");
         // If kapp is not configured, there are missing required attributes, or setup parameter is present
         if (setupHelper.routeToSetup() != null) {
             // Declare the delegate jsp variable
@@ -45,7 +46,7 @@
             "request. This is potentially due to recursively importing or including a routed "+
             "kapp page.");
     }
-    
+
     // Determine the delegate jsp
     String delegateJsp = null;
     // If the call is to render a page
@@ -107,16 +108,4 @@
         // Return so that no further JSP processing occurs
         return;
     }  
-%>
-
-<%-- REROUTE SPACE HOME TO CATALOG KAPP --%>
-<%
-    // If the request is for the space page 
-    if (kapp == null) {
-        // Redirect to the catalog
-        String catalogSlug = Text.defaultIfBlank(space.getAttributeValue("Catalog Kapp Slug"), "catalog");
-        response.sendRedirect(bundle.getSpaceLocation()+"/"+catalogSlug);
-        // Return so that no further JSP processing occurs
-        return;
-    }
 %>

@@ -31,81 +31,112 @@
 
 <%-- Create paths for headers and footers which can be shared. --%>
 <%  
-    String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
+    if (request.getAttribute("headerBundlePath") == null || request.getAttribute("headerPath") == null || request.getAttribute("headerLocation") == null) {
+        String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
 
-    String headerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
-    if (kapp != null && kapp.hasAttribute("Header Bundle Path")){
-        headerBundlePath = kapp.getAttributeValue("Header Bundle Path");
+        String headerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
+        if (kapp != null && kapp.hasAttribute("Header Bundle Path")){
+            headerBundlePath = kapp.getAttributeValue("Header Bundle Path");
+        }
+        else if (space.hasAttribute("Header Bundle Path")){
+            headerBundlePath = space.getAttributeValue("Header Bundle Path");
+        }
+        request.setAttribute("headerBundlePath", headerBundlePath);
+        request.setAttribute("headerPath", space.getBundleBase() + "/" + headerBundlePath);
+        request.setAttribute("headerLocation", contextPath + space.getBundleBase() + "/" + headerBundlePath);
     }
-    else if (space.hasAttribute("Header Bundle Path")){
-        headerBundlePath = space.getAttributeValue("Header Bundle Path");
+
+    if (request.getAttribute("footerBundlePath") == null || request.getAttribute("footerPath") == null || request.getAttribute("footerLocation") == null) {
+        String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
+        String footerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
+        if (kapp != null && kapp.hasAttribute("Footer Bundle Path")){
+            footerBundlePath = kapp.getAttributeValue("Footer Bundle Path");
+        }
+        else if (space.hasAttribute("Footer Bundle Path")){
+            footerBundlePath = space.getAttributeValue("Footer Bundle Path");
+        }
+        request.setAttribute("footerBundlePath", footerBundlePath);
+        request.setAttribute("footerPath", space.getBundleBase() + "/" + footerBundlePath);
+        request.setAttribute("footerLocation", contextPath + space.getBundleBase() + "/" + footerBundlePath);
     }
-    request.setAttribute("headerBundlePath", headerBundlePath);
-    request.setAttribute("headerPath", space.getBundleBase() + "/" + headerBundlePath);
-    request.setAttribute("headerLocation", contextPath + space.getBundleBase() + "/" + headerBundlePath);
-    
-    String footerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
-    if (kapp != null && kapp.hasAttribute("Footer Bundle Path")){
-        footerBundlePath = kapp.getAttributeValue("Footer Bundle Path");
-    }
-    else if (space.hasAttribute("Footer Bundle Path")){
-        footerBundlePath = space.getAttributeValue("Footer Bundle Path");
-    }
-    request.setAttribute("footerBundlePath", footerBundlePath);
-    request.setAttribute("footerPath", space.getBundleBase() + "/" + footerBundlePath);
-    request.setAttribute("footerLocation", contextPath + space.getBundleBase() + "/" + footerBundlePath);
 %>
 
 <%-- Load helper(s) --%>
 <%
-    request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
-    request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
-    request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
+    if (request.getAttribute("json") == null) {
+        request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
+    }
+    if (request.getAttribute("text") == null) {
+        request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
+    }
+    if (request.getAttribute("time") == null) {
+        request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
+    }
 %>
 
 <%-- I18nHelper --%>
 <%@include file="I18nHelper.jspf"%>
 <%
-    I18nHelper i18nHelper = new I18nHelper(request);
-    request.setAttribute("i18n", i18nHelper);
-    request.setAttribute("locale", i18nHelper.getLocale());
-    request.setAttribute("zoneId", i18nHelper.getZoneId());
+    if (request.getAttribute("zoneId") == null || request.getAttribute("i18n") == null || request.getAttribute("locale") == null) {
+        I18nHelper i18nHelper = new I18nHelper(request);
+        request.setAttribute("i18n", i18nHelper);
+        request.setAttribute("locale", i18nHelper.getLocale());
+        request.setAttribute("zoneId", i18nHelper.getZoneId());
+    }
 %>
 
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%
-    SetupHelper setupHelper = new SetupHelper(request);
-    request.setAttribute("SetupHelper", setupHelper);
+    if (request.getAttribute("SetupHelper") == null) {
+        request.setAttribute("SetupHelper", new SetupHelper(request));
+    }
 %>
 
 <%-- AdminHelper --%>
 <%@include file="AdminHelper.jspf"%>
 <%
-    AdminHelper adminHelper = new AdminHelper(request);
-    request.setAttribute("AdminHelper", adminHelper);
+    if (request.getAttribute("AdminHelper") == null) {
+        request.setAttribute("AdminHelper", new AdminHelper(request));
+    }
 %>
 
 <%-- CategoryHelper --%>
 <%@include file="CategoryHelper.jspf"%>
 <%
-    request.setAttribute("CategoryHelper", new CategoryHelper());
+    if (request.getAttribute("CategoryHelper") == null) {
+        request.setAttribute("CategoryHelper", new CategoryHelper());
+    }
 %>
 
 <%-- GroupHelper --%>
 <%@include file="GroupHelper.jspf"%>
 <%
-    request.setAttribute("GroupHelper", new GroupHelper(request, space));
+    if (request.getAttribute("GroupHelper") == null) {
+        request.setAttribute("GroupHelper", new GroupHelper(request, space));
+    }
 %>
 
 <%-- SearchHelper --%>
 <%@include file="SearchHelper.jspf"%>
 <%
-    request.setAttribute("SearchHelper", new SearchHelper());
+    if (request.getAttribute("SearchHelper") == null) {
+        request.setAttribute("SearchHelper", new SearchHelper());
+    }
 %>
 
 <%-- SubmissionHelper --%>
 <%@include file="SubmissionHelper.jspf"%>
 <%
-    request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
+    if (request.getAttribute("SubmissionHelper") == null) {
+        request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
+    }
+%>
+
+<%-- GravatarHelper --%>
+<%@include file="GravatarHelper.jspf"%>
+<%
+    if (request.getAttribute("GravatarHelper") == null) {
+        request.setAttribute("GravatarHelper", new GravatarHelper(request));
+    }
 %>

@@ -37,7 +37,7 @@ body > div.view-port > div.container {
       > div.aside {
         @include font-size-line-height($font-size-base*0.9, $line-height-base*0.9);
         border-left: 6px solid $secondary;
-        background-color: subtle($secondary, 94%);
+        background-color: $subheader-color;
         
         > div.aside-toggle {
           cursor: pointer;
@@ -49,7 +49,7 @@ body > div.view-port > div.container {
           }
           &:before {
             content: "\f111";
-            color: $subheader-color;
+            color: $secondary;
             font-size: 21px;
           }
           &:after {

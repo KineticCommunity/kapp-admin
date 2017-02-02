@@ -10,6 +10,28 @@ button, input[type='submit'], input[type='button'], .btn  {
   transition: all 0.15s ease-out;
 }
 
+button[data-button-type=submit-page] {
+    float: right;
+}
+
+.btn {
+  display: inline-block;
+  line-height: 1.8rem;
+  border-radius: .3rem;
+  color: $white;
+  cursor: pointer;
+  &:hover, &:focus, &:active {
+    text-decoration: none;
+  }
+}
+
+.btn[disabled] {
+  background-color: $gray;
+  border-color: darken($gray, 10%);
+  color: $lightgray; 
+  pointer-events: none;
+}
+
 .btn-round {
   height: 5rem;
   width: 5rem;
@@ -26,7 +48,7 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: darken($primary, 10%);
   color: $primary-complement;
   
-  &:hover {
+  &:hover, &:focus, &:active {
     background-color: tint($primary, 10%);
     border-color: darken(tint($primary, 10%), 10%);
     color: $primary-complement;
@@ -40,7 +62,7 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: darken($primary-complement, 10%);
   color: $primary;
   
-  &:hover {
+  &:hover, &:focus, &:active {
     background-color: tint($primary-complement, 10%);
     border-color: darken(tint($primary-complement, 10%), 10%);
     color: $primary;
@@ -54,7 +76,7 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: darken($secondary, 10%);
   color: $secondary-complement;
   
-  &:hover {
+  &:hover, &:focus, &:active {
     background-color: tint($secondary, 10%);
     border-color: darken(tint($secondary, 10%), 10%);
     color: $secondary-complement;
@@ -68,7 +90,7 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: darken($secondary-complement, 10%);
   color: $secondary;
   
-  &:hover {
+  &:hover, &:focus, &:active {
     background-color: tint($secondary-complement, 10%);
     border-color: darken(tint($secondary-complement, 10%), 10%);
     color: $secondary;
@@ -79,12 +101,12 @@ button, input[type='submit'], input[type='button'], .btn  {
   @extend .btn;
   
   background-color: $tertiary;
-  border-color: darken($tertiary, 5%);
+  border-color: darken($tertiary, 10%);
   color: $tertiary-complement;
   
-  &:hover {
-    background-color: tint($tertiary, 5%);
-    border-color: darken(tint($tertiary, 5%), 5%);
+  &:hover, &:focus, &:active {
+    background-color: tint($tertiary, 10%);
+    border-color: darken(tint($tertiary, 10%), 10%);
     color: $tertiary-complement;
   }
 }
@@ -96,7 +118,7 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: darken($tertiary-complement, 10%);
   color: $tertiary;
   
-  &:hover {
+  &:hover, &:focus, &:active {
     background-color: tint($tertiary-complement, 10%);
     border-color: darken(tint($tertiary-complement, 10%), 10%);
     color: $tertiary;
@@ -110,21 +132,30 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: transparent;
   color: $link-color;
   
-  &:hover {
-    color: tint($link-color, 15%);
+  &:hover, &:focus, &:active {
+    color: tint($link-color, 10%);
   }
+  
+  &.danger {
+    color: #ca332d;
+    
+    &:hover, &:focus, &:active {
+      color: tint(#ca332d, 10%);
+    }
+  }
+  
 }
 
 .btn-default {
   @extend .btn;
   
-  background-color: #00427e;
-  border-color: darken(#00427e, 10%);
+  background-color: #E16B1E;
+  border-color: darken(#E16B1E, 10%);
   color: $white;
   
-  &:hover {
-    background-color: tint(#00427e, 5%);
-    border-color: darken(tint(#00427e, 5%), 10%);
+  &:hover, &:focus, &:active {
+    background-color: tint(#E16B1E, 5%);
+    border-color: darken(tint(#E16B1E, 5%), 10%);
     color: $white;
   }
 }
@@ -136,9 +167,14 @@ button, input[type='submit'], input[type='button'], .btn  {
   border-color: darken(#E9E9E9, 10%);
   color: $black;
   
-  &:hover {
+  &:hover, &:focus, &:active {
     background-color: tint(#E9E9E9, 5%);
     border-color: darken(tint(#E9E9E9, 5%), 10%);
     color: $black;
   }
+}
+
+.input-group-addon:not(:first-child):not(:last-child) {
+  border-right: 0;
+  border-left: 0;
 }

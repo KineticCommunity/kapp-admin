@@ -12,50 +12,53 @@
 /* Modal Content */
 .kd-modal-content {
   position: relative;
-  background-color: subtle($primary, 95%);
+  background-color: #fefefe;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 20px;
   padding: 0;
-  border: 1px solid subtle($primary, 75%);
+  border: 1px solid darken($tertiary, 10%);
+  max-width: 1000px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  overflow: hidden;  
 }
 
 /* Modal Header */
 .kd-modal-header {
-  padding: 2px 16px;
-  color: $primary;
-
-  h4 {
-    text-transform: none;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    border-bottom: 1px solid subtle($primary, 75%);
-  }
+  padding: 1.5rem 1rem 1rem;
+  background-color: $tertiary;
+  color: white;
+  @include font-size-line-height(3rem, 3rem);
 }
 
 /* Modal Body */
 .kd-modal-body {
-  padding: 8px 16px;
+  padding: 1rem;
+  max-height: 75vh;
+  overflow: auto;
 
   table {
     width: 100%;
     th, td {
       padding: 0.5em;
     }
-    &.table-hover tbody tr:hover {
-      background-color: subtle($primary, 90%);
+    tbody tr {
+      cursor: pointer;
+      &:hover {
+        background-color: lighten($black, 75%);
+      }
     }
   }
 }
 
 /* Modal Footer */
 .kd-modal-footer {
-  padding: 6px 16px;
-  background-color: subtle($primary, 85%);
-  border-top: 1px solid subtle($primary, 75%);
+  padding: 0.5rem 1rem;
+  background-color: $lightestgray;
+  border-top: 1px solid darken($lightestgray, 10%);
+  color: white;
 }
 
-@media (max-width: 767px) {
+@media (max-width : 768px) {
   .kd-modal-content {
     width: 90% !important;
   }

@@ -35,7 +35,7 @@
     }
     
   }
-  > :first-child {
+  > *:first-child {
     @include border-top-radius();
     &:not(.alert) {
       border-top-width: 0.1rem;
@@ -43,7 +43,7 @@
       border-top-color: inherit;
     }
   }
-  > :last-child {
+  > *:last-child {
     @include border-bottom-radius();
     &:not(.alert) {
       border-bottom-width: 0.1rem;
@@ -66,6 +66,22 @@
     p {
       margin: 0;
     }
+    > .card-icon, 
+    > .card-icon-right {
+      height: 100%;
+      float: left;
+      padding: 0 10px 0 0;
+      font-size: 10rem;
+      
+      + .card-title {
+        word-wrap: break-word;
+      }
+    }
+    > .card-icon-right {
+      float: right;
+      padding: 0 0 0 10px;
+    }
+    
     > .card-title {
       @include font-size-line-height(2.4rem, 2.4rem);
       font-weight: bold;
@@ -122,6 +138,10 @@
     > .card-title {
       color: $primary;
       @include anchor($primary, tint($primary, 10%), none, none);
+    }
+    > .card-icon, 
+    > .card-icon-right {
+      color: $primary;
     }
   }
   
@@ -259,6 +279,10 @@ a.card-primary {
       color: $secondary;
       @include anchor($secondary, tint($secondary, 10%), none, none);
     }
+    > .card-icon, 
+    > .card-icon-right {
+      color: $secondary;
+    }
   }
   
   > .card-action {
@@ -395,6 +419,10 @@ a.card-secondary {
       color: $tertiary;
       @include anchor($tertiary, tint($tertiary, 10%), none, none);
     }
+    > .card-icon, 
+    > .card-icon-right {
+      color: $tertiary;
+    }
   }
   
   > .card-action {
@@ -507,6 +535,10 @@ a.card-tertiary {
   @extend .card;
   > .card-content {
     height: 6.5rem;
+    > .card-icon,
+    > .card-icon-right {
+      font-size: 4.3rem;
+    }
   }
 }
 
@@ -514,6 +546,10 @@ a.card-tertiary {
   @extend .card;
   > .card-content {
     height: 10.5rem;
+    > .card-icon,
+    > .card-icon-right {
+      font-size: 8.3rem;
+    }
   }
 }
 
