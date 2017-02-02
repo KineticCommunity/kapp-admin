@@ -41,9 +41,24 @@
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
     
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
-    <bundle:variable name="aside">
-    
-    </bundle:variable>
+    <c:if test="${identity.spaceAdmin}">
+        <bundle:variable name="aside">
+            <h3>Advanced Management</h3>
+            <hr class="border-color-white" />
+            <p>The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.</p>
+            <a target="_blank" href="${bundle.spaceLocation}/app" class="btn btn-block btn-default">
+              <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
+            </a>
+            
+            <hr class="border-color-white" />
+            <p>The <span class="strong">Kinetic Task</span> Management Console is for advanced configuration workflow and automation functions.</p>
+            <a target="_blank" href="${space.getAttributeValue('Task Server Url')}" class="btn btn-block btn-default">
+              <span class="glyphicon glyphicon-cog  pull-left" aria-hidden="true"></span> Kinetic Task
+            </a>
+            <p/>
+            
+        </bundle:variable>
+    </c:if>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     
 </bundle:layout>

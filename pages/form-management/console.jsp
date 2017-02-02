@@ -47,7 +47,23 @@
         <h3>${form.name}</h3>
         <p>${form.description}</p>
         <hr class="border-color-white" />
-        <p>To manage a Kapp's forms, click the name of the Kapp.</p>
+        <h4>
+            Instructions
+        </h4>
+        <p>
+            To manage a Kapp's forms, click the name of the Kapp.
+        </p>
+        <hr class="border-color-white" />
+        <h4>
+            Advanced Management
+        </h4>
+        <p>
+            The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.
+        </p>
+        <a target="_blank" href="${bundle.spaceLocation}/app" class="btn btn-block btn-default">
+            <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
+        </a>
+        <p/>
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     

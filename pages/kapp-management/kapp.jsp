@@ -133,6 +133,16 @@
                 <p>
                     They system was designed to be hierarchical so that properties configured at the kapp level (this level) override properties set at the Space level. Properties configured here will be used within the workflow rules and will ignore settings configured at the Space level. If routing rules are not configured here, rules set at the Space level will be used.
                 </p>
+                <h4>
+                    Advanced Management
+                </h4>
+                <p>
+                    The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.
+                </p>
+                <a target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/activity/overview" class="btn btn-block btn-default">
+                    <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
+                </a>
+                <p/>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             

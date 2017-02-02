@@ -156,12 +156,18 @@
                 </p>
                 <p>
                     They system was designed to be hierarchical so that properties configured at the form level (this level) override properties set at the Kapp and Space level. Properties configured here will be used within the workflow rules and will ignore settings configured at the Kapp and Space level. If routing rules are not configured here, rules set at the Kapp or Space level will be used.
-                <p>
-                    You can modify the fields on this form by opening the 
-                    <a target="_blank" data-toggle="tooltip" data-placement="bottom" title="Modify this form" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentObj.slug}/builder">
-                        <i class="fa fa-cog" aria-hidden="true"></i>Form Builder
-                    </a>
                 </p>
+                <hr class="border-color-white" />
+                <h4>
+                    Form Builder
+                </h4>
+                <p>
+                    You can modify the fields on this form by opening the <span class="strong">Kinetic Request</span> Management Console.
+                </p>
+                <a target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentObj.slug}/builder" class="btn btn-block btn-default">
+                    <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
+                </a>
+                <p/>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             

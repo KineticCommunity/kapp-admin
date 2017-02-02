@@ -4,9 +4,15 @@
             "name": "Admin Kapp Slug",
             "allowsMultiple": false,
             "required": true,
-            "description": "The slug of the Admin Kapp. Used by other Kapps to access the Admin Kapp.",
+            "description": "The slug of the Admin Kapp. Used by other Kapps to access the Admin Kapp."
+        },
+        {
+            "name": "Background Image",
+            "allowsMultiple": false,
+            "required": false,
+            "description": "If set, this image will be used in the Catalog's background as well as in email notifications",
             "values": [
-                "{{kapp.slug}}"
+                "header-bg.jpg"
             ]
         }
     ],

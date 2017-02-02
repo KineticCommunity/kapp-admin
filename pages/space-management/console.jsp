@@ -132,8 +132,23 @@
         <h3>${form.name}</h3>
         <p>${form.description}</p>
         <hr class="border-color-white" />
-        <p>Theming options drive overall look and feel of the system. Primary and Secondary colors should be HEX values (ex #000000). The Background Image should be either an internet accessable url to an image, or the path to an image in your environments web bundle.</p>
-        <p>Workflow Options at the Space Level will typically be overridden by Options (attributes) set within a specific form or Kapp.</p>
+        <p>
+            Theming options drive overall look and feel of the system. Primary and Secondary colors should be HEX values (ex #000000). The Background Image should be either an internet accessable url to an image, or the path to an image in your environments web bundle.
+        </p>
+        <p>
+            Workflow Options at the Space Level will typically be overridden by Options (attributes) set within a specific form or Kapp.
+        </p>
+        <hr class="border-color-white" />
+        <h4>
+            Advanced Management
+        </h4>
+        <p>
+            The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.
+        </p>
+        <a target="_blank" href="${bundle.spaceLocation}/app/#/admin/space/details" class="btn btn-block btn-default">
+            <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
+        </a>
+        <p/>
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     

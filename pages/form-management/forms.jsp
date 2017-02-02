@@ -80,9 +80,17 @@
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
                 <h4>${currentKapp.name}</h4>
-                <hr class="border-color-white" />
                 <p>This is a listing of all forms in the <b class="nowrap">${currentKapp.name} </b> Kapp.</p>
+                <hr class="border-color-white" />
+                <h4>Instructions</h4>
                 <p>To update a form's attributes click the link to the form in the first column.</p>
+                <hr class="border-color-white" />
+                <h4>Advanced Management</h4>
+                <p>The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.</p>
+                <a target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/forms" class="btn btn-block btn-default">
+                    <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
+                </a>
+                <p/>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
