@@ -47,7 +47,7 @@
             <div class="hidden">
                 <c:forEach items="${attributeDefinitions}" var="attribute">
                     <div class="attribute">
-                        <input class="attributeValue" name="${attribute.name}" value="${space.getAttributeValue(attribute.name)}">
+                        <input class="attributeValue" name="${attribute.name}" value="${fn:escapeXml(space.getAttributeValue(attribute.name))}">
                     </div>
                 </c:forEach>
             </div>
