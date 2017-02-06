@@ -1,0 +1,30 @@
+  .nav-pills.sub-nav>li.active>a, .nav-pills.sub-nav>li.active>a:focus, .nav-pills.sub-nav>li.active>a:hover {
+    color: #000;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 4px solid #ffb200;
+  }
+  
+  .nav-pills>li {
+    float: left;
+  }
+
+  .nav>li, .nav>li>a {
+    position: relative;
+    display: block;
+  }
+  
+  .nav-pills.sub-nav>li>a:hover {
+    color: #d95900;
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom: 4px solid #d95900;
+  }
+  
+    .buttons {
+    width: 10%; 
+  }
+  
+  .body {
+    width: 50%;
+  }
