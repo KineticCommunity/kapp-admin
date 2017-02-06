@@ -36,7 +36,7 @@
                             <span>${text.escape(currentKapp.name)}</span>
                             <small>${text.escape(currentObj.name)}</small>
                             <div class="pull-right">
-                                <button data-objecttype="Form" data-ajaxpath="/kapps/${currentKapp.slug}" class="btn btn-small btn-success pull-right update-object-btn">
+                                <button data-objecttype="Form" data-ajaxpath="/kapps/${currentKapp.slug}" class="btn btn-small btn-tertiary pull-right update-object-btn">
                                     Update Kapp
                                 </button>
                             </div>

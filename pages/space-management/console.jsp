@@ -28,7 +28,7 @@
                 <h3>
                     <span>${form.name}</span>
                     <div class="pull-right">
-                        <button data-objecttype="Form" data-ajaxpath="/space" class="btn btn-small btn-success pull-right update-object-btn">
+                        <button data-objecttype="Form" data-ajaxpath="/space" class="btn btn-small btn-tertiary pull-right update-object-btn">
                             Update Space
                         </button>
                     </div>
