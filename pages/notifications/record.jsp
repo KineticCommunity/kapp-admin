@@ -16,7 +16,7 @@
             
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
             <bundle:variable name="breadcrumb">
-                <li><a class="return-to-notifcations" href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
+                <li><a class="return-to-notifcations" href="${bundle.kappLocation}/${form.slug}?type=${param.type}">${form.name}</a></li>
                 <li class="active">${not empty param.id ? 'Edit' : empty param.clone ? 'New' : 'Clone'}</li>
             </bundle:variable>
             <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->

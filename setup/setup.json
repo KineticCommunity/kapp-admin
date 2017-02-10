@@ -1294,11 +1294,13 @@
             {
               "name": "Datastore Configuration",
               "values": [
-                "[{\"data\":\"Name\",\"title\":\"Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":true},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Subject\",\"title\":\"Subject\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"HTML Content\",\"title\":\"HTML Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Text Content\",\"title\":\"Text Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Type\",\"title\":\"Type\",\"visible\":false,\"searchable\":false,\"orderable\":false,\"unique\":false}]"
+                "[{\"data\":\"Name\",\"title\":\"Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":true},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Subject\",\"title\":\"Subject\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"HTML Content\",\"title\":\"HTML Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Text Content\",\"title\":\"Text Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Type\",\"title\":\"Type\",\"visible\":false,\"searchable\":false,\"orderable\":false,\"unique\":false},{\"data\":\"Language\",\"title\":\"Language\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Region\",\"title\":\"Region\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
               ]
             }
           ],
+          
           "description": "Stores the notification message content.",
+          "notes": "",
           "pages": [
             {
               "advanceCondition": "false",
@@ -1360,6 +1362,50 @@
                 },
                 {
                   "type": "field",
+                  "name": "Language",
+                  "label": "Language",
+                  "key": "f15",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": false,
+                  "enabled": true,
+                  "required": false,
+                  "requiredMessage": null,
+                  "omitWhenHidden": false,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "dropdown",
+                  "choicesResourceName": null,
+                  "choicesRunIf": null,
+                  "choices": []
+                },
+                {
+                  "type": "field",
+                  "name": "Region",
+                  "label": "Region",
+                  "key": "f16",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": false,
+                  "enabled": true,
+                  "required": false,
+                  "requiredMessage": null,
+                  "omitWhenHidden": true,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "dropdown",
+                  "choicesResourceName": null,
+                  "choicesRunIf": null,
+                  "choices": []
+                },
+                {
+                  "type": "field",
                   "name": "Subject",
                   "label": "Subject",
                   "key": "f10",
@@ -1413,7 +1459,7 @@
                   "defaultResourceName": null,
                   "visible": true,
                   "enabled": true,
-                  "required": true,
+                  "required": "values('Type') === \"Template\"",
                   "requiredMessage": null,
                   "omitWhenHidden": null,
                   "pattern": null,
@@ -1476,11 +1522,10 @@
                   "name": "Save",
                   "visible": true,
                   "enabled": true,
-                  "renderType": "custom",
+                  "renderType": "submit-page",
                   "renderAttributes": {
-                    "class": "btn btn-success"
-                  },
-                  "events": []
+                    "class": "btn btn-tertiary"
+                  }
                 }
               ],
               "events": [],

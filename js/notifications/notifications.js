@@ -179,6 +179,7 @@
                     updated: adminNote.console.redirectToNotifications,
                     loaded: function(form){
                         adminNote.form.initialize();
+                        adminNote.form.buildLocaleSelector(form);
                         form.page().on('submit', {
                             execute: function(e, actions){
                                 if ($.isEmptyObject(e.constraints) && uniqueConfiguration.length){
@@ -202,6 +203,7 @@
                             container: recordContainer,
                             loaded: function(form){
                                 adminNote.form.initialize();
+                                adminNote.form.buildLocaleSelector(form);
                                 if (form.submission().id() == null){
                                     if (clone.submission.form.name === form.name()){
                                         _.each(clone.submission.values, function(value, key){
@@ -237,6 +239,7 @@
                     created: adminNote.console.redirectToNotifications,
                     loaded: function(form){
                         adminNote.form.initialize();
+                        adminNote.form.buildLocaleSelector(form);
                         form.select('field[Type]').value(type);
                         form.page().on('submit', {
                             execute: function(e, actions){
@@ -596,6 +599,7 @@
             $('#dynamicDropdownMenu').on('click',function() {
                 $('.appearance-alert').fadeOut();
             })
+
         }
         // Reset Flag so that when the subform is submitted and the initialize function is called again
         // replacements are not rebuilt 
@@ -807,6 +811,20 @@
             adminNote.form.insertTextAtCaret(adminNote.form.textElData,$(this).text());
         });
     }
+
+    // Build Locale Selector Dropdown from hidden dom element on Form.jsp
+    adminNote.form.buildLocaleSelector = function(form) {
+        $localOptions = $('div select#temp-locales').children();
+        if ( $(form.select('field[Language]') !== null) ) {
+            $languageSelector = $(form.select('field[Language]').element())
+            currentValue = form.select('field[Language]').value();
+            $languageSelector.html($localOptions)
+            if (K('submission') !== null){
+                $languageSelector.val(K('submission').value("Language"));
+            }
+        }
+    }   
+    
 
     /**
      * Check if duplicate record already exists
