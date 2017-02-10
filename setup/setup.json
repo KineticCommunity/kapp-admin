@@ -1039,7 +1039,7 @@
             "description": "Allows for creation and management of users and their properties and attributes.",
             "slug": "user-management",
             "type": "Console",
-            "status": "Active",
+            "status": "Inactive",
             "anonymous": false,
             "customHeadContent": null,
             "notes": null,
@@ -1133,6 +1133,7 @@
             "type": "Console"
         },
         {
+          "name": "Registered Images",
           "anonymous": false,
           "attributes": [
             {
@@ -1143,7 +1144,6 @@
             }
           ],
           "description": "This datastore stores external image URL's that are commonly used throughout the system. ",
-          "name": "Registered Images",
           "pages": [
             {
               "advanceCondition": "false",
@@ -1254,6 +1254,401 @@
           "slug": "registered-images",
           "status": "Active",
           "submissionLabelExpression": null,
+          "type": "Datastore"
+        },
+        {
+          "name": "Notifications",
+          "anonymous": false,
+          "description": "Console for building and managing notifications sent out by the system.",
+          "pages": [
+            {
+              "advanceCondition": null,
+              "displayCondition": null,
+              "displayPage": "pages/notifications/console.jsp",
+              "elements": [
+                {
+                  "type": "button",
+                  "label": "Submit",
+                  "name": "Submit Button",
+                  "visible": true,
+                  "enabled": true,
+                  "renderType": "submit-page",
+                  "renderAttributes": {}
+                }
+              ],
+              "events": [],
+              "name": "Console Page",
+              "renderType": "submittable",
+              "type": "page"
+            }
+          ],
+          "slug": "notifications",
+          "status": "Active",
+          "submissionLabelExpression": null,
+          "type": "Console"
+        },
+        {
+          "name": "Notification Data",
+          "anonymous": false,
+          "attributes": [
+            {
+              "name": "Datastore Configuration",
+              "values": [
+                "[{\"data\":\"Name\",\"title\":\"Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":true},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Subject\",\"title\":\"Subject\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"HTML Content\",\"title\":\"HTML Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Text Content\",\"title\":\"Text Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Type\",\"title\":\"Type\",\"visible\":false,\"searchable\":false,\"orderable\":false,\"unique\":false}]"
+              ]
+            }
+          ],
+          "description": "Stores the notification message content.",
+          "pages": [
+            {
+              "advanceCondition": "false",
+              "displayCondition": null,
+              "displayPage": "pages/notifications/form.jsp",
+              "elements": [
+                {
+                  "type": "field",
+                  "name": "Name",
+                  "label": "Name",
+                  "key": "f1",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {
+                    "style": "width:100%"
+                  },
+                  "dataType": "string",
+                  "renderType": "text",
+                  "rows": 1,
+                  "omitWhenHidden": null
+                },
+                {
+                  "type": "field",
+                  "name": "Status",
+                  "label": "Status",
+                  "key": "f2",
+                  "defaultValue": "Active",
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "radio",
+                  "choicesResourceName": null,
+                  "choices": [
+                    {
+                      "label": "Active",
+                      "value": "Active"
+                    },
+                    {
+                      "label": "Inactive",
+                      "value": "Inactive"
+                    }
+                  ],
+                  "choicesRunIf": null,
+                  "omitWhenHidden": null
+                },
+                {
+                  "type": "field",
+                  "name": "Subject",
+                  "label": "Subject",
+                  "key": "f10",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": "values('Type') === \"Template\"",
+                  "enabled": true,
+                  "required": "values('Type') === \"Template\"",
+                  "requiredMessage": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {
+                    "style": "width:100%",
+                    "data-allows-replacement": "true"
+                  },
+                  "dataType": "string",
+                  "renderType": "text",
+                  "rows": 2,
+                  "omitWhenHidden": true
+                },
+                {
+                  "type": "field",
+                  "name": "HTML Content",
+                  "label": "HTML Content",
+                  "key": "f11",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {
+                    "style": "width:100%",
+                    "data-allows-replacement": "true"
+                  },
+                  "dataType": "string",
+                  "renderType": "text",
+                  "rows": 10,
+                  "omitWhenHidden": null
+                },
+                {
+                  "type": "field",
+                  "name": "Text Content",
+                  "label": "Text Content",
+                  "key": "f12",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "omitWhenHidden": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {
+                    "style": "width:100%",
+                    "data-allows-replacement": "true"
+                  },
+                  "dataType": "string",
+                  "renderType": "text",
+                  "rows": 10
+                },
+                {
+                  "type": "field",
+                  "name": "Type",
+                  "label": "Type",
+                  "key": "f14",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": false,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "omitWhenHidden": false,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "dropdown",
+                  "choicesResourceName": null,
+                  "choicesRunIf": null,
+                  "choices": [
+                    {
+                      "label": "Snippit",
+                      "value": "Snippit"
+                    },
+                    {
+                      "label": "Template",
+                      "value": "Template"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "label": "Cancel",
+                  "name": "Cancel",
+                  "visible": true,
+                  "enabled": true,
+                  "renderType": "custom",
+                  "renderAttributes": {
+                    "class": "btn btn-link cancel-record"
+                  },
+                  "events": []
+                },
+                {
+                  "type": "button",
+                  "label": "Save",
+                  "name": "Save",
+                  "visible": true,
+                  "enabled": true,
+                  "renderType": "custom",
+                  "renderAttributes": {
+                    "class": "btn btn-success"
+                  },
+                  "events": []
+                }
+              ],
+              "events": [],
+              "name": "Page 1",
+              "renderType": "submittable",
+              "type": "page"
+            }
+          ],
+          "securityPolicies": [],
+          "slug": "notification-data",
+          "status": "Active",
+          "submissionLabelExpression": "${values('Name')} - ${values('Status')}",
+          "type": "Content"
+        },
+        {
+          "name": "Notification Dates",
+          "anonymous": false,
+          "attributes": [
+            {
+              "name": "Datastore Configuration",
+              "values": [
+                "[]"
+              ]
+            }
+          ],
+          "description": "Store of date formats for Notifications",
+          "notes": null,
+          "pages": [
+            {
+              "advanceCondition": "false",
+              "displayCondition": null,
+              "displayPage": "pages/datastore/datastoreForm.jsp",
+              "elements": [
+                {
+                  "type": "field",
+                  "name": "Status",
+                  "label": "Status",
+                  "key": "f1",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "omitWhenHidden": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "radio",
+                  "choicesResourceName": null,
+                  "choicesRunIf": null,
+                  "choices": [
+                    {
+                      "label": "Active",
+                      "value": "active"
+                    },
+                    {
+                      "label": "Inactive",
+                      "value": "inactive"
+                    }
+                  ]
+                },
+                {
+                  "type": "field",
+                  "name": "Name",
+                  "label": "Date Format Name",
+                  "key": "fSample",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "omitWhenHidden": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "text",
+                  "rows": 1
+                },
+                {
+                  "type": "content",
+                  "renderType": "text",
+                  "name": "Name Explanation",
+                  "text": "The Name of the date format is the name you will be including in your message templates inside the ${\"${format('DateName')}\"} tag. It should likely be something human readable and short but descriptive, like ShortDatewithTime.",
+                  "visible": true,
+                  "renderAttributes": {}
+                },
+                {
+                  "type": "field",
+                  "name": "Format",
+                  "label": "Format",
+                  "key": "f2",
+                  "defaultValue": null,
+                  "defaultResourceName": null,
+                  "visible": true,
+                  "enabled": true,
+                  "required": true,
+                  "requiredMessage": null,
+                  "omitWhenHidden": null,
+                  "pattern": null,
+                  "constraints": [],
+                  "events": [],
+                  "renderAttributes": {},
+                  "dataType": "string",
+                  "renderType": "text",
+                  "rows": 1
+                },
+                {
+                  "type": "content",
+                  "renderType": "html",
+                  "name": "Format Explanation",
+                  "text": "The date format should be a ruby date format such as %m-%e-%y %H:%M for 03-17-16 15:19. Examples and explanation can be found at <a href=\"http://www.foragoodstrftime.com/\" target=\"_blank\">http://www.foragoodstrftime.com/</a>",
+                  "visible": true,
+                  "renderAttributes": {}
+                },
+                {
+                  "type": "button",
+                  "label": "Save",
+                  "name": "Save",
+                  "visible": "bundle.adminDatastore != null",
+                  "enabled": true,
+                  "renderType": "submit-page",
+                  "renderAttributes": {
+                    "class": "btn btn-primary"
+                  }
+                },
+                {
+                  "type": "button",
+                  "label": "Cancel",
+                  "name": "Cancel",
+                  "visible": "bundle.adminDatastore != null",
+                  "enabled": true,
+                  "renderType": "custom",
+                  "renderAttributes": {
+                    "class": "btn btn-link cancel-record"
+                  },
+                  "events": [
+                    {
+                      "name": "Return to Datastore",
+                      "type": "Click",
+                      "action": "Custom",
+                      "code": "location.replace($('a.return-to-store').attr('href'));"
+                    }
+                  ]
+                }
+              ],
+              "events": [
+                {
+                  "name": "Return to Datastore on Success",
+                  "type": "Submit",
+                  "action": "Custom",
+                  "code": "if ($.isEmptyObject(event.constraints)){\n\tlocation.replace($('a.return-to-store').attr('href'));\n}"
+                }
+              ],
+              "name": "Datastore",
+              "renderType": "submittable",
+              "type": "page"
+            }
+          ],
+          "securityPolicies": [],
+          "slug": "notification-template-dates",
+          "status": "Active",
+          "submissionLabelExpression": "${values('Name')}",
           "type": "Datastore"
         }
     ]

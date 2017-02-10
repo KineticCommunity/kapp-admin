@@ -1,30 +1,72 @@
-  .nav-pills.sub-nav>li.active>a, .nav-pills.sub-nav>li.active>a:focus, .nav-pills.sub-nav>li.active>a:hover {
-    color: #000;
-    background-color: transparent;
-    border-color: transparent;
-    border-bottom: 4px solid #ffb200;
-  }
-  
-  .nav-pills>li {
-    float: left;
-  }
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   DataTables Overrides
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-  .nav>li, .nav>li>a {
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span {
+    white-space: normal;
+    width: 100%;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-title {
+    overflow: hidden;
+    text-align: center;
+}
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Dynamic Drop Down Selector CSS
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+a.dynamic-replacement::before {
+    content: "${";
+}
+a.dynamic-replacement::after {
+    content: "}";
+}
+  .dropdown-submenu {
     position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
     display: block;
-  }
-  
-  .nav-pills.sub-nav>li>a:hover {
-    color: #d95900;
-    background-color: transparent;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
     border-color: transparent;
-    border-bottom: 4px solid #d95900;
-  }
-  
-    .buttons {
-    width: 10%; 
-  }
-  
-  .body {
-    width: 50%;
-  }
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}

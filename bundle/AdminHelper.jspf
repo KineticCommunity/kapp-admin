@@ -322,7 +322,7 @@
          *----------------------------------------------------------------------------------------*/
         
         /**
-         * Sorts the given list of locale codes by the name of the locale and returns a list of codes
+         * Gets a list of registered Images and returns them
          */
         public List<LinkedHashMap> getRegisteredImages(){
             Map<String, String[]> parameters = buildQueryParameters();

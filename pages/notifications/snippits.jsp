@@ -1,8 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<%@include file="../../bundle/router.jspf" %>
 
-<!-- Set variable to hold the notification type (Template or Snippit). -->
 <c:set var="notificationType" value="${not empty param.type? param.type : 'Template'}s"/>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
@@ -22,13 +20,13 @@
     <div class="page-header">
         <h3>Notification <small> ${notificationType}</small>
             <div class="pull-right notification-table-buttons">
-                <a class="btn btn-sm btn-success" href="${bundle.kappLocation}/${form.slug}?page=notifications/snippits&type=Snippit">
-                    <span class="fa fa-code fa-fw"></span> View Snippits
+                <a class="btn btn-sm btn-success" href="${bundle.kappLocation}/${form.slug}?type=Template">
+                    <span class="fa fa-file-text-o fa-fw"></span> View Templates
                 </a>
-                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=notifications/record&type=Template">
-                    <span class="fa fa-plus fa-fw"></span> Add Template
-                </a>
-                <input class="hide" accept=".csv" data-type="Template" id="notification-import" type="file">
+                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=notifications/record&type=Snippit">
+                    <span class="fa fa-plus fa-fw"></span> Add Snippit
+                </a> 
+                <input class="hide" accept=".csv" data-type="Snippit" id="notification-import" type="file">
             </div>
         </h3>
     </div>
@@ -41,8 +39,8 @@
                        data-kapp-slug="${kapp.slug}" 
                        data-datastore-slug="notification-data" 
                        id="table-notifications" 
-                       data-type="Template" 
-                       data-query="values[Type]=Template">
+                       data-type="Snippit" 
+                       data-query="values[Type]=Snippit">
                     <tr>
                         <td class="alert alert-info">
                             <span class="fa fa-spinner fa-spin"></span>
@@ -63,12 +61,12 @@
         <h4>${notificationType}</h4>
         <p>${form.description}</p>
         <hr class="border-color-white" />
-        <p>To add a new notification, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Template</b> button.</p>
-        <p>To edit a notification, click the edit <b><span class="fa fa-pencil"></span></b> button.</p>
-        <p>To clone a notification, click the clone <b><span class="fa fa-clone"></span></b> button.</p>
+        <p>To add a new snippit, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Template</b> button.</p>
+        <p>To edit a snippit, click the edit <b><span class="fa fa-pencil"></span></b> button.</p>
+        <p>To clone a snippit, click the clone <b><span class="fa fa-clone"></span></b> button.</p>
         <p>To delete a record, click the delete <b><span class="fa fa-times"></span></b> button.</p>
-        <p>To export the notification to a CSV file, click the <b>Export CSV</b> button.</p>
-        <p>To import notification from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p>
+        <p>To export snippits to a CSV file, click the <b>Export CSV</b> button.</p>
+        <p>To import snippits from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p>
         <div class="p-l-2">
             <p>
                 The CSV file you import must have columns with headings corresponding to existing field names. 
@@ -76,7 +74,7 @@
             </p>
         </div>
         <p><b>
-            <span class="fa fa-exclamation-circle"></span> Importing notification records does not perform the form validations, 
+            <span class="fa fa-exclamation-circle"></span> Importing snippit records does not perform the form validations, 
             which may allow for invalid data to be saved. Please be careful so you do not destroy your data. 
         </b></p>
     </bundle:variable>
