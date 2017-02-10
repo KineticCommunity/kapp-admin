@@ -83,6 +83,26 @@
         return uuid;
     };
     
+    admin.openAsidePopup = function(){
+        (new KD.Modal({
+            header: function(element, actions) {
+                element.append(
+                    $("<span>", {class: "fa fa-times pull-right"}).on("click", actions.dismiss),
+                    $("<h4>").text("About This Page")
+                );
+            },
+            body: function(element, actions) {
+                element.append(
+                    $("<div>").append($(".aside").clone(true, true).children())
+                ).find(".aside-toggle").remove();
+            },
+            backdrop: true,
+            backdropclose: true,
+            keyboardclose: true,
+            renderCallback: false
+        })).show();
+    };
+    
     /**
      * Add jQuery functions for encoding and decoding HTML
      */

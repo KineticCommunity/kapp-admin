@@ -90,16 +90,6 @@
         @include font-size-line-height(1.8rem, 1.8rem);
       }
     }
-    &:after {
-      content: attr(data-card-overflow-cover);
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1.5rem;
-      pointer-events: none;
-      @include vertical-gradient(rgba($white, 0), rgba($white, 1));
-    }
   }
   
   > .card-action {
@@ -531,8 +521,28 @@ a.card-tertiary {
   }
 }
 
-.card-xxs {
+.card-sized {
   @extend .card;
+  > .card-content {
+    height: 6.5rem;
+    > .card-icon,
+    > .card-icon-right {
+      font-size: 4.3rem;
+    }
+    &:after {
+      content: attr(data-card-overflow-cover);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      pointer-events: none;
+      @include vertical-gradient(rgba($white, 0), rgba($white, 1));
+    }
+  }
+}
+.card-xxs {
+  @extend .card-sized;
   > .card-content {
     height: 6.5rem;
     > .card-icon,
@@ -543,7 +553,7 @@ a.card-tertiary {
 }
 
 .card-xs {
-  @extend .card;
+  @extend .card-sized;
   > .card-content {
     height: 10.5rem;
     > .card-icon,
@@ -554,28 +564,28 @@ a.card-tertiary {
 }
 
 .card-sm {
-  @extend .card;
+  @extend .card-sized;
   > .card-content {
     height: 14.5rem;
   }
 }
 
 .card-md {
-  @extend .card;
+  @extend .card-sized;
   > .card-content {
     height: 18.5rem;
   }
 }
 
 .card-lg {
-  @extend .card;
+  @extend .card-sized;
   > .card-content {
     height: 22.5rem;
   }
 }
 
 .card-xl {
-  @extend .card;
+  @extend .card-sized;
   > .card-content {
     height: 26.5rem;
   }
@@ -584,6 +594,9 @@ a.card-tertiary {
 @media (max-width: 767px) {
   .card > .card-content {
     height: auto;
+    &:after {
+      display: none;
+    }
   }
 }
 

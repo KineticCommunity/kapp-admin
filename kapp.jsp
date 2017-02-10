@@ -35,30 +35,35 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
+            <c:if test="${identity.spaceAdmin}">
+                <hr class="border-color-white" />
+                <div class="text-center">
+                    <h3 class="carh-title m-b-2">Advanced Management</h3>
+                    <p>
+                        The
+                        <a target="_blank" href="${bundle.spaceLocation}/app" class="btn btn-default btn-xs">
+                          <span class="fa fa-cog fa-fw" aria-hidden="true"></span> Kinetic Request
+                        </a>
+                        Management Console is for advanced configuration of portals and forms. Most common configurations can be made using the above consoles.
+                    </p>
+                    <p>
+                        The
+                        <a target="_blank" href="${space.getAttributeValue('Task Server Url')}" class="btn btn-default btn-xs">
+                          <span class="fa fa-cog fa-fw" aria-hidden="true"></span> Kinetic Task
+                        </a>
+                        Management Console is for advanced configuration workflow and automation functions.
+                    </p>
+                </div>
+            </c:if>
         </div>
     </div>
 
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
     
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
-    <c:if test="${identity.spaceAdmin}">
-        <bundle:variable name="aside">
-            <h3>Advanced Management</h3>
-            <hr class="border-color-white" />
-            <p>The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.</p>
-            <a target="_blank" href="${bundle.spaceLocation}/app" class="btn btn-block btn-default">
-              <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
-            </a>
-            
-            <hr class="border-color-white" />
-            <p>The <span class="strong">Kinetic Task</span> Management Console is for advanced configuration workflow and automation functions.</p>
-            <a target="_blank" href="${space.getAttributeValue('Task Server Url')}" class="btn btn-block btn-default">
-              <span class="glyphicon glyphicon-cog  pull-left" aria-hidden="true"></span> Kinetic Task
-            </a>
-            <p/>
-            
-        </bundle:variable>
-    </c:if>
+    <bundle:variable name="aside">
+    </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     
 </bundle:layout>

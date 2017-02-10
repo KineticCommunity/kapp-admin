@@ -27,7 +27,13 @@
   padding: 1.5rem 1rem 1rem;
   background-color: $tertiary;
   color: white;
-  @include font-size-line-height(3rem, 3rem);
+  @include font-size-line-height(3rem, 3.6rem);
+  @include anchor(white, tint(white, 10%), none, none);
+  
+  .fa.fa-times {
+    @include font-size-line-height(2rem, 3.6rem);
+    cursor: pointer; 
+  }
 }
 
 /* Modal Body */
@@ -47,6 +53,10 @@
         background-color: lighten($black, 75%);
       }
     }
+  }
+  
+  hr {
+    border-color: #eee;
   }
 }
 

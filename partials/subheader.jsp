@@ -31,6 +31,11 @@
                                 <li class="divider ${empty helpLinks ? 'hide' : ''}"></li>
                             </c:if>
                             <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">About Admin Console</a></li>
+                            <c:set var="aside"><bundle:yield name="aside"/></c:set>
+                            <c:if test="${not empty aside}">
+                                <li class="divider hidden-sm hidden-md hidden-lg"></li>
+                                <li class="hidden-sm hidden-md hidden-lg"><a href="javascript:bundle.admin.openAsidePopup();">About This Page</a></li>
+                            </c:if>
                         </ul>
                     </li>
                 </ul>
