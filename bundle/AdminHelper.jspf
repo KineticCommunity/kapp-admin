@@ -339,5 +339,24 @@
             
             return images;
         }
+
+        /**
+         * Gets a list of notification templates and returns them
+         */
+        public List<LinkedHashMap> getNotificationTemplates(){
+            Map<String, String[]> parameters = buildQueryParameters();
+            parameters.put("values[Type]", new String[] {"Template"});
+            PaginatedList<Submission> notificationTemplateSubmissions = submissionComponent.searchByForm(adminKapp.getForm("notification-data"), parameters);
+
+            List<LinkedHashMap> notifications = new ArrayList<>();
+
+            for (Submission notificationSubmission : notificationTemplateSubmissions){
+                LinkedHashMap notification = new LinkedHashMap();
+                notification.put("name", notificationSubmission.getValue("Name"));
+                notifications.add(notification);
+            }
+            
+            return notifications;
+        }
     }
 %>

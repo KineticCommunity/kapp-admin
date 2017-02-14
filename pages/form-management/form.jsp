@@ -136,6 +136,14 @@
                                     <c:import url="${bundle.path}/partials/shared-management/form-selector.jsp" charEncoding="UTF-8" />
                                 </c:if>
                             </c:forEach>
+
+                            <!-- Build up Notification Selector -->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Notification Template Name')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/notification-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>
