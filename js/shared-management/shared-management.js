@@ -200,12 +200,12 @@
         // Select Team if attribute is a valid Team
         else if ($.inArray(approverElement.val(), teamsList) !== -1) {
             $('.attribute input[data-type="team"]').prop('checked', true);
-            $('#approverTeams select').val(approverElement.val()).show();
+            $('#approverTeams select').val(approverElement.val()).parent().show();
         } 
         // Select Team if attribute is a valid User
         else if ($.inArray(approverElement.val(), usersList) !== -1) {
             $('.attribute input[data-type="individual"]').prop('checked', true);
-            $('#approverIndividuals select').val(approverElement.val()).show();
+            $('#approverIndividuals select').val(approverElement.val()).parent().show();
         } 
         // If none match, assume None and wipe the Current Attribute Value because the data is bad
         else {
