@@ -60,7 +60,7 @@
         </bundle:scriptpack>
         <c:set var="pageTitle"><bundle:yield name="pageTitle"/></c:set>
         <title>
-           ${text.join([not empty pageTitle ? pageTitle : text.defaultIfBlank(form.name, kapp.name), BundleHelper.companyName], ' - ')}
+           ${text.join([not empty pageTitle ? pageTitle : text.defaultIfBlank(form.name, kapp.name), AdminHelper.companyName], ' - ')}
            ${space.hasAttribute('Page Title Brand') ? text.join([' | ', space.getAttributeValue('Page Title Brand')]) : ''}
         </title>
         <bundle:yield name="head"/>

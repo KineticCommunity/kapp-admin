@@ -40,7 +40,7 @@
             <div class="navbar-brand">
                 <a class="space-home-link" href="${bundle.spaceLocation}">
                     <span class="hidden-sm hidden-md hidden-lg fa fa-home"></span>
-                    <span class="hidden-xs">${text.escape(i18n.translate(BundleHelper.companyName))}</span>
+                    <span class="hidden-xs">${text.escape(i18n.translate(AdminHelper.companyName))}</span>
                 </a>
                 <c:if test="${not empty kapp}">
                     <a class="kapp-home-link" href="${bundle.kappLocation}">
