@@ -5,7 +5,7 @@
 <%-- Link to Space Page --%>
 <li><a href="${bundle.spaceLocation}">
     <span class="fa fa-fw fa-home"></span>
-    ${i18n.translate(space.name)}</a>
+    ${i18n.translate(BundleHelper.companyName)}</a>
 </li>
 <li class="divider"></li>
 <%-- Link to Each Kapp --%>

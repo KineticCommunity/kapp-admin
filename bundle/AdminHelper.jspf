@@ -17,6 +17,13 @@
         /*-----------------------------------------------------------------------------------------
          * GENERAL HELPER FUNCTIONS
          *----------------------------------------------------------------------------------------*/
+
+        public String getCompanyName(){
+            if (space.hasAttribute("Company Name")) {
+                return space.getAttributeValue("Company Name");
+            }
+            return space.getName();
+        }
         
         public AdminHelper(HttpServletRequest request){
             this.adminBundle = (Bundle)request.getAttribute("bundle"); 
