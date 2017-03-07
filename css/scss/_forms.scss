@@ -3,14 +3,13 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 input[type='text'], input[type='password'], textarea, select {
-  color: inherit;
   display: block;
   text-decoration: none;
   width: 100%;
-  background: white;
+  background: rgb(248, 248, 248);
   border-width: 1px;
   border-style: solid;
-  border-color: rgb(207, 207, 207);
+  border-color: rgb(229, 229, 229);
   border-image: initial;
   outline: 0px;
   padding: 0.2rem 0.8rem;
@@ -224,6 +223,11 @@ section.page {
         content:" ";
         display:block;
         clear:both;
+      }
+      &.empty {
+        .file-table {
+          display: none;
+        }
       }
     }
     .file-table {
