@@ -31,7 +31,7 @@
                         data-level="space" class="space-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Space</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${status ? description : attributeDefinition.description}</td>
+                    <td class="description-text">${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
@@ -59,7 +59,7 @@
                         data-level="kapp" class="kapp-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Kapp</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${status ? description : attributeDefinition.description}</td>
+                    <td class="description-text">${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
@@ -87,7 +87,7 @@
                         data-level="form" class="form-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Form</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${status ? description : attributeDefinition.description}</td>
+                    <td class="description-text">${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
@@ -115,7 +115,7 @@
                         data-level="category" class="cateogry-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>Category</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${status ? description : attributeDefinition.description}</td>
+                    <td class="description-text">${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
@@ -143,7 +143,7 @@
                         data-level="user" class="user-attribute-definition ${status ? 'success' : 'warning'}">
                     <td>User</td>
                     <td>${attributeDefinition.name}</td>
-                    <td>${status ? description : attributeDefinition.description}</td>
+                    <td class="description-text">${status ? description : attributeDefinition.description}</td>
                     <td>${attributeDefinition.isAllowsMultiple() ? 'Yes' : 'No'}</td>
                     <td>
                         <c:choose>
