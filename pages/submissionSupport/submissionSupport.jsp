@@ -1,5 +1,5 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
-<%@include file="bundle/initialization.jspf" %>
+<%@include file="../../bundle/initialization.jspf" %>
 <c:set var="includeHeaderTall" value="${true}" scope="request"/>
 <c:set var="removeBreadcrumb" value="${true}" scope="request"/>
 <bundle:layout page="${bundle.path}/layouts/submissionSupportLayout.jsp">
