@@ -110628,7 +110628,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var FORM_SLUG = 'submission-search';
+	var FORM_SLUG = 'submission-support';
 	var BRIDGED_RESOURCE = 'People';
 	var SEARCH_PARAM = 'Search Term';
 	
