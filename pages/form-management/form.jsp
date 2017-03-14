@@ -23,7 +23,7 @@
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
             <bundle:variable name="breadcrumb">
                 <li><a href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
-                <li><a href="${bundle.kappLocation}/${form.slug}/?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
+                <li><a href="${bundle.kappLocation}/${form.slug}?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
                 <li class="active">${text.escape(currentObj.name)}</li>
             </bundle:variable>
             <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
@@ -163,7 +163,7 @@
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
                 <h4>
-                    <span><a href="${bundle.kappLocation}/${form.slug}/?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
+                    <span><a href="${bundle.kappLocation}/${form.slug}?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
                     <small>${text.escape(currentObj.name)}</small>
                 </h4>
                 <hr class="border-color-white" />

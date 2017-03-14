@@ -1,0 +1,24 @@
+div.form-activity.sub-heading {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  
+}
+div.form-activity.sub-heading .heading-text {
+  font-size: 2rem;
+  line-height: 3rem;
+  padding: 0 1rem;
+  font-weight: bold;
+}
+
+div.form-activity.sub-heading .sub-heading-text {
+  font-size: 1.6rem;
+  line-height: 2rem;
+  padding: 0 1rem;
+  font-weight: bold;
+}
+
+div.form-activity div#response-container {
+  @include border-radius();
+  background-color: white;
+  padding: 1rem;
+}

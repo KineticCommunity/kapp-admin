@@ -22,7 +22,7 @@
     
     <div class="row">
         <div class="col-xs-12">
-            <table class="table table-hover table-striped" 
+            <table class="table table-hover table-striped form-management-kapps" 
                    data-table-dom data-table-name="Kapps"> 
                 <thead>
                     <tr>
@@ -32,7 +32,7 @@
                 <tbody>
                     <c:forEach var="kapp" items="${space.kapps}">
                         <tr>
-                            <td><a href="${i18nBaseUrl}?page=form-management/forms&kapp=${kapp.slug}">${text.escape(kapp.name)}</a></td>
+                            <td><a href="${bundle.kappLocation}/${form.slug}?page=form-management/forms&kapp=${kapp.slug}">${text.escape(kapp.name)}</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

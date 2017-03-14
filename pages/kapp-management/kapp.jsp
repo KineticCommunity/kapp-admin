@@ -139,7 +139,7 @@
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
                 <h4>
-                    <span><a href="${bundle.kappLocation}/${form.slug}/?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
+                    <span><a href="${bundle.kappLocation}/${form.slug}?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
                     <small>${text.escape(currentObj.name)}</small>
                 </h4>
                 <hr class="border-color-white" />

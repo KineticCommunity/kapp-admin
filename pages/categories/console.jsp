@@ -32,7 +32,7 @@
                 <tbody>
                     <c:forEach var="kapp" items="${space.kapps}">
                         <tr>
-                            <td><a href="${i18nBaseUrl}?page=categories/categories&kapp=${kapp.slug}">${text.escape(kapp.name)}</a></td>
+                            <td><a href="${bundle.kappLocation}/${form.slug}?page=categories/categories&kapp=${kapp.slug}">${text.escape(kapp.name)}</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

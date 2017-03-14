@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
+<c:set var="console" value="${form}" scope="request"/>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
 
 <!-- Show page content only if selected Kapp exists. -->
@@ -42,7 +43,7 @@
             
             <div class="row">
                 <div class="col-xs-12 table-responsive">
-                    <table class="table table-sm table-hover table-striped" 
+                    <table class="table table-sm table-hover table-striped form-management-forms" 
                            data-table-dom data-table-name="Forms"> 
                         <thead>
                             <tr>
@@ -54,12 +55,13 @@
                                 <th>Task Form</th>
                                 <th>Task Assignee Team</th>
                                 <th>Task Assignee Individual</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="form" items="${currentKapp.forms}">
                                 <tr>
-                                    <td><a href="${i18nBaseUrl}?page=form-management/form&kapp=${currentKapp.slug}&form=${form.slug}">${text.escape(form.name)}</a></td>
+                                    <td><a href="${bundle.kappLocation}/${console.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${form.slug}">${text.escape(form.name)}</a></td>
                                     <td>${form.getAttributeValue('Approver')}</td>
                                     <td>${form.getAttributeValue('Approval Days Due')}</td>
                                     <td>${form.getAttributeValue('Approval Form Slug')}</td>
@@ -67,6 +69,11 @@
                                     <td>${form.getAttributeValue('Task Form')}</td>
                                     <td>${form.getAttributeValue('Task Assignee Team')}</td>
                                     <td>${form.getAttributeValue('Task Assignee Individual')}</td>
+                                    <td>
+                                        <a href="${bundle.kappLocation}/${console.slug}?page=form-management/formActivity&kapp=${currentKapp.slug}&form=${form.slug}" class="btn btn-xs btn-tertiary">
+                                            <span class="fa fa-line-chart"></span>
+                                        </a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
