@@ -479,8 +479,8 @@
                         },
                         {
                             "type":"field",
-                            "name":"Username",
-                            "label":"Username",
+                            "name":"Assigned Individual",
+                            "label":"Assigned Individual",
                             "key":"fSample",
                             "defaultValue":null,
                             "defaultResourceName":null,
