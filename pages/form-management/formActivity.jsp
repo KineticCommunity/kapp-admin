@@ -60,7 +60,7 @@
                     <span>by</span>
                     <c:choose>
                         <c:when test="${not empty teamsKapp}">
-                            <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=user&username=${currentForm.createdBy}">${currentForm.createdBy}</a>
+                            <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=user&username=${text.escapeUrlParameter(currentForm.createdBy)}">${currentForm.createdBy}</a>
                         </c:when>
                         <c:otherwise>
                             <span>${currentForm.createdBy}</span>
@@ -73,7 +73,7 @@
                     <span>by</span>
                     <c:choose>
                         <c:when test="${not empty teamsKapp}">
-                            <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=user&username=${currentForm.updatedBy}">${currentForm.updatedBy}</a>
+                            <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=user&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentForm.updatedBy}</a>
                         </c:when>
                         <c:otherwise>
                             <span>${currentForm.updatedBy}</span>

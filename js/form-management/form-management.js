@@ -179,7 +179,7 @@
                     if (bundle.adminFormManagement.teamsKappSlug && row.createdBy){
                         var link = bundle.spaceLocation() + "/" 
                                     + bundle.adminFormManagement.teamsKappSlug
-                                    + "?page=user&username=" + row.createdBy;
+                                    + "?page=user&username=" + encodeURIComponent(row.createdBy);
                         userInfo += "<a href='" + link + "'>" + row.createdBy + "</a>";
                     }
                     else {
