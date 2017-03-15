@@ -6,12 +6,14 @@
     <span id="helpBlock-${thisAttribute.name}" class="help-block">${thisAttribute.description}</span>
     <select name="${thisAttribute.name}" class="attributeValue form-control" value="${currentObj.getAttributeValue(thisAttribute.name)}">
         <option/>
-        <c:forEach items="${space.getKapp(space.getAttributeValue('Queue Kapp Slug')).forms}" var="form">
-            <c:set var="selected" value=""/>
-            <c:if test="${form.slug eq currentObj.getAttributeValue(thisAttribute.name)}">
-                <c:set var="selected" value="selected"/>
-            </c:if>
-            <option ${selected} value="${form.slug}">${form.name}</option>
+        <c:forEach items="${space.kapps}" var="kapp">
+            <c:forEach items="${kapp.forms}" var="form">
+                <c:set var="selected" value=""/>
+                <c:if test="${form.slug eq currentObj.getAttributeValue(thisAttribute.name)}">
+                    <c:set var="selected" value="selected"/>
+                </c:if>
+                <option ${selected} value="${form.slug}">${kapp.name} > ${form.name}</option>
+            </c:forEach>
         </c:forEach>
     </select>
 </div>
