@@ -101,6 +101,25 @@ nav#bundle-subheader{
   }
 }
 
+.tab-content .tab-pane table thead tr:first-child th {
+  border-top: none;
+}
+
+@media (max-width: 767px) { 
+  .nav-tabs.stacked-xs > li {
+    float: none;
+    margin-bottom: 0;
+    a {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    
+    &:not(.active) a {
+      font-size: 85%;
+    }
+  }
+}
+
 /* Nav Pills Elements
  *-------------------------------------- */
 .nav-pills > li > a {

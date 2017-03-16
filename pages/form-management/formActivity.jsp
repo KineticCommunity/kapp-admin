@@ -127,23 +127,43 @@
                 </div>
             </c:if>
             
-            <%-- Show recent submissions for this form --%>
-            <div class="row form-activity recent-submissions sub-heading">
-                <div class="col-xs-12">
-                    <span class="heading-text">Recent Submissions</span>
+            <!-- Tabs for submissions and performance -->
+            <div class="form-activity-content">
+                <ul class="nav nav-tabs stacked-xs" role="tablist" id="form-activity-nav">
+                    <li role="presentation" class="active"><a href="#submissions" aria-controls="submissions" role="tab" data-toggle="tab">${i18n.translate('Submissions')}</a></li>
+                    <li role="presentation"><a href="#performance" aria-controls="performance" role="tab" data-toggle="tab">${i18n.translate('Performance')}</a></li>
+                    <li role="presentation"><a href="#feedback" aria-controls="feedback" role="tab" data-toggle="tab">${i18n.translate('Feedback')}</a></li>
+                </ul>
+                
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <%-- Members --%>
+                    <div role="tabpanel" class="tab-pane active" id="submissions">
+                        <div class="form-activity recent-submissions">
+                            <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
+                                   id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}" 
+                                   data-recent-submissions-table>
+                                <tr>
+                                    <td class="alert alert-info">
+                                        <span class="fa fa-spinner fa-spin"></span>
+                                        Loading
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <%-- Performance --%>
+                    <div role="tabpanel" class="tab-pane" id="performance">
+                        <img style="max-width: 100%" src="${bundle.location}/images/performance-placeholder.png" alt="Performance" />
+                    </div>
+
+                    <%-- Feedback --%>
+                    <div role="tabpanel" class="tab-pane" id="feedback">
+                        <h1>Coming Soon</h1>
+                    </div>
                 </div>
-            </div>
-            <div class="row form-activity recent-submissions m-b-4">
-                <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
-                       id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}" 
-                       data-recent-submissions-table>
-                    <tr>
-                        <td class="alert alert-info">
-                            <span class="fa fa-spinner fa-spin"></span>
-                            Loading
-                        </td>
-                    </tr>
-                </table>
+            
             </div>
             
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>

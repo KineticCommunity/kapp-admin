@@ -904,6 +904,23 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
   border-bottom: 2px solid #1594C4;
 }
 
+.tab-content .tab-pane table thead tr:first-child th {
+  border-top: none;
+}
+
+@media (max-width: 767px) {
+  .nav-tabs.stacked-xs > li {
+    float: none;
+    margin-bottom: 0;
+  }
+  .nav-tabs.stacked-xs > li a {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .nav-tabs.stacked-xs > li:not(.active) a {
+    font-size: 85%;
+  }
+}
 /* Nav Pills Elements
  *-------------------------------------- */
 .nav-pills > li > a {

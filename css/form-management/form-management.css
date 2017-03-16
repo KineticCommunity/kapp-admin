@@ -22,3 +22,12 @@ div.form-activity div#response-container {
   background-color: white;
   padding: 1rem;
 }
+
+div.form-activity-content ul#form-activity-nav {
+  margin-bottom: 1rem;
+}
+div.form-activity-content ul#form-activity-nav li {
+  font-size: 2rem;
+  line-height: 2.4rem;
+  font-weight: bold;
+}
