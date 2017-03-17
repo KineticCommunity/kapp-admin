@@ -1,1700 +1,2060 @@
 {
-    "spaceAttributeDefinitions": [
+    "spaceAttributeDefinitions":[
         {
-            "name": "Admin Kapp Slug",
-            "allowsMultiple": false,
-            "required": true,
-            "description": "The slug of the Admin Kapp. Used by other Kapps to access the Admin Kapp."
-        },
-        {
-            "name": "Background Image",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "If set, this image will be used in the Catalog's background as well as in email notifications",
-            "values": [
-                "header-bg.jpg"
-            ]
+            "name":"Admin Kapp Slug",
+            "allowsMultiple":false,
+            "required":true,
+            "description":"The slug of the Admin Kapp. Used by other Kapps to access the Admin Kapp."
         }
     ],
-    "kappAttributeDefinitions": [
+    "kappAttributeDefinitions":[
         {
-            "name": "Icon",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "Font Awesome Icon representing this Kapp in portal pages.",
-            "values": [
+            "name":"Icon",
+            "allowsMultiple":false,
+            "required":false,
+            "description":"Font Awesome Icon representing this Kapp in portal pages.",
+            "values":[
                 "fa-gear"
             ]
         },
         {
-            "name": "Kapp Description",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "Description of what users do within this Kapp.",
-            "values": [
+            "name":"Kapp Description",
+            "allowsMultiple":false,
+            "required":false,
+            "description":"Description of what users do within this Kapp.",
+            "values":[
                 "The Admin Console allows System Admins to configure and manage different functions of the system."
             ]
         }
     ],
-    "formAttributeDefinitions": [
+    "formAttributeDefinitions":[
         {
-            "name": "Datastore Configuration",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "DO NOT EDIT. Used by the datastore console to store configurations."
+            "name":"Datastore Configuration",
+            "allowsMultiple":false,
+            "required":false,
+            "description":"DO NOT EDIT. Used by the datastore console to store configurations."
         },
         {
-            "name": "Help Link",
-            "allowsMultiple": true,
-            "required": false,
-            "description": "Defines a url for additional help links for the console. JSON object with"
+            "name":"Help Link",
+            "allowsMultiple":true,
+            "required":false,
+            "description":"Defines a url for additional help links for the console. JSON object with"
         },
         {
-            "name": "Parent Console Slug",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "Set on forms of type Subconsole. Defines the parent console form of this subconsole."
+            "name":"Parent Console Slug",
+            "allowsMultiple":false,
+            "required":false,
+            "description":"Set on forms of type Subconsole. Defines the parent console form of this subconsole."
         }
     ],
-    "categoryAttributeDefinitions": [
+    "categoryAttributeDefinitions":[
         {
-            "name": "Parent",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "Used by the Category Console to store the parent of this category."
+            "name":"Parent",
+            "allowsMultiple":false,
+            "required":false,
+            "description":"Used by the Category Console to store the parent of this category."
         },
         {
-            "name": "Sort Order",
-            "allowsMultiple": false,
-            "required": false,
-            "description": "Used by the Category Console to store the sort order of this category."
+            "name":"Sort Order",
+            "allowsMultiple":false,
+            "required":false,
+            "description":"Used by the Category Console to store the sort order of this category."
         }
     ],
-    "bridges": [
+    "bridges":[
         {
-            "name": "Kinetic Core",
-            "status": "Active",
-            "url": "http://localhost:8080/kinetic-bridgehub/app/api/v1/bridges/kinetic-core/"
+            "name":"Kinetic Core",
+            "status":"Active",
+            "url":"http://localhost:8080/kinetic-bridgehub/app/api/v1/bridges/kinetic-core/"
         }
     ],
-    "formTypes": [
+    "formTypes":[
         {
-            "name": "Datastore"
+            "name":"Datastore"
         },
         {
-            "name": "Subconsole"
+            "name":"Subconsole"
         }
     ],
-    "forms": [
+    "forms":[
         {
-            "name": "Alerts",
-            "description": "System Alert notifications",
-            "slug": "alerts",
-            "type": "Content",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": "${values('Title')}",
-            "attributes": [
+            "name":"Alerts",
+            "description":"System Alert notifications",
+            "slug":"alerts",
+            "type":"Content",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":"${values('Title')}",
+            "attributes":[
                 {
-                    "name": "Datastore Configuration",
-                    "values": [
+                    "name":"Datastore Configuration",
+                    "values":[
                         "[{\"data\":\"Source\",\"title\":\"Source\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Title\",\"title\":\"Title\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Content\",\"title\":\"Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"URL\",\"title\":\"URL\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Display Start Date\",\"title\":\"Display Start Date\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Display end Date\",\"title\":\"Display end Date\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Start Date\",\"title\":\"Start Date\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"End Date\",\"title\":\"End Date\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
                     ]
                 }
             ],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [
+                    "elements":[
                         {
-                            "type": "field",
-                            "name": "Status",
-                            "label": "Status",
-                            "key": "f9",
-                            "defaultValue": "Active",
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "radio",
-                            "choicesResourceName": null,
-                            "choicesRunIf": null,
-                            "choices": [
+                            "type":"field",
+                            "name":"Status",
+                            "label":"Status",
+                            "key":"f9",
+                            "defaultValue":"Active",
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"radio",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
                                 {
-                                    "label": "Active",
-                                    "value": "Active"
+                                    "label":"Active",
+                                    "value":"Active"
                                 },
                                 {
-                                    "label": "Inactive",
-                                    "value": "Inactive"
+                                    "label":"Inactive",
+                                    "value":"Inactive"
                                 }
                             ]
                         },
                         {
-                            "type": "field",
-                            "name": "Title",
-                            "label": "Title",
-                            "key": "fSample",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Title",
+                            "label":"Title",
+                            "key":"fSample",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Content",
-                            "label": "Content",
-                            "key": "f3",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 3
+                            "type":"field",
+                            "name":"Content",
+                            "label":"Content",
+                            "key":"f3",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":3
                         },
                         {
-                            "type": "field",
-                            "name": "Start Date Time",
-                            "label": "Start Date",
-                            "key": "f10",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "datetime"
+                            "type":"field",
+                            "name":"Start Date Time",
+                            "label":"Start Date",
+                            "key":"f10",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"datetime"
                         },
                         {
-                            "type": "field",
-                            "name": "URL",
-                            "label": "URL",
-                            "key": "f4",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"URL",
+                            "label":"URL",
+                            "key":"f4",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "button",
-                            "label": "Save",
-                            "name": "Save",
-                            "visible": true,
-                            "enabled": true,
-                            "renderType": "submit-page",
-                            "renderAttributes": {
-                                "class": "btn btn-primary"
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+                                "class":"btn btn-primary"
                             }
                         },
                         {
-                            "type": "button",
-                            "label": "Cancel",
-                            "name": "Cancel",
-                            "visible": true,
-                            "enabled": true,
-                            "renderType": "custom",
-                            "renderAttributes": {
-                                "class": "btn btn-link cancel-record"
+                            "type":"button",
+                            "label":"Cancel",
+                            "name":"Cancel",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"custom",
+                            "renderAttributes":{
+                                "class":"btn btn-link cancel-record"
                             },
-                            "events": []
+                            "events":[
+
+                            ]
                         },
                         {
-                            "type": "section",
-                            "renderType": null,
-                            "name": "Hidden Questions",
-                            "title": null,
-                            "visible": false,
-                            "omitWhenHidden": false,
-                            "renderAttributes": {},
-                            "elements": [
+                            "type":"section",
+                            "renderType":null,
+                            "name":"Hidden Questions",
+                            "title":null,
+                            "visible":false,
+                            "omitWhenHidden":false,
+                            "renderAttributes":{
+
+                            },
+                            "elements":[
                                 {
-                                    "type": "field",
-                                    "name": "Source",
-                                    "label": "Source",
-                                    "key": "f2",
-                                    "defaultValue": "Local",
-                                    "defaultResourceName": null,
-                                    "visible": true,
-                                    "enabled": true,
-                                    "required": true,
-                                    "requiredMessage": null,
-                                    "omitWhenHidden": null,
-                                    "pattern": null,
-                                    "constraints": [],
-                                    "events": [],
-                                    "renderAttributes": {},
-                                    "dataType": "string",
-                                    "renderType": "dropdown",
-                                    "choicesResourceName": null,
-                                    "choicesRunIf": null,
-                                    "choices": [
+                                    "type":"field",
+                                    "name":"Source",
+                                    "label":"Source",
+                                    "key":"f2",
+                                    "defaultValue":"Local",
+                                    "defaultResourceName":null,
+                                    "visible":true,
+                                    "enabled":true,
+                                    "required":true,
+                                    "requiredMessage":null,
+                                    "omitWhenHidden":null,
+                                    "pattern":null,
+                                    "constraints":[
+
+                                    ],
+                                    "events":[
+
+                                    ],
+                                    "renderAttributes":{
+
+                                    },
+                                    "dataType":"string",
+                                    "renderType":"dropdown",
+                                    "choicesResourceName":null,
+                                    "choicesRunIf":null,
+                                    "choices":[
                                         {
-                                            "label": "kinops",
-                                            "value": "kinops"
+                                            "label":"kinops",
+                                            "value":"kinops"
                                         },
                                         {
-                                            "label": "Local",
-                                            "value": "Local"
+                                            "label":"Local",
+                                            "value":"Local"
                                         }
                                     ]
                                 }
                             ]
                         }
                     ],
-                    "events": [],
-                    "name": "Alerts",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": "false",
-                    "displayCondition": null,
-                    "displayPage": null
+                    "events":[
+
+                    ],
+                    "name":"Alerts",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":null
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies":[
+
+            ]
         },
         {
-            "name": "Categories",
-            "description": "An advanced console for managing categories and subcategories in a hierarchical view.",
-            "slug": "categories",
-            "type": "Console",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": null,
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"Categories",
+            "description":"An advanced console for managing categories and subcategories in a hierarchical view.",
+            "slug":"categories",
+            "type":"Console",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":null,
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [],
-                    "events": [],
-                    "name": "Categories",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": null,
-                    "displayCondition": null,
-                    "displayPage": "pages/categories/console.jsp"
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Categories",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/categories/console.jsp"
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies":[
+
+            ]
         },
         {
-            "name": "Datastore",
-            "description": "A Datastore is a Kinetic Request form that can be used to store data for use in other applications or forms. The data can be accessed using bridges.",
-            "slug": "datastore",
-            "type": "Console",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": null,
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"Datastore",
+            "description":"A Datastore is a Kinetic Request form that can be used to store data for use in other applications or forms. The data can be accessed using bridges.",
+            "slug":"datastore",
+            "type":"Console",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":null,
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [],
-                    "events": [],
-                    "name": "Datastore",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": null,
-                    "displayCondition": null,
-                    "displayPage": "pages/datastore/console.jsp"
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Datastore",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/datastore/console.jsp"
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies":[
+
+            ]
         },
         {
-            "name": "Messages",
-            "description": "Datastore for programmatically created messages to the user",
-            "slug": "messages",
-            "type": "Content",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": "${values('Date Time Sent')} ${values('Username')} ${values('Title')}",
-            "attributes": [
+            "name":"Messages",
+            "description":"Datastore for programmatically created messages to the user",
+            "slug":"messages",
+            "type":"Content",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":"${values('Date Time Sent')} ${values('Username')} ${values('Title')}",
+            "attributes":[
                 {
-                    "name": "Datastore Configuration",
-                    "values": [
+                    "name":"Datastore Configuration",
+                    "values":[
                         "[{\"data\":\"Status\",\"title\":\"Status\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Username\",\"title\":\"Username\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Title\",\"title\":\"Title\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Body\",\"title\":\"Body\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Kapp\",\"title\":\"Kapp\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Archive\",\"title\":\"Archive\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Date Time Sent\",\"title\":\"Date Time Sent\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"URL\",\"title\":\"URL\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Type\",\"title\":\"Type\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
                     ]
                 }
             ],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [
+                    "elements":[
                         {
-                            "type": "field",
-                            "name": "Status",
-                            "label": "Status",
-                            "key": "f1",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "radio",
-                            "choicesResourceName": null,
-                            "choicesRunIf": null,
-                            "choices": [
+                            "type":"field",
+                            "name":"Status",
+                            "label":"Status",
+                            "key":"f1",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"radio",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
                                 {
-                                    "label": "Read",
-                                    "value": "Read"
+                                    "label":"Read",
+                                    "value":"Read"
                                 },
                                 {
-                                    "label": "Unread",
-                                    "value": "Unread"
+                                    "label":"Unread",
+                                    "value":"Unread"
                                 }
                             ]
                         },
                         {
-                            "type": "field",
-                            "name": "Username",
-                            "label": "Username",
-                            "key": "fSample",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Assigned Individual",
+                            "label":"Assigned Individual",
+                            "key":"fSample",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Kapp",
-                            "label": "Kapp",
-                            "key": "f8",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "dropdown",
-                            "choicesResourceName": null,
-                            "choicesRunIf": null,
-                            "choices": []
+                            "type":"field",
+                            "name":"Kapp",
+                            "label":"Kapp",
+                            "key":"f8",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"dropdown",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
+
+                            ]
                         },
                         {
-                            "type": "field",
-                            "name": "Type",
-                            "label": "Type",
-                            "key": "f9",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Type",
+                            "label":"Type",
+                            "key":"f9",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Title",
-                            "label": "Title",
-                            "key": "f2",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Title",
+                            "label":"Title",
+                            "key":"f2",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Body",
-                            "label": "Body",
-                            "key": "f7",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 5
+                            "type":"field",
+                            "name":"Body",
+                            "label":"Body",
+                            "key":"f7",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":5
                         },
                         {
-                            "type": "field",
-                            "name": "Archive",
-                            "label": "",
-                            "key": "f4",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "json",
-                            "renderType": "checkbox",
-                            "choicesResourceName": null,
-                            "choicesRunIf": null,
-                            "choices": [
+                            "type":"field",
+                            "name":"Archive",
+                            "label":"",
+                            "key":"f4",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"json",
+                            "renderType":"checkbox",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
                                 {
-                                    "label": "Archive",
-                                    "value": "Archive"
+                                    "label":"Archive",
+                                    "value":"Archive"
                                 }
                             ]
                         },
                         {
-                            "type": "field",
-                            "name": "Date Time Sent",
-                            "label": "Date Time Sent",
-                            "key": "f5",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "datetime"
+                            "type":"field",
+                            "name":"Date Time Sent",
+                            "label":"Date Time Sent",
+                            "key":"f5",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"datetime"
                         },
                         {
-                            "type": "button",
-                            "label": "Save",
-                            "name": "Save",
-                            "visible": "bundle.adminDatastore != null",
-                            "enabled": true,
-                            "renderType": "submit-page",
-                            "renderAttributes": {
-                                "class": "btn btn-primary"
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":"bundle.adminDatastore != null",
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+                                "class":"btn btn-primary"
                             }
                         },
                         {
-                            "type": "button",
-                            "label": "Cancel",
-                            "name": "Cancel",
-                            "visible": "bundle.adminDatastore != null",
-                            "enabled": true,
-                            "renderType": "custom",
-                            "renderAttributes": {
-                                "class": "btn btn-link cancel-record"
+                            "type":"button",
+                            "label":"Cancel",
+                            "name":"Cancel",
+                            "visible":"bundle.adminDatastore != null",
+                            "enabled":true,
+                            "renderType":"custom",
+                            "renderAttributes":{
+                                "class":"btn btn-link cancel-record"
                             },
-                            "events": []
+                            "events":[
+
+                            ]
                         }
                     ],
-                    "events": [
+                    "events":[
                         {
-                            "name": "Add Kapp Options",
-                            "type": "Load",
-                            "action": "Custom",
-                            "code": "K.api(\"get\", bundle.apiLocation()+\"/kapps\", {\n  success: function(data){\n    var kappOptions = [];\n    $.each(data.kapps, function(i,v){\n    \tkappOptions.push({'label':v.name,'value':v.slug});\n    });\n    console.log(kappOptions);\n    K('field[Kapp]').options(kappOptions);\n  }\n})"
+                            "name":"Add Kapp Options",
+                            "type":"Load",
+                            "action":"Custom",
+                            "code":"K.api(\"get\", bundle.apiLocation()+\"/kapps\", {\n  success: function(data){\n    var kappOptions = [];\n    $.each(data.kapps, function(i,v){\n    \tkappOptions.push({'label':v.name,'value':v.slug});\n    });\n    console.log(kappOptions);\n    K('field[Kapp]').options(kappOptions);\n  }\n})"
                         }
                     ],
-                    "name": "Datastore",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": "false",
-                    "displayCondition": null,
-                    "displayPage": "pages/datastore/datastoreForm.jsp"
+                    "name":"Datastore",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":"pages/datastore/datastoreForm.jsp"
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies":[
+
+            ]
         },
         {
-            "name": "Translation Entries",
-            "description": "Store the translation entries from the translation console.",
-            "slug": "translation-entries",
-            "type": "Content",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": "${values('Context')},${values('Locale')},${values('Key').substring(0,50)}",
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"Translation Entries",
+            "description":"Store the translation entries from the translation console.",
+            "slug":"translation-entries",
+            "type":"Content",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":"${values('Context')},${values('Locale')},${values('Key').substring(0,50)}",
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [
+                    "elements":[
                         {
-                            "type": "field",
-                            "name": "Kapp Id",
-                            "label": "Kapp Id",
-                            "key": "f1",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
-                        },
-                        {
-                            "type": "field",
-                            "name": "Context",
-                            "label": "Context",
-                            "key": "f5",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
-                        },
-                        {
-                            "type": "field",
-                            "name": "Locale",
-                            "label": "Locale",
-                            "key": "f4",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": {
-                                "regex": "^[a-z]{2}(_[A-Z]{2}(_[A-Z]+)?)?$",
-                                "message": "Locale must be a valid locale code."
+                            "type":"field",
+                            "name":"Kapp Id",
+                            "label":"Kapp Id",
+                            "key":"f1",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
                             },
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Key",
-                            "label": "Key",
-                            "key": "f3",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [
+                            "type":"field",
+                            "name":"Context",
+                            "label":"Context",
+                            "key":"f5",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"field",
+                            "name":"Locale",
+                            "label":"Locale",
+                            "key":"f4",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":{
+                                "regex":"^[a-z]{2}(_[A-Z]{2}(_[A-Z]+)?)?$",
+                                "message":"Locale must be a valid locale code."
+                            },
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"field",
+                            "name":"Key",
+                            "label":"Key",
+                            "key":"f3",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
                                 {
-                                    "content": "values('Key').length <= 256",
-                                    "message": "Key must be less than or equal to 256 characters."
+                                    "content":"values('Key').length <= 256",
+                                    "message":"Key must be less than or equal to 256 characters."
                                 }
                             ],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
-                        },
-                        {
-                            "type": "field",
-                            "name": "Value",
-                            "label": "Value",
-                            "key": "f2",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
-                        },
-                        {
-                            "type": "field",
-                            "name": "Tombstone",
-                            "label": "Tombstone",
-                            "key": "f6",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": false,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": false,
-                            "pattern": {
-                                "regex": "Yes",
-                                "message": "Tombstone value must be empty or \"Yes\"."
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
                             },
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "button",
-                            "label": "Save",
-                            "name": "Save",
-                            "visible": true,
-                            "enabled": true,
-                            "renderType": "submit-page",
-                            "renderAttributes": {}
+                            "type":"field",
+                            "name":"Value",
+                            "label":"Value",
+                            "key":"f2",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"field",
+                            "name":"Tombstone",
+                            "label":"Tombstone",
+                            "key":"f6",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":false,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":false,
+                            "pattern":{
+                                "regex":"Yes",
+                                "message":"Tombstone value must be empty or \"Yes\"."
+                            },
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+
+                            }
                         }
                     ],
-                    "events": [],
-                    "name": "Translation Entry",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": "false",
-                    "displayCondition": null,
-                    "displayPage": null
+                    "events":[
+
+                    ],
+                    "name":"Translation Entry",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":null
                 }
             ],
-            "securityPolicies": [
+            "securityPolicies":[
                 {
-                    "endpoint": "Display",
-                    "name": "Admins"
+                    "endpoint":"Display",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Modification",
-                    "name": "Admins"
+                    "endpoint":"Modification",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Submission Access",
-                    "name": "Admins"
+                    "endpoint":"Submission Access",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Submission Modification",
-                    "name": "Admins"
+                    "endpoint":"Submission Modification",
+                    "name":"Admins"
                 }
             ]
         },
         {
-            "name": "Translation Events",
-            "description": "Stores events from the translation console used to maintain a fresh cache.",
-            "slug": "translation-events",
-            "type": "Content",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": "${values('Type')} - ${submission('id')}",
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"Translation Events",
+            "description":"Stores events from the translation console used to maintain a fresh cache.",
+            "slug":"translation-events",
+            "type":"Content",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":"${values('Type')} - ${submission('id')}",
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [
+                    "elements":[
                         {
-                            "type": "field",
-                            "name": "Kapp Id",
-                            "label": "Kapp Id",
-                            "key": "f1",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Kapp Id",
+                            "label":"Kapp Id",
+                            "key":"f1",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Type",
-                            "label": "Type",
-                            "key": "f2",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Type",
+                            "label":"Type",
+                            "key":"f2",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Data",
-                            "label": "Data",
-                            "key": "f3",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": false,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Data",
+                            "label":"Data",
+                            "key":"f3",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "button",
-                            "label": "Save",
-                            "name": "Save",
-                            "visible": true,
-                            "enabled": true,
-                            "renderType": "submit-page",
-                            "renderAttributes": {}
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+
+                            }
                         }
                     ],
-                    "events": [],
-                    "name": "Translation Event",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": "false",
-                    "displayCondition": null,
-                    "displayPage": null
+                    "events":[
+
+                    ],
+                    "name":"Translation Event",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":null
                 }
             ],
-            "securityPolicies": [
+            "securityPolicies":[
                 {
-                    "endpoint": "Display",
-                    "name": "Admins"
+                    "endpoint":"Display",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Modification",
-                    "name": "Admins"
+                    "endpoint":"Modification",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Submission Access",
-                    "name": "Admins"
+                    "endpoint":"Submission Access",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Submission Modification",
-                    "name": "Admins"
+                    "endpoint":"Submission Modification",
+                    "name":"Admins"
                 }
             ]
         },
         {
-            "name": "Translation Settings",
-            "description": "Stores settings used by the translation console.",
-            "slug": "translation-settings",
-            "type": "Content",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": "${values('Name')} - ${values('Value')}",
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"Translation Settings",
+            "description":"Stores settings used by the translation console.",
+            "slug":"translation-settings",
+            "type":"Content",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":"${values('Name')} - ${values('Value')}",
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [
+                    "elements":[
                         {
-                            "type": "field",
-                            "name": "Kapp Id",
-                            "label": "Kapp Id",
-                            "key": "f1",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Kapp Id",
+                            "label":"Kapp Id",
+                            "key":"f1",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Name",
-                            "label": "Name",
-                            "key": "f2",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Name",
+                            "label":"Name",
+                            "key":"f2",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "field",
-                            "name": "Value",
-                            "label": "Value",
-                            "key": "f3",
-                            "defaultValue": null,
-                            "defaultResourceName": null,
-                            "visible": true,
-                            "enabled": true,
-                            "required": true,
-                            "requiredMessage": null,
-                            "omitWhenHidden": null,
-                            "pattern": null,
-                            "constraints": [],
-                            "events": [],
-                            "renderAttributes": {},
-                            "dataType": "string",
-                            "renderType": "text",
-                            "rows": 1
+                            "type":"field",
+                            "name":"Value",
+                            "label":"Value",
+                            "key":"f3",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
                         },
                         {
-                            "type": "button",
-                            "label": "Save",
-                            "name": "Save",
-                            "visible": true,
-                            "enabled": true,
-                            "renderType": "submit-page",
-                            "renderAttributes": {}
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+
+                            }
                         }
                     ],
-                    "events": [],
-                    "name": "Translation Setting",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": "false",
-                    "displayCondition": null,
-                    "displayPage": null
+                    "events":[
+
+                    ],
+                    "name":"Translation Setting",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":null
                 }
             ],
-            "securityPolicies": [
+            "securityPolicies":[
                 {
-                    "endpoint": "Display",
-                    "name": "Admins"
+                    "endpoint":"Display",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Modification",
-                    "name": "Admins"
+                    "endpoint":"Modification",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Submission Access",
-                    "name": "Admins"
+                    "endpoint":"Submission Access",
+                    "name":"Admins"
                 },
                 {
-                    "endpoint": "Submission Modification",
-                    "name": "Admins"
+                    "endpoint":"Submission Modification",
+                    "name":"Admins"
                 }
             ]
         },
         {
-            "name": "Translations",
-            "description": "Stores translations used to localize the contest display to a user based on the user's preferred locale.",
-            "slug": "translations",
-            "type": "Console",
-            "status": "Active",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": null,
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"Translations",
+            "description":"Stores translations used to localize the contest display to a user based on the user's preferred locale.",
+            "slug":"translations",
+            "type":"Console",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":null,
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [],
-                    "events": [],
-                    "name": "Translations",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": null,
-                    "displayCondition": null,
-                    "displayPage": "pages/translations/console.jsp"
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Translations",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/translations/console.jsp"
                 }
             ],
-            "securityPolicies": []
+            "securityPolicies":[
+
+            ]
         },
         {
-            "name": "User Management",
-            "description": "Allows for creation and management of users and their properties and attributes.",
-            "slug": "user-management",
-            "type": "Console",
-            "status": "Inactive",
-            "anonymous": false,
-            "customHeadContent": null,
-            "notes": null,
-            "submissionLabelExpression": null,
-            "attributes": [],
-            "bridgedResources": [],
-            "categorizations": [],
-            "pages": [
+            "name":"User Management",
+            "description":"Allows for creation and management of users and their properties and attributes.",
+            "slug":"user-management",
+            "type":"Console",
+            "status":"Inactive",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":null,
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
                 {
-                    "elements": [],
-                    "events": [],
-                    "name": "User Management",
-                    "renderType": "submittable",
-                    "type": "page",
-                    "advanceCondition": null,
-                    "displayCondition": null,
-                    "displayPage": "pages/users/console.jsp"
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"User Management",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/users/console.jsp"
                 }
             ],
-            "securityPolicies": [
+            "securityPolicies":[
                 {
-                    "endpoint": "Display",
-                    "name": "Admins"
+                    "endpoint":"Display",
+                    "name":"Admins"
                 }
             ]
         },
         {
-            "name": "Space Management",
-            "anonymous": false,
-            "description": "Allows for management of Space Attributes.",
-            "pages": [
+            "name":"Space Management",
+            "anonymous":false,
+            "description":"Allows for management of Space Attributes.",
+            "pages":[
                 {
-                  "advanceCondition": null,
-                  "displayCondition": null,
-                  "displayPage": "pages/space-management/console.jsp",
-                  "elements": [],
-                  "events": [],
-                  "name": "Space Management",
-                  "renderType": "submittable",
-                  "type": "page"
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/space-management/console.jsp",
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Space Management",
+                    "renderType":"submittable",
+                    "type":"page"
                 }
             ],
-            "securityPolicies": [],
-            "slug": "space-management",
-            "status": "Active",
-            "submissionLabelExpression": "${form('name')} ${form('slug')}",
-            "type": "Console"
+            "securityPolicies":[
+
+            ],
+            "slug":"space-management",
+            "status":"Active",
+            "submissionLabelExpression":"${form('name')} ${form('slug')}",
+            "type":"Console"
         },
         {
-            "name": "Kapp Management",
-            "anonymous": false,
-            "description": "Allows for management of Kapp Attributes.",
-            "pages": [
+            "name":"Kapp Management",
+            "anonymous":false,
+            "description":"Allows for management of Kapp Attributes.",
+            "pages":[
                 {
-                  "advanceCondition": null,
-                  "displayCondition": null,
-                  "displayPage": "pages/kapp-management/console.jsp",
-                  "elements": [],
-                  "events": [],
-                  "name": "Kapp Management",
-                  "renderType": "submittable",
-                  "type": "page"
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/kapp-management/console.jsp",
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Kapp Management",
+                    "renderType":"submittable",
+                    "type":"page"
                 }
             ],
-            "securityPolicies": [],
-            "slug": "kapp-management",
-            "status": "Active",
-            "submissionLabelExpression": "${form('name')} ${form('slug')}",
-            "type": "Console"
+            "securityPolicies":[
+
+            ],
+            "slug":"kapp-management",
+            "status":"Active",
+            "submissionLabelExpression":"${form('name')} ${form('slug')}",
+            "type":"Console"
         },
         {
-            "name": "Form Management",
-            "anonymous": false,
-            "description": "Console for managing forms within the system.",
-            "pages": [
+            "name":"Form Management",
+            "anonymous":false,
+            "description":"Console for managing forms within the system.",
+            "pages":[
                 {
-                  "advanceCondition": null,
-                  "displayCondition": null,
-                  "displayPage": "pages/form-management/console.jsp",
-                  "elements": [],
-                  "events": [],
-                  "name": "Form Management",
-                  "renderType": "submittable",
-                  "type": "page"
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/form-management/console.jsp",
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Form Management",
+                    "renderType":"submittable",
+                    "type":"page"
                 }
             ],
-            "securityPolicies": [],
-            "slug": "form-management",
-            "status": "Active",
-            "submissionLabelExpression": "${form('name')} ${form('slug')}",
-            "type": "Console"
+            "securityPolicies":[
+
+            ],
+            "slug":"form-management",
+            "status":"Active",
+            "submissionLabelExpression":"${form('name')} ${form('slug')}",
+            "type":"Console"
         },
         {
-          "name": "Registered Images",
-          "anonymous": false,
-          "attributes": [
-            {
-              "name": "Datastore Configuration",
-              "values": [
-                "[{\"data\":\"Image Name\",\"title\":\"Image Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Image URL\",\"title\":\"Image URL\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
-              ]
-            }
-          ],
-          "description": "This datastore stores external image URL's that are commonly used throughout the system. ",
-          "pages": [
-            {
-              "advanceCondition": "false",
-              "displayCondition": null,
-              "displayPage": "pages/datastore/datastoreForm.jsp",
-              "elements": [
+            "name":"Registered Images",
+            "anonymous":false,
+            "attributes":[
                 {
-                  "type": "field",
-                  "name": "Image Name",
-                  "label": "Image Name",
-                  "key": "f2",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 1
-                },
-                {
-                  "type": "field",
-                  "name": "Image URL",
-                  "label": "Image URL",
-                  "key": "fSample",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 1
-                },
-                {
-                  "type": "field",
-                  "name": "Status",
-                  "label": "Status",
-                  "key": "f1",
-                  "defaultValue": "active",
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "radio",
-                  "choicesResourceName": null,
-                  "choicesRunIf": null,
-                  "choices": [
-                    {
-                      "label": "Active",
-                      "value": "active"
-                    },
-                    {
-                      "label": "Inactive",
-                      "value": "inactive"
-                    }
-                  ]
-                },
-                {
-                  "type": "button",
-                  "label": "Save",
-                  "name": "Save",
-                  "visible": "bundle.adminDatastore != null",
-                  "enabled": true,
-                  "renderType": "submit-page",
-                  "renderAttributes": {
-                    "class": "btn btn-tertiary"
-                  }
-                },
-                {
-                  "type": "button",
-                  "label": "Cancel",
-                  "name": "Cancel",
-                  "visible": "bundle.adminDatastore != null",
-                  "enabled": true,
-                  "renderType": "custom",
-                  "renderAttributes": {
-                    "class": "btn btn-link cancel-record"
-                  },
-                  "events": []
+                    "name":"Datastore Configuration",
+                    "values":[
+                        "[{\"data\":\"Image Name\",\"title\":\"Image Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Image URL\",\"title\":\"Image URL\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
+                    ]
                 }
-              ],
-              "events": [],
-              "name": "Datastore",
-              "renderType": "submittable",
-              "type": "page"
-            }
-          ],
-          "slug": "registered-images",
-          "status": "Active",
-          "submissionLabelExpression": null,
-          "type": "Datastore"
+            ],
+            "description":"This datastore stores external image URL's that are commonly used throughout the system. ",
+            "pages":[
+                {
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":"pages/datastore/datastoreForm.jsp",
+                    "elements":[
+                        {
+                            "type":"field",
+                            "name":"Image Name",
+                            "label":"Image Name",
+                            "key":"f2",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"field",
+                            "name":"Image URL",
+                            "label":"Image URL",
+                            "key":"fSample",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"field",
+                            "name":"Status",
+                            "label":"Status",
+                            "key":"f1",
+                            "defaultValue":"active",
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"radio",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
+                                {
+                                    "label":"Active",
+                                    "value":"active"
+                                },
+                                {
+                                    "label":"Inactive",
+                                    "value":"inactive"
+                                }
+                            ]
+                        },
+                        {
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":"bundle.adminDatastore != null",
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+                                "class":"btn btn-tertiary"
+                            }
+                        },
+                        {
+                            "type":"button",
+                            "label":"Cancel",
+                            "name":"Cancel",
+                            "visible":"bundle.adminDatastore != null",
+                            "enabled":true,
+                            "renderType":"custom",
+                            "renderAttributes":{
+                                "class":"btn btn-link cancel-record"
+                            },
+                            "events":[
+
+                            ]
+                        }
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Datastore",
+                    "renderType":"submittable",
+                    "type":"page"
+                }
+            ],
+            "slug":"registered-images",
+            "status":"Active",
+            "submissionLabelExpression":null,
+            "type":"Datastore"
         },
         {
-          "name": "Notifications",
-          "anonymous": false,
-          "description": "Console for building and managing notifications sent out by the system.",
-          "pages": [
-            {
-              "advanceCondition": null,
-              "displayCondition": null,
-              "displayPage": "pages/notifications/console.jsp",
-              "elements": [
+            "name":"Notifications",
+            "anonymous":false,
+            "description":"Console for building and managing notifications sent out by the system.",
+            "pages":[
                 {
-                  "type": "button",
-                  "label": "Submit",
-                  "name": "Submit Button",
-                  "visible": true,
-                  "enabled": true,
-                  "renderType": "submit-page",
-                  "renderAttributes": {}
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/notifications/console.jsp",
+                    "elements":[
+                        {
+                            "type":"button",
+                            "label":"Submit",
+                            "name":"Submit Button",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+
+                            }
+                        }
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Console Page",
+                    "renderType":"submittable",
+                    "type":"page"
                 }
-              ],
-              "events": [],
-              "name": "Console Page",
-              "renderType": "submittable",
-              "type": "page"
-            }
-          ],
-          "slug": "notifications",
-          "status": "Active",
-          "submissionLabelExpression": null,
-          "type": "Console"
+            ],
+            "slug":"notifications",
+            "status":"Active",
+            "submissionLabelExpression":null,
+            "type":"Console"
         },
         {
-          "name": "Notification Data",
-          "anonymous": false,
-          "attributes": [
-            {
-              "name": "Datastore Configuration",
-              "values": [
-                "[{\"data\":\"Name\",\"title\":\"Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":true},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Subject\",\"title\":\"Subject\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"HTML Content\",\"title\":\"HTML Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Text Content\",\"title\":\"Text Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Type\",\"title\":\"Type\",\"visible\":false,\"searchable\":false,\"orderable\":false,\"unique\":false},{\"data\":\"Language\",\"title\":\"Language\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Region\",\"title\":\"Region\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
-              ]
-            }
-          ],
-          
-          "description": "Stores the notification message content.",
-          "notes": "",
-          "pages": [
-            {
-              "advanceCondition": "false",
-              "displayCondition": null,
-              "displayPage": "pages/notifications/form.jsp",
-              "elements": [
+            "name":"Notification Data",
+            "anonymous":false,
+            "attributes":[
                 {
-                  "type": "field",
-                  "name": "Name",
-                  "label": "Name",
-                  "key": "f1",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {
-                    "style": "width:100%"
-                  },
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 1,
-                  "omitWhenHidden": null
-                },
-                {
-                  "type": "field",
-                  "name": "Status",
-                  "label": "Status",
-                  "key": "f2",
-                  "defaultValue": "Active",
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "radio",
-                  "choicesResourceName": null,
-                  "choices": [
-                    {
-                      "label": "Active",
-                      "value": "Active"
-                    },
-                    {
-                      "label": "Inactive",
-                      "value": "Inactive"
-                    }
-                  ],
-                  "choicesRunIf": null,
-                  "omitWhenHidden": null
-                },
-                {
-                  "type": "field",
-                  "name": "Language",
-                  "label": "Language",
-                  "key": "f15",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": false,
-                  "enabled": true,
-                  "required": false,
-                  "requiredMessage": null,
-                  "omitWhenHidden": false,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "dropdown",
-                  "choicesResourceName": null,
-                  "choicesRunIf": null,
-                  "choices": []
-                },
-                {
-                  "type": "field",
-                  "name": "Region",
-                  "label": "Region",
-                  "key": "f16",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": false,
-                  "enabled": true,
-                  "required": false,
-                  "requiredMessage": null,
-                  "omitWhenHidden": true,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "dropdown",
-                  "choicesResourceName": null,
-                  "choicesRunIf": null,
-                  "choices": []
-                },
-                {
-                  "type": "field",
-                  "name": "Subject",
-                  "label": "Subject",
-                  "key": "f10",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": "values('Type') === \"Template\"",
-                  "enabled": true,
-                  "required": "values('Type') === \"Template\"",
-                  "requiredMessage": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {
-                    "style": "width:100%",
-                    "data-allows-replacement": "true"
-                  },
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 2,
-                  "omitWhenHidden": true
-                },
-                {
-                  "type": "field",
-                  "name": "HTML Content",
-                  "label": "HTML Content",
-                  "key": "f11",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {
-                    "style": "width:100%",
-                    "data-allows-replacement": "true"
-                  },
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 10,
-                  "omitWhenHidden": null
-                },
-                {
-                  "type": "field",
-                  "name": "Text Content",
-                  "label": "Text Content",
-                  "key": "f12",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": "values('Type') === \"Template\"",
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {
-                    "style": "width:100%",
-                    "data-allows-replacement": "true"
-                  },
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 10
-                },
-                {
-                  "type": "field",
-                  "name": "Type",
-                  "label": "Type",
-                  "key": "f14",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": false,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": false,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "dropdown",
-                  "choicesResourceName": null,
-                  "choicesRunIf": null,
-                  "choices": [
-                    {
-                      "label": "Snippit",
-                      "value": "Snippit"
-                    },
-                    {
-                      "label": "Template",
-                      "value": "Template"
-                    }
-                  ]
-                },
-                {
-                  "type": "button",
-                  "label": "Cancel",
-                  "name": "Cancel",
-                  "visible": true,
-                  "enabled": true,
-                  "renderType": "custom",
-                  "renderAttributes": {
-                    "class": "btn btn-link cancel-record"
-                  },
-                  "events": []
-                },
-                {
-                  "type": "button",
-                  "label": "Save",
-                  "name": "Save",
-                  "visible": true,
-                  "enabled": true,
-                  "renderType": "submit-page",
-                  "renderAttributes": {
-                    "class": "btn btn-tertiary"
-                  }
+                    "name":"Datastore Configuration",
+                    "values":[
+                        "[{\"data\":\"Name\",\"title\":\"Name\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":true},{\"data\":\"Status\",\"title\":\"Status\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Subject\",\"title\":\"Subject\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"HTML Content\",\"title\":\"HTML Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Text Content\",\"title\":\"Text Content\",\"visible\":true,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Type\",\"title\":\"Type\",\"visible\":false,\"searchable\":false,\"orderable\":false,\"unique\":false},{\"data\":\"Language\",\"title\":\"Language\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false},{\"data\":\"Region\",\"title\":\"Region\",\"visible\":false,\"searchable\":true,\"orderable\":true,\"unique\":false}]"
+                    ]
                 }
-              ],
-              "events": [],
-              "name": "Page 1",
-              "renderType": "submittable",
-              "type": "page"
-            }
-          ],
-          "securityPolicies": [],
-          "slug": "notification-data",
-          "status": "Active",
-          "submissionLabelExpression": "${values('Name')} - ${values('Status')}",
-          "type": "Content"
+            ],
+            "description":"Stores the notification message content.",
+            "notes":"",
+            "pages":[
+                {
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":"pages/notifications/form.jsp",
+                    "elements":[
+                        {
+                            "type":"field",
+                            "name":"Name",
+                            "label":"Name",
+                            "key":"f1",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+                                "style":"width:100%"
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1,
+                            "omitWhenHidden":null
+                        },
+                        {
+                            "type":"field",
+                            "name":"Status",
+                            "label":"Status",
+                            "key":"f2",
+                            "defaultValue":"Active",
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"radio",
+                            "choicesResourceName":null,
+                            "choices":[
+                                {
+                                    "label":"Active",
+                                    "value":"Active"
+                                },
+                                {
+                                    "label":"Inactive",
+                                    "value":"Inactive"
+                                }
+                            ],
+                            "choicesRunIf":null,
+                            "omitWhenHidden":null
+                        },
+                        {
+                            "type":"field",
+                            "name":"Language",
+                            "label":"Language",
+                            "key":"f15",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":false,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":false,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"dropdown",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
+
+                            ]
+                        },
+                        {
+                            "type":"field",
+                            "name":"Region",
+                            "label":"Region",
+                            "key":"f16",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":false,
+                            "enabled":true,
+                            "required":false,
+                            "requiredMessage":null,
+                            "omitWhenHidden":true,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"dropdown",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
+
+                            ]
+                        },
+                        {
+                            "type":"field",
+                            "name":"Subject",
+                            "label":"Subject",
+                            "key":"f10",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":"values('Type') === \"Template\"",
+                            "enabled":true,
+                            "required":"values('Type') === \"Template\"",
+                            "requiredMessage":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+                                "style":"width:100%",
+                                "data-allows-replacement":"true"
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":2,
+                            "omitWhenHidden":true
+                        },
+                        {
+                            "type":"field",
+                            "name":"HTML Content",
+                            "label":"HTML Content",
+                            "key":"f11",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+                                "style":"width:100%",
+                                "data-allows-replacement":"true"
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":10,
+                            "omitWhenHidden":null
+                        },
+                        {
+                            "type":"field",
+                            "name":"Text Content",
+                            "label":"Text Content",
+                            "key":"f12",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":"values('Type') === \"Template\"",
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+                                "style":"width:100%",
+                                "data-allows-replacement":"true"
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":10
+                        },
+                        {
+                            "type":"field",
+                            "name":"Type",
+                            "label":"Type",
+                            "key":"f14",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":false,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":false,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"dropdown",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
+                                {
+                                    "label":"Snippit",
+                                    "value":"Snippit"
+                                },
+                                {
+                                    "label":"Template",
+                                    "value":"Template"
+                                }
+                            ]
+                        },
+                        {
+                            "type":"button",
+                            "label":"Cancel",
+                            "name":"Cancel",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"custom",
+                            "renderAttributes":{
+                                "class":"btn btn-link cancel-record"
+                            },
+                            "events":[
+
+                            ]
+                        },
+                        {
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":true,
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+                                "class":"btn btn-tertiary"
+                            }
+                        }
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Page 1",
+                    "renderType":"submittable",
+                    "type":"page"
+                }
+            ],
+            "securityPolicies":[
+
+            ],
+            "slug":"notification-data",
+            "status":"Active",
+            "submissionLabelExpression":"${values('Name')} - ${values('Status')}",
+            "type":"Content"
         },
         {
-          "name": "Notification Dates",
-          "anonymous": false,
-          "attributes": [
-            {
-              "name": "Datastore Configuration",
-              "values": [
-                "[]"
-              ]
-            }
-          ],
-          "description": "Store of date formats for Notifications",
-          "notes": null,
-          "pages": [
-            {
-              "advanceCondition": "false",
-              "displayCondition": null,
-              "displayPage": "pages/datastore/datastoreForm.jsp",
-              "elements": [
+            "name":"Notification Dates",
+            "anonymous":false,
+            "attributes":[
                 {
-                  "type": "field",
-                  "name": "Status",
-                  "label": "Status",
-                  "key": "f1",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "radio",
-                  "choicesResourceName": null,
-                  "choicesRunIf": null,
-                  "choices": [
-                    {
-                      "label": "Active",
-                      "value": "active"
-                    },
-                    {
-                      "label": "Inactive",
-                      "value": "inactive"
-                    }
-                  ]
-                },
-                {
-                  "type": "field",
-                  "name": "Name",
-                  "label": "Date Format Name",
-                  "key": "fSample",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 1
-                },
-                {
-                  "type": "content",
-                  "renderType": "text",
-                  "name": "Name Explanation",
-                  "text": "The Name of the date format is the name you will be including in your message templates inside the ${\"${format('DateName')}\"} tag. It should likely be something human readable and short but descriptive, like ShortDatewithTime.",
-                  "visible": true,
-                  "renderAttributes": {}
-                },
-                {
-                  "type": "field",
-                  "name": "Format",
-                  "label": "Format",
-                  "key": "f2",
-                  "defaultValue": null,
-                  "defaultResourceName": null,
-                  "visible": true,
-                  "enabled": true,
-                  "required": true,
-                  "requiredMessage": null,
-                  "omitWhenHidden": null,
-                  "pattern": null,
-                  "constraints": [],
-                  "events": [],
-                  "renderAttributes": {},
-                  "dataType": "string",
-                  "renderType": "text",
-                  "rows": 1
-                },
-                {
-                  "type": "content",
-                  "renderType": "html",
-                  "name": "Format Explanation",
-                  "text": "The date format should be a ruby date format such as %m-%e-%y %H:%M for 03-17-16 15:19. Examples and explanation can be found at <a href=\"http://www.foragoodstrftime.com/\" target=\"_blank\">http://www.foragoodstrftime.com/</a>",
-                  "visible": true,
-                  "renderAttributes": {}
-                },
-                {
-                  "type": "button",
-                  "label": "Save",
-                  "name": "Save",
-                  "visible": "bundle.adminDatastore != null",
-                  "enabled": true,
-                  "renderType": "submit-page",
-                  "renderAttributes": {
-                    "class": "btn btn-primary"
-                  }
-                },
-                {
-                  "type": "button",
-                  "label": "Cancel",
-                  "name": "Cancel",
-                  "visible": "bundle.adminDatastore != null",
-                  "enabled": true,
-                  "renderType": "custom",
-                  "renderAttributes": {
-                    "class": "btn btn-link cancel-record"
-                  },
-                  "events": [
-                    {
-                      "name": "Return to Datastore",
-                      "type": "Click",
-                      "action": "Custom",
-                      "code": "location.replace($('a.return-to-store').attr('href'));"
-                    }
-                  ]
+                    "name":"Datastore Configuration",
+                    "values":[
+                        "[]"
+                    ]
                 }
-              ],
-              "events": [
+            ],
+            "description":"Store of date formats for Notifications",
+            "notes":null,
+            "pages":[
                 {
-                  "name": "Return to Datastore on Success",
-                  "type": "Submit",
-                  "action": "Custom",
-                  "code": "if ($.isEmptyObject(event.constraints)){\n\tlocation.replace($('a.return-to-store').attr('href'));\n}"
+                    "advanceCondition":"false",
+                    "displayCondition":null,
+                    "displayPage":"pages/datastore/datastoreForm.jsp",
+                    "elements":[
+                        {
+                            "type":"field",
+                            "name":"Status",
+                            "label":"Status",
+                            "key":"f1",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"radio",
+                            "choicesResourceName":null,
+                            "choicesRunIf":null,
+                            "choices":[
+                                {
+                                    "label":"Active",
+                                    "value":"active"
+                                },
+                                {
+                                    "label":"Inactive",
+                                    "value":"inactive"
+                                }
+                            ]
+                        },
+                        {
+                            "type":"field",
+                            "name":"Name",
+                            "label":"Date Format Name",
+                            "key":"fSample",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"content",
+                            "renderType":"text",
+                            "name":"Name Explanation",
+                            "text":"The Name of the date format is the name you will be including in your message templates inside the ${\"${format('DateName')}\"} tag. It should likely be something human readable and short but descriptive, like ShortDatewithTime.",
+                            "visible":true,
+                            "renderAttributes":{
+
+                            }
+                        },
+                        {
+                            "type":"field",
+                            "name":"Format",
+                            "label":"Format",
+                            "key":"f2",
+                            "defaultValue":null,
+                            "defaultResourceName":null,
+                            "visible":true,
+                            "enabled":true,
+                            "required":true,
+                            "requiredMessage":null,
+                            "omitWhenHidden":null,
+                            "pattern":null,
+                            "constraints":[
+
+                            ],
+                            "events":[
+
+                            ],
+                            "renderAttributes":{
+
+                            },
+                            "dataType":"string",
+                            "renderType":"text",
+                            "rows":1
+                        },
+                        {
+                            "type":"content",
+                            "renderType":"html",
+                            "name":"Format Explanation",
+                            "text":"The date format should be a ruby date format such as %m-%e-%y %H:%M for 03-17-16 15:19. Examples and explanation can be found at <a href=\"http://www.foragoodstrftime.com/\" target=\"_blank\">http://www.foragoodstrftime.com/</a>",
+                            "visible":true,
+                            "renderAttributes":{
+
+                            }
+                        },
+                        {
+                            "type":"button",
+                            "label":"Save",
+                            "name":"Save",
+                            "visible":"bundle.adminDatastore != null",
+                            "enabled":true,
+                            "renderType":"submit-page",
+                            "renderAttributes":{
+                                "class":"btn btn-primary"
+                            }
+                        },
+                        {
+                            "type":"button",
+                            "label":"Cancel",
+                            "name":"Cancel",
+                            "visible":"bundle.adminDatastore != null",
+                            "enabled":true,
+                            "renderType":"custom",
+                            "renderAttributes":{
+                                "class":"btn btn-link cancel-record"
+                            },
+                            "events":[
+                                {
+                                    "name":"Return to Datastore",
+                                    "type":"Click",
+                                    "action":"Custom",
+                                    "code":"location.replace($('a.return-to-store').attr('href'));"
+                                }
+                            ]
+                        }
+                    ],
+                    "events":[
+                        {
+                            "name":"Return to Datastore on Success",
+                            "type":"Submit",
+                            "action":"Custom",
+                            "code":"if ($.isEmptyObject(event.constraints)){\n\tlocation.replace($('a.return-to-store').attr('href'));\n}"
+                        }
+                    ],
+                    "name":"Datastore",
+                    "renderType":"submittable",
+                    "type":"page"
                 }
-              ],
-              "name": "Datastore",
-              "renderType": "submittable",
-              "type": "page"
-            }
-          ],
-          "securityPolicies": [],
-          "slug": "notification-template-dates",
-          "status": "Active",
-          "submissionLabelExpression": "${values('Name')}",
-          "type": "Datastore"
+            ],
+            "securityPolicies":[
+
+            ],
+            "slug":"notification-template-dates",
+            "status":"Active",
+            "submissionLabelExpression":"${values('Name')}",
+            "type":"Datastore"
         }
     ]
 }

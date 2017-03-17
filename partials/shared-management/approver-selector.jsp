@@ -32,11 +32,13 @@
             <select class="approvalSelector form-control">
                 <option/>
                 <c:forEach items="${space.teams}" var="team">
-                    <c:set var="selected" value=""/>
-                    <c:if test="${team.name eq currentObj.getAttributeValue(thisAttribute.name)}">
-                        <c:set var="selected" value="selected"/>
+                    <c:if test="${not fn:startsWith(fn:toLowerCase(team.name), 'role')}">
+                        <c:set var="selected" value=""/>
+                        <c:if test="${team.name eq currentObj.getAttributeValue(thisAttribute.name)}">
+                            <c:set var="selected" value="selected"/>
+                        </c:if>
+                        <option ${selected} value="${team.name}">${team.name}</option>
                     </c:if>
-                    <option ${selected} value="${team.name}">${team.name}</option>
                 </c:forEach>
             </select>
         </div>

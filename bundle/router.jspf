@@ -103,7 +103,7 @@
     ) {
         // Redirect to the reset password page
         response.sendRedirect(bundle.getSpaceLocation()+"/app/reset-password"+
-            "?username="+request.getParameter("username")+
+            "?username="+Text.escapeUrlParameter(request.getParameter("username"))+
             "&token="+request.getParameter("token"));
         // Return so that no further JSP processing occurs
         return;

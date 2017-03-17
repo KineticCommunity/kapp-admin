@@ -273,14 +273,13 @@ table.dataTable.nowrap td:not(.all) {
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 input[type='text'], input[type='password'], textarea, select {
-  color: inherit;
   display: block;
   text-decoration: none;
   width: 100%;
-  background: white;
+  background: #f8f8f8;
   border-width: 1px;
   border-style: solid;
-  border-color: #cfcfcf;
+  border-color: #e5e5e5;
   border-image: initial;
   outline: 0px;
   padding: 0.2rem 0.8rem;
@@ -491,6 +490,9 @@ section.page form .attachment label:after {
   content: " ";
   display: block;
   clear: both;
+}
+section.page form .attachment.empty .file-table {
+  display: none;
 }
 section.page form .file-table {
   display: table;
@@ -902,6 +904,23 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
   border-bottom: 2px solid #1594C4;
 }
 
+.tab-content .tab-pane table thead tr:first-child th {
+  border-top: none;
+}
+
+@media (max-width: 767px) {
+  .nav-tabs.stacked-xs > li {
+    float: none;
+    margin-bottom: 0;
+  }
+  .nav-tabs.stacked-xs > li a {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .nav-tabs.stacked-xs > li:not(.active) a {
+    font-size: 85%;
+  }
+}
 /* Nav Pills Elements
  *-------------------------------------- */
 .nav-pills > li > a {

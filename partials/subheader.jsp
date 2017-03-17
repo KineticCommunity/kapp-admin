@@ -9,7 +9,7 @@
                     <li>
                         <a href="${bundle.kappLocation}">
                             <span class="fa ${kapp.getAttributeValue('Icon')}"></span>
-                            <span>${i18n.translate('Home')}</span>
+                            <span>${i18n.translate(kapp.name)}</span>
                         </a>
                     </li>
                     <bundle:yield name="breadcrumb"/>

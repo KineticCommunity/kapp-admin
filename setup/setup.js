@@ -59,7 +59,8 @@
                     definitions.push({
                         name: $(e).data("name"),
                         allowsMultiple: $(e).data("allowsMultiple"),
-                        level: $(e).data("level")
+                        level: $(e).data("level"),
+                        description: $(e).find("td.description-text").text().trim()
                     });
                 }
             });

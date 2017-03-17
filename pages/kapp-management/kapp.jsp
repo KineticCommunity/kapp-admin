@@ -72,6 +72,23 @@
                                 </c:if>
                             </c:forEach>
 
+                            <!-- Build up Team Selector -->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Owning Team')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/team-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+
+                            <!-- Build up User Profile Attribute Definitions-->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'User Card Profile Attributes')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:set scope="request" var="attributeDefs" value="${space.userProfileAttributeDefinitions}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/multiple-attributes-checkbox-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+
                         </div>
                     </div>
 
@@ -131,7 +148,7 @@
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
                 <h4>
-                    <span><a href="${bundle.kappLocation}/${form.slug}/?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
+                    <span><a href="${bundle.kappLocation}/${form.slug}?page=form-management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
                     <small>${text.escape(currentObj.name)}</small>
                 </h4>
                 <hr class="border-color-white" />

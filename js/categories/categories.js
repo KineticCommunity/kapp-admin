@@ -387,16 +387,17 @@
                 var payload = '{"slug": "' + categoryName + '","name": "' + displayName + '",';
                 // These are attributes 
                 payload = payload + '"attributes": [ ';
-                if( sortOrder != undefined ||  parent != undefined){
-                    if(sortOrder != undefined){
-                        payload = payload + '{ "name":"Sort Order","values":["' + sortOrder + '"]},';
-                    }   
-                    if(parent != undefined){
-                        payload = payload + '{ "name":"Parent","values":["' + parent + '"]},';
-                    }
+                if( sortOrder != undefined){
+                    payload = payload + '{ "name":"Sort Order","values":["' + sortOrder + '"]},';  
                 }
+
                 // Add attributes besides sort and parent
+                var checkParent = false;
                 $.each(data.category.attributes, function(index,value){
+                    if(value.name === "Parent"){
+                        checkParent = true;
+                        value.values[0] = parent !== undefined ? parent : '';
+                    }
                     var stringVal = JSON.stringify(value);
                     if(stringVal.indexOf('Sort Order') > -1){
                     }
@@ -404,6 +405,11 @@
                         payload = payload + stringVal + ",";
                     }
                 });
+
+                if (parent !== undefined && !checkParent){
+                    payload = payload + '{ "name":"Parent","values":["' + parent + '"]},';
+                }
+
                 payload = payload.substring(0,payload.length-1) + '] '; 
                 // Close the payload
                 payload = payload + '}';

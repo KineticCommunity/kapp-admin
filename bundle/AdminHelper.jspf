@@ -25,6 +25,27 @@
             this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
             this.logger = (org.slf4j.Logger)request.getAttribute("logger");
         }
+
+        public String getCompanyName(){
+            if (space.hasAttribute("Company Name")) {
+                return space.getAttributeValue("Company Name");
+            }
+            return space.getName();
+        }
+        
+        /**
+         * Helper to get Response Server URL
+         * Check the Kapp then Space for an attribute called Response server URL
+         */
+        public String getResponseUrl(){
+            if(adminKapp != null && adminKapp.hasAttribute("Response Server Url")) {
+                return adminKapp.getAttributeValue("Response Server Url");
+            } 
+            else if (space.hasAttribute("Response Server Url")) {
+                return space.getAttributeValue("Response Server Url");
+            }
+            return null;
+        }
     
         public List<Form> getActiveConsoles(){
             // Filter Consoles to only those with an Active status
@@ -358,5 +379,37 @@
             
             return notifications;
         }
+        
+        /*-----------------------------------------------------------------------------------------
+         * FORM MANAGEMENT HELPER FUNCTIONS
+         *----------------------------------------------------------------------------------------*/
+         
+         public String getFormStatusLabelClass(Form form){
+            if (Text.equals("Active", form.getStatus())){
+                return "label-success";
+            }
+            else if (Text.equals("Inactive", form.getStatus())){
+                return "label-danger";
+            }
+            else if (Text.equals("New", form.getStatus())){
+                return "label-info";
+            }
+            else if (Text.equals("Delete", form.getStatus())){
+                return "label-warning";
+            }
+            else {
+                return "hide";
+            }
+        }
+        
+        public Boolean isFormOwner(User user, Form form){
+            for (Team team : user.getTeams()){
+                if (form.hasAttributeValue("Owning Team", team.getName())) {
+                    return Boolean.TRUE;
+                }
+            }
+            return Boolean.FALSE;
+        }
+         
     }
 %>
