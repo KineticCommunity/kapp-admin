@@ -37,7 +37,43 @@
                     <a tabindex="-1" href="#">Submission</a>
                     <ul class="dropdown-menu">
                         <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('handle')</a>
+                        </li>
+                        <li>
                             <a class="dynamic-replacement" tabindex="-1" href="#">submission('id')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('closedAt')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('closedBy')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('coreState')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('createdAt')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('createdBy')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('label')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('submittedAt')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('submittedBy')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('type')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('updatedAt')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" tabindex="-1" href="#">submission('updatedBy')</a>
                         </li>
                     </ul>
                 </li>
@@ -50,13 +86,19 @@
                             <a class="dynamic-replacement" href="#">form('Form Name')</a>
                         </li>
                         <li>
-                            <a class="dynamic-replacement" href="#">form('Form Notes')</a>
-                        </li>
-                        <li>
                             <a class="dynamic-replacement" href="#">form('Form Slug')</a>
                         </li>
                         <li>
+                            <a class="dynamic-replacement" href="#">form('Form Description')</a>
+                        </li>
+                        <li>
                             <a class="dynamic-replacement" href="#">form('Form Status')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" href="#">form('Form Notes')</a>
+                        </li>
+                        <li>
+                            <a class="dynamic-replacement" href="#">form('Form Type')</a>
                         </li>
                     </ul>
                 </li>
