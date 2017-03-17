@@ -23,7 +23,6 @@
         if($('.attribute input[name="Task Assignee Team"]').length > 0){
             sharedManagement.buildTaskAssigneeDOM();
         }
-        
 
      });
 
@@ -66,6 +65,23 @@
             var name = this.name;
             var value = this.value;
             attributes[name] = [value];
+        });
+
+        // Handle attributes that have multiple values
+        $('div.attribute select.attributeValues').each(function(){
+            var name = $( this ).attr('name');
+            var value = $( this ).val() || []
+            attributes[name] = value;
+        });
+
+        // Overwrite Attributes that have multiple values with what was selected
+        $('div.multiAttributes').each(function(){
+            var value = []
+            var name = $( this ).attr('name');
+            $(this).find('input:checkbox:checked').each(function(){
+                value.push($(this).val());
+            });
+            attributes[name] = value;
         });
 
         // Add the Attributes to the Space Object if they have a value

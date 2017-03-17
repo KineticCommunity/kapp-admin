@@ -47,7 +47,17 @@
             <div class="hidden">
                 <c:forEach items="${attributeDefinitions}" var="attribute">
                     <div class="attribute">
-                        <input class="attributeValue" name="${attribute.name}" value="${fn:escapeXml(space.getAttributeValue(attribute.name))}">
+                        <label class="control-label">${i18n.translate(attribute.name)}</label>
+                        <c:if test="${not attribute.isAllowsMultiple()}">
+                            <input class="attributeValue" name="${attribute.name}" value="${fn:escapeXml(space.getAttributeValue(attribute.name))}">
+                        </c:if>
+                        <c:if test="${attribute.isAllowsMultiple()}">
+                            <select class="attributeValues" name="${attribute.name}" multiple="multiple">
+                                <c:forEach var="value" items="${space.getAttributeValues(attribute.name)}">
+                                    <option selected value="${fn:escapeXml(value)}">${value}</option>
+                                </c:forEach>
+                            </select>                            
+                        </c:if>
                     </div>
                 </c:forEach>
             </div>
@@ -80,6 +90,39 @@
                             <c:import url="${bundle.path}/partials/shared-management/background-selector.jsp" charEncoding="UTF-8" />
                         </c:if>
                     </c:forEach>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <!-- Build up Public User Attribute Definitions-->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Public User Attributes')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:set scope="request" var="attributeDefs" value="${space.userAttributeDefinitions}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/multiple-attributes-checkbox-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- Build up Public User Profile Attribute Definitions-->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Public User Profile Attributes')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:set scope="request" var="attributeDefs" value="${space.userProfileAttributeDefinitions}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/multiple-attributes-checkbox-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- Build up Public Team Attribute Definitions-->
+                            <c:forEach items="${attributeDefinitions}" var="attribute">
+                                <c:if test="${fn:containsIgnoreCase(attribute.name, 'Public Team Attributes')}">
+                                    <c:set scope="request" var="thisAttribute" value="${attribute}"/>
+                                    <c:set scope="request" var="attributeDefs" value="${space.teamAttributeDefinitions}"/>
+                                    <c:import url="${bundle.path}/partials/shared-management/multiple-attributes-checkbox-selector.jsp" charEncoding="UTF-8" />
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
                 </div>
             </div>
 
