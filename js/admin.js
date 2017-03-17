@@ -308,7 +308,12 @@
      */
     $.fn.dataTable.render.notificationReplacement = function(){
         return function ( d, type, row ){
-            return d.replace(/\${(.*?)\}/g, " <span style='background-color:yellow'>\$&</span>" )
+            if (type === "export"){
+                return $.htmlEncode(d);
+            }
+            else {
+                return d.replace(/\${(.*?)\}/g, " <span style='background-color:yellow'>\$&</span>" )
+            }
         };
     };
     
