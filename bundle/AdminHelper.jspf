@@ -34,15 +34,15 @@
         }
         
         /**
-         * Helper to get Response Server URL
-         * Check the Kapp then Space for an attribute called Response server URL
+         * Helper to get Discussion Server Url
+         * Check the Kapp then Space for an attribute called Discussion Server Url
          */
         public String getResponseUrl(){
-            if(adminKapp != null && adminKapp.hasAttribute("Response Server Url")) {
-                return adminKapp.getAttributeValue("Response Server Url");
+            if(adminKapp != null && adminKapp.hasAttribute("Discussion Server Url")) {
+                return adminKapp.getAttributeValue("Discussion Server Url");
             } 
-            else if (space.hasAttribute("Response Server Url")) {
-                return space.getAttributeValue("Response Server Url");
+            else if (space.hasAttribute("Discussion Server Url")) {
+                return space.getAttributeValue("Discussion Server Url");
             }
             return null;
         }

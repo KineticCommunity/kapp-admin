@@ -244,9 +244,9 @@
                 withCredentials: true
             },
             success: function(response, textStatus, jqXHR){
-                // Build Response GUID attribute
+                // Build Discussion Id attribute
                 var responseAttribute = {
-                    name: "Response GUID",
+                    name: "Discussion Id",
                     values: [response.guid]
                 };
                 form.attributes.push(responseAttribute);

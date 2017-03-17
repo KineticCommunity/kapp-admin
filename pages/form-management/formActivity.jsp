@@ -96,7 +96,7 @@
             
             <%-- Members of the teams who own this form can see the discussion section --%>
             <c:if test="${hasResponseAccess}">
-                <c:set scope="request" var="responseId" value="${currentForm.getAttributeValue('Response GUID')}"/>
+                <c:set scope="request" var="responseId" value="${currentForm.getAttributeValue('Discussion Id')}"/>
                 <div class="row form-activity response-discussion sub-heading">
                     <div class="col-xs-12 col-sm-6 col-md-8 m-t-1">
                         <span class="heading-text">Discussion</span>
