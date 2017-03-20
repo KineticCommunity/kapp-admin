@@ -2,6 +2,14 @@
  *   DataTables Overrides
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
  
+.dataTables_wrapper {
+  .dataTables_filter {
+    label {
+      display: inline-block;
+    }
+  }
+}
+ 
 table.dataTable thead th {
     position: relative;
     background-image: none !important;

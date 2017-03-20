@@ -1,8 +1,10 @@
+div.form-submission.sub-heading,
 div.form-activity.sub-heading {
   margin-top: 1rem;
   margin-bottom: 1rem;
   
 }
+div.form-submission.sub-heading .heading-text,
 div.form-activity.sub-heading .heading-text {
   font-size: 2rem;
   line-height: 3rem;
@@ -10,6 +12,7 @@ div.form-activity.sub-heading .heading-text {
   font-weight: bold;
 }
 
+div.form-submission.sub-heading .sub-heading-text,
 div.form-activity.sub-heading .sub-heading-text {
   font-size: 1.6rem;
   line-height: 2rem;

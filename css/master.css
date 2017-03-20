@@ -152,6 +152,10 @@ pre {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   DataTables Overrides
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.dataTables_wrapper .dataTables_filter label {
+  display: inline-block;
+}
+
 table.dataTable thead th {
   position: relative;
   background-image: none !important;
@@ -330,6 +334,7 @@ div.form-control {
 
 label {
   color: #4b4c4e;
+  display: block;
   font-size: 1.4rem;
   font-weight: 600;
   margin-top: 5px;

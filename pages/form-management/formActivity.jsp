@@ -27,6 +27,7 @@
                     bundle.adminFormManagement.responseUrl = "${AdminHelper.responseUrl}";
                     bundle.adminFormManagement.formSlug = "${currentForm.slug}";
                     bundle.adminFormManagement.kappSlug = "${currentKapp.slug}";
+                    bundle.adminFormManagement.consoleSlug = "${form.slug}";
                     bundle.adminFormManagement.teamsKappSlug = "${teamsKapp.slug}";
                 </script>
             </bundle:variable>
@@ -54,11 +55,16 @@
             </div>
             
             <div class="row form-activity m-b-4">
+                <c:if test="${text.isNotBlank(currentForm.description)}">
+                    <div class="col-xs-12">
+                        <label>${i18n.translate('Description')}</label>
+                        <span>${currentForm.description}</span>
+                    </div>
+                </c:if>
                 <div class="col-xs-12 col-sm-6">
                     <label>Created</label>
                     <span data-moment-ago="${currentForm.createdAt}" data-toggle="tooltip"></span>
-                    <span>by</span>
-                    <c:choose>
+                    by <c:choose>
                         <c:when test="${not empty teamsKapp}">
                             <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=user&username=${text.escapeUrlParameter(currentForm.createdBy)}">${currentForm.createdBy}</a>
                         </c:when>
@@ -70,8 +76,7 @@
                 <div class="col-xs-12 col-sm-6">
                     <label>Updated</label>
                     <span data-moment-ago="${currentForm.updatedAt}" data-toggle="tooltip"></span>
-                    <span>by</span>
-                    <c:choose>
+                    by <c:choose>
                         <c:when test="${not empty teamsKapp}">
                             <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=user&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentForm.updatedBy}</a>
                         </c:when>
@@ -86,11 +91,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Type</label>
-                    <span>${currentForm.type.name}</span>
-                </div>
-                <div class="col-xs-12">
-                    <label>${i18n.translate('Description')}</label>
-                    <span>${currentForm.description}</span>
+                    <span>${text.defaultIfBlank(currentForm.type.name, 'N/A')}</span>
                 </div>
             </div>
             

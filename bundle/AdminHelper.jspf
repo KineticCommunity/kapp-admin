@@ -397,9 +397,20 @@
             else if (Text.equals("Delete", form.getStatus())){
                 return "label-warning";
             }
-            else {
-                return "hide";
+            return "";
+        }
+        
+         public String getSubmissionStateLabelClass(Submission submission){
+            if (Text.equals("Closed", submission.getCoreState())){
+                return "label-default";
             }
+            else if (Text.equals("Submitted", submission.getCoreState())){
+                return "label-success";
+            }
+            else if (Text.equals("Draft", submission.getCoreState())){
+                return "label-warning";
+            }
+            return "";
         }
         
         public Boolean isFormOwner(User user, Form form){
@@ -409,6 +420,41 @@
                 }
             }
             return Boolean.FALSE;
+        }
+        
+        public List<Descendant> formatDescendants(Submission submission){
+            Map<UUID, ArrayList<Submission>> childMap = new HashMap<UUID, ArrayList<Submission>>();
+            for (Submission descendant : submission.getDescendants()){
+                if (!childMap.containsKey(descendant.getParentId())){
+                    childMap.put(descendant.getParentId(), new ArrayList<Submission>());
+                }
+                childMap.get(descendant.getParentId()).add(descendant);
+            }
+            return flattenDescendants(childMap, submission.getId(), 0);
+        }
+        
+        public List<Descendant> flattenDescendants(Map<UUID, ArrayList<Submission>> childMap, UUID id, int depth){
+            List<Descendant> descendants = new ArrayList<Descendant>();
+            if (childMap.containsKey(id)){
+                for (Submission submission : childMap.get(id)){
+                    descendants.add(new Descendant(submission, depth));
+                    descendants.addAll(flattenDescendants(childMap, submission.getId(), depth + 1));
+                }
+            }
+            return descendants;
+        }
+        
+        public class Descendant {
+            Submission submission;
+            int depth;
+            
+            public Descendant(Submission submission, int depth){ 
+                this.submission = submission;
+                this.depth = depth;
+            }
+            
+            public Submission getSubmission(){ return this.submission; }
+            public int getDepth(){ return this.depth; }
         }
          
     }

@@ -112,7 +112,8 @@
             columns: [
                 {
                     title: "Submission",
-                    data: "label"
+                    data: "label",
+                    renderType: "submissionLink"
                 },
                 {
                     title: "Submitted",
@@ -126,6 +127,7 @@
                 url: buildURL()
             },
             responsive: true,
+            pageLength: formManagement.submissionsTableLimit,
             pagingType: "server_side",
             dom: "tp",
             stateSave: true,
@@ -165,6 +167,21 @@
             }
         };
         bundle.admin.addDataTableRenderers(options.columns, {
+            submissionLink: function ( d, type, row ){
+                console.log(row);
+                if (d == null || d.length <= 0 || type === "sort" || type === "type"){
+                    return d;
+                }
+                return "<a href='" + bundle.kappLocation() + "/" + bundle.adminFormManagement.consoleSlug
+                    + "?page=form-management/submissionActivity" 
+                    + "&id=" + row.id 
+                    + "&kapp=" + bundle.adminFormManagement.kappSlug 
+                    + "&form=" + bundle.adminFormManagement.formSlug + "'>"
+                    + d + "</a>"
+                    + "<span class='label label-info pull-right'>"
+                    + row.handle.toUpperCase()
+                    + "</span>";
+            },
             submissionDetails: function ( d, type, row ){
                 if (d == null || d.length <= 0){
                     return d;

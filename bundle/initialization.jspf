@@ -140,3 +140,11 @@
         request.setAttribute("GravatarHelper", new GravatarHelper(request));
     }
 %>
+
+<%-- TeamsHelper --%>
+<%@include file="TeamsHelper.jspf"%>
+<%
+    if (request.getAttribute("TeamsHelper") == null) {
+        request.setAttribute("TeamsHelper", new TeamsHelper(request));
+    }
+%>

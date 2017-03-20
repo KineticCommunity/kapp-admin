@@ -59,6 +59,7 @@ div.form-control {
 
 label {
   color: $darkgray;
+  display: block;
   @include font-size(1.4rem);
   font-weight: 600;
   margin-top: 5px;

@@ -69,7 +69,7 @@
         </fieldset>
         
         <c:if test="${not empty currentStore}">
-            <label for="column-table" class="text">Display Table Options</label> <small class="hidden-xs">(drag to order)</small>
+            <label for="column-table" class="text">Display Table Options <small class="hidden-xs">(drag to order)</small></label> 
             <div class="overflow-auto">
                 <table class="table table-hover" id="column-table"> 
                     <thead>

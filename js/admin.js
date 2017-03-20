@@ -93,13 +93,13 @@
         var dataMomentElements = container ? container.find("[data-moment]") : $("[data-moment]");
         dataMomentElements.each(function(index, element) {
             var e = $(element);
-            e.data("date", e.data("date") || e.attr("data-moment"))
+            e.data("date", e.data("date") || e.attr("data-moment") || e.text())
              .html(moment(e.data("date")).format("LLL"));
         });
         var dataMomentAgoElements = container ? container.find("[data-moment-ago]") : $("[data-moment-ago]");
         $("[data-moment-ago]").each(function(index, element) {
             var e = $(element);
-            e.data("date", e.data("date") || e.attr("data-moment-ago"))
+            e.data("date", e.data("date") || e.attr("data-moment-ago") || e.text())
              .html(moment(e.data("date")).fromNow());
             if (e.is("[data-toggle=tooltip]")){
               e.attr("data-original-title", moment(e.data("date")).format("LLL"));
@@ -111,20 +111,15 @@
             e.data("date", e.data("date") || e.attr("title") || e.attr("data-original-title"))
              .attr(e.attr("title") ? "title" : "data-original-title", moment(e.data("date")).format("LLL"));
         });
-        var dataMomentDiffElements = container ? container.find("[data-moment-diff]") : $("[data-moment-diff]");
-        dataMomentDiffElements.each(function(index, item) {
+        var dataMomentDiffElements = container ? container.find("[data-moment-diff-start]") : $("[data-moment-diff-start]");
+        dataMomentDiffElements.each(function(index, element) {
             var e = $(element);
-            e.data("date-start", e.data("date-start") || e.attr("data-moment-start"))
-             .data("date-end", e.data("date-end") || e.attr("data-moment-end"));
+            e.data("date-start", e.data("date-start") || e.attr("data-moment-diff-start") || e.text())
+             .data("date-end", e.data("date-end") || e.attr("data-moment-diff-end"));
             var start = moment(e.data("date-start"));
-            var end = moment(e.data("date-end"));
-            var suffix = " days";
-            var diff = end.diff(start, "days", true);
-            if (diff < 1){
-                var suffix = " hours";
-                diff = end.diff(start, "hours", true);
-            }
-            e.html(Math.ceil(diff) + suffix);
+            var end = e.data("date-end") ? moment(e.data("date-end")) : moment();
+            var diff = end.valueOf() - start.valueOf();
+            e.html(moment.duration(diff).humanize());
         });
     }
     
