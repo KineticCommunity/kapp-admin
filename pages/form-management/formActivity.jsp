@@ -7,6 +7,9 @@
 <c:set var="currentForm" value="${currentKapp.getForm(param.form)}" scope="request"/>
 <%-- hasResponseAccess: Defines if response discussion section should be shown. --%>
 <c:set var="hasResponseAccess" value="${AdminHelper.isFormOwner(identity.user, currentForm) && not empty AdminHelper.responseUrl}" scope="request" />
+<c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
+<c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
+<c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 
 
 <!-- Show page content only if selected Kapp and Form exists. -->
@@ -47,6 +50,11 @@
                     <span>${text.escape(currentForm.name)}</span>
                     <small>Activity</small>
                     <div class="pull-right">
+                        <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
+                            <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/runs?sourceId=${submission.id}">
+                                <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
+                            </a>
+                        </c:if>
                         <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
                             <span class="fa fa-pencil fa-fw"></span> Edit Form
                         </a>
