@@ -2055,6 +2055,124 @@
             "status":"Active",
             "submissionLabelExpression":"${values('Name')}",
             "type":"Datastore"
+        },
+        {
+            "name": "Search History",
+            "description": "Form used to track Search History from within the system.",
+            "slug": "search-history",
+            "type": "Datastore",
+            "status": "Active",
+            "anonymous": false,
+            "customHeadContent": null,
+            "notes": null,
+            "submissionLabelExpression": null,
+            "attributes": [
+                {
+                    "name": "Datastore Configuration",
+                    "values": [
+                        "[]"
+                    ]
+                }
+            ],
+            "bridgedResources": [],
+            "categorizations": [],
+            "pages": [
+                {
+                    "elements": [
+                        {
+                            "type": "field",
+                            "name": "Search Term",
+                            "label": "Search Term",
+                            "key": "fSample",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "field",
+                            "name": "Number of Results Found",
+                            "label": "Number of Results Found",
+                            "key": "f3",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "field",
+                            "name": "Kapp Slug",
+                            "label": "Kapp Slug",
+                            "key": "f2",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "button",
+                            "label": "Save",
+                            "name": "Save",
+                            "visible": "bundle.adminDatastore != null",
+                            "enabled": true,
+                            "renderType": "submit-page",
+                            "renderAttributes": {
+                                "class": "btn btn-tertiary"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "label": "Cancel",
+                            "name": "Cancel",
+                            "visible": "bundle.adminDatastore != null",
+                            "enabled": true,
+                            "renderType": "custom",
+                            "renderAttributes": {
+                                "class": "btn btn-link cancel-record"
+                            },
+                            "events": []
+                        }
+                    ],
+                    "events": [],
+                    "name": "Datastore",
+                    "renderType": "submittable",
+                    "type": "page",
+                    "advanceCondition": "false",
+                    "displayCondition": null,
+                    "displayPage": "pages/datastore/datastoreForm.jsp"
+                }
+            ],
+            "securityPolicies": []
         }
     ]
 }
