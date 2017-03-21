@@ -6,6 +6,9 @@
 <c:set var="currentObj" value="${space.getKapp(param.kapp).getForm(param.form)}" scope="request"/>
 <c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
 <c:set var="attributeDefinitions" value="${currentKapp.formAttributeDefinitions}" scope="request"/>
+<c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
+<c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
+<c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 
 <!-- Show page content only if selected Kapp exists. -->
 <c:choose>
@@ -34,12 +37,17 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h3>
-                            <span>${text.escape(currentKapp.name)}</span>
-                            <small>${text.escape(currentObj.name)}</small>
+                            <span>${text.escape(currentObj.name)}</span>
+                            <small>Configuration</small>
                             <div class="pull-right">
-                                <button data-objecttype="Form" data-ajaxpath="/kapps/${currentKapp.slug}/forms/${currentObj.slug}" class="btn btn-small btn-tertiary pull-right update-object-btn">
-                                    Update Form
-                                </button>
+                                <a class="btn btn-sm btn-default" href="${bundle.kappLocation}/${form.slug}?page=form-management/formActivity&kapp=${currentKapp.slug}&form=${currentObj.slug}">
+                                    <span class="fa fa-area-chart fa-fw"></span> View Activity
+                                </a>
+                                <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
+                                    <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentObj.slug}">
+                                        <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
+                                    </a>
+                                </c:if>
                             </div>
                         </h3>
                     </div>
@@ -153,6 +161,17 @@
                                 </c:if>
                             </c:forEach>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row m-b-2">
+                <div class="col-xs-12">
+                    <div class="form-buttons pull-right">
+                        <button data-objecttype="Form" data-ajaxpath="/kapps/${currentKapp.slug}/forms/${currentObj.slug}" class="btn btn-success update-object-btn">
+                            <span class="fa fa-check fa-fw"></span>
+                            <span>Update Form</span>
+                        </button>
                     </div>
                 </div>
             </div>

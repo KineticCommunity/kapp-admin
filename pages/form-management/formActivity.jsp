@@ -51,7 +51,7 @@
                     <small>Activity</small>
                     <div class="pull-right">
                         <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
-                            <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/runs?sourceId=${submission.id}">
+                            <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                 <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                             </a>
                         </c:if>

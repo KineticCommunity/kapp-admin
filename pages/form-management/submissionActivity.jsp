@@ -52,8 +52,8 @@
                     <small>Submission <strong>${text.upcase(submission.handle)}</strong></small>
                     <div class="pull-right">
                         <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
-                            <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/runs?sourceId=${submission.id}">
-                                <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
+                            <a class="btn btn-sm btn-default" href="${taskServerUrl}/app/runs?sourceId=${submission.id}">
+                                <span class="fa fa-sitemap fa-fw"></span> View Runs
                             </a>
                         </c:if>
                         <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
