@@ -31,47 +31,60 @@
                         <h3>
                             <span>${text.escape(currentKapp.name)}</span>
                             <small>Forms</small>
-                            <div class="pull-right">
-                                <button class="hidden btn btn-tertiary pull-right add-category btn-sm">
-                                    <span class="fa fa-plus"></span> Add Category
-                                </button>
-                            </div>
                         </h3>
                     </div>
                 </div>
             </div>
             
             <div class="row">
-                <div class="col-xs-12 table-responsive">
+                <div class="col-xs-12">
                     <table class="table table-sm table-hover table-striped form-management-forms" 
-                           data-table-dom data-table-name="Forms"> 
+                           data-table-forms-list> 
                         <thead>
                             <tr>
                                 <th>Form Name</th>
-                                <th>Approver</th>
-                                <th>Approval SLA</th>
-                                <th>Approval Form</th>
-                                <th>Task SLA</th>
-                                <th>Task Form</th>
-                                <th>Task Assignee Team</th>
-                                <th>Task Assignee Individual</th>
-                                <th></th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <c:forEach var="attributeDefinition" items="${currentKapp.formAttributeDefinitions}">
+                                    <th class="visibility-toggle" data-visible="false">
+                                        ${attributeDefinition.name}
+                                    </th>
+                                </c:forEach>
+                                <th data-orderable="false"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="form" items="${currentKapp.forms}">
                                 <tr>
-                                    <td><a href="${bundle.kappLocation}/${console.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${form.slug}">${text.escape(form.name)}</a></td>
-                                    <td>${form.getAttributeValue('Approver')}</td>
-                                    <td>${form.getAttributeValue('Approval Days Due')}</td>
-                                    <td>${form.getAttributeValue('Approval Form Slug')}</td>
-                                    <td>${form.getAttributeValue('Task Days Due')}</td>
-                                    <td>${form.getAttributeValue('Task Form')}</td>
-                                    <td>${form.getAttributeValue('Task Assignee Team')}</td>
-                                    <td>${form.getAttributeValue('Task Assignee Individual')}</td>
                                     <td>
-                                        <a href="${bundle.kappLocation}/${console.slug}?page=form-management/formActivity&kapp=${currentKapp.slug}&form=${form.slug}" class="btn btn-xs btn-tertiary">
-                                            <span class="fa fa-line-chart"></span>
+                                        <a href="${bundle.kappLocation}/${console.slug}?page=form-management/formActivity&kapp=${currentKapp.slug}&form=${form.slug}">
+                                            ${text.escape(form.name)}
+                                        </a>
+                                    </td>
+                                    <td>${form.type.name}</td>
+                                    <td><span class="label ${AdminHelper.getFormStatusLabelClass(form)}">${form.status}</span></td>
+                                    <td data-order="${form.updatedAt}">
+                                        <span data-moment-ago="${form.updatedAt}" data-toggle="tooltip"></span>
+                                    </td>
+                                    <c:forEach var="attributeDefinition" items="${currentKapp.formAttributeDefinitions}">
+                                        <td class="visibility-toggle">
+                                            <c:choose>
+                                                <c:when test="${attributeDefinition.allowsMultiple}">
+                                                    <c:forEach var="attributeValue" items="${form.getAttributeValues(attributeDefinition.name)}">
+                                                        ${attributeValue} <br />
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${form.getAttributeValue(attributeDefinition.name)}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                    </c:forEach>
+                                    <td class="text-right">
+                                        <a class="btn btn-xs btn-tertiary"
+                                           href="${bundle.kappLocation}/${console.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${form.slug}">
+                                            <span class="fa fa-pencil"></span>
                                         </a>
                                     </td>
                                 </tr>
