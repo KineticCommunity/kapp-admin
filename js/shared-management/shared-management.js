@@ -243,7 +243,7 @@
                 $('#approverTeams select').val(null).parent().hide();
                 $('#approverIndividuals select').val(null).parent().hide();
                 $('#approverIndividuals select').val(null).parent().hide();
-                approverElement.val("manager");
+                approverElement.val("Manager");
             }
             else if ($(this).data('type') === "none"){
                 $('#approverTeams select').val(null).parent().hide();
