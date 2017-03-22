@@ -152,6 +152,26 @@ pre {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   DataTables Overrides
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+table:not(.dataTable) .visibility-toggle {
+  display: none;
+}
+
+ul.column-visibility-layout.dropdown-menu li a:before {
+  content: "\f096";
+  font-family: FontAwesome;
+  padding-right: 5px;
+  opacity: 0.6;
+}
+ul.column-visibility-layout.dropdown-menu li.active a {
+  background-color: transparent;
+  color: #333;
+}
+ul.column-visibility-layout.dropdown-menu li.active a:before {
+  content: "\f046";
+  padding-right: 3px;
+  opacity: 1;
+}
+
 .dataTables_wrapper .dataTables_filter label {
   display: inline-block;
 }

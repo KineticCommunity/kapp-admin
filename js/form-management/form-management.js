@@ -22,6 +22,12 @@
             formManagement.loadSubmissions(false, false);
         });
         
+        // Initialize table of forms
+        $("table[data-table-forms-list]").each(function(i,table){
+            formManagement.formsTable = $(table);
+            formManagement.initializeFormsTable();
+        });
+        
         /*
          * Initialize DataTable for dom sourced tables
          */
@@ -85,11 +91,36 @@
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
     
+    formManagement.initializeFormsTable = function(){
+        var options = {
+            autoWidth: false,
+            dom: "<'row'<'col-sm-6'B><'col-sm-6'f>><'overflow-auto't>",
+            paging: false,
+            drawCallback: function(){
+                $("[data-tooltip]").tooltip();
+            },
+            buttons: [
+                {
+                    extend: "colvis",
+                    text: "Toggle Attribute Columns <span class='fa fa-caret-down'></span>",
+                    collectionLayout: 'column-visibility-layout',
+                    className: "column-visibility-button btn-subtle",
+                    columns: ".visibility-toggle"
+                }
+            ]
+        };
+        formManagement.formsTable.dataTable(options);
+        formManagement.formsTable.parent()
+                                 .find("div.dt-title")
+                                 .prepend($("<h4>", {class: "pull-left"})
+                                     .append(formManagement.formsTable.data("table-name")));
+    };
+    
     /**
      * Loads the records for the current datastore and displays them in a DataTable
      * 
-     * @param previous boolean specifying if previous 2000 records should be fetched in a large volume datastore.
-     * @param next boolean specifying if next 2000 records should be fetched in a large volume datastore.
+     * @param previous boolean specifying if previous page should be fetched.
+     * @param next boolean specifying if next page should be fetched.
      */
     formManagement.loadSubmissions = function(previous, next){
         // Destroy table if it already exists
@@ -104,7 +135,8 @@
                     + "/kapps/" + bundle.adminFormManagement.kappSlug 
                     + "/forms/" + bundle.adminFormManagement.formSlug 
                     + "/submissions"
-                    + "?include=details&timeline=createdAt&direction=DESC&limit=" + formManagement.submissionsTableLimit
+                    + "?include=details&timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
+                    + "&limit=" + formManagement.submissionsTableLimit
                     + (formManagement.submissionsTable.data("pageToken") ? "&pageToken=" + formManagement.submissionsTable.data("pageToken") : "");
         };
         
@@ -117,7 +149,7 @@
                 },
                 {
                     title: "Submitted",
-                    data: "createdAt",
+                    data: "submittedAt",
                     renderType: "submissionDetails"
                 }
             ],
