@@ -54,7 +54,17 @@
                     <div class="hidden">
                         <c:forEach items="${attributeDefinitions}" var="attribute">
                             <div class="attribute">
-                                <input class="attributeValue" name="${attribute.name}" value="${fn:escapeXml(currentObj.getAttributeValue(attribute.name))}">
+                                <label class="control-label">${i18n.translate(attribute.name)}</label>
+                                <c:if test="${not attribute.isAllowsMultiple()}">
+                                    <input class="attributeValue" name="${attribute.name}" value="${fn:escapeXml(space.getAttributeValue(attribute.name))}">
+                                </c:if>
+                                <c:if test="${attribute.isAllowsMultiple()}">
+                                    <select class="attributeValues" name="${attribute.name}" multiple="multiple">
+                                        <c:forEach var="value" items="${space.getAttributeValues(attribute.name)}">
+                                            <option selected value="${fn:escapeXml(value)}">${value}</option>
+                                        </c:forEach>
+                                    </select>                            
+                                </c:if>
                             </div>
                         </c:forEach>
                     </div>
@@ -76,7 +86,7 @@
                             <c:forEach items="${attributeDefinitions}" var="attribute">
                                 <c:if test="${fn:containsIgnoreCase(attribute.name, 'Owning Team')}">
                                     <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                                    <c:import url="${bundle.path}/partials/shared-management/team-selector.jsp" charEncoding="UTF-8" />
+                                    <c:import url="${bundle.path}/partials/shared-management/team-selector-multiple.jsp" charEncoding="UTF-8" />
                                 </c:if>
                             </c:forEach>
 

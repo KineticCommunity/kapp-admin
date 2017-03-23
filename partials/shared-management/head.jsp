@@ -5,8 +5,8 @@
     <bundle:style src="${bundle.location}/css/shared-management/shared-management.css"/>
     <bundle:style src="${bundle.location}/libraries/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"/>
     <bundle:style src="${bundle.location}/libraries/fontawesome-iconpicker/css/fontawesome-iconpicker.min.css"/>
-
 </bundle:stylepack>
+
 <bundle:scriptpack>
 	<bundle:script src="${bundle.location}/js/shared-management/shared-management.js" />
     <bundle:script src="${bundle.location}/libraries/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js" />

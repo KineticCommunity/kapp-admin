@@ -78,9 +78,17 @@
         $('div.multiAttributes').each(function(){
             var value = []
             var name = $( this ).attr('name');
-            $(this).find('input:checkbox:checked').each(function(){
-                value.push($(this).val());
-            });
+
+            // Handle Checkboxs
+            if ( $(this).find('input:checkbox').length > 0 ) {
+                $(this).find('input:checkbox:checked').each(function(){
+                    value.push($(this).val());
+                });
+            }
+            // Handle Multi-Select Inputs
+            else if ( $(this).find('select').length > 0 ) {
+                value = $(this).find('select').val() || [];
+            }
             attributes[name] = value;
         });
 
