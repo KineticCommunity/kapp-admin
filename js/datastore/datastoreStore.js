@@ -50,8 +50,6 @@
         $("input#datastore-records-import").on("change", ds.store.processImportFile);
         
         // Add button event handlers
-        table.on("click", "button.edit", ds.store.editRecord);
-        table.on("click", "button.clone", ds.store.cloneRecord);
         table.on("click", "button.delete", ds.store.deleteRecord);
     };
     
@@ -185,7 +183,19 @@
                         }
                     ]
                 });
-                bundle.admin.addDataTableRenderers(options.columns, {});
+                bundle.admin.addDataTableRenderers(options.columns, {
+                    actionButtons: function ( d, type, row ){
+                        return "<div class=\"btn-group datastore-btns\">" +
+                    		"<a href=\"" + bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug + 
+                    		    "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&id=" + row.ID + 
+                    		    "\" class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></a>" +
+                    		"<a href=\"" + bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug + 
+                                "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&clone=" + row.ID + 
+                                "\" class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></a>" +
+                    		"<button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button>" +
+                		"</div>";
+                    }
+                });
                 // Build DataTable
                 ds.store.table.DataTable(options);
             },
@@ -572,26 +582,6 @@
             ds.store.loadRecords(false, false, {});
         }
     }
-    
-    /**
-     * Event handler for Edit button click. Takes user to edit page.
-     */
-    ds.store.editRecord = function(e){
-        // On click of edit button, send user to record page for editing current row
-        var data = ds.store.table.DataTable().row($(this).closest("tr")).data();
-        location.href = bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug 
-                        + "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&id=" + data.ID;
-    };
-    
-    /**
-     * Event handler for Clone button click. Takes user to new record page and prefills data from clone record.
-     */
-    ds.store.cloneRecord = function(e){
-        // On click of edit button, send user to record page for cloning current row
-        var data = ds.store.table.DataTable().row($(this).closest("tr")).data();
-        location.href = bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug 
-                        + "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&clone=" + data.ID;
-    };
     
     /**
      * Event handler for Delete button click. Verifies that user wants to delete a record and deletes it. 
