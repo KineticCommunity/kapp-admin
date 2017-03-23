@@ -88,15 +88,7 @@
             /**
              * Event handlers for edit, clone, and delete buttons for the records table
              */
-            $("table#table-notifications").on("click", "button.edit", function(e){
-                // On click of edit button, send user to record page for editing current row
-                var data = notifications.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + adminNote.console.slug + "?page=notifications/record&type=" + adminNote.console.type + "&id=" + data.ID;
-            }).on("click", "button.clone", function(e){
-                // On click of edit button, send user to record page for cloning current row
-                var data = notifications.datastoreRecordsTable.row($(this).closest("tr")).data();
-                location.href = bundle.kappLocation() + "/" + adminNote.console.slug + "?page=notifications/record&type=" + adminNote.console.type + "&clone=" + data.ID;
-            }).on("click", "button.delete", function(e){
+            $("table#table-notifications").on("click", "button.delete", function(e){
                 // On click of delete button, confirm that the user is sure they want to delete
                 var self = $(this);
                 // Get selected row data
@@ -318,7 +310,19 @@
                     ]
                 });
                 // Add Column Renderers
-                bundle.admin.addDataTableRenderers(records.columns, {});
+                bundle.admin.addDataTableRenderers(records.columns, {
+                    actionButtons: function ( d, type, row ){
+                        return "<div class=\"btn-group notification-btns\">" +
+                            "<a href=\"" + bundle.kappLocation() + "/" + bundle.notifications.consoleSlug + 
+                                "?page=notifications/record&type=" + bundle.notifications.type + "&id=" + row.ID + 
+                                "\" class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></a>" +
+                            "<a href=\"" + bundle.kappLocation() + "/" + bundle.notifications.consoleSlug + 
+                                "?page=notifications/record&type=" + bundle.notifications.type + "&clone=" + row.ID + 
+                                "\" class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></a>" +
+                            "<button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button>" +
+                        "</div>";
+                    }
+                });
                 // Build DataTable
                 notifications.datastoreRecordsTable = $("table#table-notifications").DataTable(records);
                 // Append the import/export buttons to the buttons section on the page

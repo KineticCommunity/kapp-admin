@@ -13,6 +13,9 @@
             <!-- Sets title and imports js and css specific to this console. -->
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/notifications/head.jsp" charEncoding="UTF-8"/>
+                <script>
+                    bundle.notifications.type = "Template";
+                </script>
             </bundle:variable>
 
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
