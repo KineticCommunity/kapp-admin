@@ -367,6 +367,7 @@
         public List<LinkedHashMap> getNotificationTemplates(){
             Map<String, String[]> parameters = buildQueryParameters();
             parameters.put("values[Type]", new String[] {"Template"});
+            parameters.put("values[Status]", new String[] {"Active"});
             PaginatedList<Submission> notificationTemplateSubmissions = submissionComponent.searchByForm(adminKapp.getForm("notification-data"), parameters);
 
             List<LinkedHashMap> notifications = new ArrayList<>();

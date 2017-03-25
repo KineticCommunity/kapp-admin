@@ -24,6 +24,15 @@
             sharedManagement.buildTaskAssigneeDOM();
         }
 
+        // Display alert if stored attribute Value doesn't exist in list
+        // This is specifically for notification templates that no longer exist but
+        // are set as attributes.
+        $('.attribute select, .attributes select').each(function(){
+            if ($(this).attr('value') !== undefined && $(this).attr('value').trim() !== $(this).val()){
+                $(this).parent().find('label').append('<span style="color:red;"> (*** Alert! Stored Attribute Value Doesn\'t Exist ***)</span>');
+            }
+        })
+
      });
 
     /*----------------------------------------------------------------------------------------------
