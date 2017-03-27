@@ -13,8 +13,8 @@
   position: relative;
   display: block;
   float: left;
-  padding: 0.5rem;
   width: 100%;
+  padding: 0.5rem;
   border-color: $lightgray;
   
   > * {
@@ -53,11 +53,11 @@
   }
   
   > .card-title {
-    @include font-size-line-height(2.4rem, 2.4rem);
+    @include font-size-line-height(2.2rem, 2.2rem);
     font-weight: bold;
     border-bottom: 0.2rem solid rgba($lightgray, 0.5);
     &.small {
-      @include font-size-line-height(1.8rem, 1.8rem);
+      @include font-size-line-height(1.7rem, 1.7rem);
     }
   }
   
@@ -71,10 +71,40 @@
       height: 100%;
       float: left;
       padding: 0 10px 0 0;
-      font-size: 10rem;
+      font-size: 6rem;
       
+      &.icon-xs {
+        font-size: 2rem;
+      }
+      &.icon-sm {
+        font-size: 4rem;
+      }
+      &.icon-lg {
+        font-size: 8rem;
+      }
+      &.icon-xl {
+        font-size: 10rem;
+      }
+      
+      .fa-stack {
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        .fa-stack-2x {
+          font-size: 1em;
+        }
+        .fa-stack-1x {
+          font-size: 0.5em;
+          color: white;
+        }
+      }
+
       + .card-title {
         word-wrap: break-word;
+        
+        &.ellipsis {
+            width: auto;
+        }
       }
     }
     > .card-icon-right {
@@ -83,12 +113,22 @@
     }
     
     > .card-title {
-      @include font-size-line-height(2.4rem, 2.4rem);
+      @include font-size-line-height(2.2rem, 2.2rem);
       font-weight: bold;
       margin-bottom: 0.4em;
       &.small {
-        @include font-size-line-height(1.8rem, 1.8rem);
+        @include font-size-line-height(1.7rem, 1.7rem);
       }
+    }
+    &:after {
+      content: attr(data-card-overflow-cover);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      pointer-events: none;
+      @include vertical-gradient(rgba($white, 0), rgba($white, 1));
     }
   }
   
@@ -110,7 +150,7 @@
     border-bottom-color: rgba($primary, 0.5);
     @include anchor($primary-complement, tint($primary-complement, 10%), none, none);
   }
-  
+ 
   > a.card-title {
     display: block;
     background-color: $primary;
@@ -123,40 +163,40 @@
       text-decoration: none;
     }
   }
-  
+
   > .card-content {
     > .card-title {
       color: $primary;
       @include anchor($primary, tint($primary, 10%), none, none);
     }
-    > .card-icon, 
+    > .card-icon,
     > .card-icon-right {
       color: $primary;
     }
   }
-  
+
   > .card-action {
     background-color: subtle($primary, 95%);
     border-top-color: rgba($primary, 0.5);
   }
-  
+
   &.card-subtle {
     border-color: subtle($primary, 80%);
-    
+  
     > * {
       background-color: subtle($primary, 95%);
     }
-    
+  
     > .card-title {
       color: $primary;
       border-bottom: none;
       @include anchor($primary, tint($primary, 10%), none, none);
     }
-    
+
     > .card-content:after {
       @include vertical-gradient(subtle($primary, 95%, 0), subtle($primary, 95%, 1));
     }
-    
+
     > .card-action {
       background-color: subtle($primary, 88%);
       border-top-color: subtle($primary, 80%);
@@ -169,38 +209,38 @@ a.card-primary {
   &:focus {
     text-decoration: none;
   }
-  
+
   &:not(.card-subtle):hover > .card-title,
   &:not(.card-subtle):focus > .card-title {
     background-color: tint($primary, 10%);
   }
-  
+
   &:not(.card-subtle) > .card-title {
     border-bottom-color: rgba($primary, 0.5);
     color: $primary-complement;
-    
+
     &:hover,
     &:focus {
       color: $primary-complement;
       text-decoration: none;
     }
   }
-  
+
   > .card-content {
     color: $text-color;
-    
+
     &:hover,
     &:focus {
       color: $text-color;
       text-decoration: none;
     }
-    
+
     > .card-title {
       color: $primary;
       
       &:hover,
       &:focus {
-        color: tint($primary-complement, 10%);
+        color: $primary;
         text-decoration: none;
       }
     }
@@ -340,7 +380,7 @@ a.card-secondary {
       
       &:hover,
       &:focus {
-        color: tint($secondary-complement, 10%);
+        color: $secondary;
         text-decoration: none;
       }
     }
@@ -480,7 +520,7 @@ a.card-tertiary {
       
       &:hover,
       &:focus {
-        color: tint($tertiary-complement, 10%);
+        color: $tertiary;
         text-decoration: none;
       }
     }

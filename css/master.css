@@ -296,25 +296,42 @@ table.dataTable.nowrap td:not(.all) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-input[type='text'], input[type='password'], textarea, select {
+input[type='text'],
+input[type='text'].form-control,
+input[type='password'],
+input[type='password'].form-control,
+textarea,
+textarea.form-control,
+select.form-control,
+select {
   display: block;
   text-decoration: none;
   width: 100%;
-  background: #f8f8f8;
+  background: white;
   border-width: 1px;
   border-style: solid;
-  border-color: #e5e5e5;
+  border-color: #cfcfcf;
   border-image: initial;
-  outline: 0px;
-  padding: 0.2rem 0.8rem;
-  border-radius: 3px;
+  outline: none;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.4rem;
+  line-height: 2rem;
+  border-radius: 0.4rem;
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus, select:focus {
+input[type='text']:focus,
+input[type='text'].form-control:focus,
+input[type='password']:focus,
+input[type='password'].form-control:focus,
+textarea:focus,
+textarea.form-control:focus,
+select.form-control:focus,
+select:focus {
   border-color: #7e8083;
 }
 
-input[type='text'], input[type='password'], select {
-  line-height: 2.4rem;
+textarea,
+textarea.form-control {
+  resize: vertical;
 }
 
 input:disabled, select:disabled,
@@ -336,12 +353,22 @@ div.form-control {
   box-shadow: none;
   cursor: default;
 }
+input[readonly]:focus,
+input.form-control[readonly]:focus,
+select[readonly]:focus,
+select.form-control[readonly]:focus,
+textarea[readonly]:focus,
+textarea.form-control[readonly]:focus,
+div.form-control:focus {
+  border-color: #dfdfdf;
+}
 
 .input-group-addon {
   border-color: #cfcfcf;
 }
 
-.form-group.required label:after {
+.form-group.required label:after,
+label.required:after {
   content: '*';
   color: red;
 }
@@ -350,6 +377,11 @@ div.form-control {
   content: " ";
   display: block;
   clear: both;
+}
+
+input[type=radio],
+input[type=checkbox] {
+  vertical-align: middle;
 }
 
 label {
@@ -373,6 +405,7 @@ input[type=checkbox] + label {
 label.field-label {
   padding: 0;
   width: 100%;
+  float: left;
 }
 
 .radio label, .checkbox label {
@@ -441,6 +474,7 @@ section.page form .section-container {
   margin-bottom: 2rem;
 }
 section.page form .radio label:not(.field-label), section.page form .checkbox label:not(.field-label) {
+  float: left;
   margin-right: 1rem;
   margin-left: .1rem;
 }
@@ -547,6 +581,7 @@ section.page form .file-table .file-container {
 @media (max-width: 991px) {
   label.field-label {
     width: 100%;
+    float: none;
   }
 
   section.page form .attachment {
@@ -555,7 +590,7 @@ section.page form .file-table .file-container {
 }
 /* Form Button Styles
  *-------------------------------------- */
-button, input[type='submit'], input[type='button'], .btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-link, .btn-default, .btn-subtle {
+button, input[type='submit'], input[type='button'], .btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-default, .btn-link, .btn-subtle {
   -webkit-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
 }
@@ -564,18 +599,18 @@ button[data-button-type=submit-page] {
   float: right;
 }
 
-.btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-link, .btn-default, .btn-subtle {
+.btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-default, .btn-link, .btn-subtle {
   display: inline-block;
   line-height: 1.8rem;
   border-radius: .3rem;
   color: #ffffff;
   cursor: pointer;
 }
-.btn:hover, section.page form button:hover, .btn-primary:hover, .btn-primary-complement:hover, .btn-secondary:hover, .btn-secondary-complement:hover, .btn-tertiary:hover, .btn-tertiary-complement:hover, .btn-link:hover, .btn-default:hover, .btn-subtle:hover, .btn:focus, section.page form button:focus, .btn-primary:focus, .btn-primary-complement:focus, .btn-secondary:focus, .btn-secondary-complement:focus, .btn-tertiary:focus, .btn-tertiary-complement:focus, .btn-link:focus, .btn-default:focus, .btn-subtle:focus, .btn:active, section.page form button:active, .btn-primary:active, .btn-primary-complement:active, .btn-secondary:active, .btn-secondary-complement:active, .btn-tertiary:active, .btn-tertiary-complement:active, .btn-link:active, .btn-default:active, .btn-subtle:active {
+.btn:hover, section.page form button:hover, .btn-primary:hover, .btn-primary-complement:hover, .btn-secondary:hover, .btn-secondary-complement:hover, .btn-tertiary:hover, .btn-tertiary-complement:hover, .btn-default:hover, .btn-link:hover, .btn-subtle:hover, .btn:focus, section.page form button:focus, .btn-primary:focus, .btn-primary-complement:focus, .btn-secondary:focus, .btn-secondary-complement:focus, .btn-tertiary:focus, .btn-tertiary-complement:focus, .btn-default:focus, .btn-link:focus, .btn-subtle:focus, .btn:active, section.page form button:active, .btn-primary:active, .btn-primary-complement:active, .btn-secondary:active, .btn-secondary-complement:active, .btn-tertiary:active, .btn-tertiary-complement:active, .btn-default:active, .btn-link:active, .btn-subtle:active {
   text-decoration: none;
 }
 
-.btn[disabled], section.page form button[disabled], [disabled].btn-primary, [disabled].btn-primary-complement, [disabled].btn-secondary, [disabled].btn-secondary-complement, [disabled].btn-tertiary, [disabled].btn-tertiary-complement, [disabled].btn-link, [disabled].btn-default, [disabled].btn-subtle {
+.btn[disabled], section.page form button[disabled], [disabled].btn-primary, [disabled].btn-primary-complement, [disabled].btn-secondary, [disabled].btn-secondary-complement, [disabled].btn-tertiary, [disabled].btn-tertiary-complement, [disabled].btn-default, [disabled].btn-link, [disabled].btn-subtle {
   background-color: #7e8083;
   border-color: #656769;
   color: #d5d6d7;
@@ -657,21 +692,6 @@ button[data-button-type=submit-page] {
   color: #1594C4;
 }
 
-.btn-link {
-  background-color: transparent;
-  border-color: transparent;
-  color: #1594C4;
-}
-.btn-link:hover, .btn-link:focus, .btn-link:active {
-  color: #24b2e8;
-}
-.btn-link.danger {
-  color: #ca332d;
-}
-.btn-link.danger:hover, .btn-link.danger:focus, .btn-link.danger:active {
-  color: #d85752;
-}
-
 .btn-default {
   background-color: #E16B1E;
   border-color: #b45618;
@@ -681,6 +701,23 @@ button[data-button-type=submit-page] {
   background-color: #e47a35;
   border-color: #cb601b;
   color: #ffffff;
+}
+
+.btn-link {
+  background-color: transparent;
+  border-color: transparent;
+  color: #1594C4;
+}
+.btn-link:hover, .btn-link:focus, .btn-link:active {
+  background-color: transparent;
+  border-color: transparent;
+  color: #24b2e8;
+}
+.btn-link.danger {
+  color: #ca332d;
+}
+.btn-link.danger:hover, .btn-link.danger:focus, .btn-link.danger:active {
+  color: #d85752;
 }
 
 .btn-subtle {
@@ -702,6 +739,10 @@ button[data-button-type=submit-page] {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Lists
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ul {
+  list-style-type: none;
+}
+
 /* Search Results
  *-------------------------------------- */
 .search-container form {
@@ -991,8 +1032,8 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
   position: relative;
   display: block;
   float: left;
-  padding: 0.5rem;
   width: 100%;
+  padding: 0.5rem;
   border-color: #d5d6d7;
 }
 .card > *, .card-sized > *, .card-xxs > *, .card-xs > *, .card-sm > *, .card-md > *, .card-lg > *, .card-xl > * {
@@ -1031,14 +1072,14 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
   border-bottom-color: inherit;
 }
 .card > .card-title, .card-sized > .card-title, .card-xxs > .card-title, .card-xs > .card-title, .card-sm > .card-title, .card-md > .card-title, .card-lg > .card-title, .card-xl > .card-title {
-  font-size: 2.4rem;
-  line-height: 2.4rem;
+  font-size: 2.2rem;
+  line-height: 2.2rem;
   font-weight: bold;
   border-bottom: 0.2rem solid rgba(213, 214, 215, 0.5);
 }
 .card > .card-title.small, .card-sized > .card-title.small, .card-xxs > .card-title.small, .card-xs > .card-title.small, .card-sm > .card-title.small, .card-md > .card-title.small, .card-lg > .card-title.small, .card-xl > .card-title.small {
-  font-size: 1.8rem;
-  line-height: 1.8rem;
+  font-size: 1.7rem;
+  line-height: 1.7rem;
 }
 .card > .card-content, .card-sized > .card-content, .card-xxs > .card-content, .card-xs > .card-content, .card-sm > .card-content, .card-md > .card-content, .card-lg > .card-content, .card-xl > .card-content {
   overflow: hidden;
@@ -1058,7 +1099,87 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
   height: 100%;
   float: left;
   padding: 0 10px 0 0;
+  font-size: 6rem;
+}
+.card > .card-content > .card-icon.icon-xs, .card-sized > .card-content > .card-icon.icon-xs, .card-xxs > .card-content > .card-icon.icon-xs, .card-xs > .card-content > .card-icon.icon-xs, .card-sm > .card-content > .card-icon.icon-xs, .card-md > .card-content > .card-icon.icon-xs, .card-lg > .card-content > .card-icon.icon-xs, .card-xl > .card-content > .card-icon.icon-xs,
+.card > .card-content > .card-icon-right.icon-xs,
+.card-sized > .card-content > .card-icon-right.icon-xs,
+.card-xxs > .card-content > .card-icon-right.icon-xs,
+.card-xs > .card-content > .card-icon-right.icon-xs,
+.card-sm > .card-content > .card-icon-right.icon-xs,
+.card-md > .card-content > .card-icon-right.icon-xs,
+.card-lg > .card-content > .card-icon-right.icon-xs,
+.card-xl > .card-content > .card-icon-right.icon-xs {
+  font-size: 2rem;
+}
+.card > .card-content > .card-icon.icon-sm, .card-sized > .card-content > .card-icon.icon-sm, .card-xxs > .card-content > .card-icon.icon-sm, .card-xs > .card-content > .card-icon.icon-sm, .card-sm > .card-content > .card-icon.icon-sm, .card-md > .card-content > .card-icon.icon-sm, .card-lg > .card-content > .card-icon.icon-sm, .card-xl > .card-content > .card-icon.icon-sm,
+.card > .card-content > .card-icon-right.icon-sm,
+.card-sized > .card-content > .card-icon-right.icon-sm,
+.card-xxs > .card-content > .card-icon-right.icon-sm,
+.card-xs > .card-content > .card-icon-right.icon-sm,
+.card-sm > .card-content > .card-icon-right.icon-sm,
+.card-md > .card-content > .card-icon-right.icon-sm,
+.card-lg > .card-content > .card-icon-right.icon-sm,
+.card-xl > .card-content > .card-icon-right.icon-sm {
+  font-size: 4rem;
+}
+.card > .card-content > .card-icon.icon-lg, .card-sized > .card-content > .card-icon.icon-lg, .card-xxs > .card-content > .card-icon.icon-lg, .card-xs > .card-content > .card-icon.icon-lg, .card-sm > .card-content > .card-icon.icon-lg, .card-md > .card-content > .card-icon.icon-lg, .card-lg > .card-content > .card-icon.icon-lg, .card-xl > .card-content > .card-icon.icon-lg,
+.card > .card-content > .card-icon-right.icon-lg,
+.card-sized > .card-content > .card-icon-right.icon-lg,
+.card-xxs > .card-content > .card-icon-right.icon-lg,
+.card-xs > .card-content > .card-icon-right.icon-lg,
+.card-sm > .card-content > .card-icon-right.icon-lg,
+.card-md > .card-content > .card-icon-right.icon-lg,
+.card-lg > .card-content > .card-icon-right.icon-lg,
+.card-xl > .card-content > .card-icon-right.icon-lg {
+  font-size: 8rem;
+}
+.card > .card-content > .card-icon.icon-xl, .card-sized > .card-content > .card-icon.icon-xl, .card-xxs > .card-content > .card-icon.icon-xl, .card-xs > .card-content > .card-icon.icon-xl, .card-sm > .card-content > .card-icon.icon-xl, .card-md > .card-content > .card-icon.icon-xl, .card-lg > .card-content > .card-icon.icon-xl, .card-xl > .card-content > .card-icon.icon-xl,
+.card > .card-content > .card-icon-right.icon-xl,
+.card-sized > .card-content > .card-icon-right.icon-xl,
+.card-xxs > .card-content > .card-icon-right.icon-xl,
+.card-xs > .card-content > .card-icon-right.icon-xl,
+.card-sm > .card-content > .card-icon-right.icon-xl,
+.card-md > .card-content > .card-icon-right.icon-xl,
+.card-lg > .card-content > .card-icon-right.icon-xl,
+.card-xl > .card-content > .card-icon-right.icon-xl {
   font-size: 10rem;
+}
+.card > .card-content > .card-icon .fa-stack, .card-sized > .card-content > .card-icon .fa-stack, .card-xxs > .card-content > .card-icon .fa-stack, .card-xs > .card-content > .card-icon .fa-stack, .card-sm > .card-content > .card-icon .fa-stack, .card-md > .card-content > .card-icon .fa-stack, .card-lg > .card-content > .card-icon .fa-stack, .card-xl > .card-content > .card-icon .fa-stack,
+.card > .card-content > .card-icon-right .fa-stack,
+.card-sized > .card-content > .card-icon-right .fa-stack,
+.card-xxs > .card-content > .card-icon-right .fa-stack,
+.card-xs > .card-content > .card-icon-right .fa-stack,
+.card-sm > .card-content > .card-icon-right .fa-stack,
+.card-md > .card-content > .card-icon-right .fa-stack,
+.card-lg > .card-content > .card-icon-right .fa-stack,
+.card-xl > .card-content > .card-icon-right .fa-stack {
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+}
+.card > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-sized > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-xxs > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-xs > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-sm > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-md > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-lg > .card-content > .card-icon .fa-stack .fa-stack-2x, .card-xl > .card-content > .card-icon .fa-stack .fa-stack-2x,
+.card > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-sized > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-xxs > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-xs > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-sm > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-md > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-lg > .card-content > .card-icon-right .fa-stack .fa-stack-2x,
+.card-xl > .card-content > .card-icon-right .fa-stack .fa-stack-2x {
+  font-size: 1em;
+}
+.card > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-sized > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-xxs > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-xs > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-sm > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-md > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-lg > .card-content > .card-icon .fa-stack .fa-stack-1x, .card-xl > .card-content > .card-icon .fa-stack .fa-stack-1x,
+.card > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-sized > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-xxs > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-xs > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-sm > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-md > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-lg > .card-content > .card-icon-right .fa-stack .fa-stack-1x,
+.card-xl > .card-content > .card-icon-right .fa-stack .fa-stack-1x {
+  font-size: 0.5em;
+  color: white;
 }
 .card > .card-content > .card-icon + .card-title, .card-sized > .card-content > .card-icon + .card-title, .card-xxs > .card-content > .card-icon + .card-title, .card-xs > .card-content > .card-icon + .card-title, .card-sm > .card-content > .card-icon + .card-title, .card-md > .card-content > .card-icon + .card-title, .card-lg > .card-content > .card-icon + .card-title, .card-xl > .card-content > .card-icon + .card-title,
 .card > .card-content > .card-icon-right + .card-title,
@@ -1071,19 +1192,49 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
 .card-xl > .card-content > .card-icon-right + .card-title {
   word-wrap: break-word;
 }
+.card > .card-content > .card-icon + .card-title.ellipsis, .card-sized > .card-content > .card-icon + .card-title.ellipsis, .card-xxs > .card-content > .card-icon + .card-title.ellipsis, .card-xs > .card-content > .card-icon + .card-title.ellipsis, .card-sm > .card-content > .card-icon + .card-title.ellipsis, .card-md > .card-content > .card-icon + .card-title.ellipsis, .card-lg > .card-content > .card-icon + .card-title.ellipsis, .card-xl > .card-content > .card-icon + .card-title.ellipsis,
+.card > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-sized > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-xxs > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-xs > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-sm > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-md > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-lg > .card-content > .card-icon-right + .card-title.ellipsis,
+.card-xl > .card-content > .card-icon-right + .card-title.ellipsis {
+  width: auto;
+}
 .card > .card-content > .card-icon-right, .card-sized > .card-content > .card-icon-right, .card-xxs > .card-content > .card-icon-right, .card-xs > .card-content > .card-icon-right, .card-sm > .card-content > .card-icon-right, .card-md > .card-content > .card-icon-right, .card-lg > .card-content > .card-icon-right, .card-xl > .card-content > .card-icon-right {
   float: right;
   padding: 0 0 0 10px;
 }
 .card > .card-content > .card-title, .card-sized > .card-content > .card-title, .card-xxs > .card-content > .card-title, .card-xs > .card-content > .card-title, .card-sm > .card-content > .card-title, .card-md > .card-content > .card-title, .card-lg > .card-content > .card-title, .card-xl > .card-content > .card-title {
-  font-size: 2.4rem;
-  line-height: 2.4rem;
+  font-size: 2.2rem;
+  line-height: 2.2rem;
   font-weight: bold;
   margin-bottom: 0.4em;
 }
 .card > .card-content > .card-title.small, .card-sized > .card-content > .card-title.small, .card-xxs > .card-content > .card-title.small, .card-xs > .card-content > .card-title.small, .card-sm > .card-content > .card-title.small, .card-md > .card-content > .card-title.small, .card-lg > .card-content > .card-title.small, .card-xl > .card-content > .card-title.small {
-  font-size: 1.8rem;
-  line-height: 1.8rem;
+  font-size: 1.7rem;
+  line-height: 1.7rem;
+}
+.card > .card-content:after, .card-sized > .card-content:after, .card-xxs > .card-content:after, .card-xs > .card-content:after, .card-sm > .card-content:after, .card-md > .card-content:after, .card-lg > .card-content:after, .card-xl > .card-content:after {
+  content: attr(data-card-overflow-cover);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.5rem;
+  pointer-events: none;
+  background-color: white;
+  background-repeat: repeat-x;
+  background: -khtml-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(white));
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0), white);
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0), white);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, white));
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), white);
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0), white);
+  background: linear-gradient(top, rgba(255, 255, 255, 0), white);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba(255, 255, 255, 0)', endColorstr='white', GradientType=0);
 }
 .card > .card-action, .card-sized > .card-action, .card-xxs > .card-action, .card-xs > .card-action, .card-sm > .card-action, .card-md > .card-action, .card-lg > .card-action, .card-xl > .card-action {
   border-top: 0.1rem solid rgba(213, 214, 215, 0.5);
@@ -1197,7 +1348,7 @@ a.card-primary > .card-content > .card-title {
   color: #313E47;
 }
 a.card-primary > .card-content > .card-title:hover, a.card-primary > .card-content > .card-title:focus {
-  color: #e6e6e6;
+  color: #313E47;
   text-decoration: none;
 }
 a.card-primary > .card-action {
@@ -1342,7 +1493,7 @@ a.card-secondary > .card-content > .card-title {
   color: #6F7E82;
 }
 a.card-secondary > .card-content > .card-title:hover, a.card-secondary > .card-content > .card-title:focus {
-  color: #e6e6e6;
+  color: #6F7E82;
   text-decoration: none;
 }
 a.card-secondary > .card-action {
@@ -1487,7 +1638,7 @@ a.card-tertiary > .card-content > .card-title {
   color: #1594C4;
 }
 a.card-tertiary > .card-content > .card-title:hover, a.card-tertiary > .card-content > .card-title:focus {
-  color: #e6e6e6;
+  color: #1594C4;
   text-decoration: none;
 }
 a.card-tertiary > .card-action {
@@ -1870,7 +2021,7 @@ a.card-tertiary.card-subtle:hover > .card-action, a.card-tertiary.card-subtle:fo
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 10;
+  z-index: 2048;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
