@@ -51,11 +51,11 @@
                     <small>Activity</small>
                     <div class="pull-right">
                         <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
-                            <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
+                            <a class="btn btn-tertiary" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                 <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                             </a>
                         </c:if>
-                        <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
+                        <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=form-management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
                             <span class="fa fa-pencil fa-fw"></span> Edit Form
                         </a>
                     </div>
@@ -113,10 +113,10 @@
                     <div class="col-xs-12 col-sm-6 col-md-4 m-t-1 text-right">
                         <c:choose>
                             <c:when test="${not empty responseId}">
-                                <a href="${bundle.spaceLocation}?page=discussion&id=${responseId}" class="btn btn-sm btn-default">Discuss</a>
+                                <a href="${bundle.spaceLocation}?page=discussion&id=${responseId}" class="btn btn-default">Discuss</a>
                             </c:when>
                             <c:otherwise>
-                                <button class="btn btn-sm btn-default" id="start-discussion">Start Discussion</button>
+                                <button class="btn btn-default" id="start-discussion">Start Discussion</button>
                             </c:otherwise>
                         </c:choose>
                     </div>

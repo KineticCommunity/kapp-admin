@@ -103,11 +103,11 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>Add</span>
                             <span>${pageTitle}</span>
                             <small>Translations</small>
-                        </h3>
+                        </h2>
                     </div>
                             
                     <div class="col-xs-12">
@@ -243,7 +243,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>
                     To create new translation entries, fill out the fields on the left and click the 

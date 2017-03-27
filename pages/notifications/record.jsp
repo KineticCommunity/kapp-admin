@@ -24,7 +24,7 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>${not empty param.id ? 'Edit ' : empty param.clone ? 'New ' : 'Clone '}Notification ${param.type} Record</h3>
+                <h2>${not empty param.id ? 'Edit ' : empty param.clone ? 'New ' : 'Clone '}Notification ${param.type} Record</h2>
             </div>
             
             <!-- SUBFORM GETS INSERTED HERE ---------------------------------------------------------------->
@@ -45,7 +45,7 @@
                 <h3>${form.name}</h3>
                 <p>${form.description}</p>
                 <hr class="border-color-white" />
-                <h4>Instructions</h4>
+                <h5>Instructions</h5>
                 <p>The <strong>Name</strong> field should be a unique value to identify this Template or Snippit</p>
                 <p>The <strong>HTML Content</strong> field stores HTML that will be included in this notification</p>
                 <p>The <strong>Text Content</strong> field should be non-HTML text and will be sent to users who can't view HTML emails.</p>

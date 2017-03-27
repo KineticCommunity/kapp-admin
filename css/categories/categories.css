@@ -75,7 +75,7 @@ div.change-form {
     margin-top: 10px;
     overflow: hidden;
 }
-button.add-category, button.edit-category, button.add-subcategory {
+button.edit-category, button.add-subcategory {
     margin-top: 10px;
 }
 

@@ -35,10 +35,10 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>Unexpected Contexts</span>
                             <small>${text.escape(i18nKapp.name)}</small>
-                        </h3>
+                        </h2>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>
                     An <b>Unexpected Context</b> occurs when there are translation entries with contexts the system is not expecting. 

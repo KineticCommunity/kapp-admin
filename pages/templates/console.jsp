@@ -20,7 +20,7 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>${form.name}</h3>
+                <h2>${form.name}</h2>
             </div>
         
             <div class="row">

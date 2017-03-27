@@ -166,7 +166,6 @@
                         {
                             extend: "csv",
                             text: "Export CSV",
-                            className: "btn-sm",
                             filename: bundle.adminDatastore.storeName + " Datastore",
                             exportOptions: {
                                 modifier: {
@@ -178,7 +177,6 @@
                         },
                         {
                             text: "Import CSV",
-                            className: "btn-sm",
                             action: ds.store.importRecords
                         }
                     ]
@@ -561,7 +559,7 @@
                         {
                             extend: "csv",
                             text: "Export CSV of Failed Rows",
-                            className: "btn-sm export-failures",
+                            className: "export-failures",
                             filename: bundle.adminDatastore.storeName + " Datastore - Failed Import Rows",
                             exportOptions: {
                                 modifier: {

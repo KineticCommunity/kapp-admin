@@ -38,10 +38,10 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
 
     <div class="page-header">
-        <h3>
+        <h2>
             ${not empty currentUser ? currentUser.username : (not empty cloneUser ? 'Clone User' : 'New User')}
             <c:if test="${not empty cloneUser}"><small> ${cloneUser.username}</small></c:if>
-        </h3>
+        </h2>
     </div>
 
     <div class="row user-details">
@@ -113,7 +113,7 @@
                             </select>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-success pull-right add-group-btn">
+                            <button class="btn btn-success pull-right add-group-btn">
                                 <span class="fa fa-plus"></span>
                                 <span>Add Group</span>
                             </button>
@@ -183,7 +183,7 @@
                             <input class="form-control add-attribute-value-field" />
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-success pull-right add-attribute-btn">
+                            <button class="btn btn-success pull-right add-attribute-btn">
                                 <span class="fa fa-plus"></span>
                                 <span>Add Attribute</span>
                             </button>
@@ -252,7 +252,7 @@
                             <input class="form-control add-attribute-value-field" />
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-success pull-right add-attribute-btn">
+                            <button class="btn btn-success pull-right add-attribute-btn">
                                 <span class="fa fa-plus"></span>
                                 <span>Add Attribute</span>
                             </button>
@@ -289,10 +289,10 @@
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
     <bundle:variable name="aside">
         <h3>${form.name}</h3>
-        <h4>
+        <h5>
             ${not empty currentUser ? currentUser.username : (not empty cloneUser ? 'Clone User' : 'New User')}
             <c:if test="${not empty cloneUser}"><small> ${cloneUser.username}</small></c:if>
-        </h4>
+        </h5>
         <hr class="border-color-white" />
         <p>
             Please visit Space Administration to define new 

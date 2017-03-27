@@ -4,7 +4,6 @@
 <!-- Set Varibles Needed To Build DOM Elements -->
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
 <c:set var="currentObj" value="${space.getKapp(param.kapp)}" scope="request"/>
-<c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
 <c:set var="attributeDefinitions" value="${currentKapp.kappAttributeDefinitions}" scope="request"/>
 
 <!-- Show page content only if selected Kapp exists. -->

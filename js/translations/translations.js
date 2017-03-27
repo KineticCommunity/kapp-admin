@@ -527,7 +527,7 @@
             var row = $(this).closest("tr");
             if ($(this).val()){
                 row.find("button.enable-locale-btn").attr("disabled", false);
-                row.find("td.locale-code-cell").html("<span class=\"btn-sm btn-subtle\" disabled>" + $(this).val() + "</span>");
+                row.find("td.locale-code-cell").html("<span class=\"btn-subtle\" disabled>" + $(this).val() + "</span>");
             }
             else {
                 row.find("button.enable-locale-btn").attr("disabled", true);
@@ -1112,7 +1112,7 @@
             $(this).notifie({
                 anchor: "h3",
                 message: "<b>Import Completed Successfully</b><br>" + data.response().result.message
-                    + "<br><a class='pull-right btn btn-sm btn-default' href='" + bundle.adminTranslations.i18nKappUrl + "&page=translations/publish'>"
+                    + "<br><a class='pull-right btn btn-default' href='" + bundle.adminTranslations.i18nKappUrl + "&page=translations/publish'>"
                     + "<span class='fa fa-cloud-upload'></span> Publish Imported Changes</a>",
                 severity: "info",
                 permanent: true

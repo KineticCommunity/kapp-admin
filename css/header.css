@@ -86,6 +86,9 @@ html {
   position: relative;
   min-height: 100%;
 }
+html body {
+  padding-top: 5rem;
+}
 
 nav#bundle-header {
   margin-bottom: 0;
@@ -153,7 +156,7 @@ nav#bundle-header .navbar-header .navbar-nav > li > a#user-menu > * {
 }
 nav#bundle-header .navbar-header .navbar-nav > li > a#user-menu img {
   display: inline-block;
-  border-radius: 36px;
+  border-radius: 3.6rem;
 }
 nav#bundle-header .navbar-header .navbar-nav > li.divider {
   border-right: 1px solid #d5d6d7;

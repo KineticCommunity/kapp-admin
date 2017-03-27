@@ -7,7 +7,10 @@
     $(function() {
         
         $("table[data-user-list]").each(function(i,table){
-            userManagement.loadUserList($(table));
+//            userManagement.loadUserList($(table));
+            
+            userManagement.usersTable = $(table);
+            userManagement.loadUsers();
         });
         
         $("input#users-import").on("change", userManagement.importUsersFileSelected);
@@ -31,9 +34,7 @@
     // Ensure the BUNDLE global object exists
     bundle = typeof bundle !== "undefined" ? bundle : {};
     // Create namespace for Admin Kapp
-    bundle.adminProfiles = bundle.adminProfiles || {};
-    // Create a scoped alias to simplify references to your namespace
-    var adminProfiles = bundle.adminProfiles;
+    bundle.adminUsers = bundle.adminUsers || {};
     
     // Private namesapce for user management
     var userManagement = new Object();
@@ -42,6 +43,148 @@
     /*----------------------------------------------------------------------------------------------
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
+    
+    userManagement.loadUsers = function(){
+        var options = {
+            columns: [
+                {
+                    title: "Username",
+                    data: "username",
+                    class: "all",
+                    renderType: "gravatar"
+                },
+                {
+                    title: "Display Name",
+                    data: "displayName",
+                    renderType: "text"
+                },
+                {
+                    title: "Email",
+                    data: "email",
+                    renderType: "text"
+                },
+                {
+                    title: "Enabled",
+                    data: "enabled",
+                    renderType: "boolLabel"
+                },
+                {
+                    title: "",
+                    defaultContent: "",
+                    class: "all",
+                    renderType: "actions",
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    title: "Teams",
+                    defaultContent: "",
+                    class: "none",
+                    renderType: "teams"
+                },
+                {
+                    title: "Roles",
+                    defaultContent: "",
+                    class: "none",
+                    renderType: "roles"
+                }
+            ],
+            ajax: {
+                url: bundle.apiLocation() + "/users?include=memberships",
+                dataSrc: "users"
+            },
+            responsive: true,
+            pageLength: 25,
+            stateSave: true
+        };
+        bundle.admin.addDataTableRenderers(options.columns, {
+            actions: function (d, type, row){
+                return "<div class=\"btn-group\">" +
+                    "<a href=\"" + bundle.kappLocation() + "/" + bundle.adminUsers.consoleSlug + 
+                        "?page=users/user&username=" + encodeURIComponent(row.username) + 
+                        "\" class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></a>" +
+                    "<a href=\"" + bundle.kappLocation() + "/" + bundle.adminUsers.consoleSlug + 
+                        "?page=users/user&clone=" + encodeURIComponent(row.username) + 
+                        "\" class=\"btn btn-xs btn-warning clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></a>" +
+                "</div>";
+            }, 
+            gravatar: function(d, type, row){
+                return "<img src=\"https://www.gravatar.com/avatar/" + 
+                    md5(row.email) + "?s=64&d=mm\" " + 
+                    "class=\"gravatarimg\" width=\"32px\" height=\"32px\"> " + d;
+            },
+            teams: function(d, type, row){
+                if (type === "export" || type == "sort" || type == "type"){
+                    return d;
+                }
+                return $.map(row.memberships, function(membership){
+                    if (!membership.team.name.match("^Role::")){
+                        return membership.team.name;
+                    }
+                    else {
+                        return null;
+                    }
+                }).sort().map(function(team){
+                    return "<label class=\"label label-default\">" + team + "</label>"
+                }).join(" ") || "<em>None</em>";
+            },
+            roles: function(d, type, row){
+                if (type === "export" || type == "sort" || type == "type"){
+                    return d;
+                }
+                return $.map(row.memberships, function(membership){
+                    if (membership.team.name.match("^Role::")){
+                        return membership.team.name.substring(6);
+                    }
+                    else {
+                        return null;
+                    }
+                }).sort().map(function(team){
+                    return "<label class=\"label label-default\">" + team + "</label>"
+                }).join(" ") || "<em>None</em>";
+            },
+            boolLabel: function(d, type, row){
+                if (d === true){
+                    return "<label class=\"label label-success\"><span class=\"fa fa-check\"></span> <span>Yes</span></label>";
+                }
+                else {
+                    return "<label class=\"label label-danger\"><span class=\"fa fa-times\"></span> <span>No</span></label>";
+                }
+            }
+        });
+        // Build DataTable
+        userManagement.usersTable.DataTable(options);
+    };
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     userManagement.initializeGroupsTable = function(table){
         userManagement.populateGroupOptions(table);
@@ -513,7 +656,7 @@
                         {
                             extend: "csv",
                             text: "Export CSV of Failed Rows",
-                            className: "btn-sm export-failures",
+                            className: "export-failures",
                             filename: userManagement.userTable.data("space-name") + " Users - Failed Import Rows",
                             exportOptions: {
                                 modifier: {
@@ -546,7 +689,7 @@
         userManagement.userTable = table;
         $.ajax({
             method: "GET",
-            url: encodeURI(bundle.apiLocation() + "/users?include=attributes"),
+            url: encodeURI(bundle.apiLocation() + "/users?include=memberships"),
             dataType: "json",
             contentType: "application/json",
             success: function(data){
@@ -593,14 +736,14 @@
             data: data.users,
             columns: [
                 {
-                    title: "Display Name",
-                    data: "displayName",
-                    class: "all",
+                    title: "Username",
+                    data: "username",
                     render: $.fn.dataTable.render.text()
                 },
                 {
-                    title: "Username",
-                    data: "username",
+                    title: "Display Name",
+                    data: "displayName",
+                    class: "all",
                     render: $.fn.dataTable.render.text()
                 },
                 {
@@ -629,7 +772,6 @@
                 {
                     extend: "csv",
                     text: "Export CSV",
-                    className: "btn-sm ",
                     filename: (spaceName || "kinops") + " Users",
                     exportOptions: {
                         modifier: {
@@ -641,7 +783,6 @@
                 },
                 {
                     text: "Import CSV",
-                    className: "btn-sm",
                     action: userManagement.importUsersOpen
                 }
             ],

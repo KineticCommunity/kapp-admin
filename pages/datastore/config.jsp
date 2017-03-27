@@ -18,23 +18,23 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>
+        <h2>
             ${not empty currentStore ? currentStore.name : 'New Datastore'}  
             <c:if test="${not empty currentStore}">
                 <small> Configuration</small>
                 <div class="pull-right">
-                    <a class="btn btn-sm btn-default" href="${bundle.kappLocation}/${form.slug}?page=datastore/store&store=${currentStore.slug}">
+                    <a class="btn btn-default" href="${bundle.kappLocation}/${form.slug}?page=datastore/store&store=${currentStore.slug}">
                         <span class="fa fa-database fa-fw"></span>Records
                     </a>
-                    <a class="btn btn-sm btn-tertiary" href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${currentStore.slug}/builder" target="_blank">
+                    <a class="btn btn-tertiary" href="${bundle.spaceLocation}/app/#/${kapp.slug}/author/form/${currentStore.slug}/builder" target="_blank">
                         <span class="fa fa-mouse-pointer fa-fw"></span>Builder
                     </a>
-                    <a class="btn btn-sm btn-tertiary" href="javascript:location.reload(true);">
+                    <a class="btn btn-tertiary" href="javascript:location.reload(true);">
                         <span class="fa fa-refresh fa-fw"></span>
                     </a>
                 </div>
             </c:if>
-        </h3>
+        </h2>
     </div>
     
     <form id="${empty currentStore ? 'create-datastore-form' : 'update-datastore-form'}" action="javascript:void(0);">
@@ -183,7 +183,7 @@
                                                             </c:forEach>
                                                         </select>
                                                     </td>
-                                                    <td class="param-add-btn"><button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
+                                                    <td class="param-add-btn"><button class="btn btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -232,7 +232,7 @@
                             </select>
                         </td>
                         <td style="width:36%;" class="qual-add-btn">
-                            <button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Qualification</button>
+                            <button class="btn btn-success pull-right"><span class="fa fa-plus"></span> Add Qualification</button>
                         </td>
                     </tr>
                 </tbody>
@@ -270,7 +270,7 @@
                                 </c:forEach>
                             </select>
                         </td>
-                        <td class="param-add-btn"><button class="btn btn-sm btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
+                        <td class="param-add-btn"><button class="btn btn-success pull-right"><span class="fa fa-plus"></span> Add Parameter</button></td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -326,7 +326,7 @@
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
     <bundle:variable name="aside">
         <h3>${form.name}</h3>
-        <h4>${not empty currentStore ? currentStore.name : 'New Datastore'}</h4>
+        <h5>${not empty currentStore ? currentStore.name : 'New Datastore'}</h5>
         <p>${currentStore.description}</p>
         <hr class="border-color-white" />
         <c:choose>

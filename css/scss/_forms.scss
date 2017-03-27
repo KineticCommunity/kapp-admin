@@ -2,17 +2,19 @@
  *   Forms
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-input[type='text'], 
-input[type='text'].form-control, 
-input[type='password'], 
-input[type='password'].form-control, 
-textarea, 
-textarea.form-control, 
+input[type='text'],
+input[type='text'].form-control,
+input[type='password'],
+input[type='password'].form-control,
+textarea,
+textarea.form-control,
+div.form-control,
 select.form-control,
 select {
   display: block;
   text-decoration: none;
   width: 100%;
+  height: 30px;
   background: rgb(255, 255, 255);
   border-width: 1px;
   border-style: solid;
@@ -20,97 +22,72 @@ select {
   border-image: initial;
   outline: none;
   padding: 0.4rem 0.8rem;
-  @include font-size-line-height();
+  @include font-size-line-height(1.333rem, 2rem);
   @include border-radius();
+  transition: border-color .3s linear;
   &:focus {
-    border-color: $gray;
+    border-color: $tertiary;
   }
 }
 
-textarea, 
-textarea.form-control { 
+textarea,
+textarea.form-control {
   resize: vertical;
+  height: auto;
 }
 
-input:disabled, select:disabled,
-textarea:disabled, checkbox:disabled,
-radio:disabled {
-  color: $text-color !important;
-}
-    
-input[readonly], 
-input.form-control[readonly], 
-select[readonly], 
-select.form-control[readonly], 
-textarea[readonly], 
-textarea.form-control[readonly], 
+input:disabled,
+input.form-control:disabled,
+select:disabled,
+select.form-control:disabled,
+textarea:disabled,
+textarea.form-control:disabled,
 div.form-control {
-  border-color: rgb(223, 223, 223);
-  background-color: rgb(248, 248, 248);
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  background-color: rgb(236, 236, 236);
+  color: $darkestgray;
   cursor: default;
-  
+}
+
+input[readonly],
+input.form-control[readonly],
+select[readonly],
+select.form-control[readonly],
+textarea[readonly],
+textarea.form-control[readonly],
+div.form-control {
+  background-color: rgb(248, 248, 248);
+  cursor: default;
+
   &:focus {
-    border-color: rgb(223, 223, 223);
+    border-color: rgb(168, 168, 168);
   }
 }
 
-.input-group-addon {
-  border-color: rgb(207, 207, 207);
-}
-
-.form-group.required label:after,
-label.required:after {
-  content: '*';
-  color: red;
-}
 .form-group:after {
   content:" ";
   display:block;
   clear:both;
 }
 
-input[type=radio],
-input[type=checkbox] {
-  vertical-align: middle;
+.checkbox.required label:first-child:after,
+.radio.required label:first-child:after,
+.form-group.required label:after,
+label.required:after {
+  content: '*';
+  color: red;
 }
+
 label {
   color: $darkgray;
   display: block;
   @include font-size(1.4rem);
   font-weight: 600;
-  margin-top: 5px;
   margin-bottom: 0px;
-  small {
-    font-weight: normal;
-    font-style: italic;
-  }
-}
-input[type=radio] + label,
-input[type=checkbox] + label {
-  display: inline-block;
 }
 label.field-label {
+  margin-top: 5px;
   padding: 0;
   width: 100%;
-  float: left;
-}
-.radio label, .checkbox label {
-  margin-bottom: 0;
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  cursor: pointer;
-}
-.radio label:first-child:not(.field-label),
-.checkbox label:first-child:not(.field-label) {
-  margin-right: 2rem;
-  margin-left: 1rem;
-}
-
-.section-container{
-  border-bottom: 1px solid $primary-complement;
-  padding-bottom: 2rem;
 }
 
 /* Requested For search display
@@ -129,9 +106,11 @@ label.field-label {
 }
 
 .tt-menu {
-  background-color: $white;
+  background: rgb(255, 255, 255);
   padding: .5rem;
-  border: 1px solid $lightestgray;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(207, 207, 207);
   .fa.pull-left {
     margin: 0;
   }
@@ -146,132 +125,144 @@ label.field-label {
  *-------------------------------------- */
 section.page {
   form {
-    margin-left: 0;
+    margin: 1.5rem 0;
     font-weight: 400;
     overflow: hidden;
-    padding: 1rem 1rem 2rem 1rem;
-    background-color: $white;
-    @include border-radius(6px);
-    h1{
-      padding:0 0 1rem;
-    }
-    .section-container{
+    padding: 1rem;
+    background-color: #f5f5f5;
+    @include border-radius();
+    box-shadow: 0 1px 3px rgba(49, 62, 71, 0.14);
+
+    section {
       display: block;
       margin-bottom: 2rem;
     }
 
-    .radio label:not(.field-label), .checkbox label:not(.field-label) {
-      float: left;
-      margin-right: 1rem;
-      margin-left: .1rem;
+    h1{
+      padding:0 0 1rem;
     }
-    button {
-      @extend .btn;
 
-      &[data-button-type='previous-page']{
+    .radio,
+    .checkbox {
+      &:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+      }
+
+      label {
+        margin-bottom: 0;
+        margin: 0 0 1rem 0;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:first-child:not(.field-label) {
+          margin-right: 2rem;
+          margin-left: 1rem;
+        }
+
+        &:not(.field-label) {
+          float: left;
+          margin-right: 1.5rem;
+          margin-left: .1rem;
+        }
+      }
+
+      &.vertical label:not(.field-label){
+        clear: both;
+      }
+
+      &.disabled label:not(.field-label) {
+        opacity: 0.85;
+      }
+    }
+
+    button[data-element-type="button"] {
+      display: inline-block;
+      line-height: 1.8rem;
+      @include border-radius();
+      padding: 0.5rem;
+      border-width: 1px;
+      border-style: solid;
+      color: $black;
+      background-color: #E9E9E9;
+      cursor: pointer;
+      font-size: inherit;
+      margin-right: 0.5rem;
+
+      &[data-button-type="submit-page"],
+      &[data-button-type="custom"] {
+        @extend .btn-default;
+        float: right;
+        margin-right: 0;
+        margin-left: 0.5rem;
+      }
+
+      &[data-button-type="previous-page"] {
+        @extend .btn-default;
+      }
+
+      &[data-button-type="save"] {
+        @extend .btn-subtle;
+        float: right;
+        margin-right: 0;
+        margin-left: 0.5rem;
         position: relative;
         padding-left: 2.4rem;
-        background-color: $gray;
-        color: black;
-        &:hover {
-          background-color: tint($gray, 10%);
-        }
-      }
-      &[data-button-type='previous-page']:before {
-        font-family: 'FontAwesome';
-        font-weight: 400;
-        content: '\f053';
-        position: absolute;
-        top: 50%;
-        left: 0.8rem;
-        width: 1.4rem;
-        height: 1.4rem;
-        line-height: 1;
-        margin-top: -0.7rem;
-      }
 
-      &[data-button-type='save']{
-        position: relative;
-        padding-left: 2.8rem;
-        background-color: tint($lightgray, -10%);
-        color: black;
-        &:hover {
-          background-color: $lightgray;
+        &:before {
+          font-family: 'FontAwesome';
+          font-weight: 400;
+          content: '\f0c7';
+          position: absolute;
+          top: 50%;
+          left: 0.5rem;
+          width: 1.4rem;
+          height: 1.4rem;
+          line-height: 1;
+          margin-top: -0.7rem;
         }
       }
-      &[data-button-type='save']:before {
-        font-family: 'FontAwesome';
-        font-weight: 400;
-        content: '\f0c7';
-        position: absolute;
-        top: 50%;
-        left: 1.2rem;
-        width: 1.4rem;
-        height: 1.4rem;
-        line-height: 1;
-        margin-top: -0.7rem;
-      }
+    }
 
-      &[data-button-type='custom']{
-        background-color: $white;
-        border-color: $lightgray;
-        color: black;
-        &:hover {
-          background-color: tint($white, 5%);
-        }
-      }
+    .fileinput-button {
+      @extend .btn-subtle;
     }
 
     /* Attachment files
      *-------------------------------------- */
     .attachment {
-      background-color: $white;
-      @include border-radius(6px);
-      padding: .5rem 1rem;
-      width: 70%;
+      @include border-radius();
       clear: both;
-      label {
-        margin-bottom: .5rem;
-        border: none;
-        &:after {
-          font-family: 'FontAwesome';
-          content:"\f093;";
-          display:block;
-          clear:both;
-        }
-      }
-      label:after {
-        content:" ";
-        display:block;
-        clear:both;
-      }
       &.empty {
-        .file-table {
+        .file-table > .file-header {
           display: none;
         }
       }
-    }
-    .file-table {
-      display: table;
-      margin: 0px;
-      padding: 0px;
+      .file-table {
+        display: table;
+        margin: 0px;
+        padding: 0px;
 
-      .file-header {
-        display: table-header-group;
-        color: $darkgray;
-      }
-      .file-row {
-        display: table-row;
-        > span {
-          display: table-cell;
-          padding: .5rem;
-          > a {
-            padding: 0 .5rem;
+        .file-header {
+          display: table-header-group;
+          color: $darkgray;
+        }
+        .file-row {
+          display: table-row;
+          > span {
+            display: table-cell;
+            padding: .5rem;
+            > a {
+              padding: 0 .5rem;
+            }
           }
         }
-      }
-      .file-container {
-        display: table-row-group;
+        .file-container {
+          display: table-row-group;
+        }
       }
     }
   }

@@ -51,6 +51,7 @@
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
             <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.js"/>
             <bundle:script src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.js"/>
+            <bundle:script src="${bundle.location}/libraries/md5/md5.js" />
             <bundle:script src="${bundle.location}/js/admin.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>

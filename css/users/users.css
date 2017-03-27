@@ -1,13 +1,18 @@
 /* CSS Specific to the User Management Console*/
-tr.child td span.dtr-data {
-  word-break: break-all;
+table#users-table img.gravatarimg {
+  border-radius: 50%;
+  margin: -0.5rem 0;
 }
-div.row.user-details > div {
-  margin-bottom: 15px;
+table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span {
+    white-space: normal;
+    width: auto;
+    display: block;
 }
-div.row.user-details > div > table {
-  margin-bottom: 0px;
+table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-title {
+    overflow: hidden;
+    text-align: left;
 }
-table td.group-name {
-  word-break: break-all;
+table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-data {
+    float: none;
+    overflow: hidden;
 }

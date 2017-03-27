@@ -22,15 +22,15 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
 
     <div class="page-header">
-        <h3>
+        <h2>
             ${form.name}
             <div class="pull-right users-table-buttons">
-                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=users/user">
+                <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=users/user">
                     <span class="fa fa-plus fa-fw"></span> Create User
                 </a>
                 <input class="hide" accept=".csv" id="users-import" type="file">
             </div>
-        </h3>
+        </h2>
     </div>
 
     <div class="row">

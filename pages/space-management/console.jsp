@@ -3,7 +3,6 @@
 <%@include file="../../bundle/router.jspf" %>
 
 <!-- Set Varibles Needed To Build DOM Elements -->
-<c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
 <c:set var="attributeDefinitions" value="${space.spaceAttributeDefinitions}" scope="request"/>
 <c:set var="currentObj" value="${space}" scope="request"/>
 

@@ -27,17 +27,17 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
 
             <div class="page-header">
-                <h3>Notification <small> ${notificationType}</small>
+                <h2>Notification <small> ${notificationType}</small>
                     <div class="pull-right notification-table-buttons">
-                        <a class="btn btn-sm btn-success" href="${bundle.kappLocation}/${form.slug}?page=notifications/snippits&type=Snippit">
+                        <a class="btn btn-success" href="${bundle.kappLocation}/${form.slug}?page=notifications/snippits&type=Snippit">
                             <span class="fa fa-code fa-fw"></span> View Snippits
                         </a>
-                        <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=notifications/record&type=Template">
+                        <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=notifications/record&type=Template">
                             <span class="fa fa-plus fa-fw"></span> Add Template
                         </a>
                         <input class="hide" accept=".csv" data-type="Template" id="notification-import" type="file">
                     </div>
-                </h3>
+                </h2>
             </div>
             
             <div class="row">
@@ -67,7 +67,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${notificationType}</h4>
+                <h5>${notificationType}</h5>
                 <p>${form.description}</p>
                 <hr class="border-color-white" />
                 <p>To add a new notification, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Template</b> button.</p>

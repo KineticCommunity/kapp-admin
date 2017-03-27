@@ -1268,9 +1268,9 @@
             ]
         },
         {
-            "name":"User Management",
+            "name":"Users",
             "description":"Allows for creation and management of users and their properties and attributes.",
-            "slug":"user-management",
+            "slug":"users",
             "type":"Console",
             "status":"Inactive",
             "anonymous":false,
@@ -1294,7 +1294,7 @@
                     "events":[
 
                     ],
-                    "name":"User Management",
+                    "name":"Users",
                     "renderType":"submittable",
                     "type":"page",
                     "advanceCondition":null,

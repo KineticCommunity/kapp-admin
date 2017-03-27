@@ -31,10 +31,10 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
                 
             <div class="page-header">
-                <h3>
+                <h2>
                     Manage Locales
                     <small>${text.escape(i18nKapp.name)}</small>
-                </h3>
+                </h2>
                 
                 <c:set var="allMissingTranslations" 
                        value="${translationSnapshot.getMissingEntries(i18nKapp)}"/>
@@ -118,7 +118,7 @@
                                 </td>
                                 <td style="width:35%;" class="locale-code-cell"></td>
                                 <td style="width:15%;" class="text-right">
-                                    <button class="btn btn-sm btn-success enable-locale-btn" type="button" disabled>
+                                    <button class="btn btn-success enable-locale-btn" type="button" disabled>
                                         <span class="fa fa-plus"></span>
                                         Enable Locale
                                     </button>
@@ -134,7 +134,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>
                     The <b>Enabled Locales</b> table displays the locales that have been enabled and will be available in this console. 

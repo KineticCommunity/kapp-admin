@@ -6,16 +6,12 @@
 
 /* Miscellaneous Elements
  *-------------------------------------- */
-// Truncates long text with ellipsis 
+// Truncates long text with ellipsis
 .ellipsis {
   text-overflow: ellipsis;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.category h3 {
-  font-weight: 200;
 }
 
 /* Text utilities

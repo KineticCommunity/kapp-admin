@@ -18,7 +18,7 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>${text.escape(form.name)}</h3>
+        <h2>${text.escape(form.name)}</h2>
     </div>
     
     <div class="row">

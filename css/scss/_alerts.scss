@@ -34,7 +34,7 @@
   line-height: 140%;
   padding: 1rem;
   margin-bottom: 2rem;
-  border-radius: 3px;
+  @include border-radius();
   background-color: $lightestgray;
   position: relative;
   border: 1px solid transparent;

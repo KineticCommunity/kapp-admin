@@ -120,7 +120,7 @@ ul.unstyled {
   overflow: hidden;
 }
 
-/* Empty states
+/* Hide empty state
  *-------------------------------------- */
 .empty-state:not(:only-child) {
   display: none;
@@ -130,88 +130,4 @@ ul.unstyled {
  *-------------------------------------- */
 .nowrap {
   white-space: nowrap;
-}
-
-/* Colors
- *-------------------------------------- */
-.color-primary {
-  color: $primary;
-}
-.color-primary-complement {
-  color: $primary-complement;
-}
-.color-secondary {
-  color: $secondary;
-}
-.color-secondary-complement {
-  color: $secondary-complement;
-}
-.color-tertiary {
-  color: $tertiary;
-}
-.color-tertiary-complement {
-  color: $tertiary-complement;
-}
-.color-white {
-  color: $white;
-}
-.color-black {
-  color: $black;
-}
-.color-text {
-  color: $text-color;
-}
-.background-color-primary {
-  background-color: $primary;
-}
-.background-color-primary-complement {
-  background-color: $primary-complement;
-}
-.background-color-secondary {
-  background-color: $secondary;
-}
-.background-color-secondary-complement {
-  background-color: $secondary-complement;
-}
-.background-color-tertiary {
-  background-color: $tertiary;
-}
-.background-color-tertiary-complement {
-  background-color: $tertiary-complement;
-}
-.background-color-white {
-  background-color: $white;
-}
-.background-color-black {
-  background-color: $black;
-}
-.background-color-text {
-  background-color: $text-color;
-}
-.border-color-primary {
-  border-color: $primary;
-}
-.border-color-primary-complement {
-  border-color: $primary-complement;
-}
-.border-color-secondary {
-  border-color: $secondary;
-}
-.border-color-secondary-complement {
-  border-color: $secondary-complement;
-}
-.border-color-tertiary {
-  border-color: $tertiary;
-}
-.border-color-tertiary-complement {
-  border-color: $tertiary-complement;
-}
-.border-color-white {
-  border-color: $white;
-}
-.border-color-black {
-  border-color: $black;
-}
-.border-color-text {
-  border-color: $text-color;
 }

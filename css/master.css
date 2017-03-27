@@ -21,20 +21,26 @@ body {
   font-size: 1.4rem;
   line-height: 2rem;
   color: #7e8083;
-  background-color: #f4f4f4;
+  background-color: #ECEFF1;
   margin-bottom: 6rem;
 }
 
 body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header {
   margin: 0 0 10px 0;
+  border-color: #ffffff;
 }
 body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header::after {
   content: "";
   display: table;
   clear: both;
 }
-body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 {
+body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 {
   margin-top: 10px;
+  padding: 0;
+  font-weight: 500;
+}
+body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-primary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-primary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-secondary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-secondary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-tertiary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-tertiary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-default, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="submit-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="custom"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="custom"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="previous-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="previous-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-link, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-subtle, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="save"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="save"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form .fileinput-button, section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .fileinput-button, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-primary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-primary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-secondary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-secondary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-tertiary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-tertiary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-default, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="submit-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="custom"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="custom"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="previous-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="previous-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-link, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-subtle, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="save"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="save"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form .fileinput-button, section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .fileinput-button, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-primary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-primary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-secondary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-secondary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-tertiary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-tertiary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-default, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="submit-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="custom"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="custom"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="previous-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="previous-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-link, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-subtle, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="save"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="save"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form .fileinput-button, section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .fileinput-button {
+  vertical-align: top;
 }
 body > div.view-port > div.container > div.row > div.tab-content > div.row > div.aside {
   font-size: 1.26rem;
@@ -94,6 +100,44 @@ a:hover, a:focus {
   text-decoration: underline;
 }
 
+/* Headings
+ *-------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-weight: 700;
+  color: #7e8083;
+}
+
+h6 {
+  font-size: 1.6rem;
+  line-height: 2rem;
+}
+
+h5 {
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+}
+
+h4 {
+  font-size: 2rem;
+  line-height: 2.4rem;
+}
+
+h3 {
+  font-size: 2.2rem;
+  line-height: 2.6rem;
+}
+
+h2 {
+  font-size: 2.4rem;
+  line-height: 2.8rem;
+}
+
+h1 {
+  font-size: 2.6rem;
+  line-height: 3rem;
+}
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Type
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -104,10 +148,6 @@ a:hover, a:focus {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.category h3 {
-  font-weight: 200;
 }
 
 /* Text utilities
@@ -293,324 +333,91 @@ table.dataTable.nowrap td:not(.all) {
   white-space: normal;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Forms
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-input[type='text'],
-input[type='text'].form-control,
-input[type='password'],
-input[type='password'].form-control,
-textarea,
-textarea.form-control,
-select.form-control,
-select {
-  display: block;
-  text-decoration: none;
-  width: 100%;
-  background: white;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #cfcfcf;
-  border-image: initial;
-  outline: none;
-  padding: 0.4rem 0.8rem;
-  font-size: 1.4rem;
-  line-height: 2rem;
-  border-radius: 0.4rem;
-}
-input[type='text']:focus,
-input[type='text'].form-control:focus,
-input[type='password']:focus,
-input[type='password'].form-control:focus,
-textarea:focus,
-textarea.form-control:focus,
-select.form-control:focus,
-select:focus {
-  border-color: #7e8083;
-}
-
-textarea,
-textarea.form-control {
-  resize: vertical;
-}
-
-input:disabled, select:disabled,
-textarea:disabled, checkbox:disabled,
-radio:disabled {
-  color: #7e8083 !important;
-}
-
-input[readonly],
-input.form-control[readonly],
-select[readonly],
-select.form-control[readonly],
-textarea[readonly],
-textarea.form-control[readonly],
-div.form-control {
-  border-color: #dfdfdf;
-  background-color: #f8f8f8;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  cursor: default;
-}
-input[readonly]:focus,
-input.form-control[readonly]:focus,
-select[readonly]:focus,
-select.form-control[readonly]:focus,
-textarea[readonly]:focus,
-textarea.form-control[readonly]:focus,
-div.form-control:focus {
-  border-color: #dfdfdf;
-}
-
-.input-group-addon {
-  border-color: #cfcfcf;
-}
-
-.form-group.required label:after,
-label.required:after {
-  content: '*';
-  color: red;
-}
-
-.form-group:after {
-  content: " ";
-  display: block;
-  clear: both;
-}
-
-input[type=radio],
-input[type=checkbox] {
-  vertical-align: middle;
-}
-
-label {
-  color: #4b4c4e;
-  display: block;
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-top: 5px;
-  margin-bottom: 0px;
-}
-label small {
-  font-weight: normal;
-  font-style: italic;
-}
-
-input[type=radio] + label,
-input[type=checkbox] + label {
-  display: inline-block;
-}
-
-label.field-label {
-  padding: 0;
-  width: 100%;
-  float: left;
-}
-
-.radio label, .checkbox label {
-  margin-bottom: 0;
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.radio label:first-child:not(.field-label),
-.checkbox label:first-child:not(.field-label) {
-  margin-right: 2rem;
-  margin-left: 1rem;
-}
-
-.section-container {
-  border-bottom: 1px solid #FFFFFF;
-  padding-bottom: 2rem;
-}
-
-/* Requested For search display
- *-------------------------------------- */
-.requested-for-display-name label {
-  color: #313E47;
-  padding-left: 0;
-}
-.requested-for-display-name span.fa.fa-edit {
-  cursor: pointer;
-}
-.requested-for-display-name .display-info {
-  padding: 0;
-}
-
-.tt-menu {
-  background-color: #ffffff;
-  padding: .5rem;
-  border: 1px solid #F1F1F1;
-}
-.tt-menu .fa.pull-left {
-  margin: 0;
-}
-
-.tt-input {
-  min-height: 3rem;
-  border: 1px solid #d5d6d7;
-  width: 35rem;
-}
-
-/* Section Page > Form
- *-------------------------------------- */
-section.page form {
-  margin-left: 0;
-  font-weight: 400;
-  overflow: hidden;
-  padding: 1rem 1rem 2rem 1rem;
-  background-color: #ffffff;
-  border-radius: 6px;
-  /* Attachment files
-   *-------------------------------------- */
-}
-section.page form h1 {
-  padding: 0 0 1rem;
-}
-section.page form .section-container {
-  display: block;
-  margin-bottom: 2rem;
-}
-section.page form .radio label:not(.field-label), section.page form .checkbox label:not(.field-label) {
-  float: left;
-  margin-right: 1rem;
-  margin-left: .1rem;
-}
-section.page form button[data-button-type='previous-page'] {
-  position: relative;
-  padding-left: 2.4rem;
-  background-color: #7e8083;
-  color: black;
-}
-section.page form button[data-button-type='previous-page']:hover {
-  background-color: #656769;
-}
-section.page form button[data-button-type='previous-page']:before {
-  font-family: 'FontAwesome';
-  font-weight: 400;
-  content: '\f053';
-  position: absolute;
-  top: 50%;
-  left: 0.8rem;
-  width: 1.4rem;
-  height: 1.4rem;
-  line-height: 1;
-  margin-top: -0.7rem;
-}
-section.page form button[data-button-type='save'] {
-  position: relative;
-  padding-left: 2.8rem;
-  background-color: #eff0f0;
-  color: black;
-}
-section.page form button[data-button-type='save']:hover {
-  background-color: #d5d6d7;
-}
-section.page form button[data-button-type='save']:before {
-  font-family: 'FontAwesome';
-  font-weight: 400;
-  content: '\f0c7';
-  position: absolute;
-  top: 50%;
-  left: 1.2rem;
-  width: 1.4rem;
-  height: 1.4rem;
-  line-height: 1;
-  margin-top: -0.7rem;
-}
-section.page form button[data-button-type='custom'] {
-  background-color: #ffffff;
-  border-color: #d5d6d7;
-  color: black;
-}
-section.page form button[data-button-type='custom']:hover {
-  background-color: #f2f2f2;
-}
-section.page form .attachment {
-  background-color: #ffffff;
-  border-radius: 6px;
-  padding: .5rem 1rem;
-  width: 70%;
-  clear: both;
-}
-section.page form .attachment label {
-  margin-bottom: .5rem;
-  border: none;
-}
-section.page form .attachment label:after {
-  font-family: 'FontAwesome';
-  content: "\f093;";
-  display: block;
-  clear: both;
-}
-section.page form .attachment label:after {
-  content: " ";
-  display: block;
-  clear: both;
-}
-section.page form .attachment.empty .file-table {
-  display: none;
-}
-section.page form .file-table {
-  display: table;
-  margin: 0px;
-  padding: 0px;
-}
-section.page form .file-table .file-header {
-  display: table-header-group;
-  color: #4b4c4e;
-}
-section.page form .file-table .file-row {
-  display: table-row;
-}
-section.page form .file-table .file-row > span {
-  display: table-cell;
-  padding: .5rem;
-}
-section.page form .file-table .file-row > span > a {
-  padding: 0 .5rem;
-}
-section.page form .file-table .file-container {
-  display: table-row-group;
-}
-
-/* Media Queries
- *-------------------------------------- */
-@media (max-width: 991px) {
-  label.field-label {
-    width: 100%;
-    float: none;
-  }
-
-  section.page form .attachment {
-    width: 100%;
-  }
-}
 /* Form Button Styles
  *-------------------------------------- */
-button, input[type='submit'], input[type='button'], .btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-default, .btn-link, .btn-subtle {
+button, input[type='submit'], input[type='button'], .btn, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-default, section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form button[data-element-type="button"][data-button-type="custom"], section.page form button[data-element-type="button"][data-button-type="previous-page"], .btn-link, .btn-subtle, section.page form button[data-element-type="button"][data-button-type="save"], section.page form .fileinput-button {
   -webkit-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
 }
 
-button[data-button-type=submit-page] {
-  float: right;
-}
-
-.btn, section.page form button, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-default, .btn-link, .btn-subtle {
+.btn, .btn-primary, .btn-primary-complement, .btn-secondary, .btn-secondary-complement, .btn-tertiary, .btn-tertiary-complement, .btn-default, section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form button[data-element-type="button"][data-button-type="custom"], section.page form button[data-element-type="button"][data-button-type="previous-page"], .btn-link, .btn-subtle, section.page form button[data-element-type="button"][data-button-type="save"], section.page form .fileinput-button {
   display: inline-block;
-  line-height: 1.8rem;
-  border-radius: .3rem;
+  font-size: 1.333rem;
+  line-height: 2rem;
+  border-radius: 0.4rem;
   color: #ffffff;
   cursor: pointer;
+  padding: 0.4rem 0.8rem;
 }
-.btn:hover, section.page form button:hover, .btn-primary:hover, .btn-primary-complement:hover, .btn-secondary:hover, .btn-secondary-complement:hover, .btn-tertiary:hover, .btn-tertiary-complement:hover, .btn-default:hover, .btn-link:hover, .btn-subtle:hover, .btn:focus, section.page form button:focus, .btn-primary:focus, .btn-primary-complement:focus, .btn-secondary:focus, .btn-secondary-complement:focus, .btn-tertiary:focus, .btn-tertiary-complement:focus, .btn-default:focus, .btn-link:focus, .btn-subtle:focus, .btn:active, section.page form button:active, .btn-primary:active, .btn-primary-complement:active, .btn-secondary:active, .btn-secondary-complement:active, .btn-tertiary:active, .btn-tertiary-complement:active, .btn-default:active, .btn-link:active, .btn-subtle:active {
+.btn:hover, .btn-primary:hover, .btn-primary-complement:hover, .btn-secondary:hover, .btn-secondary-complement:hover, .btn-tertiary:hover, .btn-tertiary-complement:hover, .btn-default:hover, section.page form button[data-element-type="button"][data-button-type="submit-page"]:hover, section.page form button[data-element-type="button"][data-button-type="custom"]:hover, section.page form button[data-element-type="button"][data-button-type="previous-page"]:hover, .btn-link:hover, .btn-subtle:hover, section.page form button[data-element-type="button"][data-button-type="save"]:hover, section.page form .fileinput-button:hover, .btn:focus, .btn-primary:focus, .btn-primary-complement:focus, .btn-secondary:focus, .btn-secondary-complement:focus, .btn-tertiary:focus, .btn-tertiary-complement:focus, .btn-default:focus, section.page form button[data-element-type="button"][data-button-type="submit-page"]:focus, section.page form button[data-element-type="button"][data-button-type="custom"]:focus, section.page form button[data-element-type="button"][data-button-type="previous-page"]:focus, .btn-link:focus, .btn-subtle:focus, section.page form button[data-element-type="button"][data-button-type="save"]:focus, section.page form .fileinput-button:focus, .btn:active, .btn-primary:active, .btn-primary-complement:active, .btn-secondary:active, .btn-secondary-complement:active, .btn-tertiary:active, .btn-tertiary-complement:active, .btn-default:active, section.page form button[data-element-type="button"][data-button-type="submit-page"]:active, section.page form button[data-element-type="button"][data-button-type="custom"]:active, section.page form button[data-element-type="button"][data-button-type="previous-page"]:active, .btn-link:active, .btn-subtle:active, section.page form button[data-element-type="button"][data-button-type="save"]:active, section.page form .fileinput-button:active {
   text-decoration: none;
+  outline: none;
 }
 
-.btn[disabled], section.page form button[disabled], [disabled].btn-primary, [disabled].btn-primary-complement, [disabled].btn-secondary, [disabled].btn-secondary-complement, [disabled].btn-tertiary, [disabled].btn-tertiary-complement, [disabled].btn-default, [disabled].btn-link, [disabled].btn-subtle {
+.btn-lg,
+.btn-group-lg > .btn,
+.btn-group-lg > .btn-primary,
+.btn-group-lg > .btn-primary-complement,
+.btn-group-lg > .btn-secondary,
+.btn-group-lg > .btn-secondary-complement,
+.btn-group-lg > .btn-tertiary,
+.btn-group-lg > .btn-tertiary-complement,
+.btn-group-lg > .btn-default,
+section.page form .btn-group-lg > button[data-element-type="button"][data-button-type="submit-page"],
+section.page form .btn-group-lg > button[data-element-type="button"][data-button-type="custom"],
+section.page form .btn-group-lg > button[data-element-type="button"][data-button-type="previous-page"],
+.btn-group-lg > .btn-link,
+.btn-group-lg > .btn-subtle,
+section.page form .btn-group-lg > button[data-element-type="button"][data-button-type="save"],
+section.page form .btn-group-lg > .fileinput-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+}
+
+.btn-sm,
+.btn-group-sm > .btn,
+.btn-group-sm > .btn-primary,
+.btn-group-sm > .btn-primary-complement,
+.btn-group-sm > .btn-secondary,
+.btn-group-sm > .btn-secondary-complement,
+.btn-group-sm > .btn-tertiary,
+.btn-group-sm > .btn-tertiary-complement,
+.btn-group-sm > .btn-default,
+section.page form .btn-group-sm > button[data-element-type="button"][data-button-type="submit-page"],
+section.page form .btn-group-sm > button[data-element-type="button"][data-button-type="custom"],
+section.page form .btn-group-sm > button[data-element-type="button"][data-button-type="previous-page"],
+.btn-group-sm > .btn-link,
+.btn-group-sm > .btn-subtle,
+section.page form .btn-group-sm > button[data-element-type="button"][data-button-type="save"],
+section.page form .btn-group-sm > .fileinput-button {
+  padding: 0.3rem 0.6rem;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+}
+
+.btn-xs,
+.btn-group-xs > .btn,
+.btn-group-xs > .btn-primary,
+.btn-group-xs > .btn-primary-complement,
+.btn-group-xs > .btn-secondary,
+.btn-group-xs > .btn-secondary-complement,
+.btn-group-xs > .btn-tertiary,
+.btn-group-xs > .btn-tertiary-complement,
+.btn-group-xs > .btn-default,
+section.page form .btn-group-xs > button[data-element-type="button"][data-button-type="submit-page"],
+section.page form .btn-group-xs > button[data-element-type="button"][data-button-type="custom"],
+section.page form .btn-group-xs > button[data-element-type="button"][data-button-type="previous-page"],
+.btn-group-xs > .btn-link,
+.btn-group-xs > .btn-subtle,
+section.page form .btn-group-xs > button[data-element-type="button"][data-button-type="save"],
+section.page form .btn-group-xs > .fileinput-button {
+  padding: 0.1rem 0.4rem;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+
+.btn[disabled], [disabled].btn-primary, [disabled].btn-primary-complement, [disabled].btn-secondary, [disabled].btn-secondary-complement, [disabled].btn-tertiary, [disabled].btn-tertiary-complement, [disabled].btn-default, section.page form button[disabled][data-element-type="button"][data-button-type="submit-page"], section.page form button[disabled][data-element-type="button"][data-button-type="custom"], section.page form button[disabled][data-element-type="button"][data-button-type="previous-page"], [disabled].btn-link, [disabled].btn-subtle, section.page form button[disabled][data-element-type="button"][data-button-type="save"], section.page form [disabled].fileinput-button {
   background-color: #7e8083;
   border-color: #656769;
   color: #d5d6d7;
@@ -692,14 +499,14 @@ button[data-button-type=submit-page] {
   color: #1594C4;
 }
 
-.btn-default {
-  background-color: #E16B1E;
-  border-color: #b45618;
+.btn-default, section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form button[data-element-type="button"][data-button-type="custom"], section.page form button[data-element-type="button"][data-button-type="previous-page"] {
+  background-color: #1594C4;
+  border-color: #107196;
   color: #ffffff;
 }
-.btn-default:hover, .btn-default:focus, .btn-default:active {
-  background-color: #e47a35;
-  border-color: #cb601b;
+.btn-default:hover, section.page form button[data-element-type="button"][data-button-type="submit-page"]:hover, section.page form button[data-element-type="button"][data-button-type="custom"]:hover, section.page form button[data-element-type="button"][data-button-type="previous-page"]:hover, .btn-default:focus, section.page form button[data-element-type="button"][data-button-type="submit-page"]:focus, section.page form button[data-element-type="button"][data-button-type="custom"]:focus, section.page form button[data-element-type="button"][data-button-type="previous-page"]:focus, .btn-default:active, section.page form button[data-element-type="button"][data-button-type="submit-page"]:active, section.page form button[data-element-type="button"][data-button-type="custom"]:active, section.page form button[data-element-type="button"][data-button-type="previous-page"]:active {
+  background-color: #17a5db;
+  border-color: #1383ad;
   color: #ffffff;
 }
 
@@ -720,12 +527,12 @@ button[data-button-type=submit-page] {
   color: #d85752;
 }
 
-.btn-subtle {
+.btn-subtle, section.page form button[data-element-type="button"][data-button-type="save"], section.page form .fileinput-button {
   background-color: #E9E9E9;
   border-color: #d0d0d0;
   color: #000000;
 }
-.btn-subtle:hover, .btn-subtle:focus, .btn-subtle:active {
+.btn-subtle:hover, section.page form button[data-element-type="button"][data-button-type="save"]:hover, section.page form .fileinput-button:hover, .btn-subtle:focus, section.page form button[data-element-type="button"][data-button-type="save"]:focus, section.page form .fileinput-button:focus, .btn-subtle:active, section.page form button[data-element-type="button"][data-button-type="save"]:active, section.page form .fileinput-button:active {
   background-color: gainsboro;
   border-color: #c3c3c3;
   color: #000000;
@@ -737,121 +544,279 @@ button[data-button-type=submit-page] {
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Forms
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+input[type='text'],
+input[type='text'].form-control,
+input[type='password'],
+input[type='password'].form-control,
+textarea,
+textarea.form-control,
+div.form-control,
+select.form-control,
+select {
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  height: 30px;
+  background: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #cfcfcf;
+  border-image: initial;
+  outline: none;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.333rem;
+  line-height: 2rem;
+  border-radius: 0.4rem;
+  transition: border-color .3s linear;
+}
+input[type='text']:focus,
+input[type='text'].form-control:focus,
+input[type='password']:focus,
+input[type='password'].form-control:focus,
+textarea:focus,
+textarea.form-control:focus,
+div.form-control:focus,
+select.form-control:focus,
+select:focus {
+  border-color: #1594C4;
+}
+
+textarea,
+textarea.form-control {
+  resize: vertical;
+  height: auto;
+}
+
+input:disabled,
+input.form-control:disabled,
+select:disabled,
+select.form-control:disabled,
+textarea:disabled,
+textarea.form-control:disabled,
+div.form-control {
+  background-color: #ececec;
+  color: #333333;
+  cursor: default;
+}
+
+input[readonly],
+input.form-control[readonly],
+select[readonly],
+select.form-control[readonly],
+textarea[readonly],
+textarea.form-control[readonly],
+div.form-control {
+  background-color: #f8f8f8;
+  cursor: default;
+}
+input[readonly]:focus,
+input.form-control[readonly]:focus,
+select[readonly]:focus,
+select.form-control[readonly]:focus,
+textarea[readonly]:focus,
+textarea.form-control[readonly]:focus,
+div.form-control:focus {
+  border-color: #a8a8a8;
+}
+
+.form-group:after {
+  content: " ";
+  display: block;
+  clear: both;
+}
+
+.checkbox.required label:first-child:after,
+.radio.required label:first-child:after,
+.form-group.required label:after,
+label.required:after {
+  content: '*';
+  color: red;
+}
+
+label {
+  color: #4b4c4e;
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+label.field-label {
+  margin-top: 5px;
+  padding: 0;
+  width: 100%;
+}
+
+/* Requested For search display
+ *-------------------------------------- */
+.requested-for-display-name label {
+  color: #313E47;
+  padding-left: 0;
+}
+.requested-for-display-name span.fa.fa-edit {
+  cursor: pointer;
+}
+.requested-for-display-name .display-info {
+  padding: 0;
+}
+
+.tt-menu {
+  background: white;
+  padding: .5rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #cfcfcf;
+}
+.tt-menu .fa.pull-left {
+  margin: 0;
+}
+
+.tt-input {
+  min-height: 3rem;
+  border: 1px solid #d5d6d7;
+  width: 35rem;
+}
+
+/* Section Page > Form
+ *-------------------------------------- */
+section.page form {
+  margin: 1.5rem 0;
+  font-weight: 400;
+  overflow: hidden;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 3px rgba(49, 62, 71, 0.14);
+  /* Attachment files
+   *-------------------------------------- */
+}
+section.page form section {
+  display: block;
+  margin-bottom: 2rem;
+}
+section.page form h1 {
+  padding: 0 0 1rem;
+}
+section.page form .radio:after,
+section.page form .checkbox:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+}
+section.page form .radio label,
+section.page form .checkbox label {
+  margin-bottom: 0;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+section.page form .radio label:first-child:not(.field-label),
+section.page form .checkbox label:first-child:not(.field-label) {
+  margin-right: 2rem;
+  margin-left: 1rem;
+}
+section.page form .radio label:not(.field-label),
+section.page form .checkbox label:not(.field-label) {
+  float: left;
+  margin-right: 1.5rem;
+  margin-left: .1rem;
+}
+section.page form .radio.vertical label:not(.field-label),
+section.page form .checkbox.vertical label:not(.field-label) {
+  clear: both;
+}
+section.page form .radio.disabled label:not(.field-label),
+section.page form .checkbox.disabled label:not(.field-label) {
+  opacity: 0.85;
+}
+section.page form button[data-element-type="button"] {
+  display: inline-block;
+  line-height: 1.8rem;
+  border-radius: 0.4rem;
+  padding: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  color: #000000;
+  background-color: #E9E9E9;
+  cursor: pointer;
+  font-size: inherit;
+  margin-right: 0.5rem;
+}
+section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form button[data-element-type="button"][data-button-type="custom"] {
+  float: right;
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+section.page form button[data-element-type="button"][data-button-type="save"] {
+  float: right;
+  margin-right: 0;
+  margin-left: 0.5rem;
+  position: relative;
+  padding-left: 2.4rem;
+}
+section.page form button[data-element-type="button"][data-button-type="save"]:before {
+  font-family: 'FontAwesome';
+  font-weight: 400;
+  content: '\f0c7';
+  position: absolute;
+  top: 50%;
+  left: 0.5rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  line-height: 1;
+  margin-top: -0.7rem;
+}
+section.page form .attachment {
+  border-radius: 0.4rem;
+  clear: both;
+}
+section.page form .attachment.empty .file-table > .file-header {
+  display: none;
+}
+section.page form .attachment .file-table {
+  display: table;
+  margin: 0px;
+  padding: 0px;
+}
+section.page form .attachment .file-table .file-header {
+  display: table-header-group;
+  color: #4b4c4e;
+}
+section.page form .attachment .file-table .file-row {
+  display: table-row;
+}
+section.page form .attachment .file-table .file-row > span {
+  display: table-cell;
+  padding: .5rem;
+}
+section.page form .attachment .file-table .file-row > span > a {
+  padding: 0 .5rem;
+}
+section.page form .attachment .file-table .file-container {
+  display: table-row-group;
+}
+
+/* Media Queries
+ *-------------------------------------- */
+@media (max-width: 991px) {
+  label.field-label {
+    width: 100%;
+    float: none;
+  }
+
+  section.page form .attachment {
+    width: 100%;
+  }
+}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Lists
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 ul {
   list-style-type: none;
-}
-
-/* Search Results
- *-------------------------------------- */
-.search-container form {
-  padding-bottom: 0;
-}
-
-.search-results {
-  background-color: #ffffff;
-  padding: 1em 2em;
-}
-.search-results ul {
-  padding: 0;
-}
-.search-results li {
-  list-style: none;
-  display: block;
-  position: relative;
-  padding: .5em 1em;
-  cursor: pointer;
-  border-bottom: 1px solid #E6EAF0;
-  text-align: left;
-  text-decoration: none;
-}
-.search-results h3 {
-  margin-top: .5em;
-}
-
-/* Timeline
- *-------------------------------------- */
-.menu h3 {
-  margin: 1rem 0 3rem 0;
-}
-
-.submission-meta {
-  padding: 1.5rem 3rem;
-  margin-right: -5rem;
-  background-color: #ffffff;
-  word-wrap: break-word;
-  -webkit-box-shadow: 0.1rem 0.4rem 1rem #eaeaea;
-  box-shadow: 0.1rem 0.4rem 1rem #eaeaea;
-}
-
-.timeline-block {
-  padding-left: 0.9rem;
-}
-.timeline-block > p {
-  padding: 2rem 0 2rem 0;
-}
-.timeline-block > ul {
-  list-style: none;
-  padding-left: 0;
-  margin-left: 1rem;
-  border-left: 0.2rem solid #eaeaea;
-}
-.timeline-block > ul > li {
-  margin-left: 2.25rem !important;
-  /* The Dot */
-}
-.timeline-block > ul > li:before {
-  color: #6F7E82;
-  content: '\f111';
-  font-family: 'FontAwesome';
-  position: absolute;
-  left: -5rem;
-  top: 4rem;
-}
-.timeline-block > ul > li > h4:nth-child(2) {
-  color: #818181;
-}
-.timeline-block > ul > li > div > p {
-  color: #818181;
-  margin-top: 1.25rem;
-}
-
-.timeline-status {
-  position: relative;
-  margin-right: 0.5em;
-  border: 0.1rem solid #e8e8e8;
-  margin-bottom: 2rem;
-  background-color: #ffffff;
-  border-radius: 0.4rem;
-  -webkit-box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.05);
-  box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.05);
-  word-wrap: break-word;
-  /* The Triangle */
-}
-.timeline-status:after, .timeline-status:before {
-  right: 100%;
-  top: 5rem;
-  border: solid transparent;
-  content: ' ';
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
-.timeline-status:after {
-  border-color: transparent;
-  border-right-color: #ffffff;
-  border-width: 1.4rem;
-  margin-top: -4rem;
-}
-.timeline-status:before {
-  border-color: transparent;
-  border-width: 2rem;
-  margin-top: -4.6rem;
-}
-.timeline-status .timeline-status-content {
-  padding: 1em;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -911,6 +876,9 @@ nav#bundle-subheader div.additional-menu ul:not(.dropdown-menu) {
   margin-bottom: 0;
   padding: 1rem 0 1rem 2rem;
 }
+nav#bundle-subheader div.additional-menu.with-buttons ul:not(.dropdown-menu) {
+  padding: 0.9rem 0 0.9rem 2rem;
+}
 nav#bundle-subheader ul.dropdown-menu > li a {
   color: #4b4c4e;
   text-decoration: none;
@@ -923,7 +891,7 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
 /* Media Queries
  *-------------------------------------- */
 @media (max-width: 768px) {
-  nav#bundle-subheader li a {
+  nav#bundle-subheader li a:not(.btn):not(.btn-primary):not(.btn-primary-complement):not(.btn-secondary):not(.btn-secondary-complement):not(.btn-tertiary):not(.btn-tertiary-complement):not(.btn-default):not(.btn-link):not(.btn-subtle) {
     background: transparent;
   }
   nav#bundle-subheader div#sub-header {
@@ -936,10 +904,10 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
     display: inline-block;
     float: left;
   }
-  nav#bundle-subheader div#sub-header ul li.active a {
+  nav#bundle-subheader div#sub-header ul li.active a:not(.btn):not(.btn-primary):not(.btn-primary-complement):not(.btn-secondary):not(.btn-secondary-complement):not(.btn-tertiary):not(.btn-tertiary-complement):not(.btn-default):not(.btn-link):not(.btn-subtle) {
     background: transparent;
   }
-  nav#bundle-subheader div#sub-header ul li a {
+  nav#bundle-subheader div#sub-header ul li a:not(.btn):not(.btn-primary):not(.btn-primary-complement):not(.btn-secondary):not(.btn-secondary-complement):not(.btn-tertiary):not(.btn-tertiary-complement):not(.btn-default):not(.btn-link):not(.btn-subtle) {
     color: #ffffff;
   }
   nav#bundle-subheader div.breadcrumbs {
@@ -1967,6 +1935,241 @@ a.card-tertiary.card-subtle:hover > .card-action, a.card-tertiary.card-subtle:fo
   }
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Service Specific Cards
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.service-card {
+  background-color: white;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+  border-radius: 0.4rem;
+}
+.service-card div.service-icon-wrapper {
+  float: left;
+  padding: 0;
+  margin: 0;
+}
+.service-card div.service-details-wrapper {
+  margin-left: 7.2rem;
+}
+.service-card div.service-details-wrapper h4 {
+  padding: 0.5rem 0;
+  margin: 0;
+  font-weight: 700;
+}
+.service-card div.service-details-wrapper p {
+  margin-bottom: 0.5rem;
+}
+.service-card div.service-details-wrapper ul {
+  padding: 0;
+  font-size: 1.2rem;
+  margin-bottom: 0;
+  margin-left: 0;
+}
+.service-card div.service-details-wrapper ul strong {
+  font-weight: 700;
+}
+.service-card div.service-details-wrapper ul li {
+  display: inline-block;
+  padding-left: 0;
+}
+.service-card div.service-details-wrapper ul li:not(:last-child):after {
+  content: " |";
+}
+
+.category-card .card-content {
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+  background-color: white;
+  border-top: 1rem solid #d5d6d7;
+  padding: 1rem;
+  border-radius: 0.4rem;
+}
+.category-card .card-content .card-icon-bg {
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  margin: 1rem auto 0;
+  text-align: center;
+  color: #fff;
+}
+.category-card .card-content .card-icon-bg .fa {
+  line-height: 5rem;
+}
+.category-card .card-content .card-title {
+  padding: 0.5rem 0;
+  color: #7e8083;
+}
+.category-card .card-content .card-title h3 {
+  margin: 0;
+  padding: 0.5rem 0;
+  font-weight: 200;
+}
+.category-card .card-content .card-title p {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #d5d6d7;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Teams Specific Card Styles
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+div.card-wrapper div.btn-group.card-actions {
+  position: absolute;
+  top: 2rem;
+  right: 0.2rem;
+}
+div.card-wrapper div.btn-group.card-actions > button {
+  font-size: 1.4rem;
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 2px 5px;
+}
+div.card-wrapper div.btn-group.card-actions > ul.dropdown-menu:empty + button {
+  display: none;
+}
+
+div.team-card {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  height: 115px;
+  padding: 0.5rem;
+  border-top: 1rem solid #444444;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+}
+div.team-card:hover {
+  cursor: pointer;
+}
+div.team-card div.parent-path {
+  padding: 0.4rem 0.5rem;
+  margin-right: 6.5rem;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.6rem;
+}
+div.team-card div.parent-path a {
+  color: #7e8083;
+  text-decoration: none;
+}
+div.team-card div.parent-path a:hover, div.team-card div.parent-path a:focus {
+  color: #7e8083;
+  text-decoration: underline;
+}
+div.team-card div.team-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+div.team-card div.team-icon span.fa-stack {
+  font-size: 3rem;
+}
+div.team-card div.team-icon span.fa-stack > span.fa:first-child {
+  color: #444444;
+}
+div.team-card div.team-icon span.fa-stack > span.fa:last-child {
+  color: whitesmoke;
+}
+div.team-card div.team-name {
+  padding: 0 0.5rem;
+  margin-right: 6.5rem;
+  font-size: 2.4rem;
+  line-height: 3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+div.team-card div.team-members {
+  padding: 0 1rem 0.5rem 1rem;
+  position: absolute;
+  bottom: 0rem;
+  left: 0rem;
+  right: 0rem;
+  height: 30px;
+  white-space: nowrap;
+}
+div.team-card div.team-members > a {
+  position: relative;
+  display: inline-block;
+  border-radius: 100%;
+  overflow: hidden;
+}
+div.team-card div.team-members:after {
+  content: attr(data-card-overflow-cover);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 6rem;
+  pointer-events: none;
+  background-color: white;
+  background-repeat: repeat-x;
+  background: -khtml-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(white));
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0), white);
+  background: -ms-linear-gradient(left, rgba(255, 255, 255, 0), white);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, white));
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), white);
+  background: -o-linear-gradient(left, rgba(255, 255, 255, 0), white);
+  background: linear-gradient(left, rgba(255, 255, 255, 0), white);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba(255, 255, 255, 0)', endColorstr='white', GradientType=1);
+}
+
+div.user-card {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  height: 115px;
+  padding: 0.5rem;
+  border-top: 1rem solid #444444;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+}
+div.user-card:hover {
+  cursor: pointer;
+}
+div.user-card div.user-avatar {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: inline-block;
+  border-radius: 100%;
+  overflow: hidden;
+}
+div.user-card div.user-name {
+  padding: 0.5rem;
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+div.user-card div.user-details {
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  margin-right: 6.5rem;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+div.user-card div.user-details > span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 767px) {
+  div.team-card {
+    margin-bottom: 1rem;
+  }
+}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Alerts
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Error Messages
@@ -2002,7 +2205,7 @@ a.card-tertiary.card-subtle:hover > .card-action, a.card-tertiary.card-subtle:fo
   line-height: 140%;
   padding: 1rem;
   margin-bottom: 2rem;
-  border-radius: 3px;
+  border-radius: 0.4rem;
   background-color: #F1F1F1;
   position: relative;
   border: 1px solid transparent;
@@ -2529,7 +2732,7 @@ ul.unstyled {
   overflow: hidden;
 }
 
-/* Empty states
+/* Hide empty state
  *-------------------------------------- */
 .empty-state:not(:only-child) {
   display: none;
@@ -2539,116 +2742,6 @@ ul.unstyled {
  *-------------------------------------- */
 .nowrap {
   white-space: nowrap;
-}
-
-/* Colors
- *-------------------------------------- */
-.color-primary {
-  color: #313E47;
-}
-
-.color-primary-complement {
-  color: #FFFFFF;
-}
-
-.color-secondary {
-  color: #6F7E82;
-}
-
-.color-secondary-complement {
-  color: #FFFFFF;
-}
-
-.color-tertiary {
-  color: #1594C4;
-}
-
-.color-tertiary-complement {
-  color: #FFFFFF;
-}
-
-.color-white {
-  color: #ffffff;
-}
-
-.color-black {
-  color: #000000;
-}
-
-.color-text {
-  color: #7e8083;
-}
-
-.background-color-primary {
-  background-color: #313E47;
-}
-
-.background-color-primary-complement {
-  background-color: #FFFFFF;
-}
-
-.background-color-secondary {
-  background-color: #6F7E82;
-}
-
-.background-color-secondary-complement {
-  background-color: #FFFFFF;
-}
-
-.background-color-tertiary {
-  background-color: #1594C4;
-}
-
-.background-color-tertiary-complement {
-  background-color: #FFFFFF;
-}
-
-.background-color-white {
-  background-color: #ffffff;
-}
-
-.background-color-black {
-  background-color: #000000;
-}
-
-.background-color-text {
-  background-color: #7e8083;
-}
-
-.border-color-primary {
-  border-color: #313E47;
-}
-
-.border-color-primary-complement {
-  border-color: #FFFFFF;
-}
-
-.border-color-secondary {
-  border-color: #6F7E82;
-}
-
-.border-color-secondary-complement {
-  border-color: #FFFFFF;
-}
-
-.border-color-tertiary {
-  border-color: #1594C4;
-}
-
-.border-color-tertiary-complement {
-  border-color: #FFFFFF;
-}
-
-.border-color-white {
-  border-color: #ffffff;
-}
-
-.border-color-black {
-  border-color: #000000;
-}
-
-.border-color-text {
-  border-color: #7e8083;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2731,5 +2824,11 @@ ul.unstyled {
   content: "\f111";
   visibility: hidden;
 }
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Temp
+ *     -Used for development 
+ *     -Move css into appropriate sass files when ready
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 /*# sourceMappingURL=master.css.map */

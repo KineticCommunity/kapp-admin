@@ -31,10 +31,10 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>
+        <h2>
             ${empty currentRobot ? 'New Robot' : currentRobot.values['Name']}
             <c:if test="${not empty currentRobot}"><small> Robot</small></c:if>
-        </h3>
+        </h2>
     </div>
     
     <div class="row">
@@ -74,7 +74,7 @@
                                 Schedules 
                                 <small> for ${currentRobot.values['Name']} Robot</small>
                                 <div class="pull-right">
-                                    <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/schedule&robot=${currentRobot.id}">
+                                    <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/schedule&robot=${currentRobot.id}">
                                         <span class="fa fa-plus fa-fw"></span> Create Schedule
                                     </a>
                                 </div>
@@ -122,10 +122,10 @@
     <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
     <bundle:variable name="aside">
         <h3>${form.name}</h3>
-        <h4>
+        <h5>
             ${empty currentRobot ? 'New Robot' : currentRobot.values['Name']}
             <c:if test="${not empty currentRobot}"><small> Robot</small></c:if>
-        </h4>
+        </h5>
         <hr class="border-color-white" />
         <c:choose>
             <c:when test="${not empty currentRobot}">

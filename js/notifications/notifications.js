@@ -292,7 +292,6 @@
                         {
                             extend: "csv",
                             text: "Export CSV",
-                            className: "btn-sm",
                             filename: "Notification " + $("table#table-notifications").data("type") + "s",
                             exportOptions: {
                                 modifier: {
@@ -304,7 +303,6 @@
                         },
                         {
                             text: "Import CSV",
-                            className: "btn-sm",
                             action: adminNote.console.importDatastoreRecords
                         }
                     ]
@@ -543,7 +541,7 @@
                         {
                             extend: "csv",
                             text: "Export CSV of Failed Rows",
-                            className: "btn-sm export-failures",
+                            className: "export-failures",
                             filename: $("table#table-notifications").data("datastore-name") + " Datastore - Failed Import Rows",
                             exportOptions: {
                                 modifier: {

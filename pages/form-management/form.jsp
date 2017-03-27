@@ -4,7 +4,6 @@
 <!-- Set Varibles Needed To Build DOM Elements -->
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
 <c:set var="currentObj" value="${space.getKapp(param.kapp).getForm(param.form)}" scope="request"/>
-<c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
 <c:set var="attributeDefinitions" value="${currentKapp.formAttributeDefinitions}" scope="request"/>
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
@@ -40,11 +39,11 @@
                             <span>${text.escape(currentObj.name)}</span>
                             <small>Configuration</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-default" href="${bundle.kappLocation}/${form.slug}?page=form-management/formActivity&kapp=${currentKapp.slug}&form=${currentObj.slug}">
+                                <a class="btn btn-default" href="${bundle.kappLocation}/${form.slug}?page=form-management/formActivity&kapp=${currentKapp.slug}&form=${currentObj.slug}">
                                     <span class="fa fa-area-chart fa-fw"></span> View Activity
                                 </a>
                                 <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
-                                    <a class="btn btn-sm btn-tertiary" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentObj.slug}">
+                                    <a class="btn btn-tertiary" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentObj.slug}">
                                         <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                                     </a>
                                 </c:if>

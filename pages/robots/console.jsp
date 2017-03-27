@@ -17,14 +17,14 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>
+        <h2>
             ${text.escape(form.name)}
             <div class="pull-right robots-table-buttons">
-                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/robot">
+                <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/robot">
                     <span class="fa fa-plus fa-fw"></span> Create Robot
                 </a>
             </div>
-        </h3>
+        </h2>
     </div>
     
     <div class="row">

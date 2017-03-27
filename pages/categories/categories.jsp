@@ -25,19 +25,15 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h3>
-                            <span>${text.escape(currentKapp.name)}</span>
-                            <small>Categories</small>
-                            <div class="pull-right">
-                                <button class="btn btn-tertiary pull-right add-category btn-sm">
-                                    <span class="fa fa-plus"></span> Add Category
-                                </button>
-                            </div>
-                        </h3>
+                <h2>
+                    <span>${text.escape(currentKapp.name)}</span>
+                    <small>Categories</small>
+                    <div class="pull-right">
+                        <button class="btn btn-tertiary pull-right add-category">
+                            <span class="fa fa-plus"></span> Add Category
+                        </button>
                     </div>
-                </div>
+                </h2>
             </div>
             
             <div class="manage-categories col-sm-8" data-slug="${currentKapp.slug}">            
@@ -87,8 +83,8 @@
                                                 <input placeholder="Display Name" id="change-display"  class="form-control"> 
                                                 <label for="category-name" class="control-label">Category Slug</label>
                                                 <input name="category-name" placeholder="Category Name" id="change-name" class="form-control"> 
-                                                <button class="btn btn-success btn-sm edit-category">Save</button>
-                                                <button class="btn btn-tertiary add-subcategory btn-sm pull-right"><span class="fa fa-plus"></span> Add Subcategory</button>
+                                                <button class="btn btn-success edit-category">Save</button>
+                                                <button class="btn btn-tertiary add-subcategory pull-right"><span class="fa fa-plus"></span> Add Subcategory</button>
                                             </div>
                                         </div> 
                                     </div>
@@ -111,7 +107,7 @@
                                                 <input placeholder="Display Name" id="display-name"  class="form-control"> 
                                                 <label for="category-name" class="control-label">Category Slug</label>
                                                 <input name="category-name" placeholder="Category Name" id="category-name" class="form-control"> 
-                                                <button class="btn btn-success btn-sm add-category">Save</button>
+                                                <button class="btn btn-success add-category">Save</button>
                                             </div>
                                         </div> 
                                     </div>
@@ -127,7 +123,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${currentKapp.name}</h4>
+                <h5>${currentKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>To add a new root category, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Category</b> button.</p>
                 <p>To update a category, select a category by clicking on it.</p>
