@@ -133,7 +133,7 @@
             header: function(element, actions) {
                 element.append(
                     $("<span>", {class: "fa fa-times pull-right"}).on("click", actions.dismiss),
-                    $("<h4>").text("About This Page")
+                    $("<span>").text("About This Page")
                 );
             },
             body: function(element, actions) {

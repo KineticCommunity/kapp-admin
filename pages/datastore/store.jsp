@@ -30,7 +30,8 @@
             
             <div class="page-header">
                 <h2>
-                    ${currentStore.name} <small> Records</small>
+                    <span>${currentStore.name}</span>
+                    <small>Records</small>
                     <div class="pull-right datastore-records-table-buttons">
                         <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=datastore/record&store=${currentStore.slug}">
                             <span class="fa fa-plus fa-fw"></span> Add Record

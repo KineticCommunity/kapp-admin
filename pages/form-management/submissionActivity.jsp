@@ -69,8 +69,8 @@
                     <span>${submission.id}</span>
                 </div>
                 <div class="col-xs-12 col-sm-6">
-                    <label>State</label>
-                    <span class="label ${AdminHelper.getSubmissionStateLabelClass(submission)}">${submission.coreState}</span>
+                    <label>Status</label>
+                    <span class="label ${SubmissionHelper.getStatusClass(submission)}">${SubmissionHelper.getStatus(submission)}</span>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Time to Close</label>

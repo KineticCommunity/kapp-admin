@@ -124,6 +124,12 @@ label.field-label {
 /* Section Page > Form
  *-------------------------------------- */
 section.page {
+  .page-header {
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+  }
+  
   form {
     margin: 1.5rem 0;
     font-weight: 400;
@@ -132,6 +138,7 @@ section.page {
     background-color: #f5f5f5;
     @include border-radius();
     box-shadow: 0 1px 3px rgba(49, 62, 71, 0.14);
+    clear: both;
 
     section {
       display: block;
@@ -199,6 +206,12 @@ section.page {
         margin-right: 0;
         margin-left: 0.5rem;
       }
+      &[data-button-type="custom"].btn-link {
+        @extend .btn-link;
+      }
+      &[data-button-type="custom"].btn-subtle {
+        @extend .btn-subtle;
+      }
 
       &[data-button-type="previous-page"] {
         @extend .btn-default;
@@ -264,6 +277,15 @@ section.page {
           display: table-row-group;
         }
       }
+    }
+  }
+  
+  &.embedded {
+    form {
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      box-shadow: none;
     }
   }
 }

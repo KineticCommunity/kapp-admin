@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
+<c:set var="isEmbedded" value="${param.embedded != null}" scope="request"/>
 
 <bundle:layout page="layouts/form.jsp">
     <bundle:variable name="head">
@@ -17,7 +18,7 @@
         <h3>${text.escape(form.name)}</h3>
     </div>
     
-    <section class="page" data-page="${page.name}">
+    <section class="page ${isEmbedded ? 'embedded' : ''}" data-page="${page.name}">
         <c:if test="${param.review != null && pages.size() > 1}">
             <c:import url="partials/review.jsp" charEncoding="UTF-8"></c:import>
         </c:if>

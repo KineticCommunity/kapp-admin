@@ -385,7 +385,7 @@
          * FORM MANAGEMENT HELPER FUNCTIONS
          *----------------------------------------------------------------------------------------*/
          
-         public String getFormStatusLabelClass(Form form){
+        public String getFormStatusLabelClass(Form form){
             if (Text.equals("Active", form.getStatus())){
                 return "label-success";
             }
@@ -396,19 +396,6 @@
                 return "label-info";
             }
             else if (Text.equals("Delete", form.getStatus())){
-                return "label-warning";
-            }
-            return "";
-        }
-        
-         public String getSubmissionStateLabelClass(Submission submission){
-            if (Text.equals("Closed", submission.getCoreState())){
-                return "label-default";
-            }
-            else if (Text.equals("Submitted", submission.getCoreState())){
-                return "label-success";
-            }
-            else if (Text.equals("Draft", submission.getCoreState())){
                 return "label-warning";
             }
             return "";

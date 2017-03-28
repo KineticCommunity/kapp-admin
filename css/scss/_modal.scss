@@ -16,7 +16,7 @@
   margin: auto;
   margin-top: 20px;
   padding: 0;
-  border: 1px solid darken($tertiary, 10%);
+  border: 1px solid darken($secondary, 10%);
   max-width: 1000px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
   overflow: hidden;  
@@ -25,13 +25,13 @@
 /* Modal Header */
 .kd-modal-header {
   padding: 1.5rem 1rem 1rem;
-  background-color: $tertiary;
+  background-color: $secondary;
   color: white;
-  @include font-size-line-height(3rem, 3.6rem);
+  @include font-size-line-height(2rem, 2.4rem);
   @include anchor(white, tint(white, 10%), none, none);
   
   .fa.fa-times {
-    @include font-size-line-height(2rem, 3.6rem);
+    @include font-size-line-height(2rem, 2.4rem);
     cursor: pointer; 
   }
 }

@@ -96,7 +96,7 @@
                 var data = row.data();
                 // Build confirmation dialog
                 var confirmDelete = new KD.Modal({
-                    header: "<h3>Confirm Delete</h3>",
+                    header: "Confirm Delete",
                     body: "Are you sure you want to delete this record?",
                     footer: function(element, actions) {
                         element.addClass("text-right").append(

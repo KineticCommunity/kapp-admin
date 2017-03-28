@@ -459,7 +459,7 @@
             }*/
             // Build the modal. - Waiting on updated core code.
             modal = new KD.Modal({
-                    header: '<h3>Confirm Delete</h3>',
+                    header: 'Confirm Delete',
                     body: 'Do you want to delete this category? It will also delete all children.',
                     footer: function(element, actions) {
                         element.append(

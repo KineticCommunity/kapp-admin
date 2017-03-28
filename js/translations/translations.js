@@ -160,7 +160,7 @@
                         }
                         // Create Modal to confirm delete
                         var confirmDelete = new KD.Modal({
-                            header: "<h4>Confirm Delete</h4>",
+                            header: "Confirm Delete",
                             body: "Are you sure you want to delete the <b>" + data.language 
                                     + "</b> translation in the <b>" + data.context 
                                     + "</b> context for the key <b>" + data.key + "</b>?",
@@ -240,7 +240,7 @@
                         }
                         
                         var confirmDelete = new KD.Modal({
-                            header: "<h4>Confirm Delete</h4>",
+                            header: "Confirm Delete",
                             body: confirmMessage,
                             footer: function(element, actions) {
                                 element.addClass("text-right").append(
@@ -387,7 +387,7 @@
                 }
                 // Create Modal to confirm delete
                 var confirmDelete = new KD.Modal({
-                    header: "<h4>Confirm Delete</h4>",
+                    header: "Confirm Delete",
                     body: "Are you sure you want to delete the <b>" + data.language 
                             + "</b> translation in the <b>" + data.context 
                             + "</b> context for the key <b>" + data.key + "</b>?",
@@ -607,7 +607,7 @@
             var localeName = row.data("locale-name");
             // Create Modal to confirm disable
             var confirmDisable = new KD.Modal({
-                header: "<h4>Confirm Disable</h4>",
+                header: "Confirm Disable",
                 body: "Are you sure you want to disable the <b>" + localeName + "</b> locale <b>" + locale + "</b>?",
                 footer: function(element, actions) {
                     element.addClass("text-right").append(
@@ -653,7 +653,7 @@
             var localeName = row.data("locale-name");
             // Create Modal to confirm disable
             var confirmDisable = new KD.Modal({
-                header: "<h4>Confirm Default</h4>",
+                header: "Confirm Default",
                 body: "Are you sure you want to set the <b>" + localeName + "</b> locale <b>" + locale + "</b> as the default locale?",
                 footer: function(element, actions) {
                     element.addClass("text-right").append(
@@ -759,7 +759,7 @@
             
             // Create Modal to for renaming context
             var renameDialog = new KD.Modal({
-                header: "<h4>Rename Context</h4>",
+                header: "Rename Context",
                 body: function(element) {
                     element.addClass("rename-context-body").append(
                         $("<p>").append(
@@ -963,7 +963,7 @@
             
             // Create Modal for renaming key
             var renameDialog = new KD.Modal({
-                header: "<h4>Update Key</h4>",
+                header: "Update Key",
                 body: function(element) {
                     element.addClass("update-key-body").append(
                         $("<p>").append(
@@ -1045,7 +1045,7 @@
             var isFormContext = context.indexOf("form.") === 0;
             // Create Modal to confirm delete
             var confirmDelete = new KD.Modal({
-                header: "<h4>Confirm Delete</h4>",
+                header: "Confirm Delete",
                 body: "Are you sure you want to delete the <b>" + key 
                         + "</b> translation key in the <b>" + context 
                         + "</b> context? Deleting the key will also delete all translations of the key.",

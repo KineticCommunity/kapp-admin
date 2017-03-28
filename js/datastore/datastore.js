@@ -99,7 +99,7 @@
                                                         },
                                                         error: function(jqXHR, textStatus, errorThrown){
                                                             (new KD.Modal({
-                                                                header: "<h3>Error</h3>",
+                                                                header: "Error",
                                                                 body: "There was an error building the bridge mapping: " + errorThrown,
                                                                 footer: function(element, actions) {
                                                                     element.addClass("text-right").append(
@@ -121,7 +121,7 @@
                                             },
                                             error: function(jqXHR, textStatus, errorThrown){
                                                 (new KD.Modal({
-                                                    header: "<h3>Error</h3>",
+                                                    header: "Error",
                                                     body: "There was an error building the bridge model: " + errorThrown,
                                                     footer: function(element, actions) {
                                                         element.addClass("text-right").append(
@@ -226,7 +226,7 @@
                                             },
                                             error: function(jqXHR, textStatus, errorThrown){
                                                 (new KD.Modal({
-                                                    header: "<h3>Error</h3>",
+                                                    header: "Error",
                                                     body: "There was an error building the bridge mapping: " + errorThrown,
                                                     footer: function(element, actions) {
                                                         element.addClass("text-right").append(
@@ -248,7 +248,7 @@
                                 },
                                 error: function(jqXHR, textStatus, errorThrown){
                                     (new KD.Modal({
-                                        header: "<h3>Error</h3>",
+                                        header: "Error",
                                         body: "There was an error building the bridge model: " + errorThrown,
                                         footer: function(element, actions) {
                                             element.addClass("text-right").append(
@@ -324,7 +324,7 @@
                 var modalBody = $("<div>");
                 // Build confirmation dialog
                 var parameterModal = new KD.Modal({
-                    header: "<h3>Bridge Parameters</h3>",
+                    header: "Bridge Parameters",
                     body: function(element, actions) {
                         // Move parameters table from body (where it's hidden) to the modal
                         modalBody.append(modalParams.children())
@@ -432,7 +432,7 @@
                 var row = $(this).closest("tr");
                 // Create Modal to confirm delete
                 var confirmDelete = new KD.Modal({
-                    header: "<h3>Confirm Delete</h3>",
+                    header: "Confirm Delete",
                     body: "Are you sure you want to delete this qualification?",
                     footer: function(element, actions) {
                         element.addClass("text-right").append(

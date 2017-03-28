@@ -223,6 +223,16 @@
                 return !this.hasNonEmptySubcategories() && !this.hasForms();
             }
             
+            public String getColor(){
+                if (this.category.hasAttribute("Color")){
+                    return this.category.getAttributeValue("Color");
+                }
+                else {
+                    String color = String.format("%06X", (0xBBBBBB & this.category.getSlug().hashCode()));
+                    return "#" + color.substring(4) + color.substring(0, 4);
+                }
+            }
+            
             public int compareTo(BundleCategory that) {
                 // Compare by Sort Order attribute, then by Name, then by Slug
                 Integer thisSortOrder = null;

@@ -67,17 +67,6 @@
         },
         {
           "type": "button",
-          "label": "Save",
-          "name": "Save",
-          "visible": "bundle.adminDatastore != null",
-          "enabled": true,
-          "renderType": "submit-page",
-          "renderAttributes": {
-            "class": "btn btn-tertiary"
-          }
-        },
-        {
-          "type": "button",
           "label": "Cancel",
           "name": "Cancel",
           "visible": "bundle.adminDatastore != null",
@@ -87,6 +76,17 @@
             "class": "btn btn-link cancel-record"
           },
           "events": []
+        },
+        {
+          "type": "button",
+          "label": "Save",
+          "name": "Save",
+          "visible": "bundle.adminDatastore != null",
+          "enabled": true,
+          "renderType": "submit-page",
+          "renderAttributes": {
+            "class": "btn btn-tertiary"
+          }
         }
       ],
       "events": [],
