@@ -10,34 +10,34 @@ nav#bundle-subheader{
   border-bottom: 1px solid #e5e5e5;
   @include border-radius(0);
   min-height: 4rem;
-  
+
   @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
-  
+
   ol.breadcrumb {
     margin-bottom: 0;
     padding: 1rem 1rem 1rem 0;
     background-color: transparent;
-    
+
     li {
       color: fade-out($subheader-text-color, 0.25);
       position: relative;
-      
+
       h4 {
         margin: 0;
       }
     }
   }
-  
+
   div.additional-menu ul:not(.dropdown-menu) {
     position: relative;
     margin-bottom: 0;
     padding: 1rem 0 1rem 2rem;
   }
-  
+
   div.additional-menu.with-buttons ul:not(.dropdown-menu) {
     padding: 0.9rem 0 0.9rem 2rem;
   }
-  
+
   ul.dropdown-menu > li {
     @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
   }
@@ -46,7 +46,7 @@ nav#bundle-subheader{
 /* Media Queries
  *-------------------------------------- */
 
-@media (max-width : 768px) { 
+@media (max-width : 768px) {
   nav#bundle-subheader{
     li a:not(.btn) {
       background: transparent;
@@ -69,19 +69,19 @@ nav#bundle-subheader{
     div#sub-header ul li a:not(.btn){
       color: $white;
     }
-    
+
     div.breadcrumbs {
       display: inline-block;
     }
-    
+
     div.additional-menu {
       float: right;
-      
+
       > ul:not(.dropdown-menu) {
         padding: 10px 0 10px 5px;
       }
     }
-    
+
     ol.breadcrumb {
       padding: 10px 5px 10px 0;
     }
@@ -90,26 +90,36 @@ nav#bundle-subheader{
 
 /* Nav Tabs Elements
  *-------------------------------------- */
-.nav-tabs {
-  li a {
-    color: $gray;
-  }
-  li.active a,
-  li.active > a:hover,
-  li.active > a:focus, {
-    background-color: transparent;
-    color: $tertiary;
-    border: none;
-    font-weight: bold;
-    border-bottom: 2px solid $tertiary;
-  }
-}
+ .nav-tabs {
+   > li > a,
+   > li > a:hover,
+   > li > a:focus {
+     border-radius: 0;
+     border: none;
+     color: $gray;
+   }
+
+   > li.active > a,
+   > li.active > a:hover,
+   > li.active > a:focus {
+     color: #000;
+     background-color: transparent;
+     border:none;
+     border-bottom: 2px solid $tertiary;
+   }
+    > li > a:hover{
+     color: $tertiary;
+     background-color: transparent;
+     border:none;
+     border-bottom: 2px solid $tertiary;
+   }
+ }
 
 .tab-content .tab-pane table thead tr:first-child th {
   border-top: none;
 }
 
-@media (max-width: 767px) { 
+@media (max-width: 767px) {
   .nav-tabs.stacked-xs > li {
     float: none;
     margin-bottom: 0;
@@ -117,7 +127,7 @@ nav#bundle-subheader{
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
     }
-    
+
     &:not(.active) a {
       font-size: 85%;
     }
