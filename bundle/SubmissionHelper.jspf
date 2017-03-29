@@ -75,17 +75,16 @@
          */
         public String getStatusClass(Submission submission) {
             String className;
-            List<String> activeStatuses = (submission.getForm().getAttributeValues("Statuses - Active").size() > 0)
-                ? submission.getForm().getAttributeValues("Statuses - Active")
-                : submission.getKapp().getAttributeValues("Statuses - Active");
-            List<String> inactiveStatuses = (submission.getForm().getAttributeValues("Statuses - Inactive").size() > 0)
-                ? submission.getForm().getAttributeValues("Statuses - Inactive")
-                : submission.getKapp().getAttributeValues("Statuses - Inactive");
-            List<String> cancelledStatuses = (submission.getForm().getAttributeValues("Statuses - Cancelled").size() > 0)
-                ? submission.getForm().getAttributeValues("Statuses - Cancelled")
-                : submission.getKapp().getAttributeValues("Statuses - Cancelled");
-            
             if (submission.getForm().getField("Status") != null && submission.getValue("Status") != null) {
+                List<String> activeStatuses = (submission.getForm().getAttributeValues("Statuses - Active").size() > 0)
+                    ? submission.getForm().getAttributeValues("Statuses - Active")
+                    : submission.getKapp().getAttributeValues("Statuses - Active");
+                List<String> inactiveStatuses = (submission.getForm().getAttributeValues("Statuses - Inactive").size() > 0)
+                    ? submission.getForm().getAttributeValues("Statuses - Inactive")
+                    : submission.getKapp().getAttributeValues("Statuses - Inactive");
+                List<String> cancelledStatuses = (submission.getForm().getAttributeValues("Statuses - Cancelled").size() > 0)
+                    ? submission.getForm().getAttributeValues("Statuses - Cancelled")
+                    : submission.getKapp().getAttributeValues("Statuses - Cancelled");
                 if (activeStatuses.contains(submission.getValue("Status"))) {
                     className = "label-success";
                 } else if (inactiveStatuses.contains(submission.getValue("Status"))) {

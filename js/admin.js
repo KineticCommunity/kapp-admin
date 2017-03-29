@@ -183,6 +183,83 @@
         });
     }
     
+    /** Add methods for getting the status and statusClass of a submission **/
+    bundle.config.submission = bundle.config.submission || {};
+    
+    /**
+     * Returns the status of the submission, or the core state if status field is not found
+     */
+    bundle.config.submission.getStatus = function(submission){
+        if (!submission){
+            return "";
+        }
+        else if (submission.values && submission.values["Status"]){
+            return submission.values["Status"];
+        }
+        else {
+            return submission.coreState;
+        }
+    };
+    /**
+     * Returns the class used to style the status or state of the submission
+     * The submission parameter object must include: values, form.attributes, and form.kapp.attributes 
+     */
+    bundle.config.submission.getStatusClass = function(submission){
+        if (!submission){
+            return "label-default";
+        }
+        var activeStatuses = [], inactiveStatuses = [], cancelledStatuses = [];
+        
+        if (submission.values && submission.values["Status"]){
+            if (submission.form && submission.form.attributes && submission.form.kapp && submission.form.kapp.attributes){
+                var mapFunction = function(attributeName){
+                    return function(attribute){
+                        if (attribute.name === attributeName){
+                            return attribute.values;
+                        }
+                        return null;
+                    }
+                };
+                activeStatuses = $.map(submission.form.attributes, mapFunction("Statuses - Active"));
+                if (!activeStatuses.length){
+                    activeStatuses = $.map(submission.form.kapp.attributes, mapFunction("Statuses - Active"));
+                }
+                inactiveStatuses = $.map(submission.form.attributes, mapFunction("Statuses - Inactive"));
+                if (!inactiveStatuses.length){
+                    inactiveStatuses = $.map(submission.form.kapp.attributes, mapFunction("Statuses - Inactive"));
+                }
+                cancelledStatuses = $.map(submission.form.attributes, mapFunction("Statuses - Cancelled"));
+                if (!cancelledStatuses.length){
+                    cancelledStatuses = $.map(submission.form.kapp.attributes, mapFunction("Statuses - Cancelled"));
+                }
+            }
+            
+            if ($.inArray(submission.values["Status"], activeStatuses) > -1){
+                return "label-success";
+            }
+            else if ($.inArray(submission.values["Status"], inactiveStatuses) > -1){
+                return "label-warning";
+            }
+            else if ($.inArray(submission.values["Status"], cancelledStatuses) > -1){
+                return "label-danger";
+            }
+            else {
+                return "label-default";
+            }
+        }
+        else {
+            if (submission.coreState === "Draft"){
+                return "label-warning";
+            }
+            else if (submission.coreState === "Submitted"){
+                return "label-success";
+            }
+            else {
+                return "label-default";
+            }
+        }
+    };
+    
     /*----------------------------------------------------------------------------------------------
      * DEFINE RENDERERS FOR DATATABLES FOR VARIOUS FIELD RENDER TYPES
      *--------------------------------------------------------------------------------------------*/
