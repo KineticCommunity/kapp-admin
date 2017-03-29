@@ -14,25 +14,28 @@
   position: relative;
   background-color: #fefefe;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 70px; // Sticky header moves this down 50px;
   padding: 0;
-  border: 1px solid darken($secondary, 10%);
   max-width: 1000px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-  overflow: hidden;  
+  overflow: hidden;
 }
 
 /* Modal Header */
 .kd-modal-header {
-  padding: 1.5rem 1rem 1rem;
-  background-color: $secondary;
-  color: white;
-  @include font-size-line-height(2rem, 2.4rem);
-  @include anchor(white, tint(white, 10%), none, none);
-  
-  .fa.fa-times {
-    @include font-size-line-height(2rem, 2.4rem);
-    cursor: pointer; 
+  padding: 1rem;
+  background-color: $gray;
+  color: $white;
+  @include font-size-line-height(3rem, 3rem);
+  h1,h2,h3,h4,h5,h6{
+    color: $white;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+  }
+  .fa {
+    @include font-size-line-height(2rem, 3rem);
+    cursor: pointer;
   }
 }
 
@@ -41,7 +44,9 @@
   padding: 1rem;
   max-height: 75vh;
   overflow: auto;
-
+  .container{
+    width: auto;
+  }
   table {
     width: 100%;
     th, td {
@@ -54,7 +59,7 @@
       }
     }
   }
-  
+
   hr {
     border-color: #eee;
   }
@@ -64,8 +69,7 @@
 .kd-modal-footer {
   padding: 0.5rem 1rem;
   background-color: $lightestgray;
-  border-top: 1px solid darken($lightestgray, 10%);
-  color: white;
+  color: $white;
 }
 
 @media (max-width : 768px) {
