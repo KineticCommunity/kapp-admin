@@ -135,7 +135,8 @@
                     + "/kapps/" + bundle.adminFormManagement.kappSlug 
                     + "/forms/" + bundle.adminFormManagement.formSlug 
                     + "/submissions"
-                    + "?include=details&timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
+                    + "?include=details,values,form.attributes,form.kapp.attributes" 
+                    + "&timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
                     + "&limit=" + formManagement.submissionsTableLimit
                     + (formManagement.submissionsTable.data("pageToken") ? "&pageToken=" + formManagement.submissionsTable.data("pageToken") : "");
         };
@@ -143,9 +144,18 @@
         var options = {
             columns: [
                 {
-                    title: "Submission",
-                    data: "label",
-                    renderType: "submissionLink"
+                    title: "Confirmation #",
+                    data: "handle",
+                    renderType: "submissionLink" 
+                },
+                {
+                    title: "Submission Label",
+                    data: "label"
+                },
+                {
+                    title: "Status",
+                    data: "coreState",
+                    renderType: "statusLabel"
                 },
                 {
                     title: "Submitted",
@@ -153,7 +163,7 @@
                     renderType: "submissionDetails"
                 }
             ],
-            order: [[1, "desc"]],
+            order: [[3, "desc"]],
             ajax: {
                 dataSrc: "submissions",
                 url: buildURL()
@@ -200,7 +210,6 @@
         };
         bundle.admin.addDataTableRenderers(options.columns, {
             submissionLink: function ( d, type, row ){
-                console.log(row);
                 if (d == null || d.length <= 0 || type === "sort" || type === "type"){
                     return d;
                 }
@@ -209,10 +218,7 @@
                     + "&id=" + row.id 
                     + "&kapp=" + bundle.adminFormManagement.kappSlug 
                     + "&form=" + bundle.adminFormManagement.formSlug + "'>"
-                    + d + "</a>"
-                    + "<span class='label label-info pull-right'>"
-                    + row.handle.toUpperCase()
-                    + "</span>";
+                    + d + "</a>";
             },
             submissionDetails: function ( d, type, row ){
                 if (d == null || d.length <= 0){
@@ -236,6 +242,12 @@
                     }
                     return m.fromNow() + userInfo;
                 }
+            },
+            statusLabel: function ( d, type, row ){
+                if (type === "sort" || type === "type"){
+                    return bundle.config.submission.getStatus(row);
+                }
+                return "<label class='label " + bundle.config.submission.getStatusClass(row) + "'>" + bundle.config.submission.getStatus(row) + "</label>";
             }
         });
         // Build DataTable
