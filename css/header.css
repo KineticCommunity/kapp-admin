@@ -198,24 +198,30 @@ nav#bundle-header .dropdown-menu .divider {
 }
 nav#bundle-header .user-tile {
   overflow: auto;
-  width: 360px;
+  min-width: 240px;
   padding: 0;
   color: #F1F1F1;
 }
 nav#bundle-header .user-tile > * {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 nav#bundle-header .user-tile > div.actions {
   background-color: #F1F1F1;
   border-top: 1px solid #e4e4e4;
 }
 nav#bundle-header .user-tile > div.actions a {
-  color: #7e8083;
+  color: #1594C4;
   text-decoration: none;
 }
 nav#bundle-header .user-tile > div.actions a:hover, nav#bundle-header .user-tile > div.actions a:focus {
-  color: #717376;
+  color: #24b2e8;
   text-decoration: none;
+}
+nav#bundle-header .user-tile > div.actions a {
+  display: block;
+}
+nav#bundle-header .user-tile > div.actions a:not(:last-child) {
+  margin-bottom: 1rem;
 }
 nav#bundle-header .navbar-collapse .navbar-nav {
   margin: 0;

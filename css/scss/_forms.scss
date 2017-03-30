@@ -197,14 +197,11 @@ section.page {
       background-color: #E9E9E9;
       cursor: pointer;
       font-size: inherit;
-      margin-right: 0.5rem;
+      margin-left: 0.5rem;
 
       &[data-button-type="submit-page"],
       &[data-button-type="custom"] {
         @extend .btn-default;
-        float: right;
-        margin-right: 0;
-        margin-left: 0.5rem;
       }
       &[data-button-type="custom"].btn-link {
         @extend .btn-link;
@@ -215,13 +212,13 @@ section.page {
 
       &[data-button-type="previous-page"] {
         @extend .btn-default;
+        float: left; 
+        margin-right: 0.5rem;
+        margin-left: 0;
       }
 
       &[data-button-type="save"] {
         @extend .btn-subtle;
-        float: right;
-        margin-right: 0;
-        margin-left: 0.5rem;
         position: relative;
         padding-left: 2.4rem;
 

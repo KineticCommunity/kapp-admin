@@ -12,6 +12,7 @@ button, input[type='submit'], input[type='button'], .btn  {
 
 .btn {
   display: inline-block;
+  font-family: $font-family-base;
   @include font-size-line-height(1.333rem, 2rem);
   @include border-radius();
   color: $white;

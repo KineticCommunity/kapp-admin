@@ -1,26 +1,10 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:choose>
-    <c:when test="${text.isNotBlank(param.username)}">
-        <c:catch var="userNotFound">
-            <bundle:request method="get"
-                            url="${bundle.apiPath}/users/${text.escape(param.username)}?include=attributes%2CprofileAttributes"
-                            var="user"
-                            scope="request" />
-            <c:set var="currentUser" value="${not empty user ? json.parse(user).user : null}" scope="request" />
-        </c:catch>
-    </c:when>
-    <c:when test="${text.isNotBlank(param.clone)}">
-        <c:catch var="cloneNotFound">
-            <bundle:request method="get"
-                            url="${bundle.apiPath}/users/${text.escape(param.clone)}?include=attributes%2CprofileAttributes"
-                            var="clone"
-                            scope="request" />
-            <c:set var="cloneUser" value="${not empty clone ? json.parse(clone).user : null}" scope="request" />
-        </c:catch>
-    </c:when>
-</c:choose>
-<c:set var="groupList" value="${GroupHelper.getGroupsFlattened()}" scope="request"/>
+<c:set var="currentUser" value="${space.getUser(param.username)}" scope="request" />
+<%-- cloneUser: User to clone if currentUser is empty and param.clone is passed in --%>
+<c:if test="${empty currentUser}">
+    <c:set var="cloneUser" value="${space.getUser(param.clone)}" scope="request" />
+</c:if>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
