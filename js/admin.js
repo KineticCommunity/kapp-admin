@@ -1,11 +1,11 @@
 /* Common JS for Admin Kapp */
 (function($, _) {
     /*----------------------------------------------------------------------------------------------
-     * DOM MANIPULATION AND EVENT REGISTRATION 
+     * DOM MANIPULATION AND EVENT REGISTRATION
      *   This section is executed on page load to register events and otherwise manipulate the DOM.
      *--------------------------------------------------------------------------------------------*/
     $(function() {
-        
+
         /**
          * Add aside toggle and remember toggle state.
          */
@@ -14,7 +14,7 @@
             var asideToggle = $("<div>", {class: "aside-toggle"})
                 .on("click", function(){
                     asideSection.closest("div.row").toggleClass("aside-closed");
-                    sessionStorage.setItem("hideAside_" + window.location.pathname, 
+                    sessionStorage.setItem("hideAside_" + window.location.pathname,
                                            asideSection.closest("div.row").hasClass("aside-closed") ? "hide" : null);
                 })
                 .prependTo(asideSection);
@@ -22,7 +22,7 @@
                 asideSection.closest("div.row").addClass("aside-closed");
             }
         }
-        
+
         /**
          * Clear all saved DataTable states if on the home page.
          */
@@ -34,14 +34,14 @@
                 }
             });
         });
-        
+
         admin.tooltip();
         admin.momentify();
         setInterval(admin.momentify, 60000);
     });
 
     /*----------------------------------------------------------------------------------------------
-     * COMMON INIALIZATION 
+     * COMMON INIALIZATION
      *   This code is executed when the Javascript file is loaded
      *--------------------------------------------------------------------------------------------*/
     // Ensure the BUNDLE global object exists
@@ -54,10 +54,10 @@
     /*----------------------------------------------------------------------------------------------
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
-    
+
     /**
      * Returns an Object with keys/values for each of the url parameters.
-     * 
+     *
      * @returns {Object}
      */
     admin.getUrlParameters = function(param) {
@@ -68,7 +68,7 @@
         }
         return param ? hash[param] : hash;
     };
-    
+
     /**
      * Generates a UUID
      */
@@ -84,7 +84,7 @@
         });
         return uuid;
     };
-    
+
     /**
      * Format date elements with appropriate attribute flags
      * Stores original date in data "date" to prevent issue if this function is run multiple times
@@ -93,13 +93,13 @@
         var dataMomentElements = container ? container.find("[data-moment]") : $("[data-moment]");
         dataMomentElements.each(function(index, element) {
             var e = $(element);
-            e.data("date", e.data("date") || e.attr("data-moment"))
+            e.data("date", e.data("date") || e.attr("data-moment") || e.text())
              .html(moment(e.data("date")).format("LLL"));
         });
         var dataMomentAgoElements = container ? container.find("[data-moment-ago]") : $("[data-moment-ago]");
         $("[data-moment-ago]").each(function(index, element) {
             var e = $(element);
-            e.data("date", e.data("date") || e.attr("data-moment-ago"))
+            e.data("date", e.data("date") || e.attr("data-moment-ago") || e.text())
              .html(moment(e.data("date")).fromNow());
             if (e.is("[data-toggle=tooltip]")){
               e.attr("data-original-title", moment(e.data("date")).format("LLL"));
@@ -111,34 +111,29 @@
             e.data("date", e.data("date") || e.attr("title") || e.attr("data-original-title"))
              .attr(e.attr("title") ? "title" : "data-original-title", moment(e.data("date")).format("LLL"));
         });
-        var dataMomentDiffElements = container ? container.find("[data-moment-diff]") : $("[data-moment-diff]");
-        dataMomentDiffElements.each(function(index, item) {
+        var dataMomentDiffElements = container ? container.find("[data-moment-diff-start]") : $("[data-moment-diff-start]");
+        dataMomentDiffElements.each(function(index, element) {
             var e = $(element);
-            e.data("date-start", e.data("date-start") || e.attr("data-moment-start"))
-             .data("date-end", e.data("date-end") || e.attr("data-moment-end"));
+            e.data("date-start", e.data("date-start") || e.attr("data-moment-diff-start") || e.text())
+             .data("date-end", e.data("date-end") || e.attr("data-moment-diff-end"));
             var start = moment(e.data("date-start"));
-            var end = moment(e.data("date-end"));
-            var suffix = " days";
-            var diff = end.diff(start, "days", true);
-            if (diff < 1){
-                var suffix = " hours";
-                diff = end.diff(start, "hours", true);
-            }
-            e.html(Math.ceil(diff) + suffix);
+            var end = e.data("date-end") ? moment(e.data("date-end")) : moment();
+            var diff = end.valueOf() - start.valueOf();
+            e.html(moment.duration(diff).humanize());
         });
     }
-    
+
     admin.tooltip = function(container) {
         var dataTooltipElements = container ? container.find("[data-toggle=tooltip]") : $("[data-toggle=tooltip]");
         dataTooltipElements.tooltip();
     }
-    
+
     admin.openAsidePopup = function(){
         (new KD.Modal({
             header: function(element, actions) {
                 element.append(
                     $("<span>", {class: "fa fa-times pull-right"}).on("click", actions.dismiss),
-                    $("<h4>").text("About This Page")
+                    $("<span>").text("About This Page")
                 );
             },
             body: function(element, actions) {
@@ -152,7 +147,7 @@
             renderCallback: false
         })).show();
     };
-    
+
     /**
      * Add jQuery functions for encoding and decoding HTML
      */
@@ -164,11 +159,11 @@
             return $("<div>").html(value).text();
         }
     });
-    
+
     /*----------------------------------------------------------------------------------------------
      * BUNDLE.CONFIG OVERWRITES
      *--------------------------------------------------------------------------------------------*/
-    
+
     /**
      * Overwrite the default field constraint violation error handler to use Notifie to display the errors above the individual fields.
      */
@@ -182,16 +177,93 @@
                 exitEvents: "click"
             };
             if (fieldWrapper.data("notifie-anchor")){
-                notifieOptions.anchor = fieldWrapper.data("notifie-anchor"); 
+                notifieOptions.anchor = fieldWrapper.data("notifie-anchor");
             }
             fieldWrapper.notifie(notifieOptions);
         });
     }
-    
+
+    /** Add methods for getting the status and statusClass of a submission **/
+    bundle.config.submission = bundle.config.submission || {};
+
+    /**
+     * Returns the status of the submission, or the core state if status field is not found
+     */
+    bundle.config.submission.getStatus = function(submission){
+        if (!submission){
+            return "";
+        }
+        else if (submission.values && submission.values["Status"]){
+            return submission.values["Status"];
+        }
+        else {
+            return submission.coreState;
+        }
+    };
+    /**
+     * Returns the class used to style the status or state of the submission
+     * The submission parameter object must include: values, form.attributes, and form.kapp.attributes
+     */
+    bundle.config.submission.getStatusClass = function(submission){
+        if (!submission){
+            return "label-default";
+        }
+        var activeStatuses = [], inactiveStatuses = [], cancelledStatuses = [];
+
+        if (submission.values && submission.values["Status"]){
+            if (submission.form && submission.form.attributes && submission.form.kapp && submission.form.kapp.attributes){
+                var mapFunction = function(attributeName){
+                    return function(attribute){
+                        if (attribute.name === attributeName){
+                            return attribute.values;
+                        }
+                        return null;
+                    }
+                };
+                activeStatuses = $.map(submission.form.attributes, mapFunction("Statuses - Active"));
+                if (!activeStatuses.length){
+                    activeStatuses = $.map(submission.form.kapp.attributes, mapFunction("Statuses - Active"));
+                }
+                inactiveStatuses = $.map(submission.form.attributes, mapFunction("Statuses - Inactive"));
+                if (!inactiveStatuses.length){
+                    inactiveStatuses = $.map(submission.form.kapp.attributes, mapFunction("Statuses - Inactive"));
+                }
+                cancelledStatuses = $.map(submission.form.attributes, mapFunction("Statuses - Cancelled"));
+                if (!cancelledStatuses.length){
+                    cancelledStatuses = $.map(submission.form.kapp.attributes, mapFunction("Statuses - Cancelled"));
+                }
+            }
+
+            if ($.inArray(submission.values["Status"], activeStatuses) > -1){
+                return "label-success";
+            }
+            else if ($.inArray(submission.values["Status"], inactiveStatuses) > -1){
+                return "label-warning";
+            }
+            else if ($.inArray(submission.values["Status"], cancelledStatuses) > -1){
+                return "label-danger";
+            }
+            else {
+                return "label-default";
+            }
+        }
+        else {
+            if (submission.coreState === "Draft"){
+                return "label-warning";
+            }
+            else if (submission.coreState === "Submitted"){
+                return "label-success";
+            }
+            else {
+                return "label-default";
+            }
+        }
+    };
+
     /*----------------------------------------------------------------------------------------------
      * DEFINE RENDERERS FOR DATATABLES FOR VARIOUS FIELD RENDER TYPES
      *--------------------------------------------------------------------------------------------*/
-    
+
     /**
      * Renderer for formatting dates, times, and datetimes.
      */
@@ -227,7 +299,7 @@
             return m.format(type === "sort" || type === "type" ? "x" : to);
         };
     };
-    
+
     /**
      * Renderer for formatting checkboxes.
      */
@@ -253,7 +325,7 @@
             return d;
         };
     };
-    
+
     /**
      * Renderer for formatting attachments.
      */
@@ -275,8 +347,8 @@
                         result += "<br>";
                     }
                     if (type === "display"){
-                        var url = bundle.spaceLocation() 
-                                + "/submissions/" 
+                        var url = bundle.spaceLocation()
+                                + "/submissions/"
                                 + row.ID
                                 + "/files/"
                                 + encodeURIComponent(fieldName)
@@ -290,10 +362,10 @@
                 }
                 return result;
             }
-            return d;   
+            return d;
         };
     };
-    
+
     /**
      * Renderer for formatting text (encode any HTML).
      */
@@ -312,11 +384,11 @@
                 return $.htmlEncode(d);
             }
             else {
-                return d.replace(/\${(.*?)\}/g, " <span style='background-color:yellow'>\$&</span>" )
+                return d.replace(/\${(.*?)\}/g, " <span style='background-color:rgba(255,255,0,0.20)'>\$&</span>" )
             }
         };
     };
-    
+
     /**
      * Function to add renderers to a list of columns with renderType propertiesfor DataTables
      */
@@ -351,12 +423,12 @@
                 case "notificationReplacement":
                     col.render = renderers.notificationReplacement || $.fn.dataTable.render.notificationReplacement();
                     break;
-                default: 
+                default:
                     if (renderers[col.renderType]){
                         col.render = renderers[col.renderType];
                     }
             }
         });
     };
-         
+
 })($, _);
