@@ -1310,6 +1310,34 @@
             ]
         },
         {
+            "name":"Management",
+            "anonymous":false,
+            "description":"Allows for management of the Space, Kapps, and Forms.",
+            "pages":[
+                {
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/management/console.jsp",
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Management",
+                    "renderType":"submittable",
+                    "type":"page"
+                }
+            ],
+            "securityPolicies":[
+
+            ],
+            "slug":"management",
+            "status":"Active",
+            "submissionLabelExpression":"${form('name')} ${form('slug')}",
+            "type":"Console"
+        },
+        {
             "name":"Space Management",
             "anonymous":false,
             "description":"Allows for management of Space Attributes.",
