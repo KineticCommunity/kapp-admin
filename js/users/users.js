@@ -7,11 +7,19 @@
     $(function() {
         
         $("table[data-user-list]").each(function(i,table){
-//            userManagement.loadUserList($(table));
-            
             userManagement.usersTable = $(table);
             userManagement.loadUsers();
         });
+        
+        // User actions
+        $("button.save-user").on("click", userManagement.saveUser);
+        $("button.delete-user").on("click", userManagement.deleteUser);
+        $("a.add-attribute-row").on("click", userManagement.addAttributeRow)
+        $("div[data-allows-multiple=true]").on("blur", "input[type=text]", userManagement.removeEmptyAttributeRows);
+        $("div.user-teams").on("click", ".add-team button", userManagement.addTeamMembership);
+        $("div.user-teams").on("click", ".team-label .badge", userManagement.removeTeamMembership);
+        
+        
         
         $("input#users-import").on("change", userManagement.importUsersFileSelected);
         
@@ -93,6 +101,9 @@
                 url: bundle.apiLocation() + "/users?include=memberships",
                 dataSrc: "users"
             },
+            language: {
+                search: "Filter"
+            },
             responsive: true,
             pageLength: 25,
             stateSave: true
@@ -156,670 +167,670 @@
         userManagement.usersTable.DataTable(options);
     };
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    userManagement.initializeGroupsTable = function(table){
-        userManagement.populateGroupOptions(table);
-        table.on("click", "tbody a.delete-group-btn", userManagement.deleteGroup);
-        table.on("click", "tfoot button.add-group-btn", userManagement.addGroup);
-    }
-
-    userManagement.initializeAttributesTable = function(table){
-        userManagement.populateAttributeOptions(table);
-        table.on("click", "tbody a.delete-attribute-btn", userManagement.deleteAttribute);
-        table.on("click", "tfoot button.add-attribute-btn", userManagement.addAttribute);
-    }
-    
-    userManagement.populateGroupOptions = function(table){
-        var options = table.find("select.add-group-name-field-options");
-        var select = table.find("select.add-group-name-field").empty().append($("<option>"));
-        var groups = $.map(table.find("tbody tr td.group-name"), function(td){
-            return $(td).text();
-        });
-        options.find("option").sort(function (a, b){
-            return $(a).text() == $(b).text() ? 0 : $(a).text() < $(b).text() ? -1 : 1;
-        }).each(function(i, option){
-            if (!_.contains(groups, $(option).val())){
-                select.append($(option).clone());
-            }
-        });
+    /**
+     * Click event handler for adding an input box for an attribute that allows multiple values
+     */
+    userManagement.addAttributeRow = function(e){
+        var container = $(this).closest("div[data-allows-multiple]");
+        container.find("input").first()
+             .clone()
+             .val("")
+             .css("display", "none")
+             .appendTo(container)
+             .slideDown(120)
+             .focus();
     };
     
-    userManagement.deleteGroup = function(e){
-        var table = $(this).closest("table");
-        $(this).closest("tr").remove();
-        userManagement.populateGroupOptions(table);
-    }
-    
-    userManagement.addGroup = function(e){
-        var table = $(this).closest("table");
-        var group = $(this).closest("tr").find("select.add-group-name-field").val();
-        if (group){
-            var template = _.template(table.find("tfoot.template").html());
-            table.find("tbody").append(template({group: group}));
-            userManagement.populateGroupOptions(table);
-        }
-        else {
-            $(this).notifie({
-                anchor: "table",
-                message: "Please select the group you would like to add.",
-                exitEvents: "click"
-            });
-        }
-    }
-
-    userManagement.populateAttributeOptions = function(table){
-        var options = table.find("select.add-attribute-name-field-options");
-        var select = table.find("select.add-attribute-name-field").empty().append($("<option>"));
-        var groups = $.map(table.find("tbody tr td.attribute-name"), function(td){
-            return $(td).text();
-        });
-        options.find("option").sort(function (a, b){
-            return $(a).text() == $(b).text() ? 0 : $(a).text() < $(b).text() ? -1 : 1;
-        }).each(function(i, option){
-            if ($(option).data("allows-multiple") || !_.contains(groups, $(option).val())){
-                select.append($(option).clone());
-            }
-        });
-    };
-    
-    userManagement.deleteAttribute = function(e){
-        var table = $(this).closest("table");
-        $(this).closest("tr").remove();
-        userManagement.populateAttributeOptions(table);
-    }
-    
-    userManagement.addAttribute = function(e){
-        var table = $(this).closest("table");
-        var attributeName = $(this).closest("tr").find("select.add-attribute-name-field").val();
-        var attributeValue = $(this).closest("tr").find("input.add-attribute-value-field").val();
-        if (attributeName && attributeValue){
-            var template = _.template(table.find("tfoot.template").html());
-            table.find("tbody").append(template({attributeName: attributeName, attributeValue: attributeValue}));
-            $(this).closest("tr").find("input.add-attribute-value-field").val("");
-            userManagement.populateAttributeOptions(table);
-        }
-        else {
-            $(this).notifie({
-                anchor: "table",
-                message: "Please select an attribute name and enter a value.",
-                exitEvents: "click"
-            });
-        }
-    }
-    
-    userManagement.saveUser = function(e){
-        var createUser = $("input[name=username]").length ? true : false;
-        var user = {
-            username: $("input[name=username]").val() || bundle.admin.getUrlParameters("username"),
-            displayName: $("input[name=displayName]").val(),
-            email: $("input[name=email]").val(),
-            preferredLocale: $("select[name=preferredLocale]").val(),
-            enabled: $("input[name=enabled]").prop("checked"),
-            //spaceAdmin: $("input[name=spaceAdmin]").prop("checked"),
-            attributes: new Array(),
-            profileAttributes: new Array()
-        };
-        
-        var groups = new Array();
-        var attributes = new Object();
-        var profileAttributes = new Object();
-        
-        $("table[data-user-groups-table] tbody tr td.group-name").each(function(i, td){
-            var group = $(td).text();
-            if (!attributes["Group"]){
-                attributes["Group"] = new Array();
-            }
-            attributes["Group"].push(group);
-            groups.push(group);
-        }); 
-        
-        $("table[data-user-attributes-table] tbody tr").each(function(i, tr){
-            var name = $(tr).find("td.attribute-name").text();
-            var value = $(tr).find("td.attribute-value input").val();
-            if (!attributes[name]){
-                attributes[name] = new Array();
-            }
-            attributes[name].push(value);
-        }); 
-
-        $("table[data-user-profile-attributes-table] tbody tr").each(function(i, tr){
-            var name = $(tr).find("td.attribute-name").text();
-            var value = $(tr).find("td.attribute-value input").val();
-            if (!profileAttributes[name]){
-                profileAttributes[name] = new Array();
-            }
-            profileAttributes[name].push(value);
-        }); 
-        
-        user.attributes = $.map(attributes, function(value, key){
-            return {name: key, values: value};
-        });
-        user.profileAttributes = $.map(profileAttributes, function(value, key){
-            return {name: key, values: value};
-        });
-        
-        if (createUser && !user.username){
-            $("input[name=username]").notifie({
-                message: "Username is required.",
-                exitEvents: "keyup"
-            });
-        }
-        else if (createUser){
-            userManagement.createUser(user, groups);
-        }
-        else {
-            userManagement.updateUser(user, groups);
+    /**
+     * Removes extra empty inputs on attributes that allow multiple
+     */
+    userManagement.removeEmptyAttributeRows = function(e){
+        if ($(this).val().trim().length <= 0 && $(this).siblings("input[type=text]").length > 0){
+            $(this).slideUp(120, function(){$(this).remove()});
         }
     };
     
-    userManagement.updateUser = function(user, groups){
-        $.ajax({
-            method: "put",
-            url: encodeURI(bundle.apiLocation() + "/users/" + user.username),
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(user),
-            beforeSend: function(){
-                $("button.save-user-btn").notifie({
-                    anchor: "div.row",
-                    severity: "info",
-                    message: $("<div>").append(
-                        $("<span>", {class: "fa fa-spinner fa-spin"}),
-                        $("<span>").append("Saving User")
-                    ),
-                    margin: {'margin':'0'},
-                    exitEvents: "click"
-                });
-            },
-            success: function(data){
-                userManagement.syncGroupMembership(user.username, groups);
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                try { 
-                    errorThrown = JSON.parse(jqXHR.responseText).error; 
-                } catch(e){}
-                $("button.save-user-btn").notifie({
-                    anchor: "div.row",
-                    message: "An error occurred while updating the user: " + errorThrown,
-                    margin: {'margin':'0'},
-                    exitEvents: "click"
-                });
-            }
-        });
-    }
-
-    userManagement.createUser = function(user, groups){
-        $.ajax({
-            method: "post",
-            url: encodeURI(bundle.apiLocation() + "/users"),
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify(user),
-            beforeSend: function(){
-                $("button.save-user-btn").notifie({
-                    anchor: "div.row",
-                    severity: "info",
-                    message: $("<div>").append(
-                        $("<span>", {class: "fa fa-spinner fa-spin"}),
-                        $("<span>").append("Saving User")
-                    ),
-                    margin: {'margin':'0'},
-                    exitEvents: "click"
-                });
-            },
-            success: function(data){
-                userManagement.syncGroupMembership(user.username, groups);
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                try { 
-                    errorThrown = JSON.parse(jqXHR.responseText).error; 
-                } catch(e){}
-                $("button.save-user-btn").notifie({
-                    anchor: "div.row",
-                    message: "An error occurred while creating the user: " + errorThrown,
-                    margin: {'margin':'0'},
-                    exitEvents: "click"
-                });
-            }
-        });
-    }
-    
-    userManagement.syncGroupMembership = function(username, groups){
-        $.ajax({
-            url: encodeURI(bundle.apiLocation() + "/kapps/" + bundle.kappSlug() 
-                    + "/forms/group-membership/submissions?" 
-                    + "include=values&limit=1000&q=values[Username]=\"" + username + "\""),
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data){
-                var membershipMap = new Object();
-                _.each(data.submissions, function(submission){
-                    membershipMap[submission.values["Group Name"]] = submission.id;
-                });
-                var memberships = _.keys(membershipMap);
-                var groupsToAdd = _.difference(groups, memberships);
-                var groupsToDelete = _.difference(memberships, groups);
-                
-                var deferreds = new Array();
-                var status = {success: 0, error: 0};
-                _.each(groupsToAdd, function(group){
-                    deferreds.push(userManagement.addGroupMembership(username, group, status));
-                });
-                _.each(groupsToDelete, function(group){
-                    deferreds.push(userManagement.removeGroupMembership(membershipMap[group], status));
-                });
-                
-                $.when.apply($, userManagement.wrapDeferreds(deferreds)).done(function(){
-                    if (status.error > 0){
-                        $("button.save-user-btn").notifie({
-                            anchor: "div.row",
-                            message: "Failed to update " + status.error + " group memberships for this user",
-                            margin: {'margin':'0'},
-                            expire: 5000,
-                            onConfirm: function(){
-                                window.location.href = window.location.pathname;
-                            }
-                        });
-                    }
-                    else {
-                        window.location.href = window.location.pathname;
-                    }
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                try { 
-                    errorThrown = JSON.parse(jqXHR.responseText).error; 
-                } catch(e){}
-                $("button.save-user-btn").notifie({
-                    anchor: "div.row",
-                    message: "Failed to update group memberships for this user: " + errorThrown,
-                    margin: {'margin':'0'},
-                    expire: 5000,
-                    onConfirm: function(){
-                        window.location.href = window.location.pathname;
-                    }
-                });
-            }
-        });
-    }
-    
-    userManagement.addGroupMembership = function(username, group, status){
-        return $.ajax({
-            method: "post",
-            url: encodeURI(bundle.apiLocation() + "/kapps/" + bundle.kappSlug() 
-                    + "/forms/group-membership/submissions"),
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({  
-                values: {
-                    "Username": username,
-                    "Group Name": group
+    userManagement.addTeamMembership = function(e){
+        var teamsContainer = $(this).closest("div.user-teams");
+        var availableTeams = $(this).closest(".add-team").find("select#available-teams");
+        if (availableTeams.val().trim().length > 0){
+            var selectedOption = availableTeams.find("option:selected");
+            var team = {
+                teamName: availableTeams.val(),
+                teamSlug: selectedOption.data("team-slug"),
+                teamIcon: selectedOption.data("team-icon"),
+                teamDisplayName: selectedOption.text()
+            };
+            if (teamsContainer.find(".team-label[data-team-slug='" + team.teamSlug + "']").length <= 0){
+                var newTeamTemplate = _.template($(this).closest("div.user-teams").siblings(".team-label-template").html());
+                var newTeam = $(newTeamTemplate(team)).css("display", "none");
+                var order = teamsContainer.find(".team-label").filter(function(){
+                    return $(this).data("team-name") < team.teamName;
+                }).length;
+                if (order){
+                    $(teamsContainer.find(".team-label").get(order - 1)).after(newTeam);
                 }
-            }),
-            success: function(data){
-                status.success++;
-            },
-            error: function(){
-                status.error++;
-            }
-        });
-    }
-    
-    userManagement.removeGroupMembership = function(id, status){
-        return $.ajax({
-            method: "delete",
-            url: encodeURI(bundle.apiLocation() + "/submissions/" + id),
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data){
-                status.success++;
-            },
-            error: function(){
-                status.error++;
-            }
-        });
-    }
-    
-    userManagement.wrapDeferreds = function(deferreds){
-        return $.map(deferreds, function(d) {
-            var wrapedDeferred = $.Deferred();
-            d.always(function() { wrapedDeferred.resolve(); });
-            return wrapedDeferred.promise();
-        });
-    }
-    
-    userManagement.importUsersOpen = function(){
-        // Check if File API is available
-        if (window.File && window.FileReader && window.FileList) {
-            $("input#users-import").trigger("click");
-        }
-        else {
-            $("div.users-table-buttons").notifie({
-                anchor: "h3",
-                message: "Your browser does not support the import feature. Please use a newer browser."
-            });
-        }
-    };
-    
-    userManagement.importUsersFileSelected = function(e){
-        var importInput = $(this);
-        // Get files from file input
-        var fileList = importInput.prop("files");
-        // If file uploaded
-        if (fileList.length > 0){
-            // Get first file
-            var file = fileList.item(0);
-            // If not CSV file
-            if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
-                importInput.closest("div.users-table-buttons").notifie({
-                    anchor: "h3",
-                    message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
-                    exitEvents: "mouseup"
+                else {
+                    teamsContainer.find("h4").after(newTeam);
+                }
+                newTeam.slideDown(120, function(){
+                    userManagement.buildAvailableTeamsSelect(teamsContainer);
                 });
             }
             else {
-                // Initialize FileReader
-                var reader = new FileReader();
-                // Setup onload function which will process the import
-                reader.onload = function(e){
-                    userManagement.importUsersProcessData($.csv.toObjects(e.target.result), importInput);
-                }
-                // Read file
-                reader.readAsText(file);
+                userManagement.buildAvailableTeamsSelect(teamsContainer);
             }
-        }
-        // Reset file input value to empty string to allow on change  to fire on the same file if needed
-        importInput.val("");
-    };
-    
-    userManagement.importUsersProcessData = function(data, input){
-        var records = new Array();
-        _.each(data, function(d){
-            var newUser = {
-                username: d["Username"] || "",
-                displayName: d["Display Name"] || "",
-                email: d["Email"] || "",
-                enabled: d["Enabled"] && d["Enabled"].toLowerCase() === "true",
-                attributes: []
-            };
-            if (d["Groups"]){
-                newUser.attributes = [
-                   {
-                       name: "Group",
-                       values: JSON.parse(d["Groups"])
-                   }
-               ];
-            }
-            records.push(newUser);
-        });
-        
-        if (records.length > 0){
-            // Clear and destroy table and show notification that import is happening
-            userManagement.userDataTable.destroy();
-            userManagement.userTable.empty()
-            .append($("<tr>")
-                    .append($("<td>").addClass("alert alert-info")
-                            .append($("<span>").addClass("fa fa-cog fa-spin"))
-                            .append(" Importing users")));
         }
         else {
-            input.closest("div.users-table-buttons").notifie({
-                anchor: "h3",
-                message: "The file you selected doe not contain any data."
-            });
+            $(this).closest(".add-team").find("select#available-teams").focus();
         }
-        
-        // Create counters to keep track of when ajax calls complete
-        var statusCounters = {
-            totalRows: records.length,
-            processedRows: 0,
-            createdRows: 0,
-            createErrors: 0,
-            failedRows: new Array()
+    };
+
+    userManagement.removeTeamMembership = function(e){
+        var teamsContainer = $(this).closest("div.user-teams");
+        $(this).closest(".team-label").slideUp(120, function(){
+            $(this).remove();
+            userManagement.buildAvailableTeamsSelect(teamsContainer);
+        });
+    };
+    
+    userManagement.buildAvailableTeamsSelect = function(teamsContainer){
+        var availableTeams = teamsContainer.find("select#available-teams").empty();
+        teamsContainer.find("select#source-teams option").each(function(i, o){
+            if (teamsContainer.find(".team-label[data-team-slug='" + $(o).data("team-slug") + "']").length <= 0){
+                availableTeams.append($(o).clone());
+            }
+        });
+    };
+    
+    userManagement.saveUser = function(e){
+        var self = $(this);
+        var details = $("div.user-details");
+        var create = details.find("input#user-username").length > 0;
+        var user = {
+            username: create ? details.find("input#user-username").val() : bundle.admin.getUrlParameters("username"),
+            displayName: details.find("input#user-display-name").val().trim(),
+            email: details.find("input#user-email").val().trim(),
+            preferredLocale: details.find("select#user-preferred-locale").val().trim(),
+            enabled: details.find("input#user-enabled").prop("checked"),
+            spaceAdmin: details.find("input#user-space-admin").prop("checked"),
+            attributes: new Array(),
+            profileAttributes: new Array(),
+            memberships: new Array()
         };
         
-        // Iterate through each row in the imported csv. Delay with set timeout to allow for loader to be rendered.
-        window.setTimeout(function(){
-            _.each(records, function(row){
+        // Collect all attributes from the dom into an array
+        $("div.user-attributes div[data-user-attribute]").each(function(){
+            var attribute = {
+                name: $(this).data("user-attribute"),
+                values: new Array()
+            };
+            $(this).find("input[type=text]").each(function(){
+                if ($(this).val().trim().length > 0){
+                    attribute.values.push($(this).val().trim());
+                }
+            });
+            if (attribute.values.length > 0){
+                user.attributes.push(attribute);
+            }
+        });
+        
+        // Collect all profile attributes from the dom into an array
+        $("div.user-profile-attributes div[data-profile-attribute]").each(function(){
+            var attribute = {
+                name: $(this).data("profile-attribute"),
+                values: new Array()
+            };
+            $(this).find("input[type=text]").each(function(){
+                if ($(this).val().trim().length > 0){
+                    attribute.values.push($(this).val().trim());
+                }
+            });
+            $(this).find("input[type=radio]:checked").each(function(){
+                if ($(this).val().trim().length > 0){
+                    attribute.values.push($(this).val().trim());
+                }
+            });
+            if (attribute.values.length > 0){
+                user.profileAttributes.push(attribute);
+            }
+        });
+        
+        // Collect all team memberships from the dom into an array
+        $("div.user-teams div.team-label[data-team-slug]").each(function(){
+            user.memberships.push({
+                team: { 
+                    name: $(this).data("team-name")
+                }
+            });
+        });
+        
+        // Collect all role memberships from the dom into an array
+        $("div.user-roles input[type='checkbox']:checked").each(function(){
+            user.memberships.push({
+                team: { 
+                    name: $(this).val()
+                }
+            });
+        });
+        
+        $.ajax({
+            method: create ? "post" : "put",
+            url: encodeURI(bundle.apiLocation() + "/users/" + (create ? '' : user.username)),
+            data: JSON.stringify(user),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data){
+                window.location.href = bundle.kappLocation() + "/" + bundle.adminUsers.consoleSlug;
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                try { 
+                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                } catch(e){}
+                self.notifie({
+                    anchor: "div",
+                    message: "An error occurred while saving the user: " + errorThrown,
+                    exitEvents: "click"
+                });
+            }
+        });
+    }
+    
+    userManagement.deleteUser = function(e){
+        var self = $(this);
+        var username = bundle.admin.getUrlParameters("username");
+        (new KD.Modal({
+            header: "Confirm Delete",
+            body: "Are you sure you want to delete the user <strong>" + username + "</strong>?",
+            footer: function(element, actions) {
+                element.addClass("text-right").append(
+                    $("<button>", {class: "btn btn-success"}).text("Yes").on("click", actions.accept),
+                    $("<button>", {class: "btn btn-link"}).text("Cancel").on("click", actions.dismiss)
+                );
+            },
+            size: "md",
+            backdrop: true,
+            backdropclose: true,
+            keyboardclose: true,
+            renderCallback: false,
+            accept: function(e){
+                // If delete is confirmed, delete the team
                 $.ajax({
-                    method: "POST",
-                    url: bundle.apiLocation() + "/users",
-                    dataType: "json",
-                    data: JSON.stringify(row),
+                    method: "DELETE",
+                    url: bundle.apiLocation() + "/users/" + username,
                     contentType: "application/json",
                     success: function(data, textStatus, jqXHR){
-                        statusCounters.createdRows++;
-                        statusCounters.processedRows++;
-                        userManagement.importUsersStatusReport(statusCounters, input);
+                        // On success, redirect to kapp home
+                        window.location.href = bundle.kappLocation() + "/" + bundle.adminUsers.consoleSlug;
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         try { 
                             errorThrown = JSON.parse(jqXHR.responseText).error; 
                         } catch(e){}
-                        statusCounters.failedRows.push($.extend(row, {"ERROR": errorThrown}));
-                        statusCounters.createErrors++;
-                        statusCounters.processedRows++;
-                        userManagement.importUsersStatusReport(statusCounters, input);
+                        self.notifie({
+                            anchor: "div",
+                            message: "An error occurred while deleting the user: " + errorThrown,
+                            exitEvents: "click"
+                        });
                     }
                 });
-            });
-        }, 0);
-    };
-    
-    userManagement.importUsersStatusReport = function(statusCounters, input){
-        if (statusCounters.processedRows == statusCounters.totalRows){
-            var msg = $("<div>");
-            msg.append($("<div>").append($("<span>", {class: "fa fa-fw"}))
-                    .append(statusCounters.processedRows + " rows were processed."));
-            if (statusCounters.createdRows > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
-                        .append(statusCounters.createdRows + " users were created successfully."));
             }
-            if (statusCounters.createErrors > 0){
-                msg.append($("<div>").append($("<span>", {class: "fa fa-times fa-fw"}))
-                        .append(statusCounters.createErrors + " users failed to be created."));
-            }
-            if (statusCounters.failedRows.length > 0){
-                var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
-                var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
-                var failures = $.extend({}, userManagement.buildUserListTableOptions({users: statusCounters.failedRows}), {
-                    buttons: [
-                        {
-                            extend: "csv",
-                            text: "Export CSV of Failed Rows",
-                            className: "export-failures",
-                            filename: userManagement.userTable.data("space-name") + " Users - Failed Import Rows",
-                            exportOptions: {
-                                modifier: {
-                                    search: "none"
-                                },
-                                columns: ":not(.ignore-export)",
-                                orthogonal: "export"
-                            }
-                        }
-                    ],
-                    dom: 'B'
-                });
-                failures.columns.push({
-                    title: "ERROR",
-                    data: "ERROR"
-                });
-                var failureTable = table.DataTable(failures);
-                msg.append($("<div>").addClass("pull-right").append(failureTable.buttons().container()));
-            }
-            input.closest("div.users-table-buttons").notifie({
-                severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
-                anchor: "h3",
-                message: msg
-            });
-            userManagement.loadUserList(userManagement.userTable);
-        }
+        })).show();
+        // Blur delete button
+        self.blur();
     };
     
-    userManagement.loadUserList = function(table){
-        userManagement.userTable = table;
-        $.ajax({
-            method: "GET",
-            url: encodeURI(bundle.apiLocation() + "/users?include=memberships"),
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data){
-                var options = userManagement.buildUserListTableOptions(data, table.data("space-name"));
-                userManagement.userDataTable = table.DataTable(options);
-                // Add event handler for edit button
-                userManagement.userTable.off("click", "button.edit-user-btn")
-                                        .on("click", "button.edit-user-btn", function(e){
-                    // On click of edit button, send user to page for editing current user
-                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
-                    location.href = encodeURI(bundle.kappLocation() 
-                            + "/" + userManagement.userTable.data("console-slug") 
-                            + "?page=users/user&username=" + data.username);
-                });
-                // Add event handler for clone button
-                userManagement.userTable.off("click", "button.clone-user-btn")
-                                        .on("click", "button.clone-user-btn", function(e){
-                    // On click of clone button, send user to page for cloning selected user
-                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
-                    location.href = encodeURI(bundle.kappLocation() 
-                            + "/" + userManagement.userTable.data("console-slug") 
-                            + "?page=users/user&clone=" + data.username);
-                });
-                // Append the import/export buttons to the buttons section on the page
-                userManagement.userDataTable.buttons().nodes().each(function(){
-                    $("div.users-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                try { 
-                    errorThrown = JSON.parse(jqXHR.responseText).error; 
-                } catch(e){}
-                table.empty().notifie({
-                    message: "Failed to load users.<br>" + errorThrown
-                });
-            }
-        });
-    };
     
-    userManagement.buildUserListTableOptions = function(data, spaceName){
-        return {
-            responsive: true,
-            stateSave: true,
-            data: data.users,
-            columns: [
-                {
-                    title: "Username",
-                    data: "username",
-                    render: $.fn.dataTable.render.text()
-                },
-                {
-                    title: "Display Name",
-                    data: "displayName",
-                    class: "all",
-                    render: $.fn.dataTable.render.text()
-                },
-                {
-                    title: "Enabled",
-                    data: "enabled",
-                    render: $.fn.dataTable.render.boolean()
-                },
-                {
-                    title: "Groups",
-                    data: "attributes",
-                    render: $.fn.dataTable.render.attributes("Group")
-                },
-                {
-                    title: "Email",
-                    data: "email",
-                    render: $.fn.dataTable.render.text()
-                },
-                {
-                    defaultContent: $("div.users-table-actions-template").html(),
-                    class: "actions-sm all ignore-export",
-                    orderable: false,
-                    searchable: false
-                }
-            ],
-            buttons: [
-                {
-                    extend: "csv",
-                    text: "Export CSV",
-                    filename: (spaceName || "kinops") + " Users",
-                    exportOptions: {
-                        modifier: {
-                            search: "none"
-                        },
-                        columns: ":not(.ignore-export)",
-                        orthogonal: "export"
-                    }
-                },
-                {
-                    text: "Import CSV",
-                    action: userManagement.importUsersOpen
-                }
-            ],
-            pageLength: 25
-        };
-    };
-    
-    userManagement.downloadUserImportTemplate = function(e){
-        var table = $("<table>").DataTable({
-            columns: [
-                {title: "Display Name", data: "displayName"},
-                {title: "Username", data: "username"},
-                {title: "Enabled", data: "enabled"},
-                {title: "Groups", data: "groups"},
-                {title: "Email", data: "email"}
-            ],
-            data: [{
-                displayName: "DELETE THIS ROW BEFORE IMPORTING",
-                username: "",
-                enabled: "TRUE or FALSE",
-                groups: "[\"Group 1\",\"Group 2\",\"Group N\"]",
-                email: ""
-            }],
-            buttons: [{
-                extend: "csv",
-                filename: userManagement.userTable.data("space-name") + " Users - Import Template",
-                exportOptions: {
-                    modifier: { search: "none" },
-                    columns: ":not(.ignore-export)",
-                    orthogonal: "export"
-                }
-            }],
-            dom: 'B'
-        });
-        table.buttons().trigger("click");
-    };
-    
+
+//    userManagement.saveUser_old = function(e){
+//        var createUser = $("input[name=username]").length ? true : false;
+//        var user = {
+//            username: $("input[name=username]").val() || bundle.admin.getUrlParameters("username"),
+//            displayName: $("input[name=displayName]").val(),
+//            email: $("input[name=email]").val(),
+//            preferredLocale: $("select[name=preferredLocale]").val(),
+//            enabled: $("input[name=enabled]").prop("checked"),
+//            //spaceAdmin: $("input[name=spaceAdmin]").prop("checked"),
+//            attributes: new Array(),
+//            profileAttributes: new Array()
+//        };
+//        
+//        var groups = new Array();
+//        var attributes = new Object();
+//        var profileAttributes = new Object();
+//        
+//        $("table[data-user-groups-table] tbody tr td.group-name").each(function(i, td){
+//            var group = $(td).text();
+//            if (!attributes["Group"]){
+//                attributes["Group"] = new Array();
+//            }
+//            attributes["Group"].push(group);
+//            groups.push(group);
+//        }); 
+//        
+//        $("table[data-user-attributes-table] tbody tr").each(function(i, tr){
+//            var name = $(tr).find("td.attribute-name").text();
+//            var value = $(tr).find("td.attribute-value input").val();
+//            if (!attributes[name]){
+//                attributes[name] = new Array();
+//            }
+//            attributes[name].push(value);
+//        }); 
+//
+//        $("table[data-user-profile-attributes-table] tbody tr").each(function(i, tr){
+//            var name = $(tr).find("td.attribute-name").text();
+//            var value = $(tr).find("td.attribute-value input").val();
+//            if (!profileAttributes[name]){
+//                profileAttributes[name] = new Array();
+//            }
+//            profileAttributes[name].push(value);
+//        }); 
+//        
+//        user.attributes = $.map(attributes, function(value, key){
+//            return {name: key, values: value};
+//        });
+//        user.profileAttributes = $.map(profileAttributes, function(value, key){
+//            return {name: key, values: value};
+//        });
+//        
+//        if (createUser && !user.username){
+//            $("input[name=username]").notifie({
+//                message: "Username is required.",
+//                exitEvents: "keyup"
+//            });
+//        }
+//        else if (createUser){
+//            userManagement.createUser(user, groups);
+//        }
+//        else {
+//            userManagement.updateUser(user, groups);
+//        }
+//    };
+//    
+//    userManagement.updateUser = function(user, groups){
+//        $.ajax({
+//            method: "put",
+//            url: encodeURI(bundle.apiLocation() + "/users/" + user.username),
+//            dataType: "json",
+//            contentType: "application/json",
+//            data: JSON.stringify(user),
+//            beforeSend: function(){
+//                $("button.save-user-btn").notifie({
+//                    anchor: "div.row",
+//                    severity: "info",
+//                    message: $("<div>").append(
+//                        $("<span>", {class: "fa fa-spinner fa-spin"}),
+//                        $("<span>").append("Saving User")
+//                    ),
+//                    margin: {'margin':'0'},
+//                    exitEvents: "click"
+//                });
+//            },
+//            success: function(data){
+//                userManagement.syncGroupMembership(user.username, groups);
+//            },
+//            error: function(jqXHR, textStatus, errorThrown){
+//                try { 
+//                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+//                } catch(e){}
+//                $("button.save-user-btn").notifie({
+//                    anchor: "div.row",
+//                    message: "An error occurred while updating the user: " + errorThrown,
+//                    margin: {'margin':'0'},
+//                    exitEvents: "click"
+//                });
+//            }
+//        });
+//    }
+//
+//    userManagement.createUser = function(user, groups){
+//        $.ajax({
+//            method: "post",
+//            url: encodeURI(bundle.apiLocation() + "/users"),
+//            contentType: "application/json",
+//            dataType: "json",
+//            data: JSON.stringify(user),
+//            beforeSend: function(){
+//                $("button.save-user-btn").notifie({
+//                    anchor: "div.row",
+//                    severity: "info",
+//                    message: $("<div>").append(
+//                        $("<span>", {class: "fa fa-spinner fa-spin"}),
+//                        $("<span>").append("Saving User")
+//                    ),
+//                    margin: {'margin':'0'},
+//                    exitEvents: "click"
+//                });
+//            },
+//            success: function(data){
+//                userManagement.syncGroupMembership(user.username, groups);
+//            },
+//            error: function(jqXHR, textStatus, errorThrown){
+//                try { 
+//                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+//                } catch(e){}
+//                $("button.save-user-btn").notifie({
+//                    anchor: "div.row",
+//                    message: "An error occurred while creating the user: " + errorThrown,
+//                    margin: {'margin':'0'},
+//                    exitEvents: "click"
+//                });
+//            }
+//        });
+//    }
+//    
+//    
+//    userManagement.wrapDeferreds = function(deferreds){
+//        return $.map(deferreds, function(d) {
+//            var wrapedDeferred = $.Deferred();
+//            d.always(function() { wrapedDeferred.resolve(); });
+//            return wrapedDeferred.promise();
+//        });
+//    }
+//    
+//    userManagement.importUsersOpen = function(){
+//        // Check if File API is available
+//        if (window.File && window.FileReader && window.FileList) {
+//            $("input#users-import").trigger("click");
+//        }
+//        else {
+//            $("div.users-table-buttons").notifie({
+//                anchor: "h3",
+//                message: "Your browser does not support the import feature. Please use a newer browser."
+//            });
+//        }
+//    };
+//    
+//    userManagement.importUsersFileSelected = function(e){
+//        var importInput = $(this);
+//        // Get files from file input
+//        var fileList = importInput.prop("files");
+//        // If file uploaded
+//        if (fileList.length > 0){
+//            // Get first file
+//            var file = fileList.item(0);
+//            // If not CSV file
+//            if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
+//                importInput.closest("div.users-table-buttons").notifie({
+//                    anchor: "h3",
+//                    message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
+//                    exitEvents: "mouseup"
+//                });
+//            }
+//            else {
+//                // Initialize FileReader
+//                var reader = new FileReader();
+//                // Setup onload function which will process the import
+//                reader.onload = function(e){
+//                    userManagement.importUsersProcessData($.csv.toObjects(e.target.result), importInput);
+//                }
+//                // Read file
+//                reader.readAsText(file);
+//            }
+//        }
+//        // Reset file input value to empty string to allow on change  to fire on the same file if needed
+//        importInput.val("");
+//    };
+//    
+//    userManagement.importUsersProcessData = function(data, input){
+//        var records = new Array();
+//        _.each(data, function(d){
+//            var newUser = {
+//                username: d["Username"] || "",
+//                displayName: d["Display Name"] || "",
+//                email: d["Email"] || "",
+//                enabled: d["Enabled"] && d["Enabled"].toLowerCase() === "true",
+//                attributes: []
+//            };
+//            if (d["Groups"]){
+//                newUser.attributes = [
+//                   {
+//                       name: "Group",
+//                       values: JSON.parse(d["Groups"])
+//                   }
+//               ];
+//            }
+//            records.push(newUser);
+//        });
+//        
+//        if (records.length > 0){
+//            // Clear and destroy table and show notification that import is happening
+//            userManagement.userDataTable.destroy();
+//            userManagement.userTable.empty()
+//            .append($("<tr>")
+//                    .append($("<td>").addClass("alert alert-info")
+//                            .append($("<span>").addClass("fa fa-cog fa-spin"))
+//                            .append(" Importing users")));
+//        }
+//        else {
+//            input.closest("div.users-table-buttons").notifie({
+//                anchor: "h3",
+//                message: "The file you selected doe not contain any data."
+//            });
+//        }
+//        
+//        // Create counters to keep track of when ajax calls complete
+//        var statusCounters = {
+//            totalRows: records.length,
+//            processedRows: 0,
+//            createdRows: 0,
+//            createErrors: 0,
+//            failedRows: new Array()
+//        };
+//        
+//        // Iterate through each row in the imported csv. Delay with set timeout to allow for loader to be rendered.
+//        window.setTimeout(function(){
+//            _.each(records, function(row){
+//                $.ajax({
+//                    method: "POST",
+//                    url: bundle.apiLocation() + "/users",
+//                    dataType: "json",
+//                    data: JSON.stringify(row),
+//                    contentType: "application/json",
+//                    success: function(data, textStatus, jqXHR){
+//                        statusCounters.createdRows++;
+//                        statusCounters.processedRows++;
+//                        userManagement.importUsersStatusReport(statusCounters, input);
+//                    },
+//                    error: function(jqXHR, textStatus, errorThrown){
+//                        try { 
+//                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+//                        } catch(e){}
+//                        statusCounters.failedRows.push($.extend(row, {"ERROR": errorThrown}));
+//                        statusCounters.createErrors++;
+//                        statusCounters.processedRows++;
+//                        userManagement.importUsersStatusReport(statusCounters, input);
+//                    }
+//                });
+//            });
+//        }, 0);
+//    };
+//    
+//    userManagement.importUsersStatusReport = function(statusCounters, input){
+//        if (statusCounters.processedRows == statusCounters.totalRows){
+//            var msg = $("<div>");
+//            msg.append($("<div>").append($("<span>", {class: "fa fa-fw"}))
+//                    .append(statusCounters.processedRows + " rows were processed."));
+//            if (statusCounters.createdRows > 0){
+//                msg.append($("<div>").append($("<span>", {class: "fa fa-check fa-fw"}))
+//                        .append(statusCounters.createdRows + " users were created successfully."));
+//            }
+//            if (statusCounters.createErrors > 0){
+//                msg.append($("<div>").append($("<span>", {class: "fa fa-times fa-fw"}))
+//                        .append(statusCounters.createErrors + " users failed to be created."));
+//            }
+//            if (statusCounters.failedRows.length > 0){
+//                var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
+//                var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
+//                var failures = $.extend({}, userManagement.buildUserListTableOptions({users: statusCounters.failedRows}), {
+//                    buttons: [
+//                        {
+//                            extend: "csv",
+//                            text: "Export CSV of Failed Rows",
+//                            className: "export-failures",
+//                            filename: userManagement.userTable.data("space-name") + " Users - Failed Import Rows",
+//                            exportOptions: {
+//                                modifier: {
+//                                    search: "none"
+//                                },
+//                                columns: ":not(.ignore-export)",
+//                                orthogonal: "export"
+//                            }
+//                        }
+//                    ],
+//                    dom: 'B'
+//                });
+//                failures.columns.push({
+//                    title: "ERROR",
+//                    data: "ERROR"
+//                });
+//                var failureTable = table.DataTable(failures);
+//                msg.append($("<div>").addClass("pull-right").append(failureTable.buttons().container()));
+//            }
+//            input.closest("div.users-table-buttons").notifie({
+//                severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
+//                anchor: "h3",
+//                message: msg
+//            });
+//            userManagement.loadUserList(userManagement.userTable);
+//        }
+//    };
+//    
+//    userManagement.loadUserList = function(table){
+//        userManagement.userTable = table;
+//        $.ajax({
+//            method: "GET",
+//            url: encodeURI(bundle.apiLocation() + "/users?include=memberships"),
+//            dataType: "json",
+//            contentType: "application/json",
+//            success: function(data){
+//                var options = userManagement.buildUserListTableOptions(data, table.data("space-name"));
+//                userManagement.userDataTable = table.DataTable(options);
+//                // Add event handler for edit button
+//                userManagement.userTable.off("click", "button.edit-user-btn")
+//                                        .on("click", "button.edit-user-btn", function(e){
+//                    // On click of edit button, send user to page for editing current user
+//                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
+//                    location.href = encodeURI(bundle.kappLocation() 
+//                            + "/" + userManagement.userTable.data("console-slug") 
+//                            + "?page=users/user&username=" + data.username);
+//                });
+//                // Add event handler for clone button
+//                userManagement.userTable.off("click", "button.clone-user-btn")
+//                                        .on("click", "button.clone-user-btn", function(e){
+//                    // On click of clone button, send user to page for cloning selected user
+//                    var data = userManagement.userDataTable.row($(this).closest("tr")).data();
+//                    location.href = encodeURI(bundle.kappLocation() 
+//                            + "/" + userManagement.userTable.data("console-slug") 
+//                            + "?page=users/user&clone=" + data.username);
+//                });
+//                // Append the import/export buttons to the buttons section on the page
+//                userManagement.userDataTable.buttons().nodes().each(function(){
+//                    $("div.users-table-buttons").prepend($(this).attr("href", "#")).prepend("\n");
+//                });
+//            },
+//            error: function(jqXHR, textStatus, errorThrown){
+//                try { 
+//                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+//                } catch(e){}
+//                table.empty().notifie({
+//                    message: "Failed to load users.<br>" + errorThrown
+//                });
+//            }
+//        });
+//    };
+//    
+//    userManagement.buildUserListTableOptions = function(data, spaceName){
+//        return {
+//            responsive: true,
+//            stateSave: true,
+//            data: data.users,
+//            columns: [
+//                {
+//                    title: "Username",
+//                    data: "username",
+//                    render: $.fn.dataTable.render.text()
+//                },
+//                {
+//                    title: "Display Name",
+//                    data: "displayName",
+//                    class: "all",
+//                    render: $.fn.dataTable.render.text()
+//                },
+//                {
+//                    title: "Enabled",
+//                    data: "enabled",
+//                    render: $.fn.dataTable.render.boolean()
+//                },
+//                {
+//                    title: "Groups",
+//                    data: "attributes",
+//                    render: $.fn.dataTable.render.attributes("Group")
+//                },
+//                {
+//                    title: "Email",
+//                    data: "email",
+//                    render: $.fn.dataTable.render.text()
+//                },
+//                {
+//                    defaultContent: $("div.users-table-actions-template").html(),
+//                    class: "actions-sm all ignore-export",
+//                    orderable: false,
+//                    searchable: false
+//                }
+//            ],
+//            buttons: [
+//                {
+//                    extend: "csv",
+//                    text: "Export CSV",
+//                    filename: (spaceName || "kinops") + " Users",
+//                    exportOptions: {
+//                        modifier: {
+//                            search: "none"
+//                        },
+//                        columns: ":not(.ignore-export)",
+//                        orthogonal: "export"
+//                    }
+//                },
+//                {
+//                    text: "Import CSV",
+//                    action: userManagement.importUsersOpen
+//                }
+//            ],
+//            pageLength: 25
+//        };
+//    };
+//    
+//    userManagement.downloadUserImportTemplate = function(e){
+//        var table = $("<table>").DataTable({
+//            columns: [
+//                {title: "Display Name", data: "displayName"},
+//                {title: "Username", data: "username"},
+//                {title: "Enabled", data: "enabled"},
+//                {title: "Groups", data: "groups"},
+//                {title: "Email", data: "email"}
+//            ],
+//            data: [{
+//                displayName: "DELETE THIS ROW BEFORE IMPORTING",
+//                username: "",
+//                enabled: "TRUE or FALSE",
+//                groups: "[\"Group 1\",\"Group 2\",\"Group N\"]",
+//                email: ""
+//            }],
+//            buttons: [{
+//                extend: "csv",
+//                filename: userManagement.userTable.data("space-name") + " Users - Import Template",
+//                exportOptions: {
+//                    modifier: { search: "none" },
+//                    columns: ":not(.ignore-export)",
+//                    orthogonal: "export"
+//                }
+//            }],
+//            dom: 'B'
+//        });
+//        table.buttons().trigger("click");
+//    };
+//    
     
     
     /*----------------------------------------------------------------------------------------------
