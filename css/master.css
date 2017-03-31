@@ -1000,18 +1000,18 @@ nav#bundle-subheader {
   border-radius: 0;
   min-height: 4rem;
 }
-nav#bundle-subheader a {
-  color: #4b4c4e;
-  text-decoration: none;
-}
-nav#bundle-subheader a:hover, nav#bundle-subheader a:focus {
-  color: #646568;
-  text-decoration: none;
-}
 nav#bundle-subheader ol.breadcrumb {
   margin-bottom: 0;
   padding: 1rem 1rem 1rem 0;
   background-color: transparent;
+}
+nav#bundle-subheader ol.breadcrumb a {
+  color: #4b4c4e;
+  text-decoration: none;
+}
+nav#bundle-subheader ol.breadcrumb a:hover, nav#bundle-subheader ol.breadcrumb a:focus {
+  color: #646568;
+  text-decoration: none;
 }
 nav#bundle-subheader ol.breadcrumb li {
   color: rgba(75, 76, 78, 0.75);
@@ -1019,6 +1019,14 @@ nav#bundle-subheader ol.breadcrumb li {
 }
 nav#bundle-subheader ol.breadcrumb li h4 {
   margin: 0;
+}
+nav#bundle-subheader div.additional-menu:not(.with-buttons) a {
+  color: #4b4c4e;
+  text-decoration: none;
+}
+nav#bundle-subheader div.additional-menu:not(.with-buttons) a:hover, nav#bundle-subheader div.additional-menu:not(.with-buttons) a:focus {
+  color: #646568;
+  text-decoration: none;
 }
 nav#bundle-subheader div.additional-menu ul:not(.dropdown-menu) {
   position: relative;

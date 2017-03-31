@@ -66,15 +66,16 @@
         <hr class="border-color-white" />
         <p>To create a new user, click the <b class="nowrap"><span class="fa fa-plus"></span> Create User</b> button.</p>
         <p>To update a user, click the edit <b><span class="fa fa-pencil"></span></b> button.</p>
-        <p>To export the list of users to a CSV file, click the <b>Export CSV</b> button.</p>
-        <p>To create new users from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p>
-        <div class="p-l-2">
-            <p>
-                You may download a template for creating new users via import  
-                <a class="download-import-template" href="javascript:void(0);"><span class="fa fa-download"></span> here</a>. 
-                The template includes the required formatting for the <i>Enabled</i> and <i>Groups</i> columns.
-            </p>
-        </div>
+        <p>To clone a user, click the copy <b><span class="fa fa-clone"></span></b> button.</p>
+<!--         <p>To export the list of users to a CSV file, click the <b>Export CSV</b> button.</p> -->
+<!--         <p>To create new users from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p> -->
+<!--         <div class="p-l-2"> -->
+<!--             <p> -->
+<!--                 You may download a template for creating new users via import   -->
+<!--                 <a class="download-import-template" href="javascript:void(0);"><span class="fa fa-download"></span> here</a>.  -->
+<!--                 The template includes the required formatting for the <i>Enabled</i> and <i>Groups</i> columns. -->
+<!--             </p> -->
+<!--         </div> -->
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     

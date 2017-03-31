@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
+<c:set var="removeBreadcrumb" value="${true}" scope="request"/>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     

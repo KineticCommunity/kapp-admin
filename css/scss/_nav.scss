@@ -11,9 +11,8 @@ nav#bundle-subheader{
   @include border-radius(0);
   min-height: 4rem;
 
-  @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
-
   ol.breadcrumb {
+    @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
     margin-bottom: 0;
     padding: 1rem 1rem 1rem 0;
     background-color: transparent;
@@ -28,6 +27,10 @@ nav#bundle-subheader{
     }
   }
 
+  div.additional-menu:not(.with-buttons) {
+    @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
+  }
+  
   div.additional-menu ul:not(.dropdown-menu) {
     position: relative;
     margin-bottom: 0;
@@ -90,30 +93,30 @@ nav#bundle-subheader{
 
 /* Nav Tabs Elements
  *-------------------------------------- */
- .nav-tabs {
-   > li > a,
-   > li > a:hover,
-   > li > a:focus {
-     border-radius: 0;
-     border: none;
-     color: $gray;
-   }
+.nav-tabs {
+  > li > a,
+  > li > a:hover,
+  > li > a:focus {
+    border-radius: 0;
+    border: none;
+    color: $gray;
+  }
 
-   > li.active > a,
-   > li.active > a:hover,
-   > li.active > a:focus {
-     color: #000;
-     background-color: transparent;
-     border:none;
-     border-bottom: 2px solid $tertiary;
-   }
-    > li > a:hover{
-     color: $tertiary;
-     background-color: transparent;
-     border:none;
-     border-bottom: 2px solid $tertiary;
-   }
- }
+  > li.active > a,
+  > li.active > a:hover,
+  > li.active > a:focus {
+    color: #000;
+    background-color: transparent;
+    border:none;
+    border-bottom: 2px solid $tertiary;
+  }
+   > li > a:hover{
+    color: $tertiary;
+    background-color: transparent;
+    border:none;
+    border-bottom: 2px solid $tertiary;
+  }
+}
 
 .tab-content .tab-pane table thead tr:first-child th {
   border-top: none;

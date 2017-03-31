@@ -211,8 +211,8 @@
                         <div class="team-label" data-team-slug="${team.slug}" data-team-name="${team.name}" >
                             <label class="label label-primary">
                                 <span class="fa fa-fw ${team.icon}"></span>
-                                <span>${i18n.translate(team.name)}</span>
                                 <span class="badge"><span class="fa fa-times"></span></span>
+                                <span>${i18n.translate(team.name)}</span>
                             </label>
                         </div>
                     </c:forEach>
@@ -245,8 +245,8 @@
                     <div class="team-label" data-team-slug="{{teamSlug}}" data-team-name="{{teamName}}" >
                         <label class="label label-primary">
                             <span class="fa fa-fw {{teamIcon}}"></span>
-                            <span>{{teamDisplayName}}</span>
                             <span class="badge"><span class="fa fa-times"></span></span>
+                            <span>{{teamDisplayName}}</span>
                         </label>
                     </div>
                 </div>

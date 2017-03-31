@@ -47,6 +47,7 @@ div.user-attributes input + input {
   line-height: inherit;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 }
 .checkbox-label > label.label {
   cursor: pointer;
@@ -73,10 +74,11 @@ div.user-attributes input + input {
 }
 .team-label label.label .badge {
   background-color: white;
-  margin-left: 0.5rem;
   vertical-align: baseline;
   padding: 0.1rem 0.4rem;
   cursor: pointer;
+  float: right;
+  margin: 0.3rem 0 0.3rem 1rem;
 }
 .team-label label.label .badge:hover {
   background-color: #a94442;
@@ -93,7 +95,11 @@ a.falink:active,
 a.falink:focus {
     text-decoration: none;
 }
-
+@media (max-width: 767px) {
+  div.user-image {
+    margin-bottom: 2rem;
+  }
+}
 @media (min-width: 768px) {
   div.user-details {
     margin-right: 203px;
