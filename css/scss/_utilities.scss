@@ -125,3 +125,6 @@ ul.unstyled {
 .empty-state:not(:only-child) {
   display: none;
 }
+*:not(.collapse) ~ .empty-collapse-state {
+  display: none;
+}

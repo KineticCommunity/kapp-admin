@@ -145,18 +145,26 @@ nav#bundle-header {
   
   .user-tile {
     overflow: auto;
-    width: 360px;
+    min-width: 240px;
     padding: 0;
     color: $lightestgray;
 
     > * {
-      padding: 1.5rem;
+      padding: 1rem;
     }
 
     > div.actions {
       background-color: $lightestgray;
       border-top: 1px solid tint($lightestgray, 5%);
-      @include anchor($text-color, darken($text-color, 5%), none, none);
+      @include anchor($link-color, tint($link-color, 10%), none, none);
+      
+      a {
+        display: block;
+        
+        &:not(:last-child) {
+          margin-bottom: 1rem;
+        }
+      }
     }
   }
   

@@ -16,3 +16,92 @@ table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child >
     float: none;
     overflow: hidden;
 }
+
+div.user-image {
+  text-align: center;
+}
+div.user-image img{
+  border-radius: 50%;
+}
+
+div.user-details {
+  
+}
+
+div.user-profile-attributes input + input,
+div.user-attributes input + input {
+  margin-top: 0.2rem;
+}
+
+.team-label,
+.checkbox-label {
+  margin-right: 1rem;
+}
+.team-label {
+  display: block;
+}
+.team-label label.label,
+.checkbox-label > label.label {
+  font-size: 100%;
+  display: inline-block;
+  line-height: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.checkbox-label > label.label {
+  cursor: pointer;
+}
+.checkbox-label > input {
+  display: none;
+}
+.checkbox-label > input + label.label:before {
+  font-family: FontAwesome;
+  content: "\f096";
+  font-weight: 400;
+  display: inline-block;
+  width: 1.28571429em;
+  text-align: center;
+}
+.checkbox-label > input:checked + label.label {
+  background-color: #5cb85c;
+}
+.checkbox-label > input:checked + label.label:before {
+  content: "\f046";
+}
+.team-label label.label > .fa {
+  margin-right: 0.5rem;
+}
+.team-label label.label .badge {
+  background-color: white;
+  margin-left: 0.5rem;
+  vertical-align: baseline;
+  padding: 0.1rem 0.4rem;
+  cursor: pointer;
+}
+.team-label label.label .badge:hover {
+  background-color: #a94442;
+}
+.team-label label.label .badge .fa-times {
+  color: #a94442;
+}
+.team-label label.label .badge:hover .fa-times {
+  color: white;
+}
+
+a.falink:hover,
+a.falink:active,
+a.falink:focus {
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  div.user-details {
+    margin-right: 203px;
+    min-height: 188px;
+  }
+
+  div.user-image {
+    float: right;
+    max-width: 188px;
+  }
+}

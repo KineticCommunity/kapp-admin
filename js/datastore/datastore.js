@@ -22,6 +22,32 @@
             });
         }
         
+        /**
+         * Initialize DataTable for dom sourced tables
+         */
+        $("table[data-table-dom]").each(function(i,table){
+            var options = {
+                autoWidth: false,
+                pageLength: 25,
+                language: {
+                    search: "Filter"
+                },
+                drawCallback: function(){
+                    $("[data-tooltip]").tooltip();
+                }
+            };
+            if ($(table).data("empty-message")){
+                options.language.emptyTable = $(table).data("empty-message");
+            }
+            $(table).dataTable(options);
+            $(table).on("click", "td", function(e){
+                if (e.target == this){
+                    $(this).closest("tr").toggleClass("full-text");
+                }
+            });
+            $(table).parent().find("div.dt-title").prepend($("<h4>", {class: "pull-left"}).append($(table).data("table-name")));
+        });
+        
         /** END *** DATASTORE/CONSOLE PAGE *** DOCUMENT READY CODE *********************************/
 
         /******************************************************************************************

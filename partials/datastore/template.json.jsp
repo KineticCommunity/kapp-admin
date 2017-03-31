@@ -66,27 +66,38 @@
           "rows": 1
         },
         {
-          "type": "button",
-          "label": "Cancel",
-          "name": "Cancel",
-          "visible": "bundle.adminDatastore != null",
-          "enabled": true,
-          "renderType": "custom",
+          "type": "section",
+          "renderType": null,
+          "name": "Action Buttons",
+          "title": null,
+          "visible": true,
+          "omitWhenHidden": null,
           "renderAttributes": {
-            "class": "btn btn-link cancel-record"
+            "class": "text-right"
           },
-          "events": []
-        },
-        {
-          "type": "button",
-          "label": "Save",
-          "name": "Save",
-          "visible": "bundle.adminDatastore != null",
-          "enabled": true,
-          "renderType": "submit-page",
-          "renderAttributes": {
-            "class": "btn btn-tertiary"
-          }
+          "elements": [
+            {
+              "type": "button",
+              "label": "Save",
+              "name": "Save",
+              "visible": "bundle.adminDatastore != null",
+              "enabled": true,
+              "renderType": "submit-page",
+              "renderAttributes": {}
+            },
+            {
+              "type": "button",
+              "label": "Cancel",
+              "name": "Cancel",
+              "visible": "bundle.adminDatastore != null",
+              "enabled": true,
+              "renderType": "custom",
+              "renderAttributes": {
+                "class": "btn-link cancel-record"
+              },
+              "events": []
+            }
+          ]
         }
       ],
       "events": [],
