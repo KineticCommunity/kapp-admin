@@ -254,7 +254,7 @@
         // Get form
         $.ajax({
             method: "GET",
-            url: encodeURI(bundle.apiLocation() + "/kapps/" + bundle.adminFormManagement.kappSlug + "/forms/" + bundle.adminFormManagement.formSlug + "?include=attributes"),
+            url: encodeURI(bundle.apiLocation() + "/kapps/" + bundle.adminFormManagement.kappSlug + "/forms/" + bundle.adminFormManagement.formSlug + "?include=attributes,kapp"),
             dataType: "json",
             contentType: "application/json",
             beforeSend: function(){
@@ -289,10 +289,8 @@
             data: JSON.stringify({
                 name: form.name,
                 description: "",
-                tag_list: "META:TYPE:Form, " +
-                          "META:ID:" + form.slug + ", " +
-                          "META:LABEL:View Service, " +
-                          "META:URL:" + window.location.toString()
+                tag_list: "META:TYPE:Form," +
+                          "META:ID:" + form.kapp.slug + '/' + form.slug
             }),
             dataType: "json",
             contentType: "application/json",
