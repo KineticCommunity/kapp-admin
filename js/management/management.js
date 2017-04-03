@@ -4,12 +4,6 @@
      *   This section is executed on page load to register events and otherwise manipulate the DOM.
      *--------------------------------------------------------------------------------------------*/  
     $(function() {    
-        /*
-         * Initialize Colorpicker / Spinner
-         */
-        $('.colorpicker-component').colorpicker();
-        $('.spinner').spinner()
-        $('.icp-auto').iconpicker({hideOnSelect: true});
 
         // Add Add Click Event to Save System Button
         $("button.update-object-btn").on("click", sharedManagement.updateObject);
@@ -32,6 +26,11 @@
                 $(this).parent().find('label').append('<span style="color:red;"> (*** Alert! Stored Attribute Value Doesn\'t Exist ***)</span>');
             }
         })
+        
+        bundle.adminManagement.init();
+        // Enable update and reset buttons
+        $(document).on("click", "button[data-save-button]", bundle.adminManagement.save);
+        $(document).on("click", "button[data-reset-button]", bundle.adminManagement.reset);
 
      });
 
@@ -41,10 +40,8 @@
      *--------------------------------------------------------------------------------------------*/
     // Ensure the BUNDLE global object exists
     bundle = typeof bundle !== "undefined" ? bundle : {};
-    // Create namespace for Admin Kapp
-    bundle.adminProfiles = bundle.adminProfiles || {};
-    // Create a scoped alias to simplify references to your namespace
-    var adminProfiles = bundle.adminProfiles;
+    // Create namespace for Admin Kapp Management Console
+    bundle.adminManagement = bundle.adminManagement || {};
     
     // Private namesapce for system management
     var sharedManagement = new Object();
@@ -53,6 +50,195 @@
     /*----------------------------------------------------------------------------------------------
      * COMMON FUNCTIONS
      *--------------------------------------------------------------------------------------------*/
+    
+    bundle.adminManagement.init = function(container){
+        container = container || $(document);
+        container.find(".colorpicker-component").colorpicker();
+        container.find(".spinner").spinner().on("keypress", function(e){
+            var keyCode = e.keyCode || e.which, 
+                keysAllowed = [44, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 8, 9, 13]; 
+            if ($.inArray(keyCode, keysAllowed) === -1 && e.ctrlKey === false){ 
+                e.preventDefault();
+            }
+        });
+        container.find(".icp-auto").iconpicker({hideOnSelect: true});
+    };
+    
+    bundle.adminManagement.save = function(){
+        var self = $(this);
+        var container = self.closest("div[data-save-container]");
+        var url = bundle.apiLocation() + container.data("source");
+        var sourceName = container.data("source-name");
+        
+        // Get current object with all attributes
+        $.ajax({
+            method: "get",
+            dataType: "json",
+            url: url + "?include=attributes",
+            beforeSend: function(jqXHR, settings){
+                self.prop("disabled", true)
+                    .notifie({
+                        anchor: "div",
+                        severity: "info",
+                        message: $("<div>").append(
+                            $("<span>", {class: "fa fa-spinner fa-spin"}),
+                            $("<span>").text("Saving")
+                        )
+                    });
+            },
+            success: function(data, textStatus, jqXHR){
+                bundle.adminManagement.processSave(self, container, url, data[sourceName] || {});
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                try { 
+                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                } catch(e){}
+                self.notifie({
+                    anchor: "div",
+                    message: "An error occurred while performing the update: " + errorThrown,
+                    exitEvents: "click"
+                });
+            }
+        });
+    };
+    
+    bundle.adminManagement.processSave = function(self, container, url, data){
+        var saveData = {
+            attributes: new Array()
+        };
+        
+        // Convert list of existing attributes to a map
+        var attributesMap = new Object();
+        $.each(data.attributes, function(i, a){
+            attributesMap[a.name] = a.values;
+        });
+        // Collect all attributes from the container and update map
+        container.find("div[data-attribute]").each(function(){
+            var name = $(this).data("attribute");
+            var values = new Array();
+            $(this).find(
+                "input[type=text]:not(.ignore-value), " +
+                "input[type=checkbox]:checked:not(.ignore-value), " +
+                "input[type=radio]:checked:not(.ignore-value), " +
+                "select:not([multiple]):not(.ignore-value), " +
+                "textarea:not(.ignore-value)"
+    		).each(function(){
+                if ($(this).val() && $(this).val().trim().length > 0){
+                    values.push($(this).val().trim());
+                }
+            });
+            $(this).find("select[multiple]:not(.ignore-value)").each(function(){
+                if ($(this).val() && $.isArray($(this).val())){
+                    $.each($(this).val(), function(i, v){
+                        if (v && v.trim().length > 0){
+                            values.push(v.trim());
+                        }
+                    });
+                }
+            });
+            if (values.length > 0){
+                attributesMap[name] = values;
+            }
+            else {
+                delete attributesMap[name];
+            }
+        });
+        // Convert map of attributes back into an array for saving
+        saveData.attributes = $.map(attributesMap, function(value, key){
+            return {name: key, values: value};
+        });
+        
+        // Collect all the properties from the container for saving
+        container.find("div[data-property]").each(function(){
+            var value = $(this).find(
+                "input[type=text]:not(.ignore-value), " +
+                "input[type=checkbox]:checked:not(.ignore-value), " +
+                "input[type=radio]:checked:not(.ignore-value), " +
+                "select:not(.ignore-value), " +
+                "textarea:not(.ignore-value)"
+            ).first();
+            saveData[$(this).data("property")] = value.val();
+        });
+        
+        // Collect categorizations (for forms) from the container for saving
+        container.find("div[data-categorizations]").each(function(){
+            var categories = new Array();
+            $(this).find("input[type=checkbox]:checked:not(.ignore-value)").each(function(){
+                if ($(this).val() && $(this).val().trim().length > 0){
+                    categories.push($(this).val().trim());
+                }
+
+            });
+            saveData.categorizations = $.map(categories, function(category){
+                return {category: {slug: category}};
+            });
+        });
+        
+        // Update object
+        $.ajax({
+            method: "put",
+            dataType: "json",
+            url: url,
+            data: JSON.stringify(saveData),
+            success: function(data, textStatus, jqXHR){
+                var configPartial = container.data("config-partial");
+                if (configPartial){
+                    container.load(bundle.kappLocation() + "?partial=management" + configPartial, function(){
+                        bundle.adminManagement.init(container);
+                    });
+                }
+                else {
+                    self.notifie({anchor: "div", exit: true});
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                try { 
+                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                } catch(e){}
+                self.notifie({
+                    anchor: "div",
+                    message: "An error occurred while performing the update: " + errorThrown,
+                    exitEvents: "click"
+                });
+            },
+            complete: function(jqXHR, settings){
+                self.prop("disabled", false);
+            }
+        });
+    };
+    
+    bundle.adminManagement.reset = function(){
+        var container = $(this).closest("div[data-save-container]");
+        var configPartial = container.data("config-partial");
+        if (configPartial){
+            container.load(bundle.kappLocation() + "?partial=management" + configPartial, function(){
+                bundle.adminManagement.init(container);
+            });
+        }
+        else {
+            window.location.reload();
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     sharedManagement.updateObject = function(){
 
         var path = $("button.update-object-btn").data('ajaxpath')

@@ -3,10 +3,10 @@
 <%@include file="../../bundle/router.jspf" %>
 
 <c:set var="console" value="${form}" scope="request"/>
-<c:set var="currentSpace" value="${space}" scope="request"/>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
+    <bundle:variable name="pageTitle">${text.escape(i18n.translate(space.name))} Management</bundle:variable>
     <bundle:variable name="head">
         <c:import url="${bundle.path}/partials/management/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
@@ -21,32 +21,34 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <div class="row">
-            <div class="col-xs-12">
-                <h3>
-                    <span>${text.escape(currentSpace.name)}</span>
-                    <small>Space</small>
-                    <div class="pull-right users-table-buttons">
-                        <c:if test="${identity.spaceAdmin}">
-                            <a class="btn btn-tertiary" href="${bundle.kappLocation}/${console.slug}?page=management/config/space">
-                                <span class="fa fa-cog fa-fw"></span> Space Configuration
-                            </a>
-                        </c:if>
-                    </div>
-                </h3>
+        <h2>
+            <span>${text.escape(space.name)}</span>
+            <small>Space Management</small>
+            <div class="pull-right">
+                <c:if test="${identity.spaceAdmin}">
+                    <a class="btn btn-tertiary" href="${bundle.kappLocation}/${console.slug}?page=management/config/space">
+                        <span class="fa fa-cog fa-fw"></span> Configure Space
+                    </a>
+                </c:if>
             </div>
-        </div>
+        </h2>
     </div>
     
     <div class="row">
+        <div class="col-xs-12 m-b-2">
+            <label>Updated</label>
+            <span data-moment-ago="${space.updatedAt}" data-toggle="tooltip"></span>
+            by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(space.updatedBy)}">${space.updatedBy}</a>
+        </div>
         <div class="col-xs-12">
-            <table class="table table-sm table-hover table-striped form-management-kapps" 
+            <h4 class="m-t-4">Kapps</h4>
+            <table class="table table-sm table-hover table-striped management-kapps-table" 
                    data-table-kapps-list> 
                 <thead>
                     <tr>
-                        <th>Kapp</th>
+                        <th>Kapp Name</th>
                         <th>Updated</th>
-                        <th data-orderable="false"></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,6 +62,7 @@
                                 </td>
                                 <td data-order="${currentKapp.updatedAt}">
                                     <span data-moment-ago="${currentKapp.updatedAt}" data-toggle="tooltip"></span>
+                                    by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentKapp.updatedBy)}">${currentKapp.updatedBy}</a>
                                 </td>
                                 <td class="text-right">
                                     <a class="btn btn-xs btn-tertiary"

@@ -2,186 +2,112 @@
 <%@include file="../../../bundle/initialization.jspf" %>
 
 <c:set var="console" value="${form}" scope="request"/>
-<c:set var="currentSpace" value="${space}" scope="request"/>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
 
-<c:set var="currentObj" value="${currentKapp}" scope="request"/>
-<c:set var="attributeDefinitions" value="${currentKapp.kappAttributeDefinitions}" scope="request"/>
-
+<c:if test="${empty currentKapp}">
+    <c:set var="error" value="${i18n.translate('No kapps with the slug KAPPSLUG exist.')
+        .replace('KAPPSLUG', '<b>KAPPSLUG</b>').replace('KAPPSLUG', param.kapp)}" />
+</c:if>
+    
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <!-- Sets title and imports js and css specific to this console. -->
+    <%-- Sets title and imports js and css specific to this console. --%>
     <bundle:variable name="head">
         <c:import url="${bundle.path}/partials/management/head.jsp" charEncoding="UTF-8"/>
     </bundle:variable>
 
     
-    <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+    <%-- BREADCRUMBS START HERE. Remove if not needed. -------------------------------------------%>
     <bundle:variable name="breadcrumb">
-        <li><a href="${bundle.kappLocation}/${console.slug}">Management</a></li>
-        <li><a href="${bundle.kappLocation}/${console.slug}?page=management/kapp&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
-        <li class="active">Configuration</li>
+        <li><a href="${bundle.kappLocation}/${console.slug}">${console.name}</a></li>
+        <c:choose>
+            <c:when test="${not empty currentKapp}">
+                <li><a href="${bundle.kappLocation}/${console.slug}?page=management/kapp&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
+                <li class="active">Configuration</li>
+            </c:when>
+            <c:otherwise>
+                <li class="active">Kapp Not Found</li>
+            </c:otherwise>
+        </c:choose>
     </bundle:variable>
-    <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+    <%-- BREADCRUMBS END HERE. -------------------------------------------------------------------%>
 
-    <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
+    <c:choose>
+        <c:when test="${empty error}">
+        
+            <%-- PAGE CONTENT STARTS HERE --------------------------------------------------------%>
     
-    <div class="page-header">
-        <div class="row">
-            <div class="col-xs-12">
-                <h3>
+            <div class="page-header">
+                <h2>
                     <span>${text.escape(currentKapp.name)}</span>
                     <small>Kapp Configuration</small>
-                </h3>
-            </div>
-        </div>
-    </div>
-                    
-    <div class="row">
-        <div class="col-xs-12">
-            <!-- You must pass ALL attributes you want to update, not just some
-            when updating an object. The following elements are hidden and are placeholders
-            for the attributes we don't want to expose in the UI but need to be sent with the
-            update call -->
-            <div class="hidden">
-                <c:forEach items="${attributeDefinitions}" var="attribute">
-                    <div class="attribute">
-                        <label class="control-label">${i18n.translate(attribute.name)}</label>
-                        <c:if test="${not attribute.isAllowsMultiple()}">
-                            <input class="attributeValue" name="${attribute.name}" value="${fn:escapeXml(currentObj.getAttributeValue(attribute.name))}">
-                        </c:if>
-                        <c:if test="${attribute.isAllowsMultiple()}">
-                            <select class="attributeValues" name="${attribute.name}" multiple="multiple">
-                                <c:forEach var="value" items="${currentObj.getAttributeValues(attribute.name)}">
-                                    <option selected value="${fn:escapeXml(value)}">${value}</option>
-                                </c:forEach>
-                            </select>                            
+                    <div class="pull-right">
+                        <c:if test="${identity.spaceAdmin}">
+                            <a class="btn btn-tertiary" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/activity/overview" target="_blank">
+                                <span class="fa fa-cogs fa-fw"></span> Kinetic Request
+                            </a>
                         </c:if>
                     </div>
-                </c:forEach>
+                </h2>
             </div>
-
-            <!-- DISPLAY OPTIONS -->
-            <div class="panel panel-primary">
-                <div class="panel-heading">${i18n.translate('Display Options')}</div>
-                <div class="panel-body">
-
-                    <!-- Build up Icon Selector-->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Icon')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/icon-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Build up Team Selector -->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Owning Team')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/team-selector-multiple.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Build up User Profile Attribute Definitions-->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'User Card Profile Attributes')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:set scope="request" var="attributeDefs" value="${space.userProfileAttributeDefinitions}"/>
-                            <c:import url="${bundle.path}/partials/management/multiple-attributes-checkbox-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                </div>
-            </div>
-
-
-            <!-- WORKFLOW OPTIONS -->
-            <div class="panel panel-info">
-                <div class="panel-heading">${i18n.translate('Workflow Options')}</div>
-                <div class="panel-body">
-
-                    <!-- Build up Days Due Selector-->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Days Due')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/daysdue-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Build up Team Selector -->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Assignee Team')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/team-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Build up Approver Selector -->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Approver')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/approver-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Build up Form Selector -->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Task Form Slug') || fn:containsIgnoreCase(attribute.name, 'Approval Form Slug')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/form-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Build up Notification Selector -->
-                    <c:forEach items="${attributeDefinitions}" var="attribute">
-                        <c:if test="${fn:containsIgnoreCase(attribute.name, 'Notification Template Name')}">
-                            <c:set scope="request" var="thisAttribute" value="${attribute}"/>
-                            <c:import url="${bundle.path}/partials/management/notification-selector.jsp" charEncoding="UTF-8" />
-                        </c:if>
-                    </c:forEach>
-                </div>
-            </div>
+            
+            <div class="kapp-configuration-container">
+                <ul class="nav nav-tabs h4 stacked-xs" role="tablist" id="kapp-configuration-tabs">
+                    <li role="presentation" class="active"><a href="#display" aria-controls="display" role="tab" data-toggle="tab">${i18n.translate('Display Options')}</a></li>
+                    <li role="presentation"><a href="#workflow" aria-controls="workflow" role="tab" data-toggle="tab">${i18n.translate('Workflow Options')}</a></li>
+                    <li role="presentation"><a href="#categories" aria-controls="categories" role="tab" data-toggle="tab">${i18n.translate('Categories')}</a></li>
+                </ul>
                 
-            <div class="row m-b-2">
-                <div class="col-xs-12">
-                    <div class="form-buttons pull-right">
-                        <button data-objecttype="Kapp" data-ajaxpath="/kapps/${currentKapp.slug}" class="btn btn-success update-object-btn">
-                            <span class="fa fa-check fa-fw"></span>
-                            <span>Update Kapp</span>
-                        </button>
+                <div class="tab-content">
+                    
+                    <%-- DISPLAY OPTIONS ----------------------------------------------------------------%>
+                    <div role="tabpanel" class="tab-pane active" id="display" 
+                         data-save-container data-source="/kapps/${currentKapp.slug}" data-source-name="kapp"
+                         data-config-partial="/config/kapp/display&kapp=${currentKapp.slug}">
+                         
+                        <c:import url="${bundle.path}/partials/management/config/kapp/display.jsp" charEncoding="UTF-8" />
+                                        
                     </div>
+                    
+                    <%-- WORKFLOW OPTIONS ----------------------------------------------------------------%>
+                    <div role="tabpanel" class="tab-pane" id="workflow" 
+                         data-save-container data-source="/kapps/${currentKapp.slug}" data-source-name="kapp"
+                         data-config-partial="/config/kapp/workflow&kapp=${currentKapp.slug}">
+                         
+                        <c:import url="${bundle.path}/partials/management/config/kapp/workflow.jsp" charEncoding="UTF-8" />
+                                        
+                    </div>
+                
+                    <%-- CATEGORIES ----------------------------------------------------------------------%>
+                    <div role="tabpanel" class="tab-pane" id="categories" 
+                         data-save-container data-source="/kapps/${currentKapp.slug}" data-source-name="kapp">
+                         
+                        <c:import url="${bundle.path}/partials/management/config/kapp/categories.jsp" charEncoding="UTF-8" />
+                                        
+                    </div>
+                
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
-
-    <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
-    <bundle:variable name="aside">
-        <h3>${form.name}</h3>
-        <h4>
-            <span><a href="${bundle.kappLocation}/${form.slug}?page=management/forms&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a> > </span>
-            <small>${text.escape(currentObj.name)}</small>
-        </h4>
-        <hr class="border-color-white" />
-        <p>
-            Here you can find modify different properties for this form including Workflow Options, Categorizations and the forms Description.
-        </p>
-        <p>
-            They system was designed to be hierarchical so that properties configured at the kapp level (this level) override properties set at the Space level. Properties configured here will be used within the workflow rules and will ignore settings configured at the Space level. If routing rules are not configured here, rules set at the Space level will be used.
-        </p>
-        <h4>
-            Advanced Management
-        </h4>
-        <p>
-            The <span class="strong">Kinetic Request</span> Management Console is for advanced configuration of portals and forms. Most common configurations can be made using this Admin Console.
-        </p>
-        <a target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/activity/overview" class="btn btn-block btn-default">
-            <span class="glyphicon glyphicon-cog pull-left" aria-hidden="true"></span> Kinetic Request
-        </a>
-        <p/>
-    </bundle:variable>
-    <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
+            
+            <%-- PAGE CONTENT ENDS HERE ---------------------------------------------------------%>
     
+            <%-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -----------------------%>
+            <bundle:variable name="aside">
+                <h3>Kapp Management</h3>
+                <h5>${currentKapp.name}</h5>
+                <hr />
+                <p>Here you can update different properties of the kapp including display options, workflow options, and categories.</p>
+                <p>The system was designed to be hierarchical so that properties configured here at the kapp level will override properties set at the space level.</p>
+                <p>If any properties are not configured here, the properties set at the space level will be used.</p>
+                <p>Furthermore, if the properties are set at the form level, those will override the properties set here.</p>
+            </bundle:variable>
+            <%-- RIGHT SIDEBAR CONTENT ENDS HERE. -----------------------------------------------%>
+            
+        </c:when>
+        <c:otherwise>
+            <c:import url="${bundle.path}/partials/error.jsp" charEncoding="UTF-8">
+                <c:param name="message" value="${error}"/>
+            </c:import>
+        </c:otherwise>
+    </c:choose>
     
 </bundle:layout>

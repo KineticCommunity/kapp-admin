@@ -8,8 +8,8 @@
 </bundle:stylepack>
 
 <bundle:scriptpack>
-    <bundle:script src="${bundle.location}/js/management/form.js" />
     <bundle:script src="${bundle.location}/js/management/management.js" />
+    <bundle:script src="${bundle.location}/js/management/form.js" />
     <bundle:script src="${bundle.location}/libraries/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js" />
     <bundle:script src="${bundle.location}/libraries/fontawesome-iconpicker/js/fontawesome-iconpicker.min.js" />
 </bundle:scriptpack>

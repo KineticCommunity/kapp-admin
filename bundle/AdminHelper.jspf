@@ -402,6 +402,9 @@
         }
         
         public Boolean isFormOwner(User user, Form form){
+            if (user == null || form == null){
+                return Boolean.FALSE;
+            }
             for (Team team : user.getTeams()){
                 if (form.hasAttributeValue("Owning Team", team.getName())) {
                     return Boolean.TRUE;

@@ -36,8 +36,9 @@ body > div.view-port > div.container > div.row > div.tab-content > div.row > div
   clear: both;
 }
 body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 {
-  margin-top: 10px;
+  margin: 10px 0 0 0;
   padding: 0;
+  line-height: 3rem;
 }
 body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-primary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-primary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-secondary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-secondary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-tertiary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-tertiary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-default, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="submit-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="custom"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="custom"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="previous-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="previous-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-link, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .btn-subtle, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form button[data-element-type="button"][data-button-type="save"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 button[data-element-type="button"][data-button-type="save"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 section.page form .fileinput-button, section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h1 .fileinput-button, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-primary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-primary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-secondary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-secondary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-tertiary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-tertiary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-default, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="submit-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="custom"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="custom"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="previous-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="previous-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-link, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .btn-subtle, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form button[data-element-type="button"][data-button-type="save"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 button[data-element-type="button"][data-button-type="save"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 section.page form .fileinput-button, section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h2 .fileinput-button, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-primary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-primary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-secondary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-secondary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-tertiary, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-tertiary-complement, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-default, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="submit-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="submit-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="custom"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="custom"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="previous-page"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="previous-page"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-link, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .btn-subtle, body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form button[data-element-type="button"][data-button-type="save"], section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 button[data-element-type="button"][data-button-type="save"], body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 section.page form .fileinput-button, section.page form body > div.view-port > div.container > div.row > div.tab-content > div.row > div.content-main > div.page-header > h3 .fileinput-button {
   vertical-align: top;
@@ -67,6 +68,9 @@ body > div.view-port > div.container > div.row > div.tab-content > div.row > div
   color: #e8f7fd;
   font-size: 12px;
   left: -7px;
+}
+body > div.view-port > div.container > div.row > div.tab-content > div.row > div.aside hr {
+  border-color: white;
 }
 body > div.view-port > div.container > div.row > div.tab-content > div.row.aside-closed > div.aside {
   position: absolute;
@@ -147,15 +151,19 @@ a:hover, a:focus {
 
 /* Headings
  *-------------------------------------- */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   color: #7e8083;
 }
-h1 > small, h2 > small, h3 > small, h4 > small, h5 > small, h6 > small {
+h1 > small, h2 > small, h3 > small, h4 > small, h5 > small, h6 > small,
+.h1 > small, .h2 > small, .h3 > small, .h4 > small, .h5 > small, .h6 > small {
   line-height: inherit;
 }
-h1 > .label, h1 .base-font, h2 > .label, h2 .base-font, h3 > .label, h3 .base-font, h4 > .label, h4 .base-font, h5 > .label, h5 .base-font, h6 > .label, h6 .base-font {
+h1 > .label, h1 .base-font, h2 > .label, h2 .base-font, h3 > .label, h3 .base-font, h4 > .label, h4 .base-font, h5 > .label, h5 .base-font, h6 > .label, h6 .base-font,
+.h1 > .label,
+.h1 .base-font, .h2 > .label, .h2 .base-font, .h3 > .label, .h3 .base-font, .h4 > .label, .h4 .base-font, .h5 > .label, .h5 .base-font, .h6 > .label, .h6 .base-font {
   font-family: "Source Sans Pro", sans-serif;
 }
 
@@ -699,6 +707,7 @@ select {
   text-decoration: none;
   width: 100%;
   height: 30px;
+  color: #7e8083;
   background: white;
   border-width: 1px;
   border-style: solid;
@@ -723,6 +732,11 @@ select:focus {
   border-color: #1594C4;
 }
 
+select[multiple],
+select.form-control[multiple] {
+  height: auto;
+}
+
 textarea,
 textarea.form-control {
   resize: vertical;
@@ -739,6 +753,10 @@ div.form-control {
   background-color: #ececec;
   color: #333333;
   cursor: default;
+}
+
+select option:disabled {
+  background-color: #ececec;
 }
 
 input[readonly],

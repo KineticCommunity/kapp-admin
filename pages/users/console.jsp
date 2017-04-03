@@ -2,11 +2,6 @@
 <%@include file="../../bundle/initialization.jspf" %>
 <%@include file="../../bundle/router.jspf" %>
 
-<%--bundle:request method="get"
-                url="${bundle.apiPath}/users?include=attributes%2CprofileAttributes"
-                var="userList"
-                scope="request"></bundle:request --%>
-
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">

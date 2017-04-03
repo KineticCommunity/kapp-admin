@@ -30,6 +30,7 @@
         <app:headContent/>
         <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
+            <bundle:style src="${bundle.location}/libraries/jquery-ui/jquery-ui.css"/>
             <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.css"/>
             <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
             <bundle:style src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.css"/>

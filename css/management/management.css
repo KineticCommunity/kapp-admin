@@ -33,3 +33,80 @@ div.form-activity-content ul#form-activity-nav li {
   line-height: 2.4rem;
   font-weight: bold;
 }
+
+.radio-label,
+.checkbox-label {
+  margin-right: 1rem;
+}
+.radio-label > label.label,
+.checkbox-label > label.label {
+  font-size: 100%;
+  display: inline-block;
+  line-height: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+.radio-label > label.label,
+.checkbox-label > label.label {
+  cursor: pointer;
+}
+.radio-label > input,
+.checkbox-label > input {
+  display: none;
+}
+.radio-label > input + label.label:before,
+.checkbox-label > input + label.label:before {
+  font-family: FontAwesome;
+  content: "\f096";
+  font-weight: 400;
+  display: inline-block;
+  width: 1.28571429em;
+  text-align: center;
+}
+.radio-label > input + label.label:before {
+  content: "\f1db";
+}
+.radio-label > input:checked + label.label,
+.checkbox-label > input:checked + label.label {
+  background-color: #5cb85c;
+}
+.checkbox-label > input:checked + label.label:before {
+  content: "\f046";
+}
+.radio-label > input:checked + label.label:before {
+  content: "\f058";
+}
+
+.ui-spinner.ui-widget {
+  border: none;
+  color: inherit;
+  display: block;
+}
+.ui-spinner.ui-widget > input {
+  margin: 0;
+  padding-right: 1.5rem;
+}
+.ui-spinner.ui-widget > a.ui-spinner-button {
+  width: 2rem;
+  color: inherit;
+  cursor: pointer;
+}
+.ui-spinner.ui-widget > a.ui-spinner-button:hover {
+  text-decoration: none;
+  color: black;
+}
+.ui-spinner.ui-widget > a.ui-spinner-up:after,
+.ui-spinner.ui-widget > a.ui-spinner-down:after {
+  font-family: FontAwesome;
+  content: "\f0d8";
+  font-size: 1.4rem;
+  line-height: 1.5rem;
+}
+.ui-spinner.ui-widget > a.ui-spinner-down:after {
+  content: "\f0d7";
+}
+.ui-spinner.ui-widget > a.ui-spinner-up > *,
+.ui-spinner.ui-widget > a.ui-spinner-down > * {
+  display: none;
+}
