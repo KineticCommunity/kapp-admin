@@ -8,6 +8,8 @@
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
+<c:set var="catalogKapp" value="${space.getKapp(space.getAttributeValue('Catalog Kapp Slug'))}" />
+<c:set var="feedbackForm" value="${catalogKapp.getForm(space.getAttributeValue('Feedback Form Slug'))}" />
 
 <c:choose>
     <c:when test="${empty currentKapp}">
@@ -25,10 +27,10 @@
     <bundle:variable name="head">
         <c:import url="${bundle.path}/partials/management/head.jsp" charEncoding="UTF-8"/>
         <script>
-            bundle.adminFormManagement.responseUrl = "${AdminHelper.responseUrl}";
-            bundle.adminFormManagement.formSlug = "${currentForm.slug}";
-            bundle.adminFormManagement.kappSlug = "${currentKapp.slug}";
-            bundle.adminFormManagement.consoleSlug = "${form.slug}";
+            bundle.adminManagement.responseUrl = "${AdminHelper.responseUrl}";
+            bundle.adminManagement.formSlug = "${currentForm.slug}";
+            bundle.adminManagement.kappSlug = "${currentKapp.slug}";
+            bundle.adminManagement.consoleSlug = "${form.slug}";
         </script>
     </bundle:variable>
 
@@ -140,23 +142,43 @@
                 <ul class="nav nav-tabs stacked-xs" role="tablist" id="form-activity-nav">
                     <li role="presentation" class="active"><a href="#submissions" aria-controls="submissions" role="tab" data-toggle="tab">${i18n.translate('Submissions')}</a></li>
                     <%--<li role="presentation"><a href="#performance" aria-controls="performance" role="tab" data-toggle="tab">${i18n.translate('Performance')}</a></li>--%>
-                    <li role="presentation"><a href="#feedback" aria-controls="feedback" role="tab" data-toggle="tab">${i18n.translate('Feedback')}</a></li>
+                    <c:if test="${not empty feedbackForm}">
+                        <li role="presentation"><a href="#feedback" aria-controls="feedback" role="tab" data-toggle="tab">${i18n.translate('Feedback')}</a></li>
+                    </c:if>
                 </ul>
         
                 <%-- Tab panes --%>
                 <div class="tab-content">
-                    <%-- Members --%>
+                    <%-- Submissions --%>
                     <div role="tabpanel" class="tab-pane active" id="submissions">
                         <div class="form-activity recent-submissions">
-                            <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
-                                   id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}" 
-                                   data-recent-submissions-table>
-                                <tr>
-                                    <td class="alert alert-info">
-                                        <span class="fa fa-spinner fa-spin"></span>
-                                        Loading
-                                    </td>
-                                </tr>
+                            <table data-submissions-data-table
+                                   data-source="/kapps/${currentKapp.slug}/forms/${currentForm.slug}/submissions"
+                                   data-source-include="details,values,form.attributes,form.kapp.attributes"
+                                   data-source-query="timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
+                                   data-source-limit="25"
+                                   data-order-column="3" data-order-direction="desc"
+                                   style="width:100%" class="table table-hover dt-responsive nowrap" 
+                                   id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}">
+                                <thead>
+                                    <tr>
+                                        <th data-data="handle" 
+                                            data-render-type="submissionManagementLink">Confirmation #</th>
+                                        <th data-data="label">Submission Label</th>
+                                        <th data-data="coreState"
+                                            data-render-type="statusLabel">Status</th>
+                                        <th data-data="submittedAt"
+                                            data-render-type="submitted">Submitted</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <span class="fa fa-spinner fa-spin"></span>
+                                            Loading
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -167,9 +189,38 @@
                     </div>
         
                     <%-- Feedback --%>
-                    <div role="tabpanel" class="tab-pane" id="feedback">
-                        <h1>Coming Soon</h1>
-                    </div>
+                    <c:if test="${not empty feedbackForm}">
+                        <div role="tabpanel" class="tab-pane" id="feedback">
+                            <div class="form-activity feedback-activity">
+                                <table data-submissions-data-table
+                                       data-source="/kapps/${catalogKapp.slug}/forms/${feedbackForm.slug}/submissions"
+                                       data-source-include="details,values"
+                                       data-source-query="timeline=submittedAt&direction=DESC"
+                                       data-source-limit="25"
+                                       data-order-column="2" data-order-direction="desc"
+                                       style="width:100%" class="table table-hover dt-responsive nowrap" 
+                                       id="feedback-activity-table-${currentKapp.slug}-${currentForm.slug}">
+                                    <thead>
+                                        <tr>
+                                            <th data-data="values.Comments">Comments</th>
+                                            <th data-data="values.Relevant Screenshots"
+                                                data-render-type="attachment">Attachments</th>
+                                            <th data-data="submittedAt"
+                                                data-render-type="submitted">Submitted</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <span class="fa fa-spinner fa-spin"></span>
+                                                Loading
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </c:if>
                 </div>
         
             </div>

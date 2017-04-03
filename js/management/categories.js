@@ -4,44 +4,7 @@
      *   This section is executed on page load to register events and otherwise manipulate the DOM.
      *--------------------------------------------------------------------------------------------*/  
     $(function() {    
-        /*
-         * Initialize DataTable for dom sourced tables
-         */
-        $("table[data-table-dom]").each(function(i,table){
-            var pageLength = $(table).data("page-length") || 25;
-            var dom = $(table).data("dom") 
-                    || $(table).find("tbody tr").length > pageLength 
-                        ? "<'dt-title'f>t<'pull-right'p>i"
-                        : ($(table).find("tbody tr").length > 0
-                            ? "<'dt-title'f>ti"
-                            : "<'dt-title'>t");
-            var options = {
-                autoWidth: false,
-                dom: dom,
-                pageLength: pageLength,
-                language: {
-                    search: "Filter",
-                    paginate: {
-                        previous: "<",
-                        next: ">"
-                    }
-                },
-                drawCallback: function(){
-                    $("[data-tooltip]").tooltip();
-                }
-            };
-            if ($(table).data("empty-message")){
-                options.language.emptyTable = $(table).data("empty-message");
-            }
-            $(table).dataTable(options);
-            $(table).on("click", "td", function(e){
-                if (e.target == this){
-                    $(this).closest("tr").toggleClass("full-text");
-                }
-            });
-            $(table).parent().find("div.dt-title").prepend($("<h4>", {class: "pull-left"}).append($(table).data("table-name")));
-        });
-        
+                
         /* Create Attribute Definitions if they don't exist */
         // Get kapp name
         var kapp = $('div.manage-categories').attr('data-slug');
@@ -178,7 +141,7 @@
         /* Add click event to submit edit */
         $('button.edit-category').on('click', function(){
             $('div.workarea').notifie({ exit: true });
-            $('button.add-category').notifie({ exit: true });
+            $('button.add-category, button.add-category-init').notifie({ exit: true });
             event.preventDefault();
             // Get the kapp name
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#change-name').val(), displayName = $('#change-display').val(), originalCat = $('input#parent-name').val();
@@ -220,7 +183,7 @@
         });
 
         /* Click event to show add category from blank item or header button */
-        $('div.page-header button.add-category, a.add-category').on('click',function(){
+        $('button.add-category-init, a.add-category-init').on('click',function(){
             // Deselect selected
             clearSelectedCategory();
             // Show Edit form
@@ -231,7 +194,7 @@
         /* Add button event to add cats */
         $('div#panel-add-cat button.add-category').on('click', function(event){
             $('div.workarea').notifie({ exit: true });
-            $('button.add-category').notifie({ exit: true });
+            $('button.add-category, button.add-category-init').notifie({ exit: true });
             event.preventDefault();
             var kapp = $('div.manage-categories').attr('data-slug'), name = $('#category-name').val(), displayName = $('#display-name').val(), parent = $('input#parent-name').val();
             // Check if both fields are empty
@@ -261,7 +224,7 @@
         /* Add click event to delete category */
         $('div.workarea').on('click', 'button.delete', function(event){
             $('div.workarea').notifie({ exit: true });
-            $('button.add-category').notifie({ exit: true });
+            $('button.add-category, button.add-category-init').notifie({ exit: true });
             event.stopImmediatePropagation();
             var name = $(this).closest('li').attr('data-id');
             deleteCategory($('div.manage-categories').attr('data-slug'),name);

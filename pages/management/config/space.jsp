@@ -23,13 +23,6 @@
         <h2>
             <span>${text.escape(space.name)}</span>
             <small>Space Configuration</small>
-            <div class="pull-right">
-                <c:if test="${identity.spaceAdmin}">
-                    <a class="btn btn-tertiary" href="${bundle.spaceLocation}/app/#/admin/space/details" target="_blank">
-                        <span class="fa fa-cogs fa-fw"></span> Kinetic Request
-                    </a>
-                </c:if>
-            </div>
         </h2>
     </div>
     
@@ -69,6 +62,15 @@
         <hr />
         <p>Here you can update different properties of the space including display options and workflow options.</p>
         <p>The system was designed to be hierarchical so that properties set here at the space level will be the defaults used if they are not set at the kapp and/or form levels.</p>
+        <c:if test="${identity.spaceAdmin}">
+            <hr />
+            <h6>Advanced Management</h6>
+            <p>
+                Visit the <a href="${bundle.spaceLocation}/app/#/admin/space/details" target="_blank">Kinetic Request</a> 
+                Management Console for advanced configuration options.
+            </p>
+        </c:if>
+        
     </bundle:variable>
     <%-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------%>
     

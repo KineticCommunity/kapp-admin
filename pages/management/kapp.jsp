@@ -57,8 +57,7 @@
                 </div>
                 <div class="col-xs-12">
                     <h4 class="m-t-4">Forms</h4>
-                    <table class="table table-sm table-hover table-striped form-management-forms" 
-                           data-table-forms-list> 
+                    <table class="table table-sm table-hover table-striped" data-table-forms-list> 
                         <thead>
                             <tr>
                                 <th>Form</th>
@@ -122,6 +121,9 @@
 <!--                 <hr /> -->
 <%--             </bundle:variable> --%>
             <%-- RIGHT SIDEBAR CONTENT ENDS HERE. -----------------------------------------------%>
+            
+            <%-- Clear saved states for DataTables on child pages --%>
+            <span data-submissions-data-table-state-reset="recent-submissions-table,feedback-activity-table"></span>
             
         </c:when>
         <c:otherwise>

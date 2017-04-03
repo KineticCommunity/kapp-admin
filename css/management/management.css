@@ -34,6 +34,12 @@ div.form-activity-content ul#form-activity-nav li {
   font-weight: bold;
 }
 
+div.form-submission.fulfillment-process table td.row-footer {
+  font-style: italic;
+  border-top: 0;
+  padding-top: 0;
+}
+
 .radio-label,
 .checkbox-label {
   margin-right: 1rem;

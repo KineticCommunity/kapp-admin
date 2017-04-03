@@ -13,6 +13,9 @@
     <%-- Sets title and imports js and css specific to this console. --%>
     <bundle:variable name="head">
         <c:import url="${bundle.path}/partials/management/head.jsp" charEncoding="UTF-8"/>
+        <bundle:scriptpack>
+            <bundle:script src="${bundle.location}/js/management/categories.js"/>
+        </bundle:scriptpack>
     </bundle:variable>
 
     
@@ -40,13 +43,6 @@
                 <h2>
                     <span>${text.escape(currentKapp.name)}</span>
                     <small>Kapp Configuration</small>
-                    <div class="pull-right">
-                        <c:if test="${identity.spaceAdmin}">
-                            <a class="btn btn-tertiary" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/activity/overview" target="_blank">
-                                <span class="fa fa-cogs fa-fw"></span> Kinetic Request
-                            </a>
-                        </c:if>
-                    </div>
                 </h2>
             </div>
             
@@ -99,6 +95,14 @@
                 <p>The system was designed to be hierarchical so that properties configured here at the kapp level will override properties set at the space level.</p>
                 <p>If any properties are not configured here, the properties set at the space level will be used.</p>
                 <p>Furthermore, if the properties are set at the form level, those will override the properties set here.</p>
+                <c:if test="${identity.spaceAdmin}">
+                    <hr />
+                    <h6>Advanced Management</h6>
+                    <p>
+                        Visit the <a href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/activity/overview" target="_blank">Kinetic Request</a> 
+                        Management Console for advanced configuration options.
+                    </p>
+                </c:if>
             </bundle:variable>
             <%-- RIGHT SIDEBAR CONTENT ENDS HERE. -----------------------------------------------%>
             

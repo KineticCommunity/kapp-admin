@@ -123,31 +123,12 @@
                             </c:if>
                             <i class="small">${profileAttributeDefinition.description}</i>
                         </label>
-                        <c:choose>
-                            <c:when test="${text.equals(profileAttributeDefinition.name, 'Email Notifications')}">
-                                <%-- If "Email Notifications" attribute, show as radio buttons --%>
-                                <c:set var="emailNotifications" value="${currentUser.getProfileAttributeValue(profileAttributeDefinition.name) ne 'No'}" />
-                                <label for="email-notification-yes" class="display-inline-block m-r-2">
-                                    <input type="radio" name="email-notification" value="Yes" id="email-notification-yes"
-                                           ${emailNotifications ? 'checked' : ''} />
-                                    <span>Yes</span>
-                                </label>
-                                <label for="email-notification-no" class="display-inline-block m-r-2">
-                                    <input type="radio" name="email-notification" value="No" id="email-notification-no"
-                                           ${!emailNotifications ? 'checked' : ''} />
-                                    <span>No</span>
-                                </label>
-                            </c:when>
-                            <c:otherwise>
-                                <%-- For all other profile attributes, show as input box(es) --%>
-                                <c:forEach var="profileAttributeValue" items="${currentUser.getProfileAttributeValues(profileAttributeDefinition.name)}">
-                                    <input type="text" class="form-control" value="${profileAttributeValue}" />
-                                </c:forEach>
-                                <c:if test="${not currentUser.hasProfileAttribute(profileAttributeDefinition.name)}">
-                                    <input type="text" class="form-control" />
-                                </c:if>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:forEach var="profileAttributeValue" items="${currentUser.getProfileAttributeValues(profileAttributeDefinition.name)}">
+                            <input type="text" class="form-control" value="${profileAttributeValue}" />
+                        </c:forEach>
+                        <c:if test="${not currentUser.hasProfileAttribute(profileAttributeDefinition.name)}">
+                            <input type="text" class="form-control" />
+                        </c:if>
                     </div>
                 </c:forEach>
             </div>

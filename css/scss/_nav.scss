@@ -105,13 +105,12 @@ nav#bundle-subheader{
   > li.active > a,
   > li.active > a:hover,
   > li.active > a:focus {
-    color: #000;
+    color: $tertiary;
     background-color: transparent;
     border:none;
     border-bottom: 2px solid $tertiary;
   }
-   > li > a:hover{
-    color: $tertiary;
+  > li > a:hover{
     background-color: transparent;
     border:none;
     border-bottom: 2px solid $tertiary;

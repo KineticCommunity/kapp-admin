@@ -371,7 +371,7 @@
      */
     $.fn.dataTable.render.text = function(){
         return function ( d, type, row ){
-            return $.htmlEncode(d);
+            return $.htmlEncode(d || "");
         };
     };
 

@@ -43,12 +43,12 @@
         <div class="col-xs-12">
             <h4 class="m-t-4">Kapps</h4>
             <table class="table table-sm table-hover table-striped management-kapps-table" 
-                   data-table-kapps-list> 
+                   data-table-dom> 
                 <thead>
                     <tr>
                         <th>Kapp Name</th>
                         <th>Updated</th>
-                        <th></th>
+                        <th data-orderable="false"></th>
                     </tr>
                 </thead>
                 <tbody>

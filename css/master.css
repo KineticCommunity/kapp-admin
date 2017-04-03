@@ -982,10 +982,6 @@ section.page.embedded form {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Lists
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-ul {
-  list-style-type: none;
-}
-
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Footer
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -1110,13 +1106,12 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-  color: #000;
+  color: #1594C4;
   background-color: transparent;
   border: none;
   border-bottom: 2px solid #1594C4;
 }
 .nav-tabs > li > a:hover {
-  color: #1594C4;
   background-color: transparent;
   border: none;
   border-bottom: 2px solid #1594C4;

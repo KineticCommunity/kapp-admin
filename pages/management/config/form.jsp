@@ -55,11 +55,6 @@
                     <span>${text.escape(currentForm.name)}</span>
                     <small>Form Configuration</small>
                     <div class="pull-right">
-                        <c:if test="${identity.spaceAdmin}">
-                            <a class="btn btn-tertiary" href="${bundle.spaceLocation}/app/#/admin/space/details" target="_blank">
-                                <span class="fa fa-cogs fa-fw"></span> Kinetic Request
-                            </a>
-                        </c:if>
                         <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
                             <a class="btn btn-tertiary" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                 <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
@@ -123,6 +118,14 @@
                 <p>Here you can update different properties of the form including display options, workflow options, and categories.</p>
                 <p>The system was designed to be hierarchical so that properties configured here at the form level will override properties set at the kapp and space levels.</p>
                 <p>If any properties are not configured here, the properties set at the kapp level will be used. If those properties are not set at the kapp level, the ones from the space level will be used.</p>
+                <c:if test="${identity.spaceAdmin}">
+                    <hr />
+                    <h6>Advanced Management</h6>
+                    <p>
+                        Visit the <a href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentForm.slug}/overview" target="_blank">Kinetic Request</a> 
+                        Management Console for advanced configuration options.
+                    </p>
+                </c:if>
             </bundle:variable>
             <%-- RIGHT SIDEBAR CONTENT ENDS HERE. -----------------------------------------------%>
             

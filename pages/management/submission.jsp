@@ -32,9 +32,9 @@
     <bundle:variable name="head">
         <c:import url="${bundle.path}/partials/management/head.jsp" charEncoding="UTF-8"/>
         <script>
-            bundle.adminFormManagement.submissionId = "${submission.id}";
-            bundle.adminFormManagement.formSlug = "${currentForm.slug}";
-            bundle.adminFormManagement.kappSlug = "${currentKapp.slug}";
+            bundle.adminManagement.submissionId = "${submission.id}";
+            bundle.adminManagement.formSlug = "${currentForm.slug}";
+            bundle.adminManagement.kappSlug = "${currentKapp.slug}";
         </script>
     </bundle:variable>
 
@@ -155,12 +155,11 @@
                 </div>
                 <div class="form-submission fulfillment-process m-b-4">
                     <div class="col-xs-12 overflow-auto">
-                        <table class="table table-striped">
+                        <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Form - Label</th>
-                                    <th>Team</th>
-                                    <th>User</th>
+                                    <th>Submission</th>
+                                    <th>Assignment</th>
                                     <th>Status</th>
                                     <th>Due</th>
                                     <th>Duration</th>
@@ -171,35 +170,40 @@
                                     <tr>
                                         <td>
                                             <span style="padding-left: ${descendant.depth*20}px">
-                                                ${descendant.submission.form.name} - ${descendant.submission.label}</td>
+                                                <a href="${bundle.kappLocation}/${console.slug}?page=management/submission&id=${descendant.submission.id}">
+                                                    ${descendant.submission.form.name} (${descendant.submission.handle})
+                                                </a>
                                             </span>
+                                        </td>
                                         <td>
+                                            <c:set var="assignedTeam" value="${descendant.submission.values['Assigned Team']}" />
+                                            <c:set var="assignedIndividual" value="${descendant.submission.values['Assigned Individual']}" />
                                             <c:choose>
-                                                <c:when test="${not empty teamsKapp 
-                                                                && text.isNotBlank(descendant.submission.values['Assigned Team']) 
-                                                                && not empty TeamsHelper.getTeam(descendant.submission.values['Assigned Team'])}">
-                                                    <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=team&team=${TeamsHelper.getTeam(descendant.submission.values['Assigned Team']).slug}">
-                                                        ${descendant.submission.values['Assigned Team']}
+                                                <c:when test="${not empty teamsKapp && text.isNotBlank(assignedTeam) 
+                                                                && not empty TeamsHelper.getTeam(assignedTeam)}">
+                                                    <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=team&team=${TeamsHelper.getTeam(assignedTeam).slug}">
+                                                        ${assignedTeam}
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${descendant.submission.values['Assigned Team']}
+                                                    <span>${assignedTeam}</span>
                                                 </c:otherwise>
                                             </c:choose>
-                                        </td>
-                                        <td>
+                                            <c:if test="${text.isNotBlank(assignedTeam) && text.isNotBlank(assignedIndividual)}">
+                                                <span>&gt;</span>
+                                            </c:if>
                                             <c:choose>
-                                                <c:when test="${text.isNotBlank(descendant.submission.values['Assigned Individual'])}">
-                                                    <a href="${bundle.spaceLocation}?page=user&username=${text.escapeUrlParameter(descendant.submission.values['Assigned Individual'])}">
-                                                        ${descendant.submission.values['Assigned Individual']}
+                                                <c:when test="${text.isNotBlank(assignedIndividual)}">
+                                                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(assignedIndividual)}">
+                                                        ${assignedIndividual}
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${descendant.submission.values['Assigned Individual']}
+                                                    <span>${assignedIndividual}</span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td>${descendant.submission.values['Status']}</td>
+                                        <td><span class="label ${SubmissionHelper.getStatusClass(descendant.submission)}">${SubmissionHelper.getStatus(descendant.submission)}</span></td>
                                         <td>
                                             <c:if test="${text.isNotBlank(descendant.submission.values['Due Date'])}">
                                                 <c:set var="pastDue" value="${!text.equals(descendant.submission.coreState, 'Closed') && time.parse(descendant.submission.values['Due Date']).isBefore(time.now())}" />
@@ -209,6 +213,13 @@
                                         <td>
                                             <span data-moment-diff-start="${text.equals(submission.type, 'Service') && not empty submission.submittedAt ? submission.submittedAt : submission.createdAt}" 
                                                   data-moment-diff-end="${not empty submission.closedAt ? submission.closedAt : ''}"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="row-footer">
+                                            <span style="padding-left: ${descendant.depth*20}px">
+                                                ${descendant.submission.label}
+                                            </span>
                                         </td>
                                     </tr>
                                 </c:forEach>

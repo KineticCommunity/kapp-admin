@@ -28,6 +28,25 @@
         <meta content='no' name='msapplication-tap-highlight'>
         <link rel="shortcut icon" href="${bundle.location}/images/favicon.ico" type="image/x-icon"/>
         <app:headContent/>
+        <c:set var="kappList">
+            <json:object>
+                <c:forEach var="kappIter" items="${space.kapps}">
+                    <json:object name="${kappIter.slug}">
+                        <json:property name="name" value="${kappIter.name}" />
+                        <json:property name="icon" value="${kappIter.getAttributeValue('Icon')}" />
+                    </json:object>
+                </c:forEach>
+            </json:object>
+        </c:set>
+        <script>
+            <%-- Set needed variables into js bundle object --%>
+            bundle.config.userLocale = "${locale}";
+            bundle.config.adminKappSlug = "${space.getAttributeValue('Admin Kapp Slug')}";
+            bundle.config.teamsKappSlug = "${space.getAttributeValue('Teams Kapp Slug')}";
+            bundle.config.kapps = ${kappList};
+            bundle.config.kapps["currentKapp"] = "${kapp.slug}";
+        </script>
+        
         <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
             <bundle:style src="${bundle.location}/libraries/jquery-ui/jquery-ui.css"/>
@@ -38,8 +57,6 @@
             <bundle:style src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
-        <%-- Set User Locale into bundle object. --%>
-        <script>bundle.config.userLocale = '${locale}';</script>
         <bundle:scriptpack>
             <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
             <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>

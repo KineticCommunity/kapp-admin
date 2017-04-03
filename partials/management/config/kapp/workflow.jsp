@@ -38,13 +38,6 @@
             </json:object>
         </json:object>
         <json:object>
-            <json:property name="name" value="Task Assignee Individual" />
-            <json:property name="partial" value="teamMemberSelector.jsp" />
-            <json:object name="data">
-                <json:property name="teamAttributeName" value="Task Assignee Team" />
-            </json:object>
-        </json:object>
-        <json:object>
             <json:property name="name" value="Approver" />
             <json:property name="partial" value="approverSelector.jsp" />
         </json:object>
