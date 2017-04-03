@@ -550,7 +550,7 @@
             }
             if (statusCounters.failedRows.length > 0){
                 var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
-                var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
+                var table = $("<table>").addClass("table table-hover table-bordered dt-responsive nowrap").appendTo(failuresContainer);
                 var failures = {
                     columns: _.map(_.keys(statusCounters.failedRows[0]), function(key){return {title: key, data: key};}),
                     data: statusCounters.failedRows,

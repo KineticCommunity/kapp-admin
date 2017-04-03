@@ -51,7 +51,7 @@
             
             <div class="row">
                 <div class="col-xs-12">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Enabled Locales"
                            data-empty-message="No enabled locales found. Please enable locales using the dropdown below.">
                         <thead>

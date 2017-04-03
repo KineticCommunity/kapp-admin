@@ -81,7 +81,7 @@
                             </h4>
                         </div>
                        
-                        <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="robot-schedules-table"
+                        <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedules-table"
                                data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}">
                             <tr>
                                 <td class="alert alert-info">
@@ -100,7 +100,7 @@
                             </h4>
                         </div>
                        
-                        <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="robot-executions-table"
+                        <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-executions-table"
                                data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}">
                             <tr>
                                 <td class="alert alert-info">

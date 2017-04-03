@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-xs-12">
             
-            <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="robots-table">
+            <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robots-table">
                 <tr>
                     <td class="alert alert-info">
                         <span class="fa fa-spinner fa-spin"></span>

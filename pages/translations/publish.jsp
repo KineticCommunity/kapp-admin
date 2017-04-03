@@ -53,7 +53,7 @@
             
             <div class="row entries-container">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Changes Pending Publish"
                            data-empty-message="No translations waiting to be published."> 
                         <thead>

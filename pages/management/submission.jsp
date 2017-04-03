@@ -235,7 +235,7 @@
                 </div>
                 <div class="form-submission submission-activity m-b-4">
                     <div class="col-xs-12 overflow-auto">
-                        <table class="table table-striped">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Type</th>
@@ -283,7 +283,7 @@
                 </div>
                 <div class="form-submission submission-values m-b-4">
                     <div class="col-xs-12 overflow-auto">
-                        <table class="table table-striped">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Field</th>

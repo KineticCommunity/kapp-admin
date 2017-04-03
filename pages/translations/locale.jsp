@@ -102,7 +102,7 @@
             
             <div class="row entries-container">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-state-save="true"
                            id="locale_${i18nKapp.slug}_${text.escape(param.locale)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&locale=${text.escape(param.locale)}"

@@ -30,7 +30,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <table width="100%" class="table table-hover table-striped dt-responsive" id="users-table"
+            <table width="100%" class="table table-hover dt-responsive" id="users-table"
                    data-user-list data-space-name="${space.name}" data-console-slug="${form.slug}"> 
                 <thead class="nowrap"></thead>
                 <tbody>

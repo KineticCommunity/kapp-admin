@@ -218,7 +218,7 @@
                 <br />
                 <div class="row new-entries-container">
                     <div class="col-xs-12 overflow-auto">
-                        <table class="table table-hover table-striped" 
+                        <table class="table table-hover" 
                                data-table-name="Translation Entries"
                                data-add-entries-table data-context="${param.context}"
                                data-empty-message="You have not added any new entries yet.">

@@ -105,7 +105,7 @@
             
             <div class="row entries-container">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
+                    <table class="table table-hover" data-sort="false" data-dom="t" data-table-dom> 
                         <thead>
                             <tr>
                                 <th>Key</th>
@@ -137,7 +137,7 @@
                     <br />
                 </div>
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-state-save="true" 
+                    <table class="table table-hover" data-state-save="true" 
                            id="key_${i18nKapp.slug}_${text.escape(param.context)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&context=${text.escape(param.context)}&key=${text.escape(param.key)}"
                            data-empty-message="No translations found for the above key in the <b>${text.escape(param.context)}</b> context.">

@@ -45,7 +45,7 @@
                                     
             <div class="row">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-table-dom
+                    <table class="table table-hover" data-table-dom
                            data-empty-message="No unexpected contexts."> 
                         <thead>
                             <tr>

@@ -43,7 +43,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="col-xs-12">
-                        <table id="table-notifications" style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
+                        <table id="table-notifications" style="width:100%" class="table table-hover dt-responsive nowrap" 
                                data-console-slug="${form.slug}" 
                                data-kapp-slug="${kapp.slug}" 
                                data-datastore-slug="notification-data" 

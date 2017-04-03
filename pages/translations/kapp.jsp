@@ -102,7 +102,7 @@
                     <h4>Locales</h4>
                 </div>
                 <div class="col-xs-12">
-                    <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
+                    <table class="table table-hover" data-sort="false" data-dom="t" data-table-dom> 
                         <thead>
                             <tr>
                                 <th style="width:15%;">Default Locale</th>
@@ -169,7 +169,7 @@
             <div class="row">
 
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Core Contexts"> 
                         <thead>
                             <tr>
@@ -233,7 +233,7 @@
             
             <div class="row">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Form Contexts"
                            data-empty-message="No form contexts found. Add forms to your Kapp to see form contexts."> 
                         <thead>
@@ -283,7 +283,7 @@
             
             <div class="row">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Custom Contexts"
                            data-empty-message="No custom contexts found. You may create custom contexts below."> 
                         <thead>

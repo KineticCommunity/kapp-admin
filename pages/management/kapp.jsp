@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-xs-12">
                     <h4 class="m-t-4">Forms</h4>
-                    <table class="table table-sm table-hover table-striped" data-table-forms-list> 
+                    <table class="table table-sm table-hover" data-table-forms-list> 
                         <thead>
                             <tr>
                                 <th>Form</th>

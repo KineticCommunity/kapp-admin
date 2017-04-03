@@ -83,7 +83,7 @@
                 </div>
                 
                 <div class="col-xs-12">
-                    <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
+                    <table style="width:100%" class="table table-hover dt-responsive nowrap" 
                            id="datastore-records-table-${currentStore.slug}" data-datastore-records-table>
                         <tr>
                             <td class="alert alert-info">

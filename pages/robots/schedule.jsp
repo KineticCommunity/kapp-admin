@@ -86,7 +86,7 @@
                                     </h4>
                                 </div>
                                
-                                <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="robot-schedule-executions-table"
+                                <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedule-executions-table"
                                        data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}" data-robot-schedule-id="${currentSchedule.id}">
                                     <tr>
                                         <td class="alert alert-info">

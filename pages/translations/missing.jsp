@@ -172,7 +172,7 @@
             <div class="row entries-container">
                 <c:if test="${not empty keyBreadCrumb}">
                     <div class="col-xs-12">
-                        <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
+                        <table class="table table-hover" data-sort="false" data-dom="t" data-table-dom> 
                             <thead>
                                 <tr>
                                     <th>Key</th>
@@ -188,7 +188,7 @@
                     </div>
                 </c:if>
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-state-save="true"
+                    <table class="table table-hover" data-state-save="true"
                            id="missing_${i18nKapp.slug}_${text.escape(param.context)}_${text.escape(param.locale)}"
                            data-table-source="${missingTranslationsDataUrl}"
                            data-empty-message="No missing translations.">
