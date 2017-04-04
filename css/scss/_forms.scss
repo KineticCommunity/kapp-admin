@@ -251,36 +251,30 @@ section.page {
 
     /* Attachment files
      *-------------------------------------- */
-    [data-element-name=Attachment] {
-      @include border-radius();
-      clear: both;
-      &.empty {
-        .file-table > .file-header {
-          display: none;
-        }
-      }
-      .file-table {
-        display: table;
-        margin: 0px;
-        padding: 0px;
+    .empty > .file-table > .file-header {
+      display: none;
+    }
+    .file-table {
+      display: table;
+      margin: 0px;
+      padding: 0px;
 
-        .file-header {
-          display: table-header-group;
-          color: $darkgray;
-        }
-        .file-row {
-          display: table-row;
-          > span {
-            display: table-cell;
-            padding: .5rem;
-            > a {
-              padding: 0 .5rem;
-            }
+      .file-header {
+        display: table-header-group;
+        color: $darkgray;
+      }
+      .file-row {
+        display: table-row;
+        > span {
+          display: table-cell;
+          padding: .5rem;
+          > a {
+            padding: 0 .5rem;
           }
         }
-        .file-container {
-          display: table-row-group;
-        }
+      }
+      .file-container {
+        display: table-row-group;
       }
     }
   }
@@ -302,12 +296,5 @@ section.page {
   label.field-label {
     width: 100%;
     float: none;
-  }
-  section.page {
-    form {
-      [data-element-name=Attachment] {
-        width: 100%;
-      }
-    }
   }
 }

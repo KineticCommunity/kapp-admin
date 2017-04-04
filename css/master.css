@@ -931,33 +931,29 @@ section.page form button[data-element-type="button"][data-button-type="save"]:be
   line-height: 1;
   margin-top: -0.7rem;
 }
-section.page form [data-element-name=Attachment] {
-  border-radius: 0.4rem;
-  clear: both;
-}
-section.page form [data-element-name=Attachment].empty .file-table > .file-header {
+section.page form .empty > .file-table > .file-header {
   display: none;
 }
-section.page form [data-element-name=Attachment] .file-table {
+section.page form .file-table {
   display: table;
   margin: 0px;
   padding: 0px;
 }
-section.page form [data-element-name=Attachment] .file-table .file-header {
+section.page form .file-table .file-header {
   display: table-header-group;
   color: #4b4c4e;
 }
-section.page form [data-element-name=Attachment] .file-table .file-row {
+section.page form .file-table .file-row {
   display: table-row;
 }
-section.page form [data-element-name=Attachment] .file-table .file-row > span {
+section.page form .file-table .file-row > span {
   display: table-cell;
   padding: .5rem;
 }
-section.page form [data-element-name=Attachment] .file-table .file-row > span > a {
+section.page form .file-table .file-row > span > a {
   padding: 0 .5rem;
 }
-section.page form [data-element-name=Attachment] .file-table .file-container {
+section.page form .file-table .file-container {
   display: table-row-group;
 }
 section.page.embedded form {
@@ -973,10 +969,6 @@ section.page.embedded form {
   label.field-label {
     width: 100%;
     float: none;
-  }
-
-  section.page form [data-element-name=Attachment] {
-    width: 100%;
   }
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
