@@ -336,45 +336,6 @@
             ]
         },
         {
-            "name":"Categories",
-            "description":"An advanced console for managing categories and subcategories in a hierarchical view.",
-            "slug":"categories",
-            "type":"Console",
-            "status":"Active",
-            "anonymous":false,
-            "customHeadContent":null,
-            "notes":null,
-            "submissionLabelExpression":null,
-            "attributes":[
-
-            ],
-            "bridgedResources":[
-
-            ],
-            "categorizations":[
-
-            ],
-            "pages":[
-                {
-                    "elements":[
-
-                    ],
-                    "events":[
-
-                    ],
-                    "name":"Categories",
-                    "renderType":"submittable",
-                    "type":"page",
-                    "advanceCondition":null,
-                    "displayCondition":null,
-                    "displayPage":"pages/categories/console.jsp"
-                }
-            ],
-            "securityPolicies":[
-
-            ]
-        },
-        {
             "name":"Datastore",
             "description":"A Datastore is a Kinetic Request form that can be used to store data for use in other applications or forms. The data can be accessed using bridges.",
             "slug":"datastore",
@@ -407,6 +368,45 @@
                     "advanceCondition":null,
                     "displayCondition":null,
                     "displayPage":"pages/datastore/console.jsp"
+                }
+            ],
+            "securityPolicies":[
+
+            ]
+        },
+        {
+            "name":"Utilities",
+            "description":"Console for managing utility forms related to managing the system.",
+            "slug":"utilities",
+            "type":"Console",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":null,
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
+                {
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Utilities",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/utilities/console.jsp"
                 }
             ],
             "securityPolicies":[
