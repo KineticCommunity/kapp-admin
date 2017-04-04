@@ -14,9 +14,11 @@
     </bundle:variable>
     <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
     
-    <div class="page-header">
-        <h3>${text.escape(form.name)}</h3>
-    </div>
+    <c:if test="${not isEmbedded}">
+        <div class="page-header">
+            <h3>${text.escape(form.name)}</h3>
+        </div>
+    </c:if>
     
     <section class="page ${isEmbedded ? 'embedded' : ''}" data-page="${page.name}">
         <c:if test="${param.review != null && pages.size() > 1}">
