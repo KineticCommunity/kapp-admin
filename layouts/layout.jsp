@@ -51,6 +51,7 @@
         <bundle:stylepack>
             <bundle:style src="${bundle.location}/libraries/jquery-ui/jquery-ui.css"/>
             <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.css"/>
+            <bundle:style src="${bundle.location}/libraries/bootstrap-select/bootstrap-select.css" />
             <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
             <bundle:style src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.css"/>
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
@@ -64,6 +65,7 @@
             <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.js"/>
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.js"/>
+            <bundle:script src="${bundle.location}/libraries/bootstrap-select/bootstrap-select.js" />
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
