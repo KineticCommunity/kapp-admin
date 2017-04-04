@@ -85,34 +85,41 @@
         <bundle:yield name="head"/>
     </head>
     <body>
-        <div class="view-port">
-            <c:set var="aside"><bundle:yield name="aside"/></c:set>
-            <c:import url="${headerPath}/partials/header.jsp" charEncoding="UTF-8"/>
-            <c:import url="${bundle.path}/partials/subheader.jsp" charEncoding="UTF-8"/>
-            <div class="container main-inner">
-                <div class="row">
-                    <div class="col-xs-12 tab-content">
+        <c:choose>
+            <c:when test="${identity.anonymous}">
+                <bundle:yield/>
+            </c:when>
+            <c:otherwise>
+                <div class="view-port">
+                    <c:set var="aside"><bundle:yield name="aside"/></c:set>
+                    <c:import url="${headerPath}/partials/header.jsp" charEncoding="UTF-8"/>
+                    <c:import url="${bundle.path}/partials/subheader.jsp" charEncoding="UTF-8"/>
+                    <div class="container main-inner">
                         <div class="row">
-                            <c:choose>
-                                <c:when test="${not empty aside}">
-                                    <div class="col-sm-9 content-main">
-                                        <bundle:yield/>
-                                    </div>
-                                    <div class="col-sm-3 hidden-xs aside pull-right">
-                                        <bundle:yield name="aside"/>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="col-xs-12 content-main">
-                                        <bundle:yield/>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="col-xs-12 tab-content">
+                                <div class="row">
+                                    <c:choose>
+                                        <c:when test="${not empty aside}">
+                                            <div class="col-sm-9 content-main">
+                                                <bundle:yield/>
+                                            </div>
+                                            <div class="col-sm-3 hidden-xs aside pull-right">
+                                                <bundle:yield name="aside"/>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="col-xs-12 content-main">
+                                                <bundle:yield/>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <c:import url="${footerPath}/partials/footer.jsp" charEncoding="UTF-8"/>
                 </div>
-            </div>
-            <c:import url="${footerPath}/partials/footer.jsp" charEncoding="UTF-8"/>
-        </div>
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>

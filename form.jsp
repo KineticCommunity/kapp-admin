@@ -24,7 +24,5 @@
         </c:if>
         <div class="errors"></div>
         <app:bodyContent/>
-        <script src="${i18n.scriptPath('shared')}"></script>
-        <script src="${i18n.scriptPath(form)}"></script>
     </section>
 </bundle:layout>
