@@ -2,6 +2,7 @@
 <%@include file="../../bundle/initialization.jspf" %>
 <%@include file="../../bundle/router.jspf" %>
 <c:set var="isEmbedded" value="${param.embedded != null}" scope="request"/>
+<c:set var="console" value="${form}" scope="request"/>
 
 <bundle:layout page="../../layouts/form.jsp">
     <bundle:variable name="head">
@@ -11,7 +12,9 @@
     <c:if test="${not isEmbedded}">
         <%-- BREADCRUMBS START HERE. Remove if not needed. -------------------------------------------%>
         <bundle:variable name="breadcrumb">
-            <li>${text.escape(i18n.translate('Utilities'))}</li>
+            <li>
+                <a href="${bundle.kappLocation}/utilities">${text.escape(i18n.translate('Utilities'))}</a>
+            </li>
             <li class="active">${text.escape(i18n.translate(form.name))}</li>
         </bundle:variable>
         <%-- BREADCRUMBS END HERE. -------------------------------------------------------------------%>
