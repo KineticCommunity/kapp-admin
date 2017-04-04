@@ -251,7 +251,7 @@ section.page {
 
     /* Attachment files
      *-------------------------------------- */
-    .attachment {
+    [data-element-name=Attachment] {
       @include border-radius();
       clear: both;
       &.empty {
@@ -305,7 +305,7 @@ section.page {
   }
   section.page {
     form {
-      .attachment {
+      [data-element-name=Attachment] {
         width: 100%;
       }
     }

@@ -30,7 +30,7 @@ nav#bundle-subheader{
   div.additional-menu:not(.with-buttons) {
     @include anchor($subheader-text-color, tint($subheader-text-color, 10%), none, none);
   }
-  
+
   div.additional-menu ul:not(.dropdown-menu) {
     position: relative;
     margin-bottom: 0;
@@ -129,10 +129,9 @@ nav#bundle-subheader{
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
     }
-
-    &:not(.active) a {
-      font-size: 85%;
-    }
+  }
+  .nav-tabs.stacked-xs > li.active {
+    margin-bottom: -2px;
   }
 }
 

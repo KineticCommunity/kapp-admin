@@ -167,32 +167,32 @@ h1 > .label, h1 .base-font, h2 > .label, h2 .base-font, h3 > .label, h3 .base-fo
   font-family: "Source Sans Pro", sans-serif;
 }
 
-h6 {
+h6, .h6 {
   font-size: 1.6rem;
   line-height: 2rem;
 }
 
-h5 {
+h5, .h5 {
   font-size: 1.8rem;
   line-height: 2.2rem;
 }
 
-h4 {
+h4, .h4 {
   font-size: 2rem;
   line-height: 2.4rem;
 }
 
-h3 {
+h3, .h3 {
   font-size: 2.2rem;
   line-height: 2.6rem;
 }
 
-h2 {
+h2, .h2 {
   font-size: 2.4rem;
   line-height: 2.8rem;
 }
 
-h1 {
+h1, .h1 {
   font-size: 2.6rem;
   line-height: 3rem;
 }
@@ -931,33 +931,33 @@ section.page form button[data-element-type="button"][data-button-type="save"]:be
   line-height: 1;
   margin-top: -0.7rem;
 }
-section.page form .attachment {
+section.page form [data-element-name=Attachment] {
   border-radius: 0.4rem;
   clear: both;
 }
-section.page form .attachment.empty .file-table > .file-header {
+section.page form [data-element-name=Attachment].empty .file-table > .file-header {
   display: none;
 }
-section.page form .attachment .file-table {
+section.page form [data-element-name=Attachment] .file-table {
   display: table;
   margin: 0px;
   padding: 0px;
 }
-section.page form .attachment .file-table .file-header {
+section.page form [data-element-name=Attachment] .file-table .file-header {
   display: table-header-group;
   color: #4b4c4e;
 }
-section.page form .attachment .file-table .file-row {
+section.page form [data-element-name=Attachment] .file-table .file-row {
   display: table-row;
 }
-section.page form .attachment .file-table .file-row > span {
+section.page form [data-element-name=Attachment] .file-table .file-row > span {
   display: table-cell;
   padding: .5rem;
 }
-section.page form .attachment .file-table .file-row > span > a {
+section.page form [data-element-name=Attachment] .file-table .file-row > span > a {
   padding: 0 .5rem;
 }
-section.page form .attachment .file-table .file-container {
+section.page form [data-element-name=Attachment] .file-table .file-container {
   display: table-row-group;
 }
 section.page.embedded form {
@@ -975,7 +975,7 @@ section.page.embedded form {
     float: none;
   }
 
-  section.page form .attachment {
+  section.page form [data-element-name=Attachment] {
     width: 100%;
   }
 }
@@ -1130,8 +1130,9 @@ nav#bundle-subheader ul.dropdown-menu > li a:hover, nav#bundle-subheader ul.drop
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
-  .nav-tabs.stacked-xs > li:not(.active) a {
-    font-size: 85%;
+
+  .nav-tabs.stacked-xs > li.active {
+    margin-bottom: -2px;
   }
 }
 /* Nav Pills Elements
