@@ -23,6 +23,13 @@
         
         // Create click event to start a discussion for a form
         $("div.form-activity button#start-discussion").on("click", bundle.adminManagement.form.startDiscussion);
+        
+        // On load of page, if hash exists in url, open the appropriate tab
+        if (location.hash){
+            $(".nav-tabs[role=tablist]").each(function(){
+                $(this).find("a[href='"+location.hash+"']").tab("show");
+            });
+        }
 
      });
 

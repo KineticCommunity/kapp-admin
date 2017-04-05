@@ -24,12 +24,22 @@
     </c:forEach>
 </div>
 
-<div class="m-y-2 text-right">
-    <button data-save-button class="btn btn-success">
-        <span class="fa fa-check fa-fw"></span>
-        <span>Update Categories</span>
-    </button>
-    <button data-reset-button class="btn btn-link">
-        <span>Reset</span>
-    </button>
-</div>
+<c:choose>
+    <c:when test="${empty currentKapp.categories}">
+        <div class="text-center alert alert-info">
+            <h6>The ${currentKapp.name} kapp does not have any categories.</h6>
+            <a href="${bundle.getKappLocation()}/${form.slug}?page=management/config/kapp&kapp=${currentKapp.slug}#categories">Manage Categories</a>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <div class="m-y-2 text-right">
+            <button data-save-button class="btn btn-success">
+                <span class="fa fa-check fa-fw"></span>
+                <span>Update Categories</span>
+            </button>
+            <button data-reset-button class="btn btn-link">
+                <span>Reset</span>
+            </button>
+        </div>
+    </c:otherwise>
+</c:choose>
