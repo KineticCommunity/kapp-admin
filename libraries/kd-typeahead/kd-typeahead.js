@@ -63,7 +63,7 @@
 
             // Override the specified config object if any extra typeahead attributes were set
             if(!_.isEmpty($(input).attr('typeahead-query-field'))) typeaheadConfig['queryField'] = $(input).attr('typeahead-query-field')
-            if(!_.isEmpty($(input).attr('typeahead-min-length'))) typeaheadConfig['minLength'] = parceInt($(input).attr('typeahead-min-length'))
+            if(!_.isEmpty($(input).attr('typeahead-min-length'))) typeaheadConfig['minLength'] = parseInt($(input).attr('typeahead-min-length'))
             if(!_.isEmpty($(input).attr('typeahead-fa-class'))) typeaheadConfig['faClass'] = $(input).attr('typeahead-fa-class')
             if(!_.isEmpty($(input).attr('typeahead-placeholder'))) typeaheadConfig['placeholder'] = $(input).attr('typeahead-placeholder')
             if(!_.isEmpty($(input).attr('typeahead-empty-message'))) typeaheadConfig['emptyMessage'] = $(input).attr('typeahead-empty-message')
@@ -172,7 +172,7 @@
                     source: bridgeSearch,
                     templates: {
                         empty: [
-                            '<div class="empty-message text-center">',
+                            '<div class="tt-empty-message text-center">',
                             typeaheadConfig['emptyMessage'],'<br>',
                             '</div>',
                                 ].join('\n'),

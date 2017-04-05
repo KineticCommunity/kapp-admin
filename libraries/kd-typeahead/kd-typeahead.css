@@ -1,5 +1,5 @@
 /** KD - Twitter Typeahead CSS Overrides**/
-.twitter-typeahead, .typeahead, .empty-message  {
+.twitter-typeahead, .typeahead, .tt-empty-message  {
     width: 100%;
     float:left;
 }
@@ -38,7 +38,7 @@
     font-weight: 700;
     display: inline-block;
 }
-.empty-message {
+.tt-empty-message {
     position: relative;
     padding: 10px;
     font-size: 16px;
