@@ -9,7 +9,7 @@
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 <c:set var="catalogKapp" value="${space.getKapp(space.getAttributeValue('Catalog Kapp Slug'))}" />
-<c:set var="feedbackForm" value="${catalogKapp.getForm(space.getAttributeValue('Feedback Form Slug'))}" />
+<c:set var="feedbackForm" value="${kapp.getForm(space.getAttributeValue('Feedback Form Slug'))}" />
 
 <c:choose>
     <c:when test="${empty currentKapp}">
@@ -193,7 +193,7 @@
                         <div role="tabpanel" class="tab-pane" id="feedback">
                             <div class="form-activity feedback-activity">
                                 <table data-submissions-data-table
-                                       data-source="/kapps/${catalogKapp.slug}/forms/${feedbackForm.slug}/submissions"
+                                       data-source="/kapps/${kapp.slug}/forms/${feedbackForm.slug}/submissions"
                                        data-source-include="details,values"
                                        data-source-query="timeline=submittedAt&direction=DESC"
                                        data-source-limit="25"

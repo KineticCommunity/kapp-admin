@@ -51,8 +51,8 @@
             <json:property name="label" value="Feedback Form" />
             <json:property name="partial" value="select.jsp" />
             <json:object name="data">
-                <c:forEach var="o" items="${catalogKapp.forms}">
-                    <json:property name="${catalogKapp.name} > ${o.name}" value="${o.slug}" />
+                <c:forEach var="o" items="${adminKapp.forms}">
+                    <json:property name="${adminKapp.name} > ${o.name}" value="${o.slug}" />
                 </c:forEach>
             </json:object>
         </json:object>
@@ -61,8 +61,8 @@
             <json:property name="label" value="Help Form" />
             <json:property name="partial" value="select.jsp" />
             <json:object name="data">
-                <c:forEach var="o" items="${catalogKapp.forms}">
-                    <json:property name="${catalogKapp.name} > ${o.name}" value="${o.slug}" />
+                <c:forEach var="o" items="${adminKapp.forms}">
+                    <json:property name="${adminKapp.name} > ${o.name}" value="${o.slug}" />
                 </c:forEach>
             </json:object>
         </json:object>
@@ -71,8 +71,8 @@
             <json:property name="label" value="Request Alert Form" />
             <json:property name="partial" value="select.jsp" />
             <json:object name="data">
-                <c:forEach var="o" items="${catalogKapp.forms}">
-                    <json:property name="${catalogKapp.name} > ${o.name}" value="${o.slug}" />
+                <c:forEach var="o" items="${adminKapp.forms}">
+                    <json:property name="${adminKapp.name} > ${o.name}" value="${o.slug}" />
                 </c:forEach>
             </json:object>
         </json:object>
