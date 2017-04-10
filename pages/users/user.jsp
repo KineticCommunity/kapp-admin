@@ -199,6 +199,13 @@
                     </c:forEach>
                     <div class="input-group add-team">
                         <span class="input-group-addon">Add to Team</span>
+                        <select id="source-teams" class="form-control hide">
+                            <option />
+                            <c:forEach var="team" items="${TeamsHelper.getTeams()}">
+                                <option data-team-slug="${team.slug}" data-team-icon="${team.icon}" 
+                                        value="${team.name}">${i18n.translate(team.name)}</option>
+                            </c:forEach>
+                        </select>
                         <select id="available-teams" class="form-control">
                             <option />
                             <c:forEach var="team" items="${TeamsHelper.getTeams()}">
@@ -208,18 +215,6 @@
                                 </c:if>
                             </c:forEach>
                         </select>
-                        <select id="source-teams" class="form-control hide">
-                            <option />
-                            <c:forEach var="team" items="${TeamsHelper.getTeams()}">
-                                <option data-team-slug="${team.slug}" data-team-icon="${team.icon}" 
-                                        value="${team.name}">${i18n.translate(team.name)}</option>
-                            </c:forEach>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-tertiary" type="button">
-                                <span class="fa fa-plus fa-fw"></span>
-                            </button>
-                        </span>
                     </div>
                 </div>
                 <div class="team-label-template hide">

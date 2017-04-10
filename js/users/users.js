@@ -16,7 +16,7 @@
         $("button.delete-user").on("click", userManagement.deleteUser);
         $("a.add-attribute-row").on("click", userManagement.addAttributeRow)
         $("div[data-allows-multiple=true]").on("blur", "input[type=text]", userManagement.removeEmptyAttributeRows);
-        $("div.user-teams").on("click", ".add-team button", userManagement.addTeamMembership);
+        $("div.user-teams").on("change", ".add-team select#available-teams", userManagement.addTeamMembership);
         $("div.user-teams").on("click", ".team-label .badge", userManagement.removeTeamMembership);
         
         
@@ -191,8 +191,8 @@
     };
     
     userManagement.addTeamMembership = function(e){
+        var availableTeams = $(this);
         var teamsContainer = $(this).closest("div.user-teams");
-        var availableTeams = $(this).closest(".add-team").find("select#available-teams");
         if (availableTeams.val().trim().length > 0){
             var selectedOption = availableTeams.find("option:selected");
             var team = {
@@ -222,7 +222,7 @@
             }
         }
         else {
-            $(this).closest(".add-team").find("select#available-teams").focus();
+            availableTeams.focus();
         }
     };
 
