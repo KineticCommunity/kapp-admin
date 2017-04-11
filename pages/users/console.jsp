@@ -29,6 +29,11 @@
     </div>
 
     <div class="row">
+        <c:if test="${space.hasAttribute('Invite Coworkers Form Slug')}">
+            <div class="col-xs-12 text-center">
+                <p>You can invite coworkers en-masse <a href="${bundle.spaceLocation}?page=form&form=${space.getAttributeValue('Invite Coworkers Form Slug')}">here</a>.</p>
+            </div>
+        </c:if>
         <div class="col-xs-12">
             <table width="100%" class="table table-hover dt-responsive" id="users-table"
                    data-user-list data-space-name="${space.name}" data-console-slug="${form.slug}"> 
