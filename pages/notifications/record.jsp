@@ -16,8 +16,8 @@
             
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
             <bundle:variable name="breadcrumb">
-                <li><a class="return-to-notifcations" href="${bundle.kappLocation}/${form.slug}?type=${param.type}">${form.name}</a></li>
-                <li class="active">${not empty param.id ? 'Edit' : empty param.clone ? 'New' : 'Clone'}</li>
+                <li><a class="return-to-notifications" href="${bundle.kappLocation}/${form.slug}?type=${param.type}">${form.name}</a></li>
+                <li class="active">${not empty param.id ? 'Edit ' : empty param.clone ? 'New ' : 'Clone '}${param.type}</li>
             </bundle:variable>
             <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
     
@@ -46,7 +46,7 @@
                 <p>${form.description}</p>
                 <hr class="border-color-white" />
                 <h5>Instructions</h5>
-                <p>The <strong>Name</strong> field should be a unique value to identify this Template or Snippit</p>
+                <p>The <strong>Name</strong> field should be a unique value to identify this Template or Snippet</p>
                 <p>The <strong>HTML Content</strong> field stores HTML that will be included in this notification</p>
                 <p>The <strong>Text Content</strong> field should be non-HTML text and will be sent to users who can't view HTML emails.</p>
             </bundle:variable>

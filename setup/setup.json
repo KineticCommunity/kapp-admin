@@ -1769,8 +1769,8 @@
                             "choicesRunIf":null,
                             "choices":[
                                 {
-                                    "label":"Snippit",
-                                    "value":"Snippit"
+                                    "label":"Snippet",
+                                    "value":"Snippet"
                                 },
                                 {
                                     "label":"Template",

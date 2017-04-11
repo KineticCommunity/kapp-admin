@@ -39,7 +39,7 @@
             </c:if>
           </json:object>
         </c:when>
-        <c:when test="${field.title eq 'Subject' && type eq 'Snippit'}">
+        <c:when test="${field.title eq 'Subject' && type eq 'Snippet'}">
         </c:when>
         <c:when test="${field.title eq 'Subject' && type eq 'Template'}">
           <json:object>
@@ -70,7 +70,7 @@
       </c:choose>
     </c:forEach>
     <json:object>
-      <json:property name="title" value="Datastore Record ID"/>
+      <json:property name="title" value="ID"/>
       <json:property name="data" value="ID"/>
       <json:property name="visible" value="${false}"/>
     </json:object>

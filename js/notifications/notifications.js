@@ -12,7 +12,7 @@
     // Create a scoped alias to simplify references to your namespace
     var notifications = bundle.notifications;
 
-    // Private namespace for datastore
+    // Private namespace for notifications
     var adminNote = {
         console: {},
         form: {}
@@ -34,7 +34,7 @@
     $(function() {     
 
         /******************************************************************************************
-         ** START *** NOTIFICATIONS/CONSOLE & SNIPPITS PAGE *** DOCUMENT READY CODE
+         ** START *** NOTIFICATIONS/CONSOLE & SNIPPETS PAGE *** DOCUMENT READY CODE
          ** Displays the stored notifications.
          ******************************************************************************************/
         
@@ -140,7 +140,7 @@
         }
 
         /******************************************************************************************
-         ** END *** NOTIFICATIONS/CONSOLE & SNIPPITS PAGE *** DOCUMENT READY CODE
+         ** END *** NOTIFICATIONS/CONSOLE & SNIPPETS PAGE *** DOCUMENT READY CODE
          ** Displays the stored notifications.
          ******************************************************************************************/
 
@@ -267,7 +267,7 @@
 
 
     /*----------------------------------------------------------------------------------------------
-     * START NOTIFICATIONS CONSOLE / SNIPPIT PAGE FUNCTIONS
+     * START NOTIFICATIONS CONSOLE / SNIPPET PAGE FUNCTIONS
     *--------------------------------------------------------------------------------------------*/
 
     /**
@@ -330,7 +330,7 @@
             },
             error: function(jqXHR, textStatus, errorThrown){
                 $("table#table-notifications").empty().notifie({
-                    message: "Failed to load records for the datastore.<br>" + errorThrown
+                    message: "Failed to load Notification " + $("table#table-notifications").data("type") + "s.<br>" + errorThrown
                 });
             }
         });
@@ -370,7 +370,7 @@
                 /** Convert fields to a map to check if file has valid headers **/
                 var fieldMap = $.extend(_.object(_.map(data.form.fields, function(field){
                     return [field.name, true];
-                })), {"Datastore Record ID": true, "": true});
+                })), {"ID": true, "": true});
                 // Create array to store invalid headers
                 var invalidHeaders = new Array();
                 // Get first row (any row can be used since headers are the keys of the row object)
@@ -388,7 +388,7 @@
                     importInput.closest("div.table-notifications-buttons").notifie({
                         anchor: "h3",
                         message: "Invalid CSV file. " 
-                            + invalidHeaders.length + " of the headers in the CSV file do not match an existing field on this datastore. <br/>"
+                            + invalidHeaders.length + " of the headers in the CSV file do not match an existing notification field. <br/>"
                             + "Invalid headers: " + invalidHeaders.join(", "),
                         exitEvents: "mouseup"
                     });
@@ -434,7 +434,7 @@
     
     /**
      * Save a single row of data.
-     * Update the row if Datastore Record ID is passed in, otherwise create a new row.
+     * Update the row if ID is passed in, otherwise create a new row.
      *  
      * @param row Data to save.
      * @param datastoreSlug Slug of datastore into which this data should be saved.
@@ -444,13 +444,13 @@
     adminNote.console.processSingleDatastoreRecord = function(row, datastoreSlug, importInput, statusCounters){
         // Variable to store Record ID if doing an update
         var datastoreRecordID = false;
-        // If Datastore Record ID property exists, save it if it's not empty, and remove from row object
-        if (row.hasOwnProperty("Datastore Record ID")){
-            if (row["Datastore Record ID"] != null && row["Datastore Record ID"].trim().length > 0){
-                datastoreRecordID = row["Datastore Record ID"];
+        // If ID property exists, save it if it's not empty, and remove from row object
+        if (row.hasOwnProperty("ID")){
+            if (row["ID"] != null && row["ID"].trim().length > 0){
+                datastoreRecordID = row["ID"];
             }
             // Delete since we are passing the row as the data to the API and this is not a real field
-            delete row["Datastore Record ID"];
+            delete row["ID"];
         }
         // Remove any empty title rows (which are generated in the export due to the buttons column)
         if (row.hasOwnProperty("")){
@@ -471,7 +471,7 @@
                     adminNote.console.calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": "", "ERROR": errorThrown}));
+                    statusCounters.failedRows.push($.extend(row, {"ID": "", "ERROR": errorThrown}));
                     statusCounters.createErrors++;
                     statusCounters.processedRows++;
                     adminNote.console.calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
@@ -492,7 +492,7 @@
                     adminNote.console.calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    statusCounters.failedRows.push($.extend(row, {"Datastore Record ID": datastoreRecordID, "ERROR": errorThrown}));
+                    statusCounters.failedRows.push($.extend(row, {"ID": datastoreRecordID, "ERROR": errorThrown}));
                     statusCounters.updateErrors++;
                     statusCounters.processedRows++;
                     adminNote.console.calculateDatastoreRecordsImportResults(statusCounters, importInput, datastoreSlug);
@@ -542,7 +542,7 @@
                             extend: "csv",
                             text: "Export CSV of Failed Rows",
                             className: "export-failures",
-                            filename: $("table#table-notifications").data("datastore-name") + " Datastore - Failed Import Rows",
+                            filename: $("table#table-notifications").data("datastore-name") + " Notifications - Failed Import Rows",
                             exportOptions: {
                                 modifier: {
                                     search: "none"
@@ -564,7 +564,7 @@
     }
 
     /*----------------------------------------------------------------------------------------------
-     * END NOTIFICATIONS CONSOLE / SNIPPIT PAGE FUNCTIONS
+     * END NOTIFICATIONS CONSOLE / SNIPPET PAGE FUNCTIONS
     *--------------------------------------------------------------------------------------------*/
 
 
@@ -579,7 +579,7 @@
             adminNote.form.getSpaceAttributes();
             adminNote.form.getAllKapps();
             adminNote.form.getDateFormats();
-            adminNote.form.getSnippits();
+            adminNote.form.getSnippets();
             adminNote.form.rebindClickEventToSelectionMenu();
             
             //Bind event to the textarea elements on the page (Subject, Message Body, and Text Message Body)
@@ -623,9 +623,9 @@
         K.api("GET",bundle.spaceLocation() + "/app/api/v1/kapps/" + bundle.kappSlug() + "/forms/notification-template-dates/submissions?include=details,values&limit=999&q=values[Status]=\"active\"",{"complete":function(data){adminNote.form.populateAppearanceOptions(data)}})
     }
 
-    // Function for getting Snippits to Include
-    adminNote.form.getSnippits = function(){
-        K.api("GET",bundle.spaceLocation() + "/app/api/v1/kapps/" + bundle.kappSlug() + "/forms/notification-data/submissions?include=details,values&limit=999&q=values[Type]=\"Snippit\"",{"complete":function(data){adminNote.form.populateSnippitOptions(data)}})
+    // Function for getting Snippets to Include
+    adminNote.form.getSnippets = function(){
+        K.api("GET",bundle.spaceLocation() + "/app/api/v1/kapps/" + bundle.kappSlug() + "/forms/notification-data/submissions?include=details,values&limit=999&q=values[Type]=\"Snippet\"",{"complete":function(data){adminNote.form.populateSnippetOptions(data)}})
     }
 
     // Function for getting forms in a kapp
@@ -669,25 +669,25 @@
     }
 
     // Function for populating Apperance Options
-    adminNote.form.populateSnippitOptions = function(data){
+    adminNote.form.populateSnippetOptions = function(data){
         var submissions = JSON.parse(data["responseText"])['submissions'];
-        $('ul.dropdown-menu[data-menu-name="Snippits"]').empty();
+        $('ul.dropdown-menu[data-menu-name="Snippets"]').empty();
         if (submissions.length > 0) {
             $.each(submissions,function(iterator,value) {
-                $('ul.dropdown-menu[data-menu-name="Snippits"]').append('<li><a class="dynamic-replacement" tabindex="-1" href="#">snippit(\'' + value['values']['Name'] + '\')</a></li>');
+                $('ul.dropdown-menu[data-menu-name="Snippets"]').append('<li><a class="dynamic-replacement" tabindex="-1" href="#">snippet(\'' + value['values']['Name'] + '\')</a></li>');
             });
-            $('ul.dropdown-menu[data-menu-name="Snippits"]').append('<li class="disabled"><a class="dynamic-replacement-noaction" href="#">Create reusable snippits here: <button id="notification-snippits-button" data-element-type="button" data-button-type="custom" class="btn btn-link">Notification Snippits</button> </a></li>');
+            $('ul.dropdown-menu[data-menu-name="Snippets"]').append('<li class="disabled"><a class="dynamic-replacement-noaction" href="#">Create reusable snippets here: <button id="notification-snippets-button" data-element-type="button" data-button-type="custom" class="btn btn-link">Notification Snippets</button> </a></li>');
             $('ul.dropdown-menu a.dynamic-replacement-noaction').on('click',function(e) {
                 e.preventDefault();
             });
         } else {
-            $('ul.dropdown-menu[data-menu-name="Snippits"]').append('<li class="disabled"><a class="dynamic-replacement-noaction" href="#">No Snippits have been created.<br>Create reusable snippits here: <button id="notification-snippits-button" data-element-type="button" data-button-type="custom" class="btn btn-link">Notification Snippits</button> </a></li>');
+            $('ul.dropdown-menu[data-menu-name="Snippets"]').append('<li class="disabled"><a class="dynamic-replacement-noaction" href="#">No Snippets have been created.<br>Create reusable snippets here: <button id="notification-snippets-button" data-element-type="button" data-button-type="custom" class="btn btn-link">Notification Snippets</button> </a></li>');
             $('ul.dropdown-menu a.dynamic-replacement-noaction').on('click',function(e) {
                 e.preventDefault();
             });
         }
-        $('#notification-snippits-button').on('click',function(e) {
-            window.open(bundle.spaceLocation() + '/' + bundle.kappSlug() + '/notifications?page=notifications/snippits&type=Snippit', '_blank');
+        $('#notification-snippets-button').on('click',function(e) {
+            window.open(bundle.spaceLocation() + '/' + bundle.kappSlug() + '/notifications?page=notifications/snippets&type=Snippet', '_blank');
         });
         //bind event to newly added items
         adminNote.form.rebindClickEventToSelectionMenu();
@@ -876,7 +876,7 @@
      * Redirect back to the 
      */
     adminNote.console.redirectToNotifications = function(){
-        location.href = $('a.return-to-notifcations').attr('href');
+        location.href = $('a.return-to-notifications').attr('href');
     }
 
     /*----------------------------------------------------------------------------------------------

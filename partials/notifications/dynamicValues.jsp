@@ -26,10 +26,10 @@
             </a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                 <li class="dropdown-submenu">
-                    <a tabindex="-1" href="#">Snippits</a>
-                    <ul class="dropdown-menu" data-menu-name="Snippits">
+                    <a tabindex="-1" href="#">Snippets</a>
+                    <ul class="dropdown-menu" data-menu-name="Snippets">
                         <li>
-                            <a class="dynamic-replacement dynamic-snippits" tabindex="-1" href="#">..Replaced on Page Ready..</a>
+                            <a class="dynamic-replacement dynamic-snippets" tabindex="-1" href="#">..Replaced on Page Ready..</a>
                         </li>
                     </ul>
                 </li>
