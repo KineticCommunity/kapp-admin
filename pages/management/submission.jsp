@@ -149,82 +149,90 @@
                 </div>
             </div>
         
-            <div class="row form-submission fulfillment-process sub-heading m-b-4">
+            <div class="row form-submission fulfillment-process sub-heading">
                 <div class="col-xs-12 m-t-1">
                     <span class="heading-text">Fulfillment Process</span>
                 </div>
                 <div class="form-submission fulfillment-process m-b-4">
                     <div class="col-xs-12 overflow-auto">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Submission</th>
-                                    <th>Assignment</th>
-                                    <th>Status</th>
-                                    <th>Due</th>
-                                    <th>Duration</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="descendant" items="${AdminHelper.formatDescendants(submission)}" varStatus="status">
-                                    <tr>
-                                        <td>
-                                            <span style="padding-left: ${descendant.depth*20}px">
-                                                <a href="${bundle.kappLocation}/${console.slug}?page=management/submission&id=${descendant.submission.id}">
-                                                    ${descendant.submission.form.name} (${descendant.submission.handle})
-                                                </a>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <c:set var="assignedTeam" value="${descendant.submission.values['Assigned Team']}" />
-                                            <c:set var="assignedIndividual" value="${descendant.submission.values['Assigned Individual']}" />
-                                            <c:choose>
-                                                <c:when test="${not empty teamsKapp && text.isNotBlank(assignedTeam) 
-                                                                && not empty TeamsHelper.getTeam(assignedTeam)}">
-                                                    <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=team&team=${TeamsHelper.getTeam(assignedTeam).slug}">
-                                                        ${assignedTeam}
-                                                    </a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span>${assignedTeam}</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <c:if test="${text.isNotBlank(assignedTeam) && text.isNotBlank(assignedIndividual)}">
-                                                <span>&gt;</span>
-                                            </c:if>
-                                            <c:choose>
-                                                <c:when test="${text.isNotBlank(assignedIndividual)}">
-                                                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(assignedIndividual)}">
-                                                        ${assignedIndividual}
-                                                    </a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span>${assignedIndividual}</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td><span class="label ${SubmissionHelper.getStatusClass(descendant.submission)}">${SubmissionHelper.getStatus(descendant.submission)}</span></td>
-                                        <td>
-                                            <c:if test="${text.isNotBlank(descendant.submission.values['Due Date'])}">
-                                                <c:set var="pastDue" value="${!text.equals(descendant.submission.coreState, 'Closed') && time.parse(descendant.submission.values['Due Date']).isBefore(time.now())}" />
-                                                <span data-moment-ago="${descendant.submission.values['Due Date']}" data-toggle="tooltip" class="${pastDue ? 'text-danger' : ''}"></span>
-                                            </c:if>
-                                        </td>
-                                        <td>
-                                            <span data-moment-diff-start="${text.equals(submission.type, 'Service') && not empty submission.submittedAt ? submission.submittedAt : submission.createdAt}" 
-                                                  data-moment-diff-end="${not empty submission.closedAt ? submission.closedAt : ''}"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5" class="row-footer">
-                                            <span style="padding-left: ${descendant.depth*20}px">
-                                                ${descendant.submission.label}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                        <c:set var="descendants" value="${AdminHelper.formatDescendants(submission)}" />
+                        <c:choose>
+                            <c:when test="${not empty descendants}">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Submission</th>
+                                            <th>Assignment</th>
+                                            <th>Status</th>
+                                            <th>Due</th>
+                                            <th>Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="descendant" items="${descendants}" varStatus="status">
+                                            <tr>
+                                                <td>
+                                                    <span style="padding-left: ${descendant.depth*20}px">
+                                                        <a href="${bundle.kappLocation}/${console.slug}?page=management/submission&id=${descendant.submission.id}">
+                                                            ${descendant.submission.form.name} (${descendant.submission.handle})
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <c:set var="assignedTeam" value="${descendant.submission.values['Assigned Team']}" />
+                                                    <c:set var="assignedIndividual" value="${descendant.submission.values['Assigned Individual']}" />
+                                                    <c:choose>
+                                                        <c:when test="${not empty teamsKapp && text.isNotBlank(assignedTeam) 
+                                                                        && not empty TeamsHelper.getTeam(assignedTeam)}">
+                                                            <a href="${bundle.spaceLocation}/${teamsKapp.slug}?page=team&team=${TeamsHelper.getTeam(assignedTeam).slug}">
+                                                                ${assignedTeam}
+                                                            </a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>${assignedTeam}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <c:if test="${text.isNotBlank(assignedTeam) && text.isNotBlank(assignedIndividual)}">
+                                                        <span>&gt;</span>
+                                                    </c:if>
+                                                    <c:choose>
+                                                        <c:when test="${text.isNotBlank(assignedIndividual)}">
+                                                            <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(assignedIndividual)}">
+                                                                ${assignedIndividual}
+                                                            </a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>${assignedIndividual}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td><span class="label ${SubmissionHelper.getStatusClass(descendant.submission)}">${SubmissionHelper.getStatus(descendant.submission)}</span></td>
+                                                <td>
+                                                    <c:if test="${text.isNotBlank(descendant.submission.values['Due Date'])}">
+                                                        <c:set var="pastDue" value="${!text.equals(descendant.submission.coreState, 'Closed') && time.parse(descendant.submission.values['Due Date']).isBefore(time.now())}" />
+                                                        <span data-moment-ago="${descendant.submission.values['Due Date']}" data-toggle="tooltip" class="${pastDue ? 'text-danger' : ''}"></span>
+                                                    </c:if>
+                                                </td>
+                                                <td>
+                                                    <span data-moment-diff-start="${text.equals(submission.type, 'Service') && not empty submission.submittedAt ? submission.submittedAt : submission.createdAt}" 
+                                                          data-moment-diff-end="${not empty submission.closedAt ? submission.closedAt : ''}"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" class="row-footer">
+                                                    <span style="padding-left: ${descendant.depth*20}px">
+                                                        ${descendant.submission.label}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <em>There are no fulfillment steps</em>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
@@ -235,44 +243,51 @@
                 </div>
                 <div class="form-submission submission-activity m-b-4">
                     <div class="col-xs-12 overflow-auto">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Label</th>
-                                    <th>Description</th>
-                                    <th>Data</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="activity" items="${submission.activities}">
-                                    <tr>
-                                        <td>${activity.type}</td>
-                                        <td>${activity.label}</td>
-                                        <td>${activity.description}</td>
-                                        <td>
-                                            <c:catch>
-                                                <c:set var="activityData" value="${json.parse(activity.data)}" />
-                                            </c:catch>
-                                            <c:choose>
-                                                <c:when test="${not empty activityData}">
-                                                    <c:forEach var="datum" items="${activityData}">
-                                                        <div>
-                                                            <span>${datum.key}:</span>
-                                                            <span>${datum.value}</span>
-                                                        </div>
-                                                    </c:forEach>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${activity.data}
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <c:remove var="activityData" />
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                        <c:choose>
+                            <c:when test="${not empty submission.activities}">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Label</th>
+                                            <th>Description</th>
+                                            <th>Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="activity" items="${submission.activities}">
+                                            <tr>
+                                                <td>${activity.type}</td>
+                                                <td>${activity.label}</td>
+                                                <td>${activity.description}</td>
+                                                <td>
+                                                    <c:catch>
+                                                        <c:set var="activityData" value="${json.parse(activity.data)}" />
+                                                    </c:catch>
+                                                    <c:choose>
+                                                        <c:when test="${not empty activityData}">
+                                                            <c:forEach var="datum" items="${activityData}">
+                                                                <div>
+                                                                    <span>${datum.key}:</span>
+                                                                    <span>${datum.value}</span>
+                                                                </div>
+                                                            </c:forEach>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${activity.data}
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <c:remove var="activityData" />
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <em>There is no submission activity</em>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
