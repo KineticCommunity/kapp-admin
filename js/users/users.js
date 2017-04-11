@@ -79,7 +79,7 @@
                 {
                     title: "",
                     defaultContent: "",
-                    class: "all",
+                    class: "all actions-sm",
                     renderType: "actions",
                     orderable: false,
                     searchable: false

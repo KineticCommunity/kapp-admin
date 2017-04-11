@@ -24,10 +24,8 @@
             <json:property name="name" value="Owning Team" />
             <json:property name="partial" value="selectMultiple.jsp" />
             <json:object name="data">
-                <c:forEach var="o" items="${space.teams}">
-                    <c:if test="${not text.startsWith(o.name, 'Role::')}">
-                        <json:property name="${o.name}" value="${o.name}" />
-                    </c:if>
+                <c:forEach var="o" items="${TeamsHelper.teams}">
+                    <json:property name="${o.name}" value="${o.name}" />
                 </c:forEach>
             </json:object>
         </json:object>

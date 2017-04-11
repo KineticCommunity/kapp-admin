@@ -17,13 +17,11 @@
 <%-- Build list of teams as options --%>
 <c:set var="teamOptions">
     <json:object>
-        <c:forEach var="o" items="${space.teams}">
-            <c:if test="${not text.startsWith(o.name, 'Role::')}">
-                <json:property name="${o.name}" value="${o.name}" />
-                <%-- Set selectedRadio to 'Team' if the stored value is matches a team --%>
-                <c:if test="${empty selectedRadio && text.equals(attributeObject.value, o.name)}">
-                    <c:set var="selectedRadio" value="Team" />
-                </c:if>
+        <c:forEach var="o" items="${TeamsHelper.teams}">
+            <json:property name="${o.name}" value="${o.name}" />
+            <%-- Set selectedRadio to 'Team' if the stored value matches a team --%>
+            <c:if test="${empty selectedRadio && text.equals(attributeObject.value, o.name)}">
+                <c:set var="selectedRadio" value="Team" />
             </c:if>
         </c:forEach>
     </json:object>
