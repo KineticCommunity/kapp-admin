@@ -18,15 +18,6 @@
 <c:set var="tabAttributes">
     <json:array>
         <json:object>
-            <json:property name="name" value="Request For Others" />
-            <json:property name="label" value="Allow Users to Request For Others" />
-            <json:property name="partial" value="radioInput.jsp" />
-            <json:object name="data">
-                <json:property name="Yes" value="Yes" />
-                <json:property name="No" value="" />
-            </json:object>
-        </json:object>
-        <json:object>
             <json:property name="name" value="Icon" />
             <json:property name="partial" value="iconInput.jsp" />
         </json:object>
