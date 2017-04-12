@@ -76,23 +76,27 @@
             var fieldData = {
                 name: form.find("input#datastore-name").val(),
                 slug: form.find("input#datastore-slug").val(),
-                description: form.find("textarea#datastore-description").val()
+                description: form.find("textarea#datastore-description").val(),
+                status: "Active",
+                type: "Datastore"
             };
             
             /** Make ajax call to get json template for creating a new datastore form **/
             $.ajax({
-                url: bundle.kappLocation() + "?partial=datastore/template.json",
+                url: bundle.apiLocation() + "/kapps/" + bundle.adminDatastore.kappSlug 
+                     + "/forms/datastore-template" 
+                     + "?include=attributes,pages,securityPolicies",
                 beforeSend: function(jqXHR, settings){
                     self.prop("disabled", true);
                 },
-                success: function(data, textStatus, jqXHR){
+                success: function(template, textStatus, jqXHR){
                     try {
                         /** Make ajax call to create new form using json from above ajax call and form fields from the screen **/
                         $.ajax({
                             method: "POST",
                             url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms?include=fields",
                             dataType: "json",
-                            data: JSON.stringify($.extend(true, JSON.parse(data), fieldData)),
+                            data: JSON.stringify($.extend(true, template.form, fieldData)),
                             contentType: "application/json",
                             success: function(data, textStatus, jqXHR){
                                 // Define url to redirect to
