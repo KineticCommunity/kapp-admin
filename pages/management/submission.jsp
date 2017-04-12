@@ -75,7 +75,7 @@
                         <h3>
                             <span>${text.escape(currentForm.name)} (${text.escape(submission.handle)})</span>
                             <div class="pull-right users-table-buttons">
-                                <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
+                                <c:if test="${not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
                                     <a class="btn btn-default" href="${taskServerUrl}/app/runs?sourceId=${submission.id}">
                                         <span class="fa fa-sitemap fa-fw"></span> View Runs
                                     </a>

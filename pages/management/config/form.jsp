@@ -55,12 +55,12 @@
                     <span>${text.escape(currentForm.name)}</span>
                     <small>Form Configuration</small>
                     <div class="pull-right">
-                        <c:if test="${not empty taskServerUrl && (hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
+                        <c:if test="${not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleTaskDeveloper)}">
                             <a class="btn btn-tertiary" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                 <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                             </a>
                         </c:if>
-                        <c:if test="${hasRoleFormDeveloper}">
+                        <c:if test="${identity.isSpaceAdmin() || hasRoleFormDeveloper}">
                             <a class="btn btn-tertiary" target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentForm.slug}/builder">
                                 <span class="fa fa-pencil fa-fw"></span> Edit Form
                             </a>
