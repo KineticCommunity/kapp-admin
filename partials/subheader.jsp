@@ -15,29 +15,12 @@
                     <bundle:yield name="breadcrumb"/>
                 </ol>
             </div>
-            <div class="col-sm-2 text-right additional-menu">
+            <div class="col-sm-2 text-right additional-menu hidden-sm hidden-md hidden-lg">
                 <ul class="unstyled">
-                    <li>
-                        <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"  aria-haspopup="true" aria-expanded="false">
-                            Help
-                            <span class="fa fa-caret-down fa-fw"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <c:if test="${not empty form}">
-                                <c:set var="helpLinks" value="${AdminHelper.getHelpLinks(form)}" />
-                                <c:forEach var="link" items="${helpLinks}">
-                                    <li><a href="${link.href}" target="_blank">${link.name}</a></li>
-                                </c:forEach>
-                                <li class="divider ${empty helpLinks ? 'hide' : ''}"></li>
-                            </c:if>
-                            <li><a href="https://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Kapp-Admin" target="_blank">About Admin Console</a></li>
-                            <c:set var="aside"><bundle:yield name="aside"/></c:set>
-                            <c:if test="${not empty aside}">
-                                <li class="divider hidden-sm hidden-md hidden-lg"></li>
-                                <li class="hidden-sm hidden-md hidden-lg"><a href="javascript:bundle.admin.openAsidePopup();">About This Page</a></li>
-                            </c:if>
-                        </ul>
-                    </li>
+                    <c:set var="aside"><bundle:yield name="aside"/></c:set>
+                    <c:if test="${not empty aside}">
+                        <li><a href="javascript:bundle.admin.openAsidePopup();"><span class="fa fa-info-circle fa-lg fa-fw"></span></a></li>
+                    </c:if>
                 </ul>
             </div>
         </div>
