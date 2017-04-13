@@ -202,10 +202,11 @@
                     <c:if test="${not empty feedbackForm}">
                         <div role="tabpanel" class="tab-pane" id="feedback">
                             <div class="form-activity feedback-activity">
+                                <c:set var="feedbackQ">values[Kapp]="${currentKapp.slug}" AND values[Form]="${currentForm.slug}"</c:set>
                                 <table data-submissions-data-table
                                        data-source="/kapps/${kapp.slug}/forms/${feedbackForm.slug}/submissions"
                                        data-source-include="details,values"
-                                       data-source-query="timeline=submittedAt&direction=DESC"
+                                       data-source-query="timeline=submittedAt&direction=DESC&q=${text.escapeUrlParameter(feedbackQ)}"
                                        data-source-limit="25"
                                        data-order-column="2" data-order-direction="desc"
                                        style="width:100%" class="table table-hover dt-responsive nowrap" 
