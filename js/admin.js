@@ -376,20 +376,6 @@
     };
 
     /**
-     * Replace variables in Notifcations with Yellow Background Color
-     */
-    $.fn.dataTable.render.notificationReplacement = function(){
-        return function ( d, type, row ){
-            if (type === "export"){
-                return $.htmlEncode(d);
-            }
-            else {
-                return d.replace(/\${(.*?)\}/g, " <span style='background-color:rgba(255,255,0,0.20)'>\$&</span>" )
-            }
-        };
-    };
-
-    /**
      * Function to add renderers to a list of columns with renderType propertiesfor DataTables
      */
     admin.addDataTableRenderers = function(columns, renderers){
@@ -419,9 +405,6 @@
                     break;
                 case "radio":
                     col.render = renderers.radio || $.fn.dataTable.render.text();
-                    break;
-                case "notificationReplacement":
-                    col.render = renderers.notificationReplacement || $.fn.dataTable.render.notificationReplacement();
                     break;
                 default:
                     if (renderers[col.renderType]){

@@ -55,6 +55,12 @@ table.dataTable tbody td.actions-xs {
     width: 28px; 
     text-align: center;
 }
+table.dataTable thead th.actions-lg,
+table.dataTable tbody td.actions-lg {
+    min-width: 109px; 
+    width: 109px; 
+    text-align: center;
+}
 table.dataTable tbody td ul {
     margin-bottom: 0;
     padding-left: 16px;

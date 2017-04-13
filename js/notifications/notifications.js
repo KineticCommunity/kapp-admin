@@ -86,7 +86,7 @@
             });
             
             /**
-             * Event handlers for edit, clone, and delete buttons for the records table
+             * Event handlers for preview and delete buttons for the records table
              */
             $("table#table-notifications").on("click", "button.delete", function(e){
                 // On click of delete button, confirm that the user is sure they want to delete
@@ -136,6 +136,30 @@
                 confirmDelete.show();
                 // Blur delete button
                 $(this).blur();
+            }).on("click", "button.preview", function(e){
+                (new KD.Modal({
+                    header: "Preview " + bundle.notifications.type,
+                    body: $("<iframe>", {
+                            src: bundle.kappLocation() + "?partial=notifications/preview&id=" + $(this).data("preview-id"),
+                            frameborder: "0",
+                            scrolling: "no"
+                        }).css({
+                            "width": "100%",
+                            "height": "auto"
+                        }).on("load", function(){
+                            $(this).height($(this).get(0).contentWindow.document.body.scrollHeight + "px");
+                        }),
+                    footer: function(element, actions) {
+                        element.addClass("text-right").append(
+                            $("<button>", {class: "btn btn-link", tabindex: 1}).text("Close").on("click", actions.dismiss)
+                        );
+                    },
+                    size: "md",
+                    backdrop: true,
+                    backdropclose: true,
+                    keyboardclose: true,
+                    renderCallback: false
+                })).show()
             });
         }
 
@@ -312,11 +336,20 @@
                             "<a href=\"" + bundle.kappLocation() + "/" + bundle.notifications.consoleSlug + 
                                 "?page=notifications/record&type=" + bundle.notifications.type + "&id=" + row.ID + 
                                 "\" class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></a>" +
+                            "<button class=\"btn btn-xs btn-info preview\" data-preview-id=\"" + row.ID + "\" title=\"Preview\"><span class=\"fa fa-eye fa-fw\"></span></button>" +
                             "<a href=\"" + bundle.kappLocation() + "/" + bundle.notifications.consoleSlug + 
                                 "?page=notifications/record&type=" + bundle.notifications.type + "&clone=" + row.ID + 
                                 "\" class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></a>" +
                             "<button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button>" +
                         "</div>";
+                    },
+                    notificationReplacement: function ( d, type, row ){
+                        if (type === "export"){
+                            return $.htmlEncode(d);
+                        }
+                        else {
+                            return d.replace(/\${(.*?)\}/g, " <span style='background-color:rgba(255,255,0,0.20)'>\$&</span>" )
+                        }
                     }
                 });
                 // Build DataTable
