@@ -10,6 +10,8 @@
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 <c:set var="catalogKapp" value="${space.getKapp(space.getAttributeValue('Catalog Kapp Slug'))}" />
 <c:set var="feedbackForm" value="${kapp.getForm(space.getAttributeValue('Feedback Form Slug'))}" />
+<c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
+        || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
 
 <c:choose>
     <c:when test="${empty currentKapp}">
@@ -66,7 +68,7 @@
                             <span>${text.escape(currentForm.name)}</span>
                             <small>Form</small>
                             <div class="pull-right users-table-buttons">
-                                <c:if test="${not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleTaskDeveloper)}">
+                                <c:if test="${hasCustomWorkflow && not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleTaskDeveloper)}">
                                     <a class="btn btn-tertiary" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                         <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                                     </a>

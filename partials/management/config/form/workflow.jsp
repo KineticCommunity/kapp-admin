@@ -6,7 +6,18 @@
 <c:set var="adminKapp" value="${space.getKapp(space.getAttributeValue('Admin Kapp Slug'))}" scope="request" />
 <c:set var="catalogKapp" value="${space.getKapp(space.getAttributeValue('Catalog Kapp Slug'))}" scope="request" />
 <c:set var="queueKapp" value="${space.getKapp(space.getAttributeValue('Queue Kapp Slug'))}" scope="request" />
+<c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
+        || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
 
+<script>
+    var hasCustomWorkflow = ${hasCustomWorkflow};
+    if (hasCustomWorkflow){
+        $(".custom-workflow-btn").removeClass("hide");
+    }
+    else {
+        $(".custom-workflow-btn").addClass("hide");
+    }
+</script>
 
 <%-- Define list of form attributes that should appear in the Workflow Options tab.
      Each attribute is a JSON object with the following properties:
@@ -17,6 +28,27 @@
                   For options, the property name is the label to display and the property value is the value to be saved. --%>
 <c:set var="tabAttributes">
     <json:array>
+        <json:object>
+            <json:property name="name" value="Custom Workflow on Created" />
+            <json:property name="partial" value="radioInput.jsp" />
+            <json:object name="data">
+                <json:property name="Use Standard Workflow Process" value="" />
+                <json:property name="Use Custom Workflow Process" value="True" />
+                <json:property name="_default" value="" />
+            </json:object>
+        </json:object>
+        <json:object>
+            <json:property name="name" value="Custom Workflow on Submitted" />
+            <json:property name="partial" value="radioInput.jsp" />
+            <json:object name="data">
+                <json:property name="Use Standard Workflow Process" value="" />
+                <json:property name="Use Custom Workflow Process" value="True" />
+                <json:property name="_default" value="" />
+            </json:object>
+            <json:property name="hr" value="true" />
+        </json:object>
+        <json:object>
+        </json:object>
         <json:object>
             <json:property name="name" value="Approval Days Due" />
             <json:property name="partial" value="numberInput.jsp" />
@@ -91,6 +123,9 @@
         </c:import>
         <c:remove var="attributeObject" />
         <c:remove var="dataObject" />
+        <c:if test="${text.equals(attr.hr, 'true')}">
+            <hr />
+        </c:if>
     </c:if>
     <c:remove var="definitionObject" />
 </c:forEach>

@@ -87,6 +87,9 @@ body > div.view-port > div.container > div.row > div.tab-content > div.row.aside
   content: "\f053";
   left: -8px;
 }
+body > div.view-port > div.container hr {
+  border-color: white;
+}
 
 @media (min-width: 768px) {
   body > div.view-port > div.container > div.row > div.tab-content > div.row.aside-closed > div.content-main {

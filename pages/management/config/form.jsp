@@ -7,6 +7,8 @@
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
+<c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
+        || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
 
 <c:choose>
     <c:when test="${empty currentKapp}">
@@ -56,7 +58,7 @@
                     <small>Form Configuration</small>
                     <div class="pull-right">
                         <c:if test="${not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleTaskDeveloper)}">
-                            <a class="btn btn-tertiary" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
+                            <a class="btn btn-tertiary custom-workflow-btn ${hasCustomWorkflow ? '' : 'hide'}" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                 <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                             </a>
                         </c:if>
@@ -116,6 +118,13 @@
                 <h5>${currentForm.name}</h5>
                 <hr />
                 <p>Here you can update different properties of the form including display options, workflow options, and categories.</p>
+                <p>
+                    The <b>Workflow Options</b> define configurable properties that are used by the workflow of the form.
+                    <div class="p-l-2">
+                        <div>The <b>Standard Workflow Process</b> uses all of the options if they are set.</div>
+                        <div>If a <b>Custom Workflow Process</b> is used, the options are only used if the custom process is configured to use them.</div>
+                    </div>
+                </p>
                 <p>The system was designed to be hierarchical so that properties configured here at the form level will override properties set at the kapp and space levels.</p>
                 <p>If any properties are not configured here, the properties set at the kapp level will be used. If those properties are not set at the kapp level, the ones from the space level will be used.</p>
                 <c:if test="${identity.spaceAdmin}">
