@@ -337,6 +337,14 @@
             }
             return fieldElements;
         }
+        
+        public List<Element> getFormFieldElements(Form form){
+            List<Element> fieldElements = new ArrayList<>();
+            for (Page page : form.getPages()){
+                fieldElements.addAll(getFieldElements(page.getElements()));
+            }
+            return fieldElements;
+        }
 
          /*-----------------------------------------------------------------------------------------
          * SYSTEM MANAGEMENT CONSOLE HELPER FUNCTIONS

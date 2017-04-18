@@ -51,8 +51,8 @@
         // Destroy table if it already exists and show loading message
         if ($.fn.DataTable.isDataTable(table)){
             table.DataTable().destroy();
-            table.find("tbody").empty();
-            table.find("tbody").append("<tr><td class=\"text-center\"><span class=\"fa fa-spinner fa-spin\"></span>Loading</td>");
+            table.find("tbody").remove();
+            table.append("<tbody><tr><td class=\"text-center\"><span class=\"fa fa-spinner fa-spin\"></span>Loading</td><tbody>");
         }        
         
         // Build options and set renderers
@@ -82,7 +82,7 @@
     };
     
     sdt.buildOptions = function(table, previousPage, nextPage){
-        return {
+        var options = {
             columns: sdt.buildColumns(table),
             ajax: {
                 dataSrc: "submissions",
@@ -127,6 +127,20 @@
                 table.data("nextPageToken", json.nextPageToken || null);
             }
         };
+        if (table.data("toggle-columns")){
+            options.buttons = options.buttons || []; 
+            options.buttons.push({
+                extend: "colvis",
+                text: table.data("toggle-columns") + " <span class='fa fa-caret-down'></span>",
+                collectionLayout: 'column-visibility-layout',
+                className: "column-visibility-button btn-subtle",
+                columns: ".visibility-toggle"
+            });
+            if (options.dom.indexOf("B") < 0){
+                options.dom = "B" + options.dom;
+            }
+        }
+        return options;
     };
     
     

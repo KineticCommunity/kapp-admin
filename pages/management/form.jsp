@@ -170,6 +170,7 @@
                                    data-source-query="timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
                                    data-source-limit="25"
                                    data-order-column="3" data-order-direction="desc"
+                                   data-toggle-columns="Toggle Value Columns"
                                    style="width:100%" class="table table-hover dt-responsive nowrap" 
                                    id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}">
                                 <thead>
@@ -181,6 +182,11 @@
                                             data-render-type="statusLabel">Status</th>
                                         <th data-data="submittedAt"
                                             data-render-type="submitted">Submitted</th>
+                                        <c:forEach var="field" items="${AdminHelper.getFormFieldElements(currentForm)}">
+                                            <th class="visibility-toggle" data-visible="false"
+                                                data-data="values.${field.name}"
+                                                data-render-type="${field.renderType}">${field.name}</th>
+                                        </c:forEach>
                                     </tr>
                                 </thead>
                                 <tbody>
