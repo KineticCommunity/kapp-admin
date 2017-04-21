@@ -115,18 +115,12 @@ label.field-label {
 
 .tt-menu {
   background: rgb(255, 255, 255);
-  padding: .5rem;
   border-width: 1px;
   border-style: solid;
   border-color: rgb(207, 207, 207);
   .fa.pull-left {
     margin: 0;
   }
-}
-.tt-input {
-  min-height: 3rem;
-  border: 1px solid $lightgray;
-  width: 35rem;
 }
 
 /* Section Page > Form
