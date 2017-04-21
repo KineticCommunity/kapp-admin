@@ -1,6 +1,6 @@
 /**
 * KD Typeahead
-* Version 1.0 (2017-04-20)
+* Version 1.0.1 (2017-04-21)
 * 
 * Prerequisates to using this script are
 * jQuery / underscore / moment
@@ -113,15 +113,25 @@
                     if(value.split('::')[0].toLowerCase() === 'string'){
                         addtlParam = '&values[' + name + ']=' + valToSet;
                     } else if(value.split('::')[0].toLowerCase() === 'field') {
-                        addtlParam = '&values[' + name + ']=' + typeaheadForm.select('field['+ valToSet +']').value();
+                        var field = typeaheadConfig['typeaheadForm'].select('field[' + valToSet + ']');
+                        if (field != null){
+                            addtlParam = '&values[' + name + ']=' + field.value();
+                        }
+                        else {
+                            console.log("KD Typeahead Error! When adding additional bridge parameters (typeahead-additional-params), could not find field with the name: " + valToSet);
+                        }
                     }
                     typeaheadConfig['bridgeUrl'] += addtlParam
                 })
             }
 
             // Stop processing if bridgedresource is not defined or attribute to set as value is not defined 
-            if(_.isEmpty(typeaheadConfig['bridgedResource']) || _.isEmpty(typeaheadConfig['bridgeUrl']) || _.isEmpty(typeaheadConfig['attrToSet']) ) {
-                console.log("Typeahead Search Misconfigured");
+            if(_.isEmpty(typeaheadConfig['bridgedResource'])) {
+                console.log("KD Typeahead Error! Missing bridged resource configuration (typeahead-bridged-resource).");
+                return false;
+            }
+            else if(_.isEmpty(typeaheadConfig['attrToSet']) ) {
+                console.log("KD Typeahead Error! Missing attribute to set configuration (typeahead-attribute-to-set).");
                 return false;
             }
 
@@ -231,10 +241,26 @@ typeaheadConfigurations = {
         selectedCallback: function(data, config) {  // Data is the row that was selected, all attributes returned from the bridge are available
             // Loop over the Fields to Set and Set them
             $.each( config['fieldsToSet'], function( key, value ) {
-                config['typeaheadForm'].select('field[' + key + ']').value(data[value]);
-                // Fire change event on field that was set
-                $(config['typeaheadForm'].select('field[' + key + ']').element()).change();
+                var field = config['typeaheadForm'].select('field[' + key + ']');
+                if (field != null){
+                    field.value(data[value]);
+                    // Fire change event on field that was set
+                    $(field.element()).change();
+                }
+                else {
+                    console.log("KD Typeahead Error! When setting fields (typeahead-fields-to-set), could not find field with the name: " + key);
+                }
             });
         }
     }
 };
+
+/**
+ * Change Log
+ * 
+ * v1.0.1 2017-04-21
+ *  - Added null checks when working with fields. 
+ * v1.0 2017-04-20
+ *  - Added version. Cleaned up code a bit. 
+ *
+ */
