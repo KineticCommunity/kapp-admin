@@ -25,8 +25,21 @@
     </json:object>
     <c:forEach var="field" items="${fields}" varStatus="status">
       <c:choose>
+        <c:when test="${field.title eq 'HTML Content'}">
+        <json:object>
+          <json:property name="title" value="${field.title}"/>
+          <json:property name="data" value="${field.data}"/>
+          <json:property name="renderType" value="notificationReplacement"/>
+          <json:property name="class" value="none"/>
+          <json:property name="visible" value="${false}"/>
+          <json:property name="searchable" value="${false}"/>
+          <json:property name="orderable" value="${false}"/>
+          <c:if test="${orderColumn eq 0 && field.visible eq true}">
+              <c:set var="orderColumn" value="${status.index+1}" />
+          </c:if>
+        </json:object>
+        </c:when>
         <c:when test="${fn:contains(field.title, 'Content')}">
-          <c:if test="${not fn:contains(field.title, 'HTML')}">
             <json:object>
               <json:property name="title" value="${field.title}"/>
               <json:property name="data" value="${field.data}"/>
@@ -39,7 +52,6 @@
                   <c:set var="orderColumn" value="${status.index+1}" />
               </c:if>
             </json:object>
-          </c:if>
         </c:when>
         <c:when test="${field.title eq 'Subject' && type eq 'Snippet'}">
         </c:when>
