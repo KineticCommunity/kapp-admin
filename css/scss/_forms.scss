@@ -51,6 +51,7 @@ div.form-control {
   background-color: rgb(236, 236, 236);
   color: $darkestgray;
   cursor: default;
+  opacity: 1;
 }
 select option:disabled {
   background-color: rgb(236, 236, 236);
@@ -131,7 +132,7 @@ section.page {
     margin: 0;
     padding: 0;
   }
-  
+
   form {
     margin: 1.5rem 0;
     font-weight: 400;
@@ -214,7 +215,7 @@ section.page {
 
       &[data-button-type="previous-page"] {
         @extend .btn-default;
-        float: left; 
+        float: left;
         margin-right: 0.5rem;
         margin-left: 0;
       }
@@ -272,7 +273,7 @@ section.page {
       }
     }
   }
-  
+
   &.embedded {
     form {
       margin: 0;
