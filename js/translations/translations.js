@@ -767,15 +767,15 @@
                         ),
                         $("<div>", {class: "input-group"}).append(
                             $("<span>", {class: "input-group-addon"}).append(
-                                $("<span>", {}).append(
+                                $("<label>", {for: "custom-prefix"}).append(
                                     $("<input>", {type: "radio", name: "context-prefix", value: "custom.", id: "custom-prefix", checked: !isFormContext}),
-                                    $("<label>", {for: "custom-prefix"}).append("custom.")
+                                    $("<span>").append("custom.")
                                 )
                             ),
                             $("<span>", {class: "input-group-addon"}).append(
-                                $("<span>", {}).append(
+                                $("<label>", {for: "form-prefix"}).append(
                                     $("<input>", {type: "radio", name: "context-prefix", value: "form.", id: "form-prefix", checked: isFormContext}),
-                                    $("<label>", {for: "form-prefix"}).append("form.")
+                                    $("<span>").append("form.")
                                 )
                             ),
                             $("<input>", {class: "form-control new-context-name", placeholder: "Context Name"}).on("keypress", function(e){
@@ -831,7 +831,7 @@
                             try { 
                                 errorThrown = JSON.parse(jqXHR.responseText).error; 
                             } catch(e){}
-                            self.closest("table, h3").notifie({
+                            self.closest("table, h2").notifie({
                                 message: "Failed to rename the context <b>" + currentName + "</b><br>Error: " + errorThrown
                             });
                         }
@@ -1103,14 +1103,14 @@
             url: bundle.adminTranslations.apiBaseUrl + "/translations.csv"
         }).bind('fileuploadsend', function (e, data) {
             $(this).notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "<span class='fa fa-spinner fa-spin'></span> Importing...",
                 severity: "info",
                 permanent: true
             });
         }).bind('fileuploaddone', function (e, data) {
             $(this).notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "<b>Import Completed Successfully</b><br>" + data.response().result.message
                     + "<br><a class='pull-right btn btn-default' href='" + bundle.adminTranslations.i18nKappUrl + "&page=translations/publish'>"
                     + "<span class='fa fa-cloud-upload'></span> Publish Imported Changes</a>",
@@ -1123,7 +1123,7 @@
                 errorThrown = JSON.parse(data.response().jqXHR.responseText).error; 
             } catch(e){}
             $(this).notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "Failed to import translations from the uploaded file.<br>Error: " + errorThrown,
                 exitEvents: "click"
             });
@@ -1138,7 +1138,7 @@
                 beforeSend: function(){
                     self.attr("disabled", true);
                     self.notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         message: "<span class='fa fa-spinner fa-spin'></span> Publishing...",
                         severity: "info",
                         permanent: true
@@ -1152,7 +1152,7 @@
                         errorThrown = JSON.parse(jqXHR.responseText).error; 
                     } catch(e){}
                     self.notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         message: "Failed to publish changes.<br>Error: " + errorThrown,
                         exitEvents: "click"
                     });

@@ -313,7 +313,7 @@
         }
         else {
             $("div.datastore-records-table-buttons").notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "Your browser does not support the import feature. Please use a newer browser."
             });
         }
@@ -333,7 +333,7 @@
             // If not CSV file
             if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
                 importInput.closest("div.datastore-records-table-buttons").notifie({
-                    anchor: "h3",
+                    anchor: "h2",
                     message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
                     exitEvents: "mouseup"
                 });
@@ -386,7 +386,7 @@
                 /** If invalid headers found, throw error **/
                 if (invalidHeaders.length){
                     importInput.closest("div.datastore-records-table-buttons").notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         message: "Invalid CSV file. " 
                             + invalidHeaders.length + " of the headers in the CSV file do not match an existing field on this datastore. <br/>"
                             + "Invalid headers: " + invalidHeaders.join(", "),
@@ -397,7 +397,7 @@
                 else {
                     // Close any top level alerts
                     importInput.closest("div.datastore-records-table-buttons").notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         exit: true
                     });
                     // Clear and destroy table and show notification that import is happening
@@ -438,7 +438,7 @@
             },
             error: function(jqXHR, textStatus, errorThrown){
                 importInput.closest("div.datastore-records-table-buttons").notifie({
-                    anchor: "h3",
+                    anchor: "h2",
                     message: "An error occurred while importing records: " + errorThrown,
                     exitEvents: "mouseup"
                 });
@@ -574,7 +574,7 @@
             }
             importInput.closest("div.datastore-records-table-buttons").notifie({
                 severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
-                anchor: "h3",
+                anchor: "h2",
                 message: msg
             });
             ds.store.loadRecords(false, false, {});

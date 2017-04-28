@@ -43,6 +43,9 @@ div.translation-editor small {
 span.rename-context-button {
   cursor: pointer;
 }
+div.rename-context-body .input-group-addon label input[type=radio] {
+  vertical-align: bottom;
+}
 
 a.pending-publish {
   border-top-right-radius: 0;

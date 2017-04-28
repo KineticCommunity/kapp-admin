@@ -64,8 +64,8 @@
                     var file = fileList.item(0);
                     // If not CSV file
                     if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
-                        importInput.closest("div.table-notifications-buttons").notifie({
-                            anchor: "h3",
+                        importInput.closest("div.notification-table-buttons").notifie({
+                            anchor: "h2",
                             message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
                             exitEvents: "mouseup"
                         });
@@ -376,8 +376,8 @@
             $("input#notification-import").trigger("click");
         }
         else {
-            $("div.table-notifications-buttons").notifie({
-                anchor: "h3",
+            $("div.notification-table-buttons").notifie({
+                anchor: "h2",
                 message: "Your browser does not support the import feature. Please use a newer browser."
             });
         }
@@ -416,8 +416,8 @@
                 
                 /** If invalid headers found, throw error **/
                 if (invalidHeaders.length){
-                    importInput.closest("div.table-notifications-buttons").notifie({
-                        anchor: "h3",
+                    importInput.closest("div.notification-table-buttons").notifie({
+                        anchor: "h2",
                         message: "Invalid CSV file. " 
                             + invalidHeaders.length + " of the headers in the CSV file do not match an existing notification field. <br/>"
                             + "Invalid headers: " + invalidHeaders.join(", "),
@@ -454,8 +454,8 @@
                 }
             },
             error: function(jqXHR, textStatus, errorThrown){
-                importInput.closest("div.table-notifications-buttons").notifie({
-                    anchor: "h3",
+                importInput.closest("div.notification-table-buttons").notifie({
+                    anchor: "h2",
                     message: "An error occurred while importing records: " + errorThrown,
                     exitEvents: "mouseup"
                 });
@@ -585,9 +585,9 @@
                 var failureTable = table.DataTable(failures);
                 msg.append($("<div>").addClass("pull-right").append(failureTable.buttons().container()));
             }
-            importInput.closest("div.table-notifications-buttons").notifie({
+            importInput.closest("div.notification-table-buttons").notifie({
                 severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
-                anchor: "h3",
+                anchor: "h2",
                 message: msg
             });
             adminNote.console.loadDatastoreRecords(datastoreSlug, adminNote.console.filters, adminNote.console.type);
