@@ -22,7 +22,7 @@
 
 <%-- Get bundle, space, and kapp objects --%>
 <%
-    Bundle bundle = (Bundle)request.getAttribute("bundle"); 
+    Bundle bundle = (Bundle)request.getAttribute("bundle");
     Space space = (Space)request.getAttribute("space");
     Kapp kapp = (Kapp)request.getAttribute("kapp");
     Form form = (Form)request.getAttribute("form");
@@ -30,10 +30,9 @@
 %>
 
 <%-- Create paths for headers and footers which can be shared. --%>
-<%  
+<%
     if (request.getAttribute("headerBundlePath") == null || request.getAttribute("headerPath") == null || request.getAttribute("headerLocation") == null) {
         String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
-
         String headerBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
         if (kapp != null && kapp.hasAttribute("Header Bundle Path")){
             headerBundlePath = kapp.getAttributeValue("Header Bundle Path");
@@ -59,6 +58,21 @@
         request.setAttribute("footerPath", space.getBundleBase() + "/" + footerBundlePath);
         request.setAttribute("footerLocation", contextPath + space.getBundleBase() + "/" + footerBundlePath);
     }
+    
+    if (request.getAttribute("librariesBundlePath") == null || request.getAttribute("librariesPath") == null || request.getAttribute("librariesLocation") == null) {
+        String contextPath = Text.replace(bundle.getSpaceLocation(), "/" + space.getSlug(), "");
+        String librariesBundlePath = kapp != null ? kapp.getBundlePath() : space.getBundlePath();
+        if (kapp != null && kapp.hasAttribute("Libraries Bundle Path")){
+            librariesBundlePath = kapp.getAttributeValue("Libraries Bundle Path");
+        }
+        else if (space.hasAttribute("Libraries Bundle Path")){
+            librariesBundlePath = space.getAttributeValue("Libraries Bundle Path");
+        }
+        request.setAttribute("librariesBundlePath", librariesBundlePath);
+        request.setAttribute("librariesPath", space.getBundleBase() + "/" + librariesBundlePath);
+        request.setAttribute("librariesLocation", contextPath + space.getBundleBase() + "/" + librariesBundlePath);
+    }
+
 %>
 
 <%-- Load helper(s) --%>

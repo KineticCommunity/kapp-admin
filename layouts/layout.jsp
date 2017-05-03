@@ -47,38 +47,16 @@
             bundle.config.kapps["currentKapp"] = "${kapp.slug}";
         </script>
         
-        <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+        <%-- Include libraries, css, and js --%>
+        <c:import url="${librariesPath}/partials/libraries.jsp" charEncoding="UTF-8"/>
         <bundle:stylepack>
-            <bundle:style src="${bundle.location}/libraries/jquery-ui/jquery-ui.css"/>
-            <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.css"/>
-            <bundle:style src="${bundle.location}/libraries/bootstrap-select/bootstrap-select.css" />
-            <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
-            <bundle:style src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.css"/>
-            <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
-            <bundle:style src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.css"/>
-            <bundle:style src="${bundle.location}/css/master.css"/>
+            <bundle:style src="${bundle.location}/css/master.css" />
         </bundle:stylepack>
         <bundle:scriptpack>
-            <bundle:script src="${bundle.location}/libraries/jquery/jquery.js" />
-            <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
-            <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
-            <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
-            <bundle:script src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.js"/>
-            <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.js"/>
-            <bundle:script src="${bundle.location}/libraries/bootstrap-select/bootstrap-select.js" />
-            <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
-            <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
-            <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
-            <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.js"/>
-            <bundle:script src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.js"/>
-            <bundle:script src="${bundle.location}/libraries/md5/md5.js" />
             <bundle:script src="${bundle.location}/js/admin.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
-        <%-- Moment-with-locales.js is incompatible with the bundle:scriptpack minification process. --%>
-        <bundle:scriptpack minify="false">
-            <bundle:script src="${bundle.location}/libraries/moment/moment-with-locales.min.js"/>
-        </bundle:scriptpack>
+        
         <c:set var="pageTitle"><bundle:yield name="pageTitle"/></c:set>
         <title>
            ${text.join([not empty pageTitle ? pageTitle : text.defaultIfBlank(form.name, kapp.name), AdminHelper.companyName], ' - ')}
