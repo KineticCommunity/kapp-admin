@@ -43,10 +43,10 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>
+                <h2>
                     ${empty currentSchedule ? 'New Schedule' : currentSchedule.values['Schedule Name']}
                     <c:if test="${not empty currentRobot}"><small> Schedule for ${currentRobot.values['Name']} Robot</small></c:if>
-                </h3>
+                </h2>
             </div>
             
             <div class="row">
@@ -86,7 +86,7 @@
                                     </h4>
                                 </div>
                                
-                                <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="robot-schedule-executions-table"
+                                <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedule-executions-table"
                                        data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}" data-robot-schedule-id="${currentSchedule.id}">
                                     <tr>
                                         <td class="alert alert-info">
@@ -108,10 +108,10 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                 <h4>
+                 <h5>
                     ${empty currentSchedule ? 'New Schedule' : currentSchedule.values['Schedule Name']}
                     <c:if test="${not empty currentSchedule}"><small> Schedule</small></c:if>
-                </h4>
+                </h5>
                 <hr class="border-color-white" />
                 <c:choose>
                     <c:when test="${not empty currentRobot}">

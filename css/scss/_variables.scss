@@ -17,10 +17,10 @@ $white: #ffffff;
 
 $text-color: $gray !default; // Global text color on `<body>`.
 $link-color: $tertiary !default; // Global textual link color.
-$body-bg-color: #f4f4f4 !default; // Background color for `<body>`.
+$body-bg-color: #ECEFF1 !default; // Background color for `<body>`.
 $header-color: rgb(102,102,102) !default; // Background color for header
 $header-text-color: rgba(255,255,255,.8) !default; // Text color for header
-$subheader-color: rgba(255,255,255,0.6) !default; 
+$subheader-color: rgba(255,255,255,0.6) !default;
 $subheader-text-color: $darkgray !default;
 
 // Color Tint Function
@@ -54,7 +54,7 @@ $footer-height: 6rem;
 // Typography
 // --------------------------------------
 
-$font-family-sans-serif:  "Trebuchet MS", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif:  "Source Sans Pro", sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-base:        $font-family-sans-serif !default;

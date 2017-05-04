@@ -7,3 +7,7 @@
 <bundle:scriptpack>
     <bundle:script src="${bundle.location}/js/notifications/notifications.js" />
 </bundle:scriptpack>
+<script>
+    bundle.notifications.consoleSlug = "${form.slug}";
+    bundle.notifications.kappSlug = "${kapp.slug}";
+</script>

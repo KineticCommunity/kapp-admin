@@ -44,23 +44,23 @@
             <div class="page-header" data-clear-entry-table-states="${i18nKapp.slug}">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>${text.escape(i18nKapp.name)}</span>
                             <small>Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-default" href="${i18nApiUrl}/translations.csv">
+                                <a class="btn btn-default" href="${i18nApiUrl}/translations.csv">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <button class="btn btn-sm btn-default import-translations-btn fileinput-button">
+                                <button class="btn btn-default import-translations-btn fileinput-button">
                                     <span class="fa fa-upload fa-fw"></span> Import
                                     <input id="fileupload" type="file" accept=".csv"/>
                                 </button>
-                                <a class="btn btn-sm btn-tertiary" 
+                                <a class="btn btn-tertiary" 
                                    href="${i18nKappUrl}&page=translations/add">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>
                             </div>
-                        </h3>
+                        </h2>
                     </div>
                             
                     <div class="col-xs-12">
@@ -102,7 +102,7 @@
                     <h4>Locales</h4>
                 </div>
                 <div class="col-xs-12">
-                    <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
+                    <table class="table table-hover" data-sort="false" data-dom="t" data-table-dom> 
                         <thead>
                             <tr>
                                 <th style="width:15%;">Default Locale</th>
@@ -169,7 +169,7 @@
             <div class="row">
 
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Core Contexts"> 
                         <thead>
                             <tr>
@@ -233,7 +233,7 @@
             
             <div class="row">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Form Contexts"
                            data-empty-message="No form contexts found. Add forms to your Kapp to see form contexts."> 
                         <thead>
@@ -283,7 +283,7 @@
             
             <div class="row">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-table-dom data-table-name="Custom Contexts"
                            data-empty-message="No custom contexts found. You may create custom contexts below."> 
                         <thead>
@@ -334,7 +334,7 @@
                                     </div>
                                 </td>
                                 <td class="text-right col-xs-12 col-sm-3">
-                                    <button class="btn btn-sm btn-success add-custom-context-btn" type="button" disabled>
+                                    <button class="btn btn-success add-custom-context-btn" type="button" disabled>
                                         <span class="fa fa-plus"></span>
                                         Add Custom Context
                                     </button>
@@ -350,7 +350,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>A <b>context</b> is a collection of translations that applies in a specific situation. All translations exist within a context.</p>
                 <p>A locale is considered <b>available</b> for a certain context if at least one translation entry exists for that locale.</p>

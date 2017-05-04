@@ -1,0 +1,1 @@
+/* JS Specific to the [CONSOLE NAME] Console */

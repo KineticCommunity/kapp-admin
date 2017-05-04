@@ -2,11 +2,6 @@
 <%@include file="../../bundle/initialization.jspf" %>
 <%@include file="../../bundle/router.jspf" %>
 
-<%--bundle:request method="get"
-                url="${bundle.apiPath}/users?include=attributes%2CprofileAttributes"
-                var="userList"
-                scope="request"></bundle:request --%>
-
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
     <bundle:variable name="head">
@@ -22,20 +17,25 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
 
     <div class="page-header">
-        <h3>
+        <h2>
             ${form.name}
             <div class="pull-right users-table-buttons">
-                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=users/user">
+                <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=users/user">
                     <span class="fa fa-plus fa-fw"></span> Create User
                 </a>
                 <input class="hide" accept=".csv" id="users-import" type="file">
             </div>
-        </h3>
+        </h2>
     </div>
 
     <div class="row">
+        <c:if test="${space.hasAttribute('Invite Others Form Slug')}">
+            <div class="col-xs-12 text-center">
+                <p>You can invite others <a href="${bundle.spaceLocation}?page=form&form=${space.getAttributeValue('Invite Others Form Slug')}">here</a>.</p>
+            </div>
+        </c:if>
         <div class="col-xs-12">
-            <table width="100%" class="table table-hover table-striped dt-responsive" id="users-table"
+            <table width="100%" class="table table-hover dt-responsive" id="users-table"
                    data-user-list data-space-name="${space.name}" data-console-slug="${form.slug}"> 
                 <thead class="nowrap"></thead>
                 <tbody>
@@ -66,15 +66,16 @@
         <hr class="border-color-white" />
         <p>To create a new user, click the <b class="nowrap"><span class="fa fa-plus"></span> Create User</b> button.</p>
         <p>To update a user, click the edit <b><span class="fa fa-pencil"></span></b> button.</p>
-        <p>To export the list of users to a CSV file, click the <b>Export CSV</b> button.</p>
-        <p>To create new users from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p>
-        <div class="p-l-2">
-            <p>
-                You may download a template for creating new users via import  
-                <a class="download-import-template" href="javascript:void(0);"><span class="fa fa-download"></span> here</a>. 
-                The template includes the required formatting for the <i>Enabled</i> and <i>Groups</i> columns.
-            </p>
-        </div>
+        <p>To clone a user, click the copy <b><span class="fa fa-clone"></span></b> button.</p>
+<!--         <p>To export the list of users to a CSV file, click the <b>Export CSV</b> button.</p> -->
+<!--         <p>To create new users from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p> -->
+<!--         <div class="p-l-2"> -->
+<!--             <p> -->
+<!--                 You may download a template for creating new users via import   -->
+<!--                 <a class="download-import-template" href="javascript:void(0);"><span class="fa fa-download"></span> here</a>.  -->
+<!--                 The template includes the required formatting for the <i>Enabled</i> and <i>Groups</i> columns. -->
+<!--             </p> -->
+<!--         </div> -->
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     

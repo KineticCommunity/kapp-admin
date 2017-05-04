@@ -29,15 +29,16 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>
-                    ${currentStore.name} <small> Records</small>
+                <h2>
+                    <span>${currentStore.name}</span>
+                    <small>Records</small>
                     <div class="pull-right datastore-records-table-buttons">
-                        <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=datastore/record&store=${currentStore.slug}">
+                        <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=datastore/record&store=${currentStore.slug}">
                             <span class="fa fa-plus fa-fw"></span> Add Record
                         </a>
                         <input class="hide" accept=".csv" id="datastore-records-import" type="file">
                     </div>
-                </h3>
+                </h2>
             </div>
         
             <div class="row">
@@ -82,7 +83,7 @@
                 </div>
                 
                 <div class="col-xs-12">
-                    <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
+                    <table style="width:100%" class="table table-hover dt-responsive nowrap" 
                            id="datastore-records-table-${currentStore.slug}" data-datastore-records-table>
                         <tr>
                             <td class="alert alert-info">
@@ -113,7 +114,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${currentStore.name}</h4>
+                <h5>${currentStore.name}</h5>
                 <p>${currentStore.description}</p>
                 <hr class="border-color-white" />
                 <p>To add a new record to this datastore, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Record</b> button.</p>

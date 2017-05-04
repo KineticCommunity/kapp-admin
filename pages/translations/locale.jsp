@@ -53,20 +53,20 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>${TranslationLocale.get(param.locale).name}</span>
                             <small>Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-default" 
+                                <a class="btn btn-default" 
                                    href="${i18nApiUrl}/translations.csv?locale=${text.escape(param.locale)}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <a class="btn btn-sm btn-tertiary" 
+                                <a class="btn btn-tertiary" 
                                    href="${i18nKappUrl}&page=translations/add&locale=${text.escape(param.locale)}">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>
                             </div>
-                        </h3>
+                        </h2>
                     </div>
                             
                     <div class="col-xs-12">
@@ -102,7 +102,7 @@
             
             <div class="row entries-container">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" 
+                    <table class="table table-hover" 
                            data-state-save="true"
                            id="locale_${i18nKapp.slug}_${text.escape(param.locale)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&locale=${text.escape(param.locale)}"
@@ -132,7 +132,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>The table displays all the translations for the <b class="nowrap">${TranslationLocale.get(param.locale).name} | ${param.locale}</b> locale.</p>
                 <p>To export the translations, click the <b class="nowrap"><span class="fa fa-download"></span> Export</b> button.</p>

@@ -2,60 +2,61 @@
 <%@include file="../../bundle/initialization.jspf" %>
 <%@include file="../../bundle/router.jspf" %>
 
-<!-- Set variable to hold the notification type (Template or Snippit). -->
+<!-- Set variable to hold the notification type (Template or Snippet). -->
 <c:set var="notificationType" value="${not empty param.type? param.type : 'Template'}s"/>
 <c:choose>
-    <c:when test="${notificationType eq 'Snippits'}">
-         <c:redirect url="${bundle.kappPath}/${form.slug}?page=notifications/snippits&type=Snippit"/>
+    <c:when test="${notificationType eq 'Snippets'}">
+         <c:redirect url="${bundle.kappPath}/${form.slug}?page=notifications/snippets&type=Snippet"/>
     </c:when>
     <c:otherwise>
         <bundle:layout page="${bundle.path}/layouts/layout.jsp">
             <!-- Sets title and imports js and css specific to this console. -->
             <bundle:variable name="head">
                 <c:import url="${bundle.path}/partials/notifications/head.jsp" charEncoding="UTF-8"/>
+                <script>
+                    bundle.notifications.type = "Template";
+                </script>
             </bundle:variable>
 
             <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
             <bundle:variable name="breadcrumb">
-                <li class="active">${form.name} Console</li>
+                <li class="active">${form.name}</li>
             </bundle:variable>
             <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
 
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
 
             <div class="page-header">
-                <h3>Notification <small> ${notificationType}</small>
+                <h2>Notification <small> ${notificationType}</small>
                     <div class="pull-right notification-table-buttons">
-                        <a class="btn btn-sm btn-success" href="${bundle.kappLocation}/${form.slug}?page=notifications/snippits&type=Snippit">
-                            <span class="fa fa-code fa-fw"></span> View Snippits
-                        </a>
-                        <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=notifications/record&type=Template">
+                        <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=notifications/record&type=Template">
                             <span class="fa fa-plus fa-fw"></span> Add Template
                         </a>
                         <input class="hide" accept=".csv" data-type="Template" id="notification-import" type="file">
                     </div>
-                </h3>
+                </h2>
             </div>
-            
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="col-xs-12">
-                        <table id="table-notifications" style="width:100%" class="table table-hover table-striped dt-responsive nowrap" 
-                               data-console-slug="${form.slug}" 
-                               data-kapp-slug="${kapp.slug}" 
-                               data-datastore-slug="notification-data" 
-                               id="table-notifications" 
-                               data-type="Template" 
-                               data-query="values[Type]=Template">
-                            <tr>
-                                <td class="alert alert-info">
-                                    <span class="fa fa-spinner fa-spin"></span>
-                                    Loading
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
+    
+            <div>
+                <ul class="nav nav-tabs h4 stacked-xs" role="tablist" id="form-configuration-tabs">
+                    <li role="presentation" class="active"><a href="javascript:void(0);">Templates</a></li>
+                    <li role="presentation"><a href="${bundle.kappLocation}/${form.slug}?page=notifications/snippets&type=Snippet">Snippets</a></li>
+                </ul>
+                <div class="m-t-2">
+                    <table id="table-notifications" style="width:100%" class="table table-hover dt-responsive nowrap" 
+                           data-console-slug="${form.slug}" 
+                           data-kapp-slug="${kapp.slug}" 
+                           data-datastore-slug="notification-data" 
+                           id="table-notifications" 
+                           data-type="Template" 
+                           data-query="values[Type]=Template">
+                        <tr>
+                            <td class="alert alert-info">
+                                <span class="fa fa-spinner fa-spin"></span>
+                                Loading
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
@@ -64,7 +65,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${notificationType}</h4>
+                <h5>${notificationType}</h5>
                 <p>${form.description}</p>
                 <hr class="border-color-white" />
                 <p>To add a new notification, click the <b class="nowrap"><span class="fa fa-plus"></span> Add Template</b> button.</p>
@@ -76,7 +77,7 @@
                 <div class="p-l-2">
                     <p>
                         The CSV file you import must have columns with headings corresponding to existing field names. 
-                        It may also have a <i>"Datastore Record ID"</i> column, used to update existing records.
+                        It may also have an <i>"ID"</i> column, used to update existing records.
                     </p>
                 </div>
                 <p><b>

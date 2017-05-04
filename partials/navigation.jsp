@@ -41,7 +41,7 @@
     </c:when>
     <c:otherwise>
         <li class="hidden-sm hidden-md hidden-lg">
-            <a href="${bundle.spaceLocation}/?page=profile">
+            <a href="${bundle.spaceLocation}?page=profile">
                 <span class="fa fa-user fa-fw"></span>
                 ${i18n.translate('Profile')}
             </a>

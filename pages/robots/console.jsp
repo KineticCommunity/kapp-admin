@@ -17,20 +17,20 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>
+        <h2>
             ${text.escape(form.name)}
             <div class="pull-right robots-table-buttons">
-                <a class="btn btn-sm btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/robot">
+                <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/robot">
                     <span class="fa fa-plus fa-fw"></span> Create Robot
                 </a>
             </div>
-        </h3>
+        </h2>
     </div>
     
     <div class="row">
         <div class="col-xs-12">
             
-            <table style="width:100%" class="table table-hover table-striped dt-responsive nowrap" id="robots-table">
+            <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robots-table">
                 <tr>
                     <td class="alert alert-info">
                         <span class="fa fa-spinner fa-spin"></span>

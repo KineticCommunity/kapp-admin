@@ -40,7 +40,7 @@
         <%-- Set User Locale into bundle object. --%>
         <script>bundle.config.userLocale = '${locale}';</script>
         <bundle:scriptpack>
-            <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
+            <bundle:script src="${bundle.location}/libraries/jquery/jquery.js" />
             <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
             <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>

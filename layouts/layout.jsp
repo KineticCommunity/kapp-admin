@@ -28,29 +28,50 @@
         <meta content='no' name='msapplication-tap-highlight'>
         <link rel="shortcut icon" href="${bundle.location}/images/favicon.ico" type="image/x-icon"/>
         <app:headContent/>
+        <c:set var="kappList">
+            <json:object>
+                <c:forEach var="kappIter" items="${space.kapps}">
+                    <json:object name="${kappIter.slug}">
+                        <json:property name="name" value="${kappIter.name}" />
+                        <json:property name="icon" value="${kappIter.getAttributeValue('Icon')}" />
+                    </json:object>
+                </c:forEach>
+            </json:object>
+        </c:set>
+        <script>
+            <%-- Set needed variables into js bundle object --%>
+            bundle.config.userLocale = "${locale}";
+            bundle.config.adminKappSlug = "${space.getAttributeValue('Admin Kapp Slug')}";
+            bundle.config.teamsKappSlug = "${space.getAttributeValue('Teams Kapp Slug')}";
+            bundle.config.kapps = ${kappList};
+            bundle.config.kapps["currentKapp"] = "${kapp.slug}";
+        </script>
+        
         <link href="${bundle.location}/libraries/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
         <bundle:stylepack>
+            <bundle:style src="${bundle.location}/libraries/jquery-ui/jquery-ui.css"/>
             <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.css"/>
+            <bundle:style src="${bundle.location}/libraries/bootstrap-select/bootstrap-select.css" />
             <bundle:style src="${bundle.location}/libraries/datatables/datatables.css"/>
             <bundle:style src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.css"/>
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
             <bundle:style src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.css"/>
             <bundle:style src="${bundle.location}/css/master.css"/>
         </bundle:stylepack>
-        <%-- Set User Locale into bundle object. --%>
-        <script>bundle.config.userLocale = '${locale}';</script>
         <bundle:scriptpack>
-            <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
+            <bundle:script src="${bundle.location}/libraries/jquery/jquery.js" />
             <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
             <bundle:script src="${bundle.location}/libraries/datatables/datatables.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-ui/jquery-ui.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery.fileupload/jquery.fileupload.js"/>
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.js"/>
+            <bundle:script src="${bundle.location}/libraries/bootstrap-select/bootstrap-select.js" />
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-csv/jquery.csv.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
             <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.js"/>
             <bundle:script src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.js"/>
+            <bundle:script src="${bundle.location}/libraries/md5/md5.js" />
             <bundle:script src="${bundle.location}/js/admin.js"/>
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
@@ -66,34 +87,41 @@
         <bundle:yield name="head"/>
     </head>
     <body>
-        <div class="view-port">
-            <c:set var="aside"><bundle:yield name="aside"/></c:set>
-            <c:import url="${headerPath}/partials/header.jsp" charEncoding="UTF-8"/>
-            <c:import url="${bundle.path}/partials/subheader.jsp" charEncoding="UTF-8"/>
-            <div class="container main-inner">
-                <div class="row">
-                    <div class="col-xs-12 tab-content">
+        <c:choose>
+            <c:when test="${identity.anonymous}">
+                <bundle:yield/>
+            </c:when>
+            <c:otherwise>
+                <div class="view-port">
+                    <c:set var="aside"><bundle:yield name="aside"/></c:set>
+                    <c:import url="${headerPath}/partials/header.jsp" charEncoding="UTF-8"/>
+                    <c:import url="${bundle.path}/partials/subheader.jsp" charEncoding="UTF-8"/>
+                    <div class="container main-inner">
                         <div class="row">
-                            <c:choose>
-                                <c:when test="${not empty aside}">
-                                    <div class="col-sm-9 content-main">
-                                        <bundle:yield/>
-                                    </div>
-                                    <div class="col-sm-3 hidden-xs aside pull-right">
-                                        <bundle:yield name="aside"/>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="col-xs-12 content-main">
-                                        <bundle:yield/>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="col-xs-12 tab-content">
+                                <div class="row">
+                                    <c:choose>
+                                        <c:when test="${not empty aside}">
+                                            <div class="col-sm-9 content-main">
+                                                <bundle:yield/>
+                                            </div>
+                                            <div class="col-sm-3 hidden-xs aside pull-right">
+                                                <bundle:yield name="aside"/>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="col-xs-12 content-main">
+                                                <bundle:yield/>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <c:import url="${footerPath}/partials/footer.jsp" charEncoding="UTF-8"/>
                 </div>
-            </div>
-            <c:import url="${footerPath}/partials/footer.jsp" charEncoding="UTF-8"/>
-        </div>
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>

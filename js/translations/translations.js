@@ -160,7 +160,7 @@
                         }
                         // Create Modal to confirm delete
                         var confirmDelete = new KD.Modal({
-                            header: "<h4>Confirm Delete</h4>",
+                            header: "Confirm Delete",
                             body: "Are you sure you want to delete the <b>" + data.language 
                                     + "</b> translation in the <b>" + data.context 
                                     + "</b> context for the key <b>" + data.key + "</b>?",
@@ -240,7 +240,7 @@
                         }
                         
                         var confirmDelete = new KD.Modal({
-                            header: "<h4>Confirm Delete</h4>",
+                            header: "Confirm Delete",
                             body: confirmMessage,
                             footer: function(element, actions) {
                                 element.addClass("text-right").append(
@@ -387,7 +387,7 @@
                 }
                 // Create Modal to confirm delete
                 var confirmDelete = new KD.Modal({
-                    header: "<h4>Confirm Delete</h4>",
+                    header: "Confirm Delete",
                     body: "Are you sure you want to delete the <b>" + data.language 
                             + "</b> translation in the <b>" + data.context 
                             + "</b> context for the key <b>" + data.key + "</b>?",
@@ -527,7 +527,7 @@
             var row = $(this).closest("tr");
             if ($(this).val()){
                 row.find("button.enable-locale-btn").attr("disabled", false);
-                row.find("td.locale-code-cell").html("<span class=\"btn-sm btn-subtle\" disabled>" + $(this).val() + "</span>");
+                row.find("td.locale-code-cell").html("<span class=\"btn-subtle\" disabled>" + $(this).val() + "</span>");
             }
             else {
                 row.find("button.enable-locale-btn").attr("disabled", true);
@@ -607,7 +607,7 @@
             var localeName = row.data("locale-name");
             // Create Modal to confirm disable
             var confirmDisable = new KD.Modal({
-                header: "<h4>Confirm Disable</h4>",
+                header: "Confirm Disable",
                 body: "Are you sure you want to disable the <b>" + localeName + "</b> locale <b>" + locale + "</b>?",
                 footer: function(element, actions) {
                     element.addClass("text-right").append(
@@ -653,7 +653,7 @@
             var localeName = row.data("locale-name");
             // Create Modal to confirm disable
             var confirmDisable = new KD.Modal({
-                header: "<h4>Confirm Default</h4>",
+                header: "Confirm Default",
                 body: "Are you sure you want to set the <b>" + localeName + "</b> locale <b>" + locale + "</b> as the default locale?",
                 footer: function(element, actions) {
                     element.addClass("text-right").append(
@@ -759,7 +759,7 @@
             
             // Create Modal to for renaming context
             var renameDialog = new KD.Modal({
-                header: "<h4>Rename Context</h4>",
+                header: "Rename Context",
                 body: function(element) {
                     element.addClass("rename-context-body").append(
                         $("<p>").append(
@@ -767,15 +767,15 @@
                         ),
                         $("<div>", {class: "input-group"}).append(
                             $("<span>", {class: "input-group-addon"}).append(
-                                $("<span>", {}).append(
+                                $("<label>", {for: "custom-prefix"}).append(
                                     $("<input>", {type: "radio", name: "context-prefix", value: "custom.", id: "custom-prefix", checked: !isFormContext}),
-                                    $("<label>", {for: "custom-prefix"}).append("custom.")
+                                    $("<span>").append("custom.")
                                 )
                             ),
                             $("<span>", {class: "input-group-addon"}).append(
-                                $("<span>", {}).append(
+                                $("<label>", {for: "form-prefix"}).append(
                                     $("<input>", {type: "radio", name: "context-prefix", value: "form.", id: "form-prefix", checked: isFormContext}),
-                                    $("<label>", {for: "form-prefix"}).append("form.")
+                                    $("<span>").append("form.")
                                 )
                             ),
                             $("<input>", {class: "form-control new-context-name", placeholder: "Context Name"}).on("keypress", function(e){
@@ -831,7 +831,7 @@
                             try { 
                                 errorThrown = JSON.parse(jqXHR.responseText).error; 
                             } catch(e){}
-                            self.closest("table, h3").notifie({
+                            self.closest("table, h2").notifie({
                                 message: "Failed to rename the context <b>" + currentName + "</b><br>Error: " + errorThrown
                             });
                         }
@@ -963,7 +963,7 @@
             
             // Create Modal for renaming key
             var renameDialog = new KD.Modal({
-                header: "<h4>Update Key</h4>",
+                header: "Update Key",
                 body: function(element) {
                     element.addClass("update-key-body").append(
                         $("<p>").append(
@@ -1045,7 +1045,7 @@
             var isFormContext = context.indexOf("form.") === 0;
             // Create Modal to confirm delete
             var confirmDelete = new KD.Modal({
-                header: "<h4>Confirm Delete</h4>",
+                header: "Confirm Delete",
                 body: "Are you sure you want to delete the <b>" + key 
                         + "</b> translation key in the <b>" + context 
                         + "</b> context? Deleting the key will also delete all translations of the key.",
@@ -1103,16 +1103,16 @@
             url: bundle.adminTranslations.apiBaseUrl + "/translations.csv"
         }).bind('fileuploadsend', function (e, data) {
             $(this).notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "<span class='fa fa-spinner fa-spin'></span> Importing...",
                 severity: "info",
                 permanent: true
             });
         }).bind('fileuploaddone', function (e, data) {
             $(this).notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "<b>Import Completed Successfully</b><br>" + data.response().result.message
-                    + "<br><a class='pull-right btn btn-sm btn-default' href='" + bundle.adminTranslations.i18nKappUrl + "&page=translations/publish'>"
+                    + "<br><a class='pull-right btn btn-default' href='" + bundle.adminTranslations.i18nKappUrl + "&page=translations/publish'>"
                     + "<span class='fa fa-cloud-upload'></span> Publish Imported Changes</a>",
                 severity: "info",
                 permanent: true
@@ -1123,7 +1123,7 @@
                 errorThrown = JSON.parse(data.response().jqXHR.responseText).error; 
             } catch(e){}
             $(this).notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "Failed to import translations from the uploaded file.<br>Error: " + errorThrown,
                 exitEvents: "click"
             });
@@ -1138,7 +1138,7 @@
                 beforeSend: function(){
                     self.attr("disabled", true);
                     self.notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         message: "<span class='fa fa-spinner fa-spin'></span> Publishing...",
                         severity: "info",
                         permanent: true
@@ -1152,7 +1152,7 @@
                         errorThrown = JSON.parse(jqXHR.responseText).error; 
                     } catch(e){}
                     self.notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         message: "Failed to publish changes.<br>Error: " + errorThrown,
                         exitEvents: "click"
                     });

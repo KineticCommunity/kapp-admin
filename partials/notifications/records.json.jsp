@@ -25,21 +25,35 @@
     </json:object>
     <c:forEach var="field" items="${fields}" varStatus="status">
       <c:choose>
-        <c:when test="${fn:contains(field.title, 'Content')}">
-          <json:object>
-            <json:property name="title" value="${field.title}"/>
-            <json:property name="data" value="${field.data}"/>
-            <json:property name="renderType" value="notificationReplacement"/>
-            <json:property name="class" value="none"/>
-            <json:property name="visible" value="${field.visible}"/>
-            <json:property name="searchable" value="${false}"/>
-            <json:property name="orderable" value="${false}"/>
-            <c:if test="${orderColumn eq 0 && field.visible eq true}">
-                <c:set var="orderColumn" value="${status.index+1}" />
-            </c:if>
-          </json:object>
+        <c:when test="${field.title eq 'HTML Content'}">
+        <json:object>
+          <json:property name="title" value="${field.title}"/>
+          <json:property name="data" value="${field.data}"/>
+          <json:property name="renderType" value="notificationReplacement"/>
+          <json:property name="class" value="none"/>
+          <json:property name="visible" value="${false}"/>
+          <json:property name="searchable" value="${false}"/>
+          <json:property name="orderable" value="${false}"/>
+          <c:if test="${orderColumn eq 0 && field.visible eq true}">
+              <c:set var="orderColumn" value="${status.index+1}" />
+          </c:if>
+        </json:object>
         </c:when>
-        <c:when test="${field.title eq 'Subject' && type eq 'Snippit'}">
+        <c:when test="${fn:contains(field.title, 'Content')}">
+            <json:object>
+              <json:property name="title" value="${field.title}"/>
+              <json:property name="data" value="${field.data}"/>
+              <json:property name="renderType" value="notificationReplacement"/>
+              <json:property name="class" value="none"/>
+              <json:property name="visible" value="${field.visible}"/>
+              <json:property name="searchable" value="${false}"/>
+              <json:property name="orderable" value="${false}"/>
+              <c:if test="${orderColumn eq 0 && field.visible eq true}">
+                  <c:set var="orderColumn" value="${status.index+1}" />
+              </c:if>
+            </json:object>
+        </c:when>
+        <c:when test="${field.title eq 'Subject' && type eq 'Snippet'}">
         </c:when>
         <c:when test="${field.title eq 'Subject' && type eq 'Template'}">
           <json:object>
@@ -70,7 +84,7 @@
       </c:choose>
     </c:forEach>
     <json:object>
-      <json:property name="title" value="Datastore Record ID"/>
+      <json:property name="title" value="ID"/>
       <json:property name="data" value="ID"/>
       <json:property name="visible" value="${false}"/>
     </json:object>
@@ -78,7 +92,8 @@
       <json:property name="title" value=""/>
       <json:property name="data" value=""/>
       <json:property name="visible" value="${true}"/>
-      <json:property name="class" value="actions ignore-export all"/>
+      <json:property name="renderType" value="actionButtons"/>
+      <json:property name="class" value="actions actions-lg ignore-export all"/>
       <json:property name="orderable" value="${false}"/>
       <json:property name="defaultContent" value="<div class=\"btn-group datastore-btns\"><button class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></button><button class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></button><button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button></div> "/>
     </json:object>

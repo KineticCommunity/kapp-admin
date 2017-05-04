@@ -1,0 +1,485 @@
+<%@page import="com.google.common.collect.ComparisonChain" %>
+<%@page import="com.google.common.collect.Ordering" %>
+<%@page import="com.google.common.primitives.Ints" %>
+<%@page import="com.kineticdata.core.web.bundles.PaginatedList" %>
+<%!
+    public static class TeamsHelper {
+    
+        private BundleSubmissionComponent submissionComponent;
+        private Space space;
+        private Set<BundleTeam> rootTeams;
+        private Map<String, BundleTeam> teamsByName;
+        private Set<BundleRole> rootRoles;
+        private Map<String, BundleRole> rolesByName;
+        private Map<String, String> nameBySlugOrId;
+        private org.slf4j.Logger logger;
+        
+        public TeamsHelper(HttpServletRequest request) {
+            this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
+            this.space = (Space)request.getAttribute("space");
+            this.rootTeams = null;
+            this.teamsByName = null;
+            this.rootRoles = null;
+            this.rolesByName = null;
+            this.nameBySlugOrId = null;
+            this.logger = (org.slf4j.Logger)request.getAttribute("logger");
+        }
+        
+        public List<BundleTeam> getTeams() {
+            loadTeamsAndRoles();
+            
+            return new ArrayList<BundleTeam>(this.teamsByName.values());
+        }
+        
+        public List<BundleTeam> getRootTeams() {
+            loadTeamsAndRoles();
+            
+            return new ArrayList<BundleTeam>(this.rootTeams);
+        }
+        
+        public BundleTeam getTeam(String name) {
+            loadTeamsAndRoles();
+            
+            return this.teamsByName.get(name);
+        }
+        
+        public BundleTeam getTeam(Team team) {
+            if (team == null){
+                return null;
+            }
+            
+            loadTeamsAndRoles();
+            
+            return this.teamsByName.get(team.getName());
+        }
+        
+        public BundleTeam getTeamById(UUID id) {
+            loadTeamsAndRoles();
+            
+            if (id == null || this.nameBySlugOrId.get(id.toString()) == null){
+                return null;
+            }
+            
+            return this.teamsByName.get(this.nameBySlugOrId.get(id.toString()));
+        }
+        
+        public BundleTeam getTeamBySlug(String slug) {
+            loadTeamsAndRoles();
+            
+            if (slug == null || this.nameBySlugOrId.get(slug) == null){
+                return null;
+            }
+            
+            return this.teamsByName.get(this.nameBySlugOrId.get(slug));
+        }
+        
+        public List<BundleRole> getRoles() {
+            loadTeamsAndRoles();
+            
+            return new ArrayList<BundleRole>(this.rolesByName.values());
+        }
+        
+        public List<BundleRole> getRootRoles() {
+            loadTeamsAndRoles();
+            
+            return new ArrayList<BundleRole>(this.rootRoles);
+        }
+        
+        public BundleRole getRole(String name) {
+            loadTeamsAndRoles();
+            
+            return this.rolesByName.get(name);
+        }
+        
+        public BundleRole getRole(Team team) {
+            if (team == null){
+                return null;
+            }
+            
+            loadTeamsAndRoles();
+            
+            return this.rolesByName.get(team.getName());
+        }
+        
+        public BundleRole getRoleById(UUID id) {
+            loadTeamsAndRoles();
+            
+            if (id == null || this.nameBySlugOrId.get(id.toString()) == null){
+                return null;
+            }
+            
+            return this.rolesByName.get(this.nameBySlugOrId.get(id.toString()));
+        }
+        
+        public BundleRole getRoleBySlug(String slug) {
+            loadTeamsAndRoles();
+            
+            if (slug == null || this.nameBySlugOrId.get(slug) == null){
+                return null;
+            }
+            
+            return this.rolesByName.get(this.nameBySlugOrId.get(slug));
+        }
+        
+        private void loadTeamsAndRoles(){
+            // If teams and roles exist, return because they're already loaded
+            if (this.rootTeams != null && this.rootRoles != null){
+                return;
+            }
+            
+            // Create empty collections for teams
+            this.rootTeams = new TreeSet<BundleTeam>();
+            this.teamsByName = new TreeMap<String, BundleTeam>();
+            this.rootRoles = new TreeSet<BundleRole>();
+            this.rolesByName = new TreeMap<String, BundleRole>();
+            this.nameBySlugOrId = new HashMap<String, String>();
+            
+            // Process each team/role into a BundleTeam object
+            for (Team team : space.getTeams()){
+                if (Text.startsWith(team.getName(), "Role")){
+                    // Ignore root with name Role
+                    if (!Text.equals(team.getName(), "Role")){
+                        BundleRole bundleRole = new BundleRole(team);
+                        // Add to map of all roles by name
+                        this.rolesByName.put(team.getName(), bundleRole);
+                    }
+                }
+                else {
+                    BundleTeam bundleTeam = new BundleTeam(team);
+                    // Add to map of all teams by name
+                    this.teamsByName.put(team.getName(), bundleTeam);
+                }
+                // Create a map of slugs and ids to names
+                this.nameBySlugOrId.put(team.getSlug(), team.getName());
+                this.nameBySlugOrId.put(team.getId().toString(), team.getName());
+            }
+            
+            // Transform flat teams into hierarchy
+            for (BundleTeam bundleTeam : this.teamsByName.values()){
+                if (bundleTeam.hasParent()){
+                    // Get parent team
+                    BundleTeam parentTeam = this.teamsByName.get(bundleTeam.getParentName());
+                    // If parent team exists
+                    if (parentTeam != null){
+                        // Set parent of current team
+                        bundleTeam.setParent(parentTeam);
+                        // Add current team to subteams of parent team
+                        parentTeam.addChild(bundleTeam);
+                        // Skip adding team to teams list since it's not a root team
+                        continue;
+                    }
+                }
+                this.rootTeams.add(bundleTeam);
+            }
+
+            // Transform flat roles into hierarchy
+            for (BundleRole bundleRole : this.rolesByName.values()){
+                if (bundleRole.hasParent() && !Text.equals(bundleRole.getName(), "Role")){
+                    // Get parent role
+                    BundleRole parentRole = this.rolesByName.get(bundleRole.getParentName());
+                    // If parent role exists
+                    if (parentRole != null){
+                        // Set parent of current team
+                        bundleRole.setParent(parentRole);
+                        // Add current team to subteams of parent team
+                        parentRole.addChild(bundleRole);
+                        // Skip adding team to teams list since it's not a root team
+                        continue;
+                    }
+                }
+                this.rootRoles.add(bundleRole);
+            }
+        }
+        
+        public List<BundleTeam> getUserTeams(User user){
+            if (user == null){
+                return new ArrayList<BundleTeam>();
+            }
+            Map<String, BundleTeam> teams = new TreeMap<String, BundleTeam>();
+            for (Team team : user.getTeams()){
+                BundleTeam bundleTeam = this.getTeam(team);
+                if (bundleTeam != null){
+                    teams.put(team.getName(), bundleTeam);
+                }
+            }
+            return new ArrayList<BundleTeam>(teams.values());
+        }
+        
+        public List<BundleRole> getUserRoles(User user){
+            if (user == null){
+                return new ArrayList<BundleRole>();
+            }
+            Map<String, BundleRole> roles = new TreeMap<String, BundleRole>();
+            for (Team team : user.getTeams()){
+                BundleRole bundleRole = this.getRole(team);
+                if (bundleRole != null){
+                    roles.put(team.getName(), bundleRole);
+                }
+            }
+            return new ArrayList<BundleRole>(roles.values());
+        }
+        
+        public class BundleTeam implements Comparable<BundleTeam> {
+            Team team;
+            BundleTeam parent;
+            Set<BundleTeam> children;
+            
+            public BundleTeam(Team team) { 
+                this.team = team;
+                this.parent = null;
+                this.children = new TreeSet<BundleTeam>();
+            }
+            
+            public Team getTeam(){
+                return this.team;
+            }
+            
+            public String getName(){
+                return this.team.getName();
+            }
+            
+            public String getLocalName(){
+                return this.team.getLocalName();
+            }
+            
+            public BundleTeam getParent(){
+                return this.parent;
+            }
+            
+            public String getParentName(){
+                return this.team.getParentName();
+            }
+            
+            public List<BundleTeam> getParentPath(){
+                List<BundleTeam> path = new ArrayList<>();
+                BundleTeam team = this;
+                while (team != null && team.hasParent()){
+                    path.add(0, team.getParent());
+                    team = team.getParent();
+                }
+                return path;
+            }
+            
+            public String getSlug(){
+                return this.team.getSlug();
+            }
+            
+            public UUID getId(){
+                return this.team.getId();
+            }
+            
+            public String getDescription(){
+                return this.team.getDescription();
+            }
+            
+            public String getAttribute(String attributeName){
+                return this.team.getAttributeValue(attributeName);
+            }
+            
+            public List<BundleTeam> getChildren(){
+                return new ArrayList<BundleTeam>(this.children);
+            }
+            
+            public List<User> getUsers(){
+                List<User> users = new ArrayList<User>();
+                users.addAll(this.team.getUsers());
+                Collections.sort(users, new UserComparator());
+                return users;
+            }
+            
+            public List<Membership> getMemberships(){
+                return this.team.getMemberships();
+            }
+            
+            public String getColor(){
+                if (this.team.hasAttribute("Color")){
+                    return this.team.getAttributeValue("Color");
+                }
+                else {
+                    String color = String.format("%06X", (0xBBBBBB & this.team.getSlug().hashCode()));
+                    return "#" + color.substring(4) + color.substring(0, 4);
+                }
+            }
+            
+            public String getIcon(){
+                if (this.team.hasAttribute("Icon")){
+                    return this.team.getAttributeValue("Icon");
+                }
+                else {
+                    return "fa-group";
+                }
+            }
+            
+            public boolean hasParent(){
+                return this.team.hasParent();
+            }
+            
+            public boolean hasChildren(){
+                return !this.children.isEmpty();
+            }
+            
+            public boolean isAssignable(){
+                return this.team.hasAttribute("Assignable");
+            }
+            
+            protected void setParent(BundleTeam team){
+                this.parent = team;
+            }
+            
+            protected void addChild(BundleTeam team){
+                this.children.add(team);
+            }
+            
+            public List<Form> getServicesOffered() {
+                List<Form> results;
+                String catalogSlug = space.getAttributeValue("Catalog Kapp Slug");
+                Kapp catalog = (catalogSlug == null) ? null : space.getKapp(catalogSlug);
+                if (catalog != null) {
+                    results = new ArrayList<>();
+                    for (Form form : catalog.getForms()) {
+                        if (form.hasAttributeValue("Owning Team", this.getName())) {
+                          results.add(form);
+                        }
+                    };
+                } else {
+                    results = Collections.EMPTY_LIST;
+                }
+                return results;
+            }
+            
+            public int compareTo(BundleTeam that) {
+                return ComparisonChain.start()
+                        .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .compare(this.getSlug(), that.getSlug(), Ordering.natural().nullsLast())
+                        .compare(this.getId(), that.getId(), Ordering.natural().nullsLast())
+                        .result();
+            }
+        }
+        
+        public class BundleRole extends BundleTeam {
+            
+            public BundleRole(Team team){ 
+                super(team);
+            }
+            
+            public String getFormattedName(){
+                return Text.replaceRegex(this.team.getName(), "^Role::", "");
+            }
+            
+            @Override
+            public List<BundleTeam> getParentPath(){
+                List<BundleTeam> path = new ArrayList<>();
+                BundleTeam team = this;
+                while (team != null && team.hasParent() && team.getParent() != null){
+                    path.add(0, team.getParent());
+                    team = team.getParent();
+                }
+                return path;
+            }
+            
+            @Override
+            public String getIcon(){
+                if (this.team.hasAttribute("Icon")){
+                    return this.team.getAttributeValue("Icon");
+                }
+                else {
+                    return "fa-user-secret";
+                }
+            }
+        }
+        
+        public static String getUserColor(User user){
+            if (user.hasAttribute("Color")){
+                return user.getAttributeValue("Color");
+            }
+            else {
+                return String.format("#%06X", (0xBBBBBB & Text.defaultIfBlank(user.getEmail(), user.getUsername()).hashCode()));
+            }
+        }
+        
+        public static boolean isMemberOfTeam(User user, Team team){
+            if (user == null || team == null){
+                return false;
+            }
+            
+            for (Team t : user.getTeams()){
+                if (Text.equals(t.getSlug(), team.getSlug())){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public static boolean isMemberOfTeam(User user, String teamName){
+            if (user == null || teamName == null){
+                return false;
+            }
+            
+            for (Team t : user.getTeams()){
+                if (Text.equals(t.getName(), teamName)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public List<AttributeDefinition> getOrderedUserProfileAttributeDefinitions(){
+            Map<String, AttributeDefinition> sorted = new TreeMap<String, AttributeDefinition>();
+            for (AttributeDefinition def : this.space.getUserProfileAttributeDefinitions()){
+                sorted.put(def.getName(), def);
+            }
+            
+            List<AttributeDefinition> ordered = new ArrayList<AttributeDefinition>();
+            if (sorted.containsKey("First Name")){
+                ordered.add(sorted.remove("First Name"));
+            }
+            if (sorted.containsKey("Middle Name")){
+                ordered.add(sorted.remove("Middle Name"));
+            }
+            if (sorted.containsKey("Last Name")){
+                ordered.add(sorted.remove("Last Name"));
+            }
+            ordered.addAll(sorted.values());
+            
+            return ordered;
+        }
+        
+        public List<AttributeDefinition> getOrderedUserAttributeDefinitions(){
+            Map<String, AttributeDefinition> sorted = new TreeMap<String, AttributeDefinition>();
+            for (AttributeDefinition def : this.space.getUserAttributeDefinitions()){
+                sorted.put(def.getName(), def);
+            }
+            
+            List<AttributeDefinition> ordered = new ArrayList<AttributeDefinition>();
+            ordered.addAll(sorted.values());
+            
+            return ordered;
+        }
+        
+        public List<AttributeDefinition> getOrderedTeamAttributeDefinitions(){
+            Map<String, AttributeDefinition> sorted = new TreeMap<String, AttributeDefinition>();
+            for (AttributeDefinition def : this.space.getTeamAttributeDefinitions()){
+                sorted.put(def.getName(), def);
+            }
+            
+            List<AttributeDefinition> ordered = new ArrayList<AttributeDefinition>();
+            ordered.addAll(sorted.values());
+            
+            return ordered;
+        }
+        
+        public List<User> getAllUsers(){
+            List<User> users = new ArrayList<User>();
+            users.addAll(this.space.getUsers());
+            Collections.sort(users, new UserComparator());
+            return users;
+        }
+        
+        public static class UserComparator implements Comparator<User> {
+            @Override
+            public int compare(User o1, User o2) {
+                return Text.defaultIfBlank(o1.getDisplayName(), o1.getUsername()).compareTo(Text.defaultIfBlank(o2.getDisplayName(), o2.getUsername()));
+            }
+        }
+    }
+%>

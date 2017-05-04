@@ -336,45 +336,6 @@
             ]
         },
         {
-            "name":"Categories",
-            "description":"An advanced console for managing categories and subcategories in a hierarchical view.",
-            "slug":"categories",
-            "type":"Console",
-            "status":"Active",
-            "anonymous":false,
-            "customHeadContent":null,
-            "notes":null,
-            "submissionLabelExpression":null,
-            "attributes":[
-
-            ],
-            "bridgedResources":[
-
-            ],
-            "categorizations":[
-
-            ],
-            "pages":[
-                {
-                    "elements":[
-
-                    ],
-                    "events":[
-
-                    ],
-                    "name":"Categories",
-                    "renderType":"submittable",
-                    "type":"page",
-                    "advanceCondition":null,
-                    "displayCondition":null,
-                    "displayPage":"pages/categories/console.jsp"
-                }
-            ],
-            "securityPolicies":[
-
-            ]
-        },
-        {
             "name":"Datastore",
             "description":"A Datastore is a Kinetic Request form that can be used to store data for use in other applications or forms. The data can be accessed using bridges.",
             "slug":"datastore",
@@ -407,6 +368,165 @@
                     "advanceCondition":null,
                     "displayCondition":null,
                     "displayPage":"pages/datastore/console.jsp"
+                }
+            ],
+            "securityPolicies":[
+
+            ]
+        },
+        {
+            "name": "Datastore Template",
+            "description": "The template used to create new datastores.",
+            "slug": "datastore-template",
+            "type": "Template",
+            "status": "Active",
+            "anonymous": false,
+            "customHeadContent": null,
+            "notes": null,
+            "submissionLabelExpression": null,
+            "attributes": [
+                {
+                    "name": "Datastore Configuration",
+                    "values": [
+                        "[]"
+                    ]
+                }
+            ],
+            "bridgedResources": [],
+            "categorizations": [],
+            "pages": [
+                {
+                    "elements": [
+                        {
+                            "type": "field",
+                            "name": "Status",
+                            "label": "Status",
+                            "key": "f1",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "radio",
+                            "choicesResourceName": null,
+                            "choicesRunIf": null,
+                            "choices": [
+                                {
+                                    "label": "Active",
+                                    "value": "active"
+                                },
+                                {
+                                    "label": "Inactive",
+                                    "value": "inactive"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "field",
+                            "name": "Sample Field",
+                            "label": "Sample Field",
+                            "key": "fSample",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": false,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "section",
+                            "renderType": null,
+                            "name": "Action Buttons",
+                            "title": null,
+                            "visible": true,
+                            "omitWhenHidden": null,
+                            "renderAttributes": {
+                                "class": "text-right"
+                            },
+                            "elements": [
+                                {
+                                    "type": "button",
+                                    "label": "Save",
+                                    "name": "Save",
+                                    "visible": "bundle.adminDatastore != null",
+                                    "enabled": true,
+                                    "renderType": "submit-page",
+                                    "renderAttributes": {}
+                                },
+                                {
+                                    "type": "button",
+                                    "label": "Cancel",
+                                    "name": "Cancel",
+                                    "visible": "bundle.adminDatastore != null",
+                                    "enabled": true,
+                                    "renderType": "custom",
+                                    "renderAttributes": {
+                                        "class": "btn-link cancel-record"
+                                    },
+                                    "events": []
+                                }
+                            ]
+                        }
+                    ],
+                    "events": [],
+                    "name": "Datastore",
+                    "renderType": "submittable",
+                    "type": "page",
+                    "advanceCondition": "false",
+                    "displayCondition": null,
+                    "displayPage": "pages/datastore/datastoreForm.jsp"
+                }
+            ],
+            "securityPolicies": []
+        },
+        {
+            "name":"Utilities",
+            "description":"Console for managing utility forms related to managing the system.",
+            "slug":"utilities",
+            "type":"Console",
+            "status":"Active",
+            "anonymous":false,
+            "customHeadContent":null,
+            "notes":null,
+            "submissionLabelExpression":null,
+            "attributes":[
+
+            ],
+            "bridgedResources":[
+
+            ],
+            "categorizations":[
+
+            ],
+            "pages":[
+                {
+                    "elements":[
+
+                    ],
+                    "events":[
+
+                    ],
+                    "name":"Utilities",
+                    "renderType":"submittable",
+                    "type":"page",
+                    "advanceCondition":null,
+                    "displayCondition":null,
+                    "displayPage":"pages/utilities/console.jsp"
                 }
             ],
             "securityPolicies":[
@@ -1268,9 +1388,9 @@
             ]
         },
         {
-            "name":"User Management",
+            "name":"Users",
             "description":"Allows for creation and management of users and their properties and attributes.",
-            "slug":"user-management",
+            "slug":"users",
             "type":"Console",
             "status":"Inactive",
             "anonymous":false,
@@ -1294,7 +1414,7 @@
                     "events":[
 
                     ],
-                    "name":"User Management",
+                    "name":"Users",
                     "renderType":"submittable",
                     "type":"page",
                     "advanceCondition":null,
@@ -1310,21 +1430,21 @@
             ]
         },
         {
-            "name":"Space Management",
+            "name":"Management",
             "anonymous":false,
-            "description":"Allows for management of Space Attributes.",
+            "description":"Allows for management of the Space, Kapps, and Forms.",
             "pages":[
                 {
                     "advanceCondition":null,
                     "displayCondition":null,
-                    "displayPage":"pages/space-management/console.jsp",
+                    "displayPage":"pages/management/console.jsp",
                     "elements":[
 
                     ],
                     "events":[
 
                     ],
-                    "name":"Space Management",
+                    "name":"Management",
                     "renderType":"submittable",
                     "type":"page"
                 }
@@ -1332,63 +1452,7 @@
             "securityPolicies":[
 
             ],
-            "slug":"space-management",
-            "status":"Active",
-            "submissionLabelExpression":"${form('name')} ${form('slug')}",
-            "type":"Console"
-        },
-        {
-            "name":"Kapp Management",
-            "anonymous":false,
-            "description":"Allows for management of Kapp Attributes.",
-            "pages":[
-                {
-                    "advanceCondition":null,
-                    "displayCondition":null,
-                    "displayPage":"pages/kapp-management/console.jsp",
-                    "elements":[
-
-                    ],
-                    "events":[
-
-                    ],
-                    "name":"Kapp Management",
-                    "renderType":"submittable",
-                    "type":"page"
-                }
-            ],
-            "securityPolicies":[
-
-            ],
-            "slug":"kapp-management",
-            "status":"Active",
-            "submissionLabelExpression":"${form('name')} ${form('slug')}",
-            "type":"Console"
-        },
-        {
-            "name":"Form Management",
-            "anonymous":false,
-            "description":"Console for managing forms within the system.",
-            "pages":[
-                {
-                    "advanceCondition":null,
-                    "displayCondition":null,
-                    "displayPage":"pages/form-management/console.jsp",
-                    "elements":[
-
-                    ],
-                    "events":[
-
-                    ],
-                    "name":"Form Management",
-                    "renderType":"submittable",
-                    "type":"page"
-                }
-            ],
-            "securityPolicies":[
-
-            ],
-            "slug":"form-management",
+            "slug":"management",
             "status":"Active",
             "submissionLabelExpression":"${form('name')} ${form('slug')}",
             "type":"Console"
@@ -1825,8 +1889,8 @@
                             "choicesRunIf":null,
                             "choices":[
                                 {
-                                    "label":"Snippit",
-                                    "value":"Snippit"
+                                    "label":"Snippet",
+                                    "value":"Snippet"
                                 },
                                 {
                                     "label":"Template",
@@ -2055,6 +2119,124 @@
             "status":"Active",
             "submissionLabelExpression":"${values('Name')}",
             "type":"Datastore"
+        },
+        {
+            "name": "Search History",
+            "description": "Form used to track Search History from within the system.",
+            "slug": "search-history",
+            "type": "Datastore",
+            "status": "Active",
+            "anonymous": false,
+            "customHeadContent": null,
+            "notes": null,
+            "submissionLabelExpression": null,
+            "attributes": [
+                {
+                    "name": "Datastore Configuration",
+                    "values": [
+                        "[]"
+                    ]
+                }
+            ],
+            "bridgedResources": [],
+            "categorizations": [],
+            "pages": [
+                {
+                    "elements": [
+                        {
+                            "type": "field",
+                            "name": "Search Term",
+                            "label": "Search Term",
+                            "key": "fSample",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "field",
+                            "name": "Number of Results Found",
+                            "label": "Number of Results Found",
+                            "key": "f3",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "field",
+                            "name": "Kapp Slug",
+                            "label": "Kapp Slug",
+                            "key": "f2",
+                            "defaultValue": null,
+                            "defaultResourceName": null,
+                            "visible": true,
+                            "enabled": true,
+                            "required": true,
+                            "requiredMessage": null,
+                            "omitWhenHidden": null,
+                            "pattern": null,
+                            "constraints": [],
+                            "events": [],
+                            "renderAttributes": {},
+                            "dataType": "string",
+                            "renderType": "text",
+                            "rows": 1
+                        },
+                        {
+                            "type": "button",
+                            "label": "Save",
+                            "name": "Save",
+                            "visible": "bundle.adminDatastore != null",
+                            "enabled": true,
+                            "renderType": "submit-page",
+                            "renderAttributes": {
+                                "class": "btn btn-tertiary"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "label": "Cancel",
+                            "name": "Cancel",
+                            "visible": "bundle.adminDatastore != null",
+                            "enabled": true,
+                            "renderType": "custom",
+                            "renderAttributes": {
+                                "class": "btn btn-link cancel-record"
+                            },
+                            "events": []
+                        }
+                    ],
+                    "events": [],
+                    "name": "Datastore",
+                    "renderType": "submittable",
+                    "type": "page",
+                    "advanceCondition": "false",
+                    "displayCondition": null,
+                    "displayPage": "pages/datastore/datastoreForm.jsp"
+                }
+            ],
+            "securityPolicies": []
         }
     ]
 }

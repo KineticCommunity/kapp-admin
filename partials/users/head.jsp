@@ -7,3 +7,6 @@
 <bundle:scriptpack>
     <bundle:script src="${bundle.location}/js/users/users.js" />
 </bundle:scriptpack>
+<script>
+    bundle.adminUsers.consoleSlug = "${form.slug}";
+</script>

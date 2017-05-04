@@ -1,15 +1,16 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
+<c:set var="removeBreadcrumb" value="${true}" scope="request"/>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
                 
     <div class="page-header" id="admin-console-home">
-        <h3 class="text-center">
+        <h1 class="text-center">
             Welcome to the <strong>Admin Console</strong>
-        </h3>
+        </h1>
         <p class="text-center">
             Please select a console component below.
         </p>
@@ -39,7 +40,7 @@
             <c:if test="${identity.spaceAdmin}">
                 <hr class="border-color-white" />
                 <div class="text-center">
-                    <h3 class="carh-title m-b-2">Advanced Management</h3>
+                    <h3 class="carh-title">Advanced Management</h3>
                     <p>
                         The
                         <a target="_blank" href="${bundle.spaceLocation}/app" class="btn btn-default btn-xs">

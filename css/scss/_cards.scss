@@ -13,8 +13,8 @@
   position: relative;
   display: block;
   float: left;
-  padding: 0.5rem;
   width: 100%;
+  padding: 0.5rem;
   border-color: $lightgray;
   
   > * {
@@ -33,7 +33,7 @@
       border-right-style: solid;
       border-right-color: inherit;
     }
-    
+
   }
   > *:first-child {
     @include border-top-radius();
@@ -51,16 +51,16 @@
       border-bottom-color: inherit;
     }
   }
-  
+
   > .card-title {
-    @include font-size-line-height(2.4rem, 2.4rem);
+    @include font-size-line-height(2.2rem, 2.2rem);
     font-weight: bold;
     border-bottom: 0.2rem solid rgba($lightgray, 0.5);
     &.small {
-      @include font-size-line-height(1.8rem, 1.8rem);
+      @include font-size-line-height(1.7rem, 1.7rem);
     }
   }
-  
+
   > .card-content {
     overflow: hidden;
     p {
@@ -71,10 +71,40 @@
       height: 100%;
       float: left;
       padding: 0 10px 0 0;
-      font-size: 10rem;
+      font-size: 6rem;
       
+      &.icon-xs {
+        font-size: 2rem;
+      }
+      &.icon-sm {
+        font-size: 4rem;
+      }
+      &.icon-lg {
+        font-size: 8rem;
+      }
+      &.icon-xl {
+        font-size: 10rem;
+      }
+      
+      .fa-stack {
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        .fa-stack-2x {
+          font-size: 1em;
+        }
+        .fa-stack-1x {
+          font-size: 0.5em;
+          color: white;
+        }
+      }
+
       + .card-title {
         word-wrap: break-word;
+        
+        &.ellipsis {
+            width: auto;
+        }
       }
     }
     > .card-icon-right {
@@ -83,12 +113,22 @@
     }
     
     > .card-title {
-      @include font-size-line-height(2.4rem, 2.4rem);
+      @include font-size-line-height(2.2rem, 2.2rem);
       font-weight: bold;
       margin-bottom: 0.4em;
       &.small {
-        @include font-size-line-height(1.8rem, 1.8rem);
+        @include font-size-line-height(1.7rem, 1.7rem);
       }
+    }
+    &:after {
+      content: attr(data-card-overflow-cover);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1.5rem;
+      pointer-events: none;
+      @include vertical-gradient(rgba($white, 0), rgba($white, 1));
     }
   }
   
@@ -110,7 +150,7 @@
     border-bottom-color: rgba($primary, 0.5);
     @include anchor($primary-complement, tint($primary-complement, 10%), none, none);
   }
-  
+ 
   > a.card-title {
     display: block;
     background-color: $primary;
@@ -123,40 +163,40 @@
       text-decoration: none;
     }
   }
-  
+
   > .card-content {
     > .card-title {
       color: $primary;
       @include anchor($primary, tint($primary, 10%), none, none);
     }
-    > .card-icon, 
+    > .card-icon,
     > .card-icon-right {
       color: $primary;
     }
   }
-  
+
   > .card-action {
     background-color: subtle($primary, 95%);
     border-top-color: rgba($primary, 0.5);
   }
-  
+
   &.card-subtle {
     border-color: subtle($primary, 80%);
-    
+  
     > * {
       background-color: subtle($primary, 95%);
     }
-    
+  
     > .card-title {
       color: $primary;
       border-bottom: none;
       @include anchor($primary, tint($primary, 10%), none, none);
     }
-    
+
     > .card-content:after {
       @include vertical-gradient(subtle($primary, 95%, 0), subtle($primary, 95%, 1));
     }
-    
+
     > .card-action {
       background-color: subtle($primary, 88%);
       border-top-color: subtle($primary, 80%);
@@ -169,38 +209,38 @@ a.card-primary {
   &:focus {
     text-decoration: none;
   }
-  
+
   &:not(.card-subtle):hover > .card-title,
   &:not(.card-subtle):focus > .card-title {
     background-color: tint($primary, 10%);
   }
-  
+
   &:not(.card-subtle) > .card-title {
     border-bottom-color: rgba($primary, 0.5);
     color: $primary-complement;
-    
+
     &:hover,
     &:focus {
       color: $primary-complement;
       text-decoration: none;
     }
   }
-  
+
   > .card-content {
     color: $text-color;
-    
+
     &:hover,
     &:focus {
       color: $text-color;
       text-decoration: none;
     }
-    
+
     > .card-title {
       color: $primary;
       
       &:hover,
       &:focus {
-        color: tint($primary-complement, 10%);
+        color: $primary;
         text-decoration: none;
       }
     }
@@ -340,7 +380,7 @@ a.card-secondary {
       
       &:hover,
       &:focus {
-        color: tint($secondary-complement, 10%);
+        color: $secondary;
         text-decoration: none;
       }
     }
@@ -480,7 +520,7 @@ a.card-tertiary {
       
       &:hover,
       &:focus {
-        color: tint($tertiary-complement, 10%);
+        color: $tertiary;
         text-decoration: none;
       }
     }
@@ -669,4 +709,245 @@ a.card-tertiary {
   .card-container-lg-3 { @extend .card-container-lg; > .card { width: 25%; } }
   .card-container-lg-2 { @extend .card-container-lg; > .card { width: 16.66666667%; } }
   .card-container-lg-1 { @extend .card-container-lg; > .card { width: 8.33333333%; } }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Service Specific Cards
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ 
+.service-card {
+  background-color: white;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+  @include border-radius();
+  
+  div.service-icon-wrapper {
+    float: left;
+    padding: 0;
+    margin: 0;
+  }
+  
+  div.service-details-wrapper {
+    margin-left: 7.2rem;
+    
+    h5 {
+      padding: 0.2rem 0 0.5rem;
+      margin: 0;
+      font-weight: 700;
+    }
+    p {
+      margin-bottom: 0.5rem;
+    }
+    ul {
+      padding: 0;
+      font-size: 1.2rem;
+      margin-bottom: 0;
+      margin-left: 0;
+      strong{
+        font-weight: 700;
+      }
+      li{
+        display: inline-block;
+        padding-left: 0;
+      }
+      li:not(:last-child):after {
+        content: " |";
+      }
+    }
+  }
+}
+
+.category-card {
+  .card-content {
+    box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+    background-color: white;
+    border-top: 1rem solid #d5d6d7;
+    padding: 1rem;
+    @include border-radius();
+    
+    .card-icon-bg {
+      border-radius: 50%;
+      width: 5rem;
+      height: 5rem;
+      margin: 1rem auto 0;
+      text-align: center;
+      color: #fff;
+      .fa {
+        line-height: 5rem;
+      }
+    }
+    .card-title {
+      padding: 0.5rem 0;
+      color: #7e8083;
+      h3 {
+        margin: 0;
+        padding: 0.5rem 0;
+        font-weight: 200;
+      }
+      p {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #d5d6d7;
+      }
+    }
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Teams Specific Card Styles
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+div.card-wrapper {
+  div.btn-group.card-actions {
+    position: absolute;
+    top: 2rem;
+    right: 0.2rem;
+    > button {
+      font-size: 1.4rem;
+      border-left: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      padding: 2px 5px;
+    }
+    > ul.dropdown-menu:empty + button {
+      display: none;
+    }
+  }
+}
+ 
+div.team-card {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  height: 115px;
+  padding: 0.5rem;
+  border-top: 1rem solid #444444;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  @include border-radius();
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  div.parent-path {
+    padding: 0.4rem 0.5rem;
+    margin-right: 6.5rem;
+    @include font-size-line-height(1.4rem, 1.8rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 2.6rem;
+    
+    @include anchor($color: $text-color, $hover-color: $text-color, $text-decoration: none, $hover-text-decoration: underline);
+  }
+  
+  div.team-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    
+    span.fa-stack {     
+      font-size: 3rem;          
+              
+      > span.fa:first-child {
+        color: #444444;
+      }
+      > span.fa:last-child {
+        color: whitesmoke;
+      }
+    }
+  }
+  
+  div.team-name {
+    padding: 0 0.5rem;
+    margin-right: 6.5rem;
+    @include font-size-line-height(2.4rem, 3rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  
+  }
+  
+  div.team-members {
+    padding: 0 1rem 0.5rem 1rem;
+    position: absolute;
+    bottom: 0rem;
+    left: 0rem;
+    right: 0rem;
+    height: 30px;
+    white-space: nowrap;
+    
+    > a {
+      position: relative;
+      display: inline-block;
+      border-radius: 100%;
+      overflow: hidden;
+    }
+    
+    &:after {
+      content: attr(data-card-overflow-cover);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 6rem;
+      pointer-events: none;
+      @include horizontal-gradient(rgba(white, 0), rgba(white, 1));
+    }
+  }
+}
+
+div.user-card {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  height: 115px;
+  padding: 0.5rem;
+  border-top: 1rem solid #444444;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  @include border-radius();
+  box-shadow: 0 1px 2px rgba(49, 62, 71, 0.14);
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  div.user-avatar {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: inline-block;
+    border-radius: 100%;
+    overflow: hidden;
+  }
+  
+  div.user-name {
+    padding: 0.5rem;
+    @include font-size-line-height(1.8rem, 2.4rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  div.user-details {
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    margin-right: 6.5rem;
+    @include font-size-line-height(1.2rem, 1.6rem);
+    
+    > span {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  div.team-card {
+    margin-bottom: 1rem;
+  }
 }

@@ -50,8 +50,6 @@
         $("input#datastore-records-import").on("change", ds.store.processImportFile);
         
         // Add button event handlers
-        table.on("click", "button.edit", ds.store.editRecord);
-        table.on("click", "button.clone", ds.store.cloneRecord);
         table.on("click", "button.delete", ds.store.deleteRecord);
     };
     
@@ -168,7 +166,6 @@
                         {
                             extend: "csv",
                             text: "Export CSV",
-                            className: "btn-sm",
                             filename: bundle.adminDatastore.storeName + " Datastore",
                             exportOptions: {
                                 modifier: {
@@ -180,12 +177,23 @@
                         },
                         {
                             text: "Import CSV",
-                            className: "btn-sm",
                             action: ds.store.importRecords
                         }
                     ]
                 });
-                bundle.admin.addDataTableRenderers(options.columns, {});
+                bundle.admin.addDataTableRenderers(options.columns, {
+                    actionButtons: function ( d, type, row ){
+                        return "<div class=\"btn-group datastore-btns\">" +
+                    		"<a href=\"" + bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug + 
+                    		    "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&id=" + row.ID + 
+                    		    "\" class=\"btn btn-xs btn-default edit\" title=\"Edit\"><span class=\"fa fa-pencil fa-fw\"></span></a>" +
+                    		"<a href=\"" + bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug + 
+                                "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&clone=" + row.ID + 
+                                "\" class=\"btn btn-xs btn-success clone\" title=\"Clone\"><span class=\"fa fa-clone fa-fw\"></span></a>" +
+                    		"<button class=\"btn btn-xs btn-danger delete\" title=\"Delete\"><span class=\"fa fa-times fa-fw\"></span></button>" +
+                		"</div>";
+                    }
+                });
                 // Build DataTable
                 ds.store.table.DataTable(options);
             },
@@ -305,7 +313,7 @@
         }
         else {
             $("div.datastore-records-table-buttons").notifie({
-                anchor: "h3",
+                anchor: "h2",
                 message: "Your browser does not support the import feature. Please use a newer browser."
             });
         }
@@ -325,7 +333,7 @@
             // If not CSV file
             if (file.name && file.name.slice(-4).toLowerCase() !== ".csv"){
                 importInput.closest("div.datastore-records-table-buttons").notifie({
-                    anchor: "h3",
+                    anchor: "h2",
                     message: "Invalid file (" + file.name + "). Only files of type CSV are allowed.",
                     exitEvents: "mouseup"
                 });
@@ -378,7 +386,7 @@
                 /** If invalid headers found, throw error **/
                 if (invalidHeaders.length){
                     importInput.closest("div.datastore-records-table-buttons").notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         message: "Invalid CSV file. " 
                             + invalidHeaders.length + " of the headers in the CSV file do not match an existing field on this datastore. <br/>"
                             + "Invalid headers: " + invalidHeaders.join(", "),
@@ -389,7 +397,7 @@
                 else {
                     // Close any top level alerts
                     importInput.closest("div.datastore-records-table-buttons").notifie({
-                        anchor: "h3",
+                        anchor: "h2",
                         exit: true
                     });
                     // Clear and destroy table and show notification that import is happening
@@ -430,7 +438,7 @@
             },
             error: function(jqXHR, textStatus, errorThrown){
                 importInput.closest("div.datastore-records-table-buttons").notifie({
-                    anchor: "h3",
+                    anchor: "h2",
                     message: "An error occurred while importing records: " + errorThrown,
                     exitEvents: "mouseup"
                 });
@@ -542,7 +550,7 @@
             }
             if (statusCounters.failedRows.length > 0){
                 var failuresContainer = $("<div>", {class: "import-has-errors hide"}).appendTo(msg);
-                var table = $("<table>").addClass("table table-hover table-striped table-bordered dt-responsive nowrap").appendTo(failuresContainer);
+                var table = $("<table>").addClass("table table-hover table-bordered dt-responsive nowrap").appendTo(failuresContainer);
                 var failures = {
                     columns: _.map(_.keys(statusCounters.failedRows[0]), function(key){return {title: key, data: key};}),
                     data: statusCounters.failedRows,
@@ -551,7 +559,7 @@
                         {
                             extend: "csv",
                             text: "Export CSV of Failed Rows",
-                            className: "btn-sm export-failures",
+                            className: "export-failures",
                             filename: bundle.adminDatastore.storeName + " Datastore - Failed Import Rows",
                             exportOptions: {
                                 modifier: {
@@ -566,32 +574,12 @@
             }
             importInput.closest("div.datastore-records-table-buttons").notifie({
                 severity: statusCounters.failedRows.length > 0 ? "danger" : "info",
-                anchor: "h3",
+                anchor: "h2",
                 message: msg
             });
             ds.store.loadRecords(false, false, {});
         }
     }
-    
-    /**
-     * Event handler for Edit button click. Takes user to edit page.
-     */
-    ds.store.editRecord = function(e){
-        // On click of edit button, send user to record page for editing current row
-        var data = ds.store.table.DataTable().row($(this).closest("tr")).data();
-        location.href = bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug 
-                        + "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&id=" + data.ID;
-    };
-    
-    /**
-     * Event handler for Clone button click. Takes user to new record page and prefills data from clone record.
-     */
-    ds.store.cloneRecord = function(e){
-        // On click of edit button, send user to record page for cloning current row
-        var data = ds.store.table.DataTable().row($(this).closest("tr")).data();
-        location.href = bundle.kappLocation() + "/" + bundle.adminDatastore.consoleSlug 
-                        + "?page=datastore/record&store=" + bundle.adminDatastore.storeSlug + "&clone=" + data.ID;
-    };
     
     /**
      * Event handler for Delete button click. Verifies that user wants to delete a record and deletes it. 
@@ -604,7 +592,7 @@
         var data = row.data();
         // Build confirmation dialog
         var confirmDelete = new KD.Modal({
-            header: "<h3>Confirm Delete</h3>",
+            header: "Confirm Delete",
             body: "Are you sure you want to delete this record?",
             footer: function(element, actions) {
                 element.addClass("text-right").append(

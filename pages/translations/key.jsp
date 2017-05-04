@@ -60,7 +60,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>${text.truncate(text.escape(param.key), 30, '...')}</span>
                             <small>Translations</small>
                             <div class="pull-right">
@@ -74,15 +74,15 @@
                                                value="${i18nApiUrl}/translationContexts/${text.escape(param.context)}/translations.csv?key=${text.escape(param.key)}"/>
                                     </c:otherwise>
                                 </c:choose>
-                                <a class="btn btn-sm btn-default" href="${exportUrl}">
+                                <a class="btn btn-default" href="${exportUrl}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
-                                <a class="btn btn-sm btn-tertiary" 
+                                <a class="btn btn-tertiary" 
                                    href="${i18nKappUrl}&page=translations/add&context=${text.escape(param.context)}&key=${text.escape(param.key)}">
                                     <span class="fa fa-plus fa-fw"></span> Add Entries
                                 </a>
                             </div>
-                        </h3>
+                        </h2>
                     </div>
                             
                     <div class="col-xs-12">
@@ -105,7 +105,7 @@
             
             <div class="row entries-container">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
+                    <table class="table table-hover" data-sort="false" data-dom="t" data-table-dom> 
                         <thead>
                             <tr>
                                 <th>Key</th>
@@ -137,7 +137,7 @@
                     <br />
                 </div>
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-state-save="true" 
+                    <table class="table table-hover" data-state-save="true" 
                            id="key_${i18nKapp.slug}_${text.escape(param.context)}"
                            data-table-source="${i18nKappUrl}&partial=translations/entries.json&context=${text.escape(param.context)}&key=${text.escape(param.key)}"
                            data-empty-message="No translations found for the above key in the <b>${text.escape(param.context)}</b> context.">
@@ -163,7 +163,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>The table displays all the translations for the selected key, which is shown above the table.</p>
                 <p>To export the translations, click the <b class="nowrap"><span class="fa fa-download"></span> Export</b> button.</p>

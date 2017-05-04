@@ -35,17 +35,17 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>Unexpected Locales</span>
                             <small>${text.escape(i18nKapp.name)}</small>
-                        </h3>
+                        </h2>
                     </div>
                 </div>
             </div>
                                     
             <div class="row">
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-table-dom
+                    <table class="table table-hover" data-table-dom
                            data-empty-message="No unexpected contexts."> 
                         <thead>
                             <tr>
@@ -85,7 +85,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <p>
                     An <b>Unexpected Locale</b> occurs when there are translation entries with locales that are not enabled 

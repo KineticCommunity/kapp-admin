@@ -26,7 +26,7 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>${not empty param.id ? 'Edit ' : empty param.clone ? 'New ' : 'Clone '}${currentStore.name} Record</h3>
+                <h2>${not empty param.id ? 'Edit ' : empty param.clone ? 'New ' : 'Clone '}${currentStore.name} Record</h2>
             </div>
             
             <div class="row">
@@ -43,7 +43,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${currentStore.name}</h4>
+                <h5>${currentStore.name}</h5>
                 <p>${currentStore.description}</p>
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->

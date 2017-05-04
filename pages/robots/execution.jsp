@@ -54,13 +54,13 @@
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
             <div class="page-header">
-                <h3>
+                <h2>
                     Execution Details
                     <small>
                         of ${currentSchedule.values['Schedule Name']} Schedule 
                         for ${currentRobot.values['Name']} Robot
                     </small>
-                </h3>
+                </h2>
             </div>
             
             <div class="row">

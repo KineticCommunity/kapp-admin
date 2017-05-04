@@ -18,13 +18,13 @@
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
     
     <div class="page-header">
-        <h3>${text.escape(form.name)}</h3>
+        <h2>${text.escape(form.name)}</h2>
     </div>
     
     <div class="row">
         <div class="col-xs-12">
             <div class="overflow-auto">
-                <table class="table table-hover table-striped" 
+                <table class="table table-hover" 
                        data-table-dom data-table-name="Kapps"> 
                     <thead>
                         <tr>

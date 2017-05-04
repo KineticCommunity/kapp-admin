@@ -22,6 +22,32 @@
             });
         }
         
+        /**
+         * Initialize DataTable for dom sourced tables
+         */
+        $("table[data-table-dom]").each(function(i,table){
+            var options = {
+                autoWidth: false,
+                pageLength: 25,
+                language: {
+                    search: "Filter"
+                },
+                drawCallback: function(){
+                    $("[data-tooltip]").tooltip();
+                }
+            };
+            if ($(table).data("empty-message")){
+                options.language.emptyTable = $(table).data("empty-message");
+            }
+            $(table).dataTable(options);
+            $(table).on("click", "td", function(e){
+                if (e.target == this){
+                    $(this).closest("tr").toggleClass("full-text");
+                }
+            });
+            $(table).parent().find("div.dt-title").prepend($("<h4>", {class: "pull-left"}).append($(table).data("table-name")));
+        });
+        
         /** END *** DATASTORE/CONSOLE PAGE *** DOCUMENT READY CODE *********************************/
 
         /******************************************************************************************
@@ -50,23 +76,27 @@
             var fieldData = {
                 name: form.find("input#datastore-name").val(),
                 slug: form.find("input#datastore-slug").val(),
-                description: form.find("textarea#datastore-description").val()
+                description: form.find("textarea#datastore-description").val(),
+                status: "Active",
+                type: "Datastore"
             };
             
             /** Make ajax call to get json template for creating a new datastore form **/
             $.ajax({
-                url: bundle.kappLocation() + "?partial=datastore/template.json",
+                url: bundle.apiLocation() + "/kapps/" + bundle.adminDatastore.kappSlug 
+                     + "/forms/datastore-template" 
+                     + "?include=attributes,pages,securityPolicies",
                 beforeSend: function(jqXHR, settings){
                     self.prop("disabled", true);
                 },
-                success: function(data, textStatus, jqXHR){
+                success: function(template, textStatus, jqXHR){
                     try {
                         /** Make ajax call to create new form using json from above ajax call and form fields from the screen **/
                         $.ajax({
                             method: "POST",
                             url: bundle.apiLocation() + "/kapps/" + bundle.kappSlug() + "/forms?include=fields",
                             dataType: "json",
-                            data: JSON.stringify($.extend(true, JSON.parse(data), fieldData)),
+                            data: JSON.stringify($.extend(true, template.form, fieldData)),
                             contentType: "application/json",
                             success: function(data, textStatus, jqXHR){
                                 // Define url to redirect to
@@ -99,7 +129,7 @@
                                                         },
                                                         error: function(jqXHR, textStatus, errorThrown){
                                                             (new KD.Modal({
-                                                                header: "<h3>Error</h3>",
+                                                                header: "Error",
                                                                 body: "There was an error building the bridge mapping: " + errorThrown,
                                                                 footer: function(element, actions) {
                                                                     element.addClass("text-right").append(
@@ -121,7 +151,7 @@
                                             },
                                             error: function(jqXHR, textStatus, errorThrown){
                                                 (new KD.Modal({
-                                                    header: "<h3>Error</h3>",
+                                                    header: "Error",
                                                     body: "There was an error building the bridge model: " + errorThrown,
                                                     footer: function(element, actions) {
                                                         element.addClass("text-right").append(
@@ -226,7 +256,7 @@
                                             },
                                             error: function(jqXHR, textStatus, errorThrown){
                                                 (new KD.Modal({
-                                                    header: "<h3>Error</h3>",
+                                                    header: "Error",
                                                     body: "There was an error building the bridge mapping: " + errorThrown,
                                                     footer: function(element, actions) {
                                                         element.addClass("text-right").append(
@@ -248,7 +278,7 @@
                                 },
                                 error: function(jqXHR, textStatus, errorThrown){
                                     (new KD.Modal({
-                                        header: "<h3>Error</h3>",
+                                        header: "Error",
                                         body: "There was an error building the bridge model: " + errorThrown,
                                         footer: function(element, actions) {
                                             element.addClass("text-right").append(
@@ -324,7 +354,7 @@
                 var modalBody = $("<div>");
                 // Build confirmation dialog
                 var parameterModal = new KD.Modal({
-                    header: "<h3>Bridge Parameters</h3>",
+                    header: "Bridge Parameters",
                     body: function(element, actions) {
                         // Move parameters table from body (where it's hidden) to the modal
                         modalBody.append(modalParams.children())
@@ -432,7 +462,7 @@
                 var row = $(this).closest("tr");
                 // Create Modal to confirm delete
                 var confirmDelete = new KD.Modal({
-                    header: "<h3>Confirm Delete</h3>",
+                    header: "Confirm Delete",
                     body: "Are you sure you want to delete this qualification?",
                     footer: function(element, actions) {
                         element.addClass("text-right").append(
@@ -635,16 +665,14 @@
             /**
              * Overwrite the default field constraint violation error handler to use Notifie to display the errors above the individual fields.
              */
-            bundle.config = {
-                renderers: {
-                    fieldConstraintViolations: function(form, fieldConstraintViolations) {
-                        _.each(fieldConstraintViolations, function(value, key){
-                            $(form.getFieldByName(key).wrapper()).notifie({
-                                message: value.join("<br>"),
-                                exitEvents: "click"
-                            });
+            bundle.config.renderers = {
+                fieldConstraintViolations: function(form, fieldConstraintViolations) {
+                    _.each(fieldConstraintViolations, function(value, key){
+                        $(form.getFieldByName(key).wrapper()).notifie({
+                            message: value.join("<br>"),
+                            exitEvents: "click"
                         });
-                    }
+                    });
                 }
             };
         }

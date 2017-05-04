@@ -2,6 +2,37 @@
  *   DataTables Overrides
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
  
+table:not(.dataTable) .visibility-toggle {
+  display: none;
+}
+ul.column-visibility-layout.dropdown-menu {
+  li a {
+    &:before {
+      content: "\f096";
+      font-family: FontAwesome;
+      padding-right: 5px;
+      opacity: 0.6;
+    }
+  }
+  li.active a {
+    background-color: transparent;
+    color: #333;
+    &:before {
+      content: "\f046";
+      padding-right: 3px;
+      opacity: 1;
+    }
+  }
+}
+ 
+.dataTables_wrapper {
+  .dataTables_filter {
+    label {
+      display: inline-block;
+    }
+  }
+}
+ 
 table.dataTable thead th {
     position: relative;
     background-image: none !important;
@@ -22,6 +53,12 @@ table.dataTable thead th.actions-xs,
 table.dataTable tbody td.actions-xs {
     min-width: 28px; 
     width: 28px; 
+    text-align: center;
+}
+table.dataTable thead th.actions-lg,
+table.dataTable tbody td.actions-lg {
+    min-width: 109px; 
+    width: 109px; 
     text-align: center;
 }
 table.dataTable tbody td ul {

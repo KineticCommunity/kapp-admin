@@ -15,6 +15,7 @@ body {
   background-color: $body-bg-color;
   // Sticky footer space
   margin-bottom: $footer-height;
+  overflow-y: scroll;
 }
 
 body > div.view-port > div.container {
@@ -23,14 +24,21 @@ body > div.view-port > div.container {
     
     > div.row {
       > div.content-main {
-      
+
         > div.page-header {
-            margin: 0 0 10px 0;
-            @include clearfix();
-            
-            > h3 {
-                margin-top: 10px;
+          margin: 0 0 10px 0;
+          @include clearfix();
+          border-color: $white;
+
+          > h1, > h2, > h3 {
+            margin: 10px 0 0 0;
+            padding: 0;
+            line-height: 3rem;
+
+            .btn {
+              vertical-align: top;
             }
+          }
         }
       }
       
@@ -59,6 +67,10 @@ body > div.view-port > div.container {
             left: -7px;
           }
         }
+        
+        hr {
+          border-color: white;
+        }
       }
       
       &.aside-closed {
@@ -84,6 +96,10 @@ body > div.view-port > div.container {
         }
       }
     }
+  }
+  
+  hr {
+    border-color: white;
   }
 }
 

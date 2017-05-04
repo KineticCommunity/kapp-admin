@@ -140,15 +140,15 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>
+                        <h2>
                             <span>${pageTitle}</span>
                             <small>Missing Translations</small>
                             <div class="pull-right">
-                                <a class="btn btn-sm btn-default" href="${exportUrl}">
+                                <a class="btn btn-default" href="${exportUrl}">
                                     <span class="fa fa-download fa-fw"></span> Export
                                 </a>
                             </div>
-                        </h3>
+                        </h2>
                     </div>
                     <c:if test="${empty keyBreadCrumb}">
                         <div class="col-xs-12">
@@ -172,7 +172,7 @@
             <div class="row entries-container">
                 <c:if test="${not empty keyBreadCrumb}">
                     <div class="col-xs-12">
-                        <table class="table table-hover table-striped" data-sort="false" data-dom="t" data-table-dom> 
+                        <table class="table table-hover" data-sort="false" data-dom="t" data-table-dom> 
                             <thead>
                                 <tr>
                                     <th>Key</th>
@@ -188,7 +188,7 @@
                     </div>
                 </c:if>
                 <div class="col-xs-12 overflow-auto">
-                    <table class="table table-hover table-striped" data-state-save="true"
+                    <table class="table table-hover" data-state-save="true"
                            id="missing_${i18nKapp.slug}_${text.escape(param.context)}_${text.escape(param.locale)}"
                            data-table-source="${missingTranslationsDataUrl}"
                            data-empty-message="No missing translations.">
@@ -214,7 +214,7 @@
             <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
             <bundle:variable name="aside">
                 <h3>${form.name}</h3>
-                <h4>${i18nKapp.name}</h4>
+                <h5>${i18nKapp.name}</h5>
                 <hr class="border-color-white" />
                 <c:choose>
                     <c:when test="${text.isNotBlank(param.context) && text.isNotBlank(param.key)}">

@@ -1,13 +1,113 @@
 /* CSS Specific to the User Management Console*/
-tr.child td span.dtr-data {
-  word-break: break-all;
+table#users-table img.gravatarimg {
+  border-radius: 50%;
+  margin: -0.5rem 0;
 }
-div.row.user-details > div {
-  margin-bottom: 15px;
+table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span {
+    white-space: normal;
+    width: auto;
+    display: block;
 }
-div.row.user-details > div > table {
-  margin-bottom: 0px;
+table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-title {
+    overflow: hidden;
+    text-align: left;
 }
-table td.group-name {
-  word-break: break-all;
+table#users-table.dataTable.dtr-inline.collapsed > tbody > tr.child > td.child > ul > li > span.dtr-data {
+    float: none;
+    overflow: hidden;
+}
+
+div.user-image {
+  text-align: center;
+}
+div.user-image img{
+  border-radius: 50%;
+}
+
+div.user-details {
+  
+}
+
+div.user-profile-attributes input + input,
+div.user-attributes input + input {
+  margin-top: 0.2rem;
+}
+
+.team-label,
+.checkbox-label {
+  margin-right: 1rem;
+}
+.team-label {
+  display: block;
+}
+.team-label label.label,
+.checkbox-label > label.label {
+  font-size: 100%;
+  display: inline-block;
+  line-height: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+.checkbox-label > label.label {
+  cursor: pointer;
+}
+.checkbox-label > input {
+  display: none;
+}
+.checkbox-label > input + label.label:before {
+  font-family: FontAwesome;
+  content: "\f096";
+  font-weight: 400;
+  display: inline-block;
+  width: 1.28571429em;
+  text-align: center;
+}
+.checkbox-label > input:checked + label.label {
+  background-color: #5cb85c;
+}
+.checkbox-label > input:checked + label.label:before {
+  content: "\f046";
+}
+.team-label label.label > .fa {
+  margin-right: 0.5rem;
+}
+.team-label label.label .badge {
+  background-color: white;
+  vertical-align: baseline;
+  padding: 0.1rem 0.4rem;
+  cursor: pointer;
+  float: right;
+  margin: 0.3rem 0 0.3rem 1rem;
+}
+.team-label label.label .badge:hover {
+  background-color: #a94442;
+}
+.team-label label.label .badge .fa-times {
+  color: #a94442;
+}
+.team-label label.label .badge:hover .fa-times {
+  color: white;
+}
+
+a.falink:hover,
+a.falink:active,
+a.falink:focus {
+    text-decoration: none;
+}
+@media (max-width: 767px) {
+  div.user-image {
+    margin-bottom: 2rem;
+  }
+}
+@media (min-width: 768px) {
+  div.user-details {
+    margin-right: 203px;
+    min-height: 188px;
+  }
+
+  div.user-image {
+    float: right;
+    max-width: 188px;
+  }
 }

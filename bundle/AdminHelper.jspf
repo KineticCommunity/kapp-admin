@@ -34,15 +34,15 @@
         }
         
         /**
-         * Helper to get Response Server URL
-         * Check the Kapp then Space for an attribute called Response server URL
+         * Helper to get Discussion Server Url
+         * Check the Kapp then Space for an attribute called Discussion Server Url
          */
         public String getResponseUrl(){
-            if(adminKapp != null && adminKapp.hasAttribute("Response Server Url")) {
-                return adminKapp.getAttributeValue("Response Server Url");
+            if(adminKapp != null && adminKapp.hasAttribute("Discussion Server Url")) {
+                return adminKapp.getAttributeValue("Discussion Server Url");
             } 
-            else if (space.hasAttribute("Response Server Url")) {
-                return space.getAttributeValue("Response Server Url");
+            else if (space.hasAttribute("Discussion Server Url")) {
+                return space.getAttributeValue("Discussion Server Url");
             }
             return null;
         }
@@ -337,6 +337,14 @@
             }
             return fieldElements;
         }
+        
+        public List<Element> getFormFieldElements(Form form){
+            List<Element> fieldElements = new ArrayList<>();
+            for (Page page : form.getPages()){
+                fieldElements.addAll(getFieldElements(page.getElements()));
+            }
+            return fieldElements;
+        }
 
          /*-----------------------------------------------------------------------------------------
          * SYSTEM MANAGEMENT CONSOLE HELPER FUNCTIONS
@@ -367,6 +375,7 @@
         public List<LinkedHashMap> getNotificationTemplates(){
             Map<String, String[]> parameters = buildQueryParameters();
             parameters.put("values[Type]", new String[] {"Template"});
+            parameters.put("values[Status]", new String[] {"Active"});
             PaginatedList<Submission> notificationTemplateSubmissions = submissionComponent.searchByForm(adminKapp.getForm("notification-data"), parameters);
 
             List<LinkedHashMap> notifications = new ArrayList<>();
@@ -384,7 +393,7 @@
          * FORM MANAGEMENT HELPER FUNCTIONS
          *----------------------------------------------------------------------------------------*/
          
-         public String getFormStatusLabelClass(Form form){
+        public String getFormStatusLabelClass(Form form){
             if (Text.equals("Active", form.getStatus())){
                 return "label-success";
             }
@@ -397,18 +406,54 @@
             else if (Text.equals("Delete", form.getStatus())){
                 return "label-warning";
             }
-            else {
-                return "hide";
-            }
+            return "";
         }
         
         public Boolean isFormOwner(User user, Form form){
+            if (user == null || form == null){
+                return Boolean.FALSE;
+            }
             for (Team team : user.getTeams()){
                 if (form.hasAttributeValue("Owning Team", team.getName())) {
                     return Boolean.TRUE;
                 }
             }
             return Boolean.FALSE;
+        }
+        
+        public List<Descendant> formatDescendants(Submission submission){
+            Map<UUID, ArrayList<Submission>> childMap = new HashMap<UUID, ArrayList<Submission>>();
+            for (Submission descendant : submission.getDescendants()){
+                if (!childMap.containsKey(descendant.getParentId())){
+                    childMap.put(descendant.getParentId(), new ArrayList<Submission>());
+                }
+                childMap.get(descendant.getParentId()).add(descendant);
+            }
+            return flattenDescendants(childMap, submission.getId(), 0);
+        }
+        
+        public List<Descendant> flattenDescendants(Map<UUID, ArrayList<Submission>> childMap, UUID id, int depth){
+            List<Descendant> descendants = new ArrayList<Descendant>();
+            if (childMap.containsKey(id)){
+                for (Submission submission : childMap.get(id)){
+                    descendants.add(new Descendant(submission, depth));
+                    descendants.addAll(flattenDescendants(childMap, submission.getId(), depth + 1));
+                }
+            }
+            return descendants;
+        }
+        
+        public class Descendant {
+            Submission submission;
+            int depth;
+            
+            public Descendant(Submission submission, int depth){ 
+                this.submission = submission;
+                this.depth = depth;
+            }
+            
+            public Submission getSubmission(){ return this.submission; }
+            public int getDepth(){ return this.depth; }
         }
          
     }

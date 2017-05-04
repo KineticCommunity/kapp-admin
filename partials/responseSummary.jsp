@@ -13,7 +13,7 @@
     
     <bundle:variable name="head">
         <!-- This loads Response + Angular. -->
-        <script src="${AdminHelper.responseUrl}/assets/response_bundle.js"></script>
+        <script src="${headerLocation}/js/response_bundle.js"></script>
         <!-- This defines the application which will render the Response components (and other Angular functionality as needed). -->
         <script>
             angular.module("kd.discussion", [

@@ -116,7 +116,7 @@
                         // Add event to show alert when delete is clicked that you can't delete a robot with schedules
                         container.on("click", "button.delete-robot", function(e){
                             (new KD.Modal({
-                                header: "<h3>Not Allowed</h3>",
+                                header: "Not Allowed",
                                 body: "You can not delete a robot which has schedules. Please delete all schedules first.",
                                 footer: function(element, actions) {
                                     element.addClass("text-right").append(
@@ -138,7 +138,7 @@
                         // Add event for handling delete of robot
                         container.on("click", "button.delete-robot", function(e){
                             (new KD.Modal({
-                                header: "<h3>Confirm Delete</h3>",
+                                header: "Confirm Delete",
                                 body: "Are you sure you want to delete this robot?",
                                 footer: function(element, actions) {
                                     element.addClass("text-right").append(
@@ -259,7 +259,7 @@
                     // Add event for handling delete of schedule
                     container.on("click", "button.delete-schedule", function(e){
                         (new KD.Modal({
-                            header: "<h3>Confirm Delete</h3>",
+                            header: "Confirm Delete",
                             body: "Are you sure you want to delete this schedule?",
                             footer: function(element, actions) {
                                 element.addClass("text-right").append(
@@ -475,7 +475,7 @@
             error: function(jqXHR, textStatus, errorThrown){
                 // On error, show error
                 (new KD.Modal({
-                    header: "<h3>Error</h3>",
+                    header: "Error",
                     body: "Failed to delete this " + item + ".",
                     footer: function(element, actions) {
                         element.addClass("text-right").append(

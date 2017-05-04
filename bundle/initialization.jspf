@@ -109,14 +109,6 @@
     }
 %>
 
-<%-- GroupHelper --%>
-<%@include file="GroupHelper.jspf"%>
-<%
-    if (request.getAttribute("GroupHelper") == null) {
-        request.setAttribute("GroupHelper", new GroupHelper(request, space));
-    }
-%>
-
 <%-- SearchHelper --%>
 <%@include file="SearchHelper.jspf"%>
 <%
@@ -138,5 +130,13 @@
 <%
     if (request.getAttribute("GravatarHelper") == null) {
         request.setAttribute("GravatarHelper", new GravatarHelper(request));
+    }
+%>
+
+<%-- TeamsHelper --%>
+<%@include file="TeamsHelper.jspf"%>
+<%
+    if (request.getAttribute("TeamsHelper") == null) {
+        request.setAttribute("TeamsHelper", new TeamsHelper(request));
     }
 %>

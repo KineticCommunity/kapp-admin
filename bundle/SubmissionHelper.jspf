@@ -51,5 +51,57 @@
 
             return submissionComponent.searchByKapp(kapp, searchOptions);
         }
+        
+        /************************************************************
+         * Helper Methods for getting data our of submissions
+         ************************************************************/
+
+         /**
+         * Returns the status of the submission, or the core state if status field is not found
+         */
+        public String getStatus(Submission submission) {
+            String value = null;
+            if (submission.getForm().getField("Status") != null){
+                value = submission.getValue("Status");
+            }
+            if (value == null) {
+                value = submission.getCoreState();
+            }
+            return value;
+        }
+        
+        /**
+         * Returns the class used to style the status or state of the submission
+         */
+        public String getStatusClass(Submission submission) {
+            String className;
+            if (submission.getForm().getField("Status") != null && submission.getValue("Status") != null) {
+                List<String> activeStatuses = (submission.getForm().getAttributeValues("Statuses - Active").size() > 0)
+                    ? submission.getForm().getAttributeValues("Statuses - Active")
+                    : submission.getKapp().getAttributeValues("Statuses - Active");
+                List<String> inactiveStatuses = (submission.getForm().getAttributeValues("Statuses - Inactive").size() > 0)
+                    ? submission.getForm().getAttributeValues("Statuses - Inactive")
+                    : submission.getKapp().getAttributeValues("Statuses - Inactive");
+                List<String> cancelledStatuses = (submission.getForm().getAttributeValues("Statuses - Cancelled").size() > 0)
+                    ? submission.getForm().getAttributeValues("Statuses - Cancelled")
+                    : submission.getKapp().getAttributeValues("Statuses - Cancelled");
+                if (activeStatuses.contains(submission.getValue("Status"))) {
+                    className = "label-success";
+                } else if (inactiveStatuses.contains(submission.getValue("Status"))) {
+                    className = "label-warning";
+                } else if (cancelledStatuses.contains(submission.getValue("Status"))) {
+                    className = "label-danger";
+                } else {
+                    className = "label-default";
+                }
+            } else if ("Draft".equals(submission.getCoreState())) {
+                className = "label-warning";
+            } else if ("Submitted".equals(submission.getCoreState())) {
+                className = "label-success";
+            } else {
+                className = "label-default";
+            }
+            return className;
+        }
     }
 %>
