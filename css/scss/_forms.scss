@@ -92,6 +92,10 @@ label {
   @include font-size(1.4rem);
   font-weight: 600;
   margin-bottom: 0px;
+  
+  .subtle {
+    color: #7e8083;
+  }
 }
 label.field-label {
   margin-top: 5px;
@@ -102,15 +106,10 @@ label.field-label {
 /* Requested For search display
  *-------------------------------------- */
 .requested-for-display-name {
-  label {
-    color: $primary;
-    padding-left: 0;
-  }
-  span.fa.fa-edit {
+  span.fa-edit,
+  span.fa-times-circle {
+    margin-left: 5px;
     cursor: pointer;
-  }
-  .display-info {
-    padding: 0;
   }
 }
 

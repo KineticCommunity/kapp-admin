@@ -26,7 +26,10 @@
         private Form form;
         private Identity identity;
         
-        private boolean exists; // Does a configuration exist in setup.json
+        // File containing the configuration setup
+        private final String SETUP_CONFIGURATION_FILE = "setup.json";
+        
+        private boolean exists; // Does a configuration exist in the setup configuration file
         private boolean configured; // Is the Kapp configured (true if Kapp Configuration Status attribute exists)
         private boolean valid; // Is the Kapp configuration valid
         private boolean adminRequired; // Is the Admin Kapp required by this Kapp
@@ -55,7 +58,7 @@
         /**
          * Constructor for SetupHelper
          *
-         * Reads and parses the setup.json configuration file which defines the necessary configurations for this kapp to run.
+         * Reads and parses the setup configuration file which defines the necessary configurations for this kapp to run.
          */
         public SetupHelper(HttpServletRequest request){    
             this.request = request;
@@ -82,8 +85,8 @@
             // Only check kapp configuration if kapp is not null
             if (this.kapp != null){                
                 try { 
-                    // Read and parse the setup.json configuration data
-                    LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/setup.json")));
+                    // Read and parse the setup configuration data
+                    LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/" + SETUP_CONFIGURATION_FILE)));
                     // Save configuration as string
                     String stringConfiguration = Json.toString(parsedConfiguration);
                     // Replace dynamic value placeholders with the values
@@ -98,7 +101,7 @@
                 catch (FileNotFoundException e){/* Configuration is already an empty map */}
                 // If error occurs, throw an exception. This file must contain a valid JSON Object
                 catch (Exception e){
-                    throw new RuntimeException("Failed to read Kapp Configuration Data from file setup.json: " + e.getMessage());
+                    throw new RuntimeException("Failed to read Kapp Configuration Data from file " + SETUP_CONFIGURATION_FILE + ": " + e.getMessage());
                 }
             
                 /** PROCESS CONFIGURATION FILE AND STORE IN CUSTOM MODELS DEFINED BELOW **/

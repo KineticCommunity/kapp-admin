@@ -35,50 +35,6 @@
   visibility: hidden;
 }
 
-.fa.fa-kinetic-admin {
-  background-image: url("../images/fa-image/kinetic-admin.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-kinetic-admin:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-default-kapp {
-  background-image: url("../images/fa-image/kapp-default.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-default-kapp:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-catalog-kapp {
-  background-image: url("../images/fa-image/kapp-catalog.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-catalog-kapp:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-queue-kapp {
-  background-image: url("../images/fa-image/kapp-queue.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-queue-kapp:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Header
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

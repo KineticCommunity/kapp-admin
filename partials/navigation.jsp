@@ -12,7 +12,7 @@
 <c:forEach items="${space.kapps}" var="kappLink">
     <c:if test="${not text.equals(kappLink.slug, adminKapp.slug)}">
         <li><a href="${bundle.spaceLocation}/${kappLink.slug}">
-            <span class="fa fa-fw ${text.defaultIfBlank(kappLink.getAttributeValue('Icon'), 'fa-default-kapp')}"></span>
+            <span class="fa fa-fw ${text.defaultIfBlank(kappLink.getAttributeValue('Icon'), 'fa-circle')}"></span>
             ${i18n.translate(kappLink.name)}</a>
         </li>
     </c:if>
@@ -22,7 +22,7 @@
     <li class="divider"></li>
     <c:if test="${adminKapp != null}">
         <li><a href="${bundle.spaceLocation}/${adminKapp.slug}">
-            <span class="fa fa-fw ${text.defaultIfBlank(adminKapp.getAttributeValue('Icon'), 'fa-kinetic-admin')}"></span>
+            <span class="fa fa-fw ${text.defaultIfBlank(adminKapp.getAttributeValue('Icon'), 'fa-gear')}"></span>
             ${i18n.translate('Admin Console')}
         </a></li>
     </c:if>

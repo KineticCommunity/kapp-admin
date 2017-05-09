@@ -1,6 +1,5 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../../bundle/initialization.jspf" %>
-<c:set var="includeHeaderTall" value="${true}" scope="request"/>
 <c:set var="removeBreadcrumb" value="${true}" scope="request"/>
 
 <%-- Here we check for a request header that tells us whether or not the request was made via webpack proxy server.

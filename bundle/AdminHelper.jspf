@@ -455,6 +455,32 @@
             public Submission getSubmission(){ return this.submission; }
             public int getDepth(){ return this.depth; }
         }
+        
+
+        /*-----------------------------------------------------------------------------------------
+         * USER MANAGEMENT HELPER FUNCTIONS
+         *----------------------------------------------------------------------------------------*/
+
+        public List<AttributeDefinition> getOrderedUserProfileAttributeDefinitions(){
+            Map<String, AttributeDefinition> sorted = new TreeMap<String, AttributeDefinition>();
+            for (AttributeDefinition def : this.space.getUserProfileAttributeDefinitions()){
+                sorted.put(def.getName(), def);
+            }
+            
+            List<AttributeDefinition> ordered = new ArrayList<AttributeDefinition>();
+            if (sorted.containsKey("First Name")){
+                ordered.add(sorted.remove("First Name"));
+            }
+            if (sorted.containsKey("Middle Name")){
+                ordered.add(sorted.remove("Middle Name"));
+            }
+            if (sorted.containsKey("Last Name")){
+                ordered.add(sorted.remove("Last Name"));
+            }
+            ordered.addAll(sorted.values());
+            
+            return ordered;
+        }
          
     }
 %>

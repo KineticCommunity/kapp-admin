@@ -104,7 +104,7 @@
             
             <%-- Profile Attributes --%>
             <div class="user-profile-attributes">
-                <c:forEach var="profileAttributeDefinition" items="${TeamsHelper.getOrderedUserProfileAttributeDefinitions()}">
+                <c:forEach var="profileAttributeDefinition" items="${AdminHelper.getOrderedUserProfileAttributeDefinitions()}">
                     <c:if test="${empty firstProfileAttribute}">
                         <h4 class="m-t-4">${i18n.translate('Profile Attributes')}</h4>
                         <c:set var="firstProfileAttribute" value="${true}" />

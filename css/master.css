@@ -810,6 +810,9 @@ label {
   font-weight: 600;
   margin-bottom: 0px;
 }
+label .subtle {
+  color: #7e8083;
+}
 
 label.field-label {
   margin-top: 5px;
@@ -819,15 +822,10 @@ label.field-label {
 
 /* Requested For search display
  *-------------------------------------- */
-.requested-for-display-name label {
-  color: #313E47;
-  padding-left: 0;
-}
-.requested-for-display-name span.fa.fa-edit {
+.requested-for-display-name span.fa-edit,
+.requested-for-display-name span.fa-times-circle {
+  margin-left: 5px;
   cursor: pointer;
-}
-.requested-for-display-name .display-info {
-  padding: 0;
 }
 
 .tt-menu {
@@ -2949,50 +2947,6 @@ ul.unstyled {
   background-position: 50% 43%;
 }
 .fa.fa-kinetic-task:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-kinetic-admin {
-  background-image: url("../images/fa-image/kinetic-admin.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-kinetic-admin:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-default-kapp {
-  background-image: url("../images/fa-image/kapp-default.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-default-kapp:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-catalog-kapp {
-  background-image: url("../images/fa-image/kapp-catalog.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-catalog-kapp:before {
-  content: "\f111";
-  visibility: hidden;
-}
-
-.fa.fa-queue-kapp {
-  background-image: url("../images/fa-image/kapp-queue.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 43%;
-}
-.fa.fa-queue-kapp:before {
   content: "\f111";
   visibility: hidden;
 }
