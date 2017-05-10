@@ -6,8 +6,8 @@
 <c:set var="currentForm" value="${space.getKapp(param.kapp).getForm(param.form)}" scope="request"/>
 <c:set var="hasResponseAccess" value="${AdminHelper.isFormOwner(identity.user, currentForm) && not empty AdminHelper.responseUrl}" scope="request" />
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
-<c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
-<c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
+<c:set var="hasRoleFormDeveloper" value="${identity.spaceAdmin || TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
+<c:set var="hasRoleTaskDeveloper" value="${identity.spaceAdmin || TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 <c:set var="catalogKapp" value="${space.getKapp(space.getAttributeValue('Catalog Kapp Slug'))}" />
 <c:set var="feedbackForm" value="${kapp.getForm(space.getAttributeValue('Feedback Form Slug'))}" />
 <c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
@@ -68,19 +68,19 @@
                             <span>${text.escape(currentForm.name)}</span>
                             <small>Form</small>
                             <div class="pull-right users-table-buttons">
-                                <c:if test="${hasCustomWorkflow && not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleTaskDeveloper)}">
+                                <c:if test="${hasCustomWorkflow && not empty taskServerUrl && hasRoleTaskDeveloper}">
                                     <a class="btn btn-tertiary" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                         <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                                     </a>
                                 </c:if>
-                                <c:if test="${identity.isSpaceAdmin() || hasRoleFormDeveloper}">
+                                <c:if test="${hasRoleFormDeveloper}">
                                     <a class="btn btn-tertiary" target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentForm.slug}/builder">
                                         <span class="fa fa-pencil fa-fw"></span> Edit Form
                                     </a>
+                                    <a class="btn btn-tertiary" href="${bundle.kappLocation}/${console.slug}?page=management/config/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
+                                        <span class="fa fa-cog fa-fw"></span> Configure Form
+                                    </a>
                                 </c:if>
-                                <a class="btn btn-tertiary" href="${bundle.kappLocation}/${console.slug}?page=management/config/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
-                                    <span class="fa fa-cog fa-fw"></span> Configure Form
-                                </a>
                             </div>
                         </h3>
                     </div>

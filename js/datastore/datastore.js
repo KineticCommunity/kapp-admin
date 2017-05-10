@@ -197,6 +197,8 @@
          */
         $("form#create-datastore-form").on("keyup", "input#datastore-name", function(){
             $("input#datastore-slug").val($(this).val().trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"));
+        }).on("keyup", "input#datastore-slug", function(){
+            $(this).val($(this).val().trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"));
         }).one("keyup", "input#datastore-slug", function(){
             $("form#create-datastore-form").off("keyup", "input#datastore-name");
         });

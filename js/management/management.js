@@ -20,6 +20,9 @@
         $("table[data-table-forms-list]").each(function(i,table){
             bundle.adminManagement.buildFormsDataTable($(table));
         });
+
+        // Enable create form and clone form buttons
+        $(document).on("click", "button[data-clone-form-button]", bundle.adminManagement.cloneForm);
         
         // Create click event to start a discussion for a form
         $("div.form-activity button#start-discussion").on("click", bundle.adminManagement.form.startDiscussion);
@@ -259,7 +262,8 @@
             dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>><'row'<'col-xs-12'<'overflow-auto't>>><'row'<'col-sm-5'i><'col-sm-7'p>>",
             pageLength: pageLength,
             language: {
-                search: "Filter"
+                search: "Filter",
+                emptyTable: "There are no forms owned by any of the teams you are in."
             },
             buttons: [
                 {
@@ -272,6 +276,178 @@
             ]
         };
         table.dataTable(options);
+    };
+    
+    /**
+     * Event handler for creating a new form by cloning a template. 
+     */
+    bundle.adminManagement.cloneForm = function(e){
+        var self = $(this);
+        (new KD.Modal({
+            header: self.data("form-slug") ? "Clone Form" : "Create Form",
+            body: function(element, actions) {
+                element.append($("<div>", {class: "text-center"}).append($("<span>", {class: "fa fa-spinner fa-spin"})));
+                element.load(
+                    bundle.kappLocation() + "?partial=management/config/form/new&kapp=" + self.data("kapp-slug") + "&form=" + (self.data("form-slug") || ""), 
+                    function(responseText, textStatus, jqXHR){
+                        if (jqXHR.status >= 400) {
+                            element.empty().append(
+                                $("<div>", {class: "alert alert-danger"})
+                                    .text("An error occurred. Please contact an administrator.")
+                            );
+                        }
+                        else if (element.find(".alert").length <= 0) {
+                            element.next().prepend(
+                                $("<button>", {class: "btn btn-success create", tabindex: 2})
+                                    .text("Create")
+                                    .on("click", function(){
+                                        bundle.adminManagement.validateNewForm($(element), actions, self.data("console-slug"), self.data("kapp-slug"));
+                                    })
+                            )
+                        }
+                        // Event handlers for mirroring name field input into slug and preventing slug from getting forbidden characters
+                        element.on("keyup", "input[name='form-name']", function(){
+                            element.find("input[name='form-slug']").val($(this).val().trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"));
+                        }).on("keyup", "input[name='form-slug']", function(){
+                            $(this).val($(this).val().trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-"));
+                        }).one("keyup", "input[name='form-slug']", function(){
+                            element.off("keyup", "input[name='form-name']");
+                        });
+                    }
+                );
+            },
+            footer: function(element, actions) {
+                element.addClass("text-right").append(
+                    $("<button>", {class: "btn btn-link", tabindex: 1}).text("Cancel").on("click", actions.dismiss)
+                );
+            },
+            size: "sm",
+            backdrop: true,
+            backdropclose: true,
+            keyboardclose: true,
+            renderCallback: false
+        })).show();
+        // Blur button
+        $(this).blur();
+    };
+    
+    /**
+     * Validates that all required fields when creating/cloning a form have data
+     */
+    bundle.adminManagement.validateNewForm = function(element, actions, consoleSlug, kappSlug){
+        var error = false;
+        element.notifie({exit: true, recurseExit: true});
+        element.find("label.required").each(function(){
+            var field = $(this).next()
+            if (field.val() == null || field.val().length <= 0){
+                field.notifie({
+                    anchor: "div",
+                    message: $(this).data("error-message"),
+                    exitEvents: "change",
+                    margin: {'margin-top':'10px'}
+                });
+                error = true;
+            }
+        });
+        if (!error){
+            var cloneFormDiv = element.find("div[data-clone-form]");
+            var cloneFormSlug = cloneFormDiv.data("clone-form") || cloneFormDiv.find("select").val();
+            bundle.adminManagement.processNewForm(element, actions, consoleSlug, kappSlug, cloneFormSlug);
+        }
+    };
+    
+    /**
+     * Fetches the form to be cloned, updates it with data entered by user, and creates a new form
+     */
+    bundle.adminManagement.processNewForm = function(element, actions, consoleSlug, kappSlug, cloneFormSlug){
+        // Get form to clone with all details
+        $.ajax({
+            method: "get",
+            dataType: "json",
+            url: bundle.apiLocation() + "/kapps/" + kappSlug + "/forms/" + cloneFormSlug 
+                 + "?include=details,customHeadContent,attributes,bridgedResources,categorizations,pages,securityPolicies",
+            beforeSend: function(jqXHR, settings){
+                element.next().find("button.create").prop("disabled", true);
+                element.children("[data-clone-form]").notifie({
+                    severity: "info",
+                    message: $("<div>").append(
+                        $("<span>", {class: "fa fa-spinner fa-spin"}),
+                        $("<span>").text("Saving")
+                    )
+                });
+            },
+            success: function(data, textStatus, jqXHR){
+                var data = data.form || {};
+                delete data.createdAt;
+                delete data.createdBy;
+                delete data.updatedAt;
+                delete data.updatedBy;
+             
+                // Collect all the properties from the container for saving
+                element.find("div[data-property]").each(function(){
+                    var value = $(this).find("input[type=text], select, textarea").first();
+                    data[$(this).data("property")] = value.val();
+                });
+                
+                // Collect attributes (Owning Team)
+                element.find("div[data-attribute]").each(function(){
+                    var name = $(this).data("attribute");
+                    var values = new Array();
+                    // Remove old attribute
+                    for (var i = 0; i < data.attributes.length; i++){
+                        if (data.attributes[i].name === name){
+                            data.attributes.splice(i, 1);
+                            break;
+                        }
+                    }
+                    $(this).find("select[multiple]").each(function(){
+                        if ($(this).val() && $.isArray($(this).val())){
+                            $.each($(this).val(), function(i, v){
+                                if (v && v.trim().length > 0){
+                                    values.push(v.trim());
+                                }
+                            });
+                        }
+                    });
+                    if (values.length > 0){
+                        data.attributes.push({
+                            name: name,
+                            values: values
+                        });
+                    }
+                });
+                
+                // Create new form
+                $.ajax({
+                    method: "post",
+                    dataType: "json",
+                    url: bundle.apiLocation() + "/kapps/" + kappSlug + "/forms",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    success: function(data, textStatus, jqXHR){
+                        location.href = bundle.kappLocation() + "/" + consoleSlug + "?page=management/config/form&kapp=" + kappSlug + "&form=" + data.form.slug;
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        try { 
+                            errorThrown = JSON.parse(jqXHR.responseText).error; 
+                        } catch(e){}
+                        element.next().find("button.create").prop("disabled", false);
+                        element.children("[data-clone-form]").notifie({
+                            message: "An error occurred: " + errorThrown
+                        });
+                    }
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                try { 
+                    errorThrown = JSON.parse(jqXHR.responseText).error; 
+                } catch(e){}
+                element.next().find("button.create").prop("disabled", false);
+                element.children("[data-clone-form]").notifie({
+                    message: "An error occurred: " + errorThrown
+                });
+            }
+        });
     };
     
     /**

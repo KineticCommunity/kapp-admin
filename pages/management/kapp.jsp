@@ -3,6 +3,8 @@
 
 <c:set var="console" value="${form}" scope="request"/>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
+<c:set var="isKappOwner" value="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}" scope="request"/>
+<c:set var="hasRoleFormDeveloper" value="${identity.spaceAdmin || TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 
 <c:if test="${empty currentKapp}">
     <c:set var="error" value="${i18n.translate('No kapps with the slug SLUG exist.')
@@ -42,9 +44,16 @@
                     <span>${text.escape(currentKapp.name)}</span>
                     <small>Kapp Management</small>
                     <div class="pull-right users-table-buttons">
-                        <a class="btn btn-tertiary" href="${bundle.kappLocation}/${console.slug}?page=management/config/kapp&kapp=${currentKapp.slug}">
-                            <span class="fa fa-cog fa-fw"></span> Configure Kapp
-                        </a>
+                        <c:if test="${hasRoleFormDeveloper}">
+                            <button class="btn btn-tertiary" data-clone-form-button data-kapp-slug="${currentKapp.slug}" data-console-slug="${console.slug}">
+                                <span class="fa fa-plus fa-fw"></span> Create Form
+                            </button>
+                        </c:if>
+                        <c:if test="${isKappOwner}">
+                            <a class="btn btn-tertiary" href="${bundle.kappLocation}/${console.slug}?page=management/config/kapp&kapp=${currentKapp.slug}">
+                                <span class="fa fa-cog fa-fw"></span> Configure Kapp
+                            </a>
+                        </c:if>
                     </div>
                 </h2>
             </div>
@@ -69,43 +78,56 @@
                                         ${text.escape(attributeDefinition.name)}
                                     </th>
                                 </c:forEach>
-                                <th data-orderable="false"></th>
+                                <c:if test="${hasRoleFormDeveloper}">
+                                    <th data-orderable="false"></th>
+                                </c:if>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="currentForm" items="${currentKapp.forms}">
-                                <tr>
-                                    <td>
-                                        <a href="${bundle.kappLocation}/${console.slug}?page=management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
-                                            ${text.escape(currentForm.name)}
-                                        </a>
-                                    </td>
-                                    <td>${text.escape(currentForm.type.name)}</td>
-                                    <td data-order="${currentForm.updatedAt}">
-                                        <span data-moment-ago="${currentForm.updatedAt}" data-toggle="tooltip"></span>
-                                    </td>
-                                    <td><span class="label ${AdminHelper.getFormStatusLabelClass(form)}">${currentForm.status}</span></td>
-                                    <c:forEach var="attributeDefinition" items="${currentKapp.formAttributeDefinitions}">
-                                        <td class="visibility-toggle">
-                                            <c:choose>
-                                                <c:when test="${attributeDefinition.allowsMultiple}">
-                                                    <c:forEach var="attributeValue" items="${currentForm.getAttributeValues(attributeDefinition.name)}">
-                                                        ${attributeValue} <br />
-                                                    </c:forEach>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${currentForm.getAttributeValue(attributeDefinition.name)}
-                                                </c:otherwise>
-                                            </c:choose>
+                                <c:if test="${isKappOwner || TeamsHelper.isFormOwner(identity.user, currentForm)}">
+                                    <tr>
+                                        <td>
+                                            <a href="${bundle.kappLocation}/${console.slug}?page=management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
+                                                ${text.escape(currentForm.name)}
+                                            </a>
                                         </td>
-                                    </c:forEach>
-                                    <td class="text-right">
-                                        <a class="btn btn-xs btn-tertiary"
-                                           href="${bundle.kappLocation}/${console.slug}?page=management/config/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
-                                            <span class="fa fa-cog fa-fw"></span>
-                                        </a>
-                                    </td>
-                                </tr>
+                                        <td>${text.escape(currentForm.type.name)}</td>
+                                        <td data-order="${currentForm.updatedAt}">
+                                            <span data-moment-ago="${currentForm.updatedAt}" data-toggle="tooltip"></span>
+                                        </td>
+                                        <td><span class="label ${AdminHelper.getFormStatusLabelClass(form)}">${currentForm.status}</span></td>
+                                        <c:forEach var="attributeDefinition" items="${currentKapp.formAttributeDefinitions}">
+                                            <td class="visibility-toggle">
+                                                <c:choose>
+                                                    <c:when test="${attributeDefinition.allowsMultiple}">
+                                                        <c:forEach var="attributeValue" items="${currentForm.getAttributeValues(attributeDefinition.name)}">
+                                                            ${attributeValue} <br />
+                                                        </c:forEach>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${currentForm.getAttributeValue(attributeDefinition.name)}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </c:forEach>
+                                        <c:if test="${hasRoleFormDeveloper}">
+                                            <td class="text-right">
+                                                <div class="btn-group">
+                                                    <button class="btn btn-xs btn-warning" title="Clone" data-clone-form-button 
+                                                            data-kapp-slug="${currentKapp.slug}" data-form-slug="${currentForm.slug}" data-console-slug="${console.slug}">
+                                                        <span class="fa fa-clone fa-fw"></span>
+                                                    </button>
+                                                    <a class="btn btn-xs btn-tertiary" title="Configure"
+                                                       href="${bundle.kappLocation}/${console.slug}?page=management/config/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">
+                                                        <span class="fa fa-cog fa-fw"></span>
+                                                    </a>
+                                                </div>
+                                                
+                                            </td>
+                                        </c:if>
+                                    </tr>
+                                </c:if>
                             </c:forEach>
                         </tbody>
                     </table>

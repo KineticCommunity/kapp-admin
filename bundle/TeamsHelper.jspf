@@ -219,6 +219,24 @@
             return new ArrayList<BundleRole>(roles.values());
         }
         
+        public boolean isKappOwner(User user, Kapp kapp){
+            for (BundleTeam bundleTeam : getUserTeams(user)){
+                if (kapp.hasAttributeValue("Owning Team", bundleTeam.getName())){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public boolean isFormOwner(User user, Form form){
+            for (BundleTeam bundleTeam : getUserTeams(user)){
+                if (form.hasAttributeValue("Owning Team", bundleTeam.getName())){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         public class BundleTeam implements Comparable<BundleTeam> {
             Team team;
             BundleTeam parent;

@@ -65,10 +65,12 @@
                                     by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentKapp.updatedBy)}">${currentKapp.updatedBy}</a>
                                 </td>
                                 <td class="text-right">
-                                    <a class="btn btn-xs btn-tertiary"
-                                       href="${bundle.kappLocation}/${console.slug}?page=management/config/kapp&kapp=${currentKapp.slug}">
-                                        <span class="fa fa-cog fa-fw"></span>
-                                    </a>
+                                    <c:if test="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}">
+                                        <a class="btn btn-xs btn-tertiary" title="Configure"
+                                           href="${bundle.kappLocation}/${console.slug}?page=management/config/kapp&kapp=${currentKapp.slug}">
+                                            <span class="fa fa-cog fa-fw"></span>
+                                        </a>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:if>
