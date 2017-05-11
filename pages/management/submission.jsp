@@ -11,7 +11,7 @@
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
-<c:set var="isFormOwner" value="${identity.spaceAdmin || TeamsHelper.isFormOwner(identity.user, currentForm)}" scope="request"/>
+<c:set var="isFormOwner" value="${identity.spaceAdmin || (not empty currentForm && TeamsHelper.isFormOwner(identity.user, currentForm))}" scope="request"/>
 
 <c:choose>
     <c:when test="${empty submission}">
