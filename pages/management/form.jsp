@@ -169,42 +169,49 @@
                 <div class="tab-content">
                     <%-- Submissions --%>
                     <div role="tabpanel" class="tab-pane active" id="submissions">
-                        <div class="form-activity recent-submissions">
-                            <table data-submissions-data-table
-                                   data-source="/kapps/${currentKapp.slug}/forms/${currentForm.slug}/submissions"
-                                   data-source-include="details,values,form.attributes,form.kapp.attributes"
-                                   data-source-query="timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
-                                   data-source-limit="25"
-                                   data-order-column="3" data-order-direction="desc"
-                                   data-toggle-columns="Toggle Value Columns"
-                                   style="width:100%" class="table table-hover dt-responsive nowrap" 
-                                   id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}">
-                                <thead>
-                                    <tr>
-                                        <th data-data="handle" 
-                                            data-render-type="submissionManagementLink">Confirmation #</th>
-                                        <th data-data="label">Submission Label</th>
-                                        <th data-data="coreState"
-                                            data-render-type="statusLabel">Status</th>
-                                        <th data-data="submittedAt"
-                                            data-render-type="submitted">Submitted</th>
-                                        <c:forEach var="field" items="${AdminHelper.getFormFieldElements(currentForm)}">
-                                            <th class="visibility-toggle" data-visible="false"
-                                                data-data="values.${field.name}"
-                                                data-render-type="${field.renderType}">${field.name}</th>
-                                        </c:forEach>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            <span class="fa fa-spinner fa-spin"></span>
-                                            Loading
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <c:choose>
+                            <c:when test="${isFormOwner}">
+                                <div class="form-activity recent-submissions">
+                                    <table data-submissions-data-table
+                                           data-source="/kapps/${currentKapp.slug}/forms/${currentForm.slug}/submissions"
+                                           data-source-include="details,values,form.attributes,form.kapp.attributes"
+                                           data-source-query="timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
+                                           data-source-limit="25"
+                                           data-order-column="3" data-order-direction="desc"
+                                           data-toggle-columns="Toggle Value Columns"
+                                           style="width:100%" class="table table-hover dt-responsive nowrap" 
+                                           id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}">
+                                        <thead>
+                                            <tr>
+                                                <th data-data="handle" 
+                                                    data-render-type="submissionManagementLink">Confirmation #</th>
+                                                <th data-data="label">Submission Label</th>
+                                                <th data-data="coreState"
+                                                    data-render-type="statusLabel">Status</th>
+                                                <th data-data="submittedAt"
+                                                    data-render-type="submitted">Submitted</th>
+                                                <c:forEach var="field" items="${AdminHelper.getFormFieldElements(currentForm)}">
+                                                    <th class="visibility-toggle" data-visible="false"
+                                                        data-data="values.${field.name}"
+                                                        data-render-type="${field.renderType}">${field.name}</th>
+                                                </c:forEach>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    <span class="fa fa-spinner fa-spin"></span>
+                                                    Loading
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="text-center alert alert-info">You must be a form owner to view submissions.</div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
         
                     <%-- Performance --%>

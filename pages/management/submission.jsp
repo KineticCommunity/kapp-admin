@@ -11,6 +11,7 @@
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
+<c:set var="isFormOwner" value="${identity.spaceAdmin || TeamsHelper.isFormOwner(identity.user, currentForm)}" scope="request"/>
 
 <c:choose>
     <c:when test="${empty submission}">
@@ -23,6 +24,10 @@
     <c:when test="${empty currentForm}">
         <c:set var="error" value="${i18n.translate('No forms with the slug FORMSLUG exist in the KAPPNAME kapp.')
             .replace('FORMSLUG', '<b>FORMSLUG</b>').replace('FORMSLUG', text.defaultIfBlank(param.form, '')).replace('KAPPNAME', text.defaultIfBlank(currentKapp.name, ''))}" />
+    </c:when>
+    <c:when test="${not isFormOwner}">
+        <c:set var="error" value="${i18n.translate('You must be a form owner for the FORMNAME form to view submissions.')
+            .replace('FORMNAME', '<b>FORMNAME</b>').replace('FORMNAME', currentForm.name)}" />
     </c:when>
 </c:choose>
 
