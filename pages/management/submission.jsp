@@ -13,17 +13,16 @@
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 
 <c:choose>
+    <c:when test="${empty submission}">
+        <c:set var="error" value="${i18n.translate('The submission with the specified id does not exist.')}" />
+    </c:when>
     <c:when test="${empty currentKapp}">
         <c:set var="error" value="${i18n.translate('No kapps with the slug SLUG exist.')
-            .replace('SLUG', '<b>SLUG</b>').replace('SLUG', param.kapp)}" />
+            .replace('SLUG', '<b>SLUG</b>').replace('SLUG', text.defaultIfBlank(param.kapp, ''))}" />
     </c:when>
     <c:when test="${empty currentForm}">
         <c:set var="error" value="${i18n.translate('No forms with the slug FORMSLUG exist in the KAPPNAME kapp.')
-            .replace('FORMSLUG', '<b>FORMSLUG</b>').replace('FORMSLUG', param.form).replace('KAPPNAME', currentKapp.name)}" />
-    </c:when>
-    <c:when test="${empty submission}">
-        <c:set var="error" value="${i18n.translate('The submission with id SUBMISSIONID does not exist for the FORMNAME form in the KAPPNAME kapp.')
-            .replace('SUBMISSIONID', '<b>SUBMISSIONID</b>').replace('SUBMISSIONID', param.id).replace('FORMNAME', currentForm.name).replace('KAPPNAME', currentKapp.name)}" />
+            .replace('FORMSLUG', '<b>FORMSLUG</b>').replace('FORMSLUG', text.defaultIfBlank(param.form, '')).replace('KAPPNAME', text.defaultIfBlank(currentKapp.name, ''))}" />
     </c:when>
 </c:choose>
 
@@ -43,17 +42,15 @@
     <bundle:variable name="breadcrumb">
         <li><a href="${bundle.kappLocation}/${console.slug}">Management</a></li>
         <c:choose>
+            <c:when test="${empty submission}">
+                <li class="active">Submission Not Found</li>
+            </c:when>
             <c:when test="${empty currentKapp}">
                 <li class="active">Kapp Not Found</li>
             </c:when>
             <c:when test="${empty currentForm}">
                 <li><a href="${bundle.kappLocation}/${console.slug}?page=management/kapp&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
                 <li class="active">Form Not Found</li>
-            </c:when>
-            <c:when test="${empty submission}">
-                <li><a href="${bundle.kappLocation}/${console.slug}?page=management/kapp&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>
-                <li><a href="${bundle.kappLocation}/${console.slug}?page=management/form&kapp=${currentKapp.slug}&form=${currentForm.slug}">${text.escape(currentForm.name)}</a></li>
-                <li class="active">Submission Not Found</li>
             </c:when>
             <c:otherwise>
                 <li><a href="${bundle.kappLocation}/${console.slug}?page=management/kapp&kapp=${currentKapp.slug}">${text.escape(currentKapp.name)}</a></li>

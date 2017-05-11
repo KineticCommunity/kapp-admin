@@ -18,11 +18,11 @@
 <c:choose>
     <c:when test="${empty currentKapp}">
         <c:set var="error" value="${i18n.translate('No kapps with the slug SLUG exist.')
-            .replace('SLUG', '<b>SLUG</b>').replace('SLUG', param.kapp)}" />
+            .replace('SLUG', '<b>SLUG</b>').replace('SLUG', text.defaultIfBlank(param.kapp, ''))}" />
     </c:when>
     <c:when test="${empty currentForm}">
         <c:set var="error" value="${i18n.translate('No forms with the slug FORMSLUG exist in the KAPPNAME kapp.')
-            .replace('FORMSLUG', '<b>FORMSLUG</b>').replace('FORMSLUG', param.form).replace('KAPPNAME', currentKapp.name)}" />
+            .replace('FORMSLUG', '<b>FORMSLUG</b>').replace('FORMSLUG', text.defaultIfBlank(param.form, '')).replace('KAPPNAME', currentKapp.name)}" />
     </c:when>
     <c:when test="${not isKappOwner && not isFormOwner}">
         <c:set var="error" value="${i18n.translate('You do not have permission to view the FORMNAME form in the KAPPNAME kapp.')

@@ -8,12 +8,12 @@
     <c:when test="${not isNew && empty currentUser}">
         <c:set var="error" value="${i18n.translate('User USERNAME does not exist.')
             .replace('USERNAME', '<b>USERNAME</b>')
-            .replace('USERNAME', param.username)}" />
+            .replace('USERNAME', text.defaultIfBlank(param.username, ''))}" />
     </c:when>
     <c:when test="${isClone && empty currentUser}">
         <c:set var="error" value="${i18n.translate('User USERNAME, who you are trying to clone, does not exist.')
             .replace('USERNAME', '<b>USERNAME</b>')
-            .replace('USERNAME', param.clone)}" />
+            .replace('USERNAME', text.defaultIfBlank(param.clone, ''))}" />
     </c:when>
 </c:choose>
 

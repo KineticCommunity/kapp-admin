@@ -8,7 +8,7 @@
 <c:choose>
     <c:when test="${empty currentKapp}">
         <c:set var="error" value="${i18n.translate('No kapps with the slug KAPPSLUG exist.')
-            .replace('KAPPSLUG', '<b>KAPPSLUG</b>').replace('KAPPSLUG', param.kapp)}" />
+            .replace('KAPPSLUG', '<b>KAPPSLUG</b>').replace('KAPPSLUG', text.defaultIfBlank(param.kapp, ''))}" />
     </c:when>
     <c:when test="${not isKappOwner}">
         <c:set var="error" value="${i18n.translate('You do not have permission to configure the KAPPNAME kapp.')

@@ -11,7 +11,7 @@
     <c:when test="${empty currentKapp}">
         <c:set var="error" value="${i18n.translate('No kapps with the slug SLUG exist.')
             .replace('SLUG', '<b>SLUG</b>')
-            .replace('SLUG', param.kapp)}" />
+            .replace('SLUG', text.defaultIfBlank(param.kapp, ''))}" />
     </c:when>
     <c:when test="${not isKappOwner && not isFormOwnerInKapp}">
         <c:set var="error" value="${i18n.translate('You do not have permission to view the KAPPNAME kapp.')
