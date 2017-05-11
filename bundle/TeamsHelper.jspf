@@ -237,6 +237,15 @@
             return false;
         }
         
+        public boolean isFormOwnerInKapp(User user, Kapp kapp){
+            for (Form form : kapp.getForms()){
+                if (isFormOwner(user, form)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         public class BundleTeam implements Comparable<BundleTeam> {
             Team team;
             BundleTeam parent;

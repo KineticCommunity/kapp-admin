@@ -53,7 +53,10 @@
                 </thead>
                 <tbody>
                     <c:forEach var="currentKapp" items="${space.kapps}">
-                        <c:if test="${kapp.slug != currentKapp.slug}">
+                        <c:if test="${kapp.slug != currentKapp.slug && 
+                                      (identity.spaceAdmin || 
+                                       TeamsHelper.isKappOwner(identity.user, currentKapp) || 
+                                       TeamsHelper.isFormOwnerInKapp(identity.user, currentKapp))}">
                             <tr>
                                 <td>
                                     <a href="${bundle.kappLocation}/${console.slug}?page=management/kapp&kapp=${currentKapp.slug}">
