@@ -9,6 +9,8 @@
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 <c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
         || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
+<c:set var="isKappOwner" value="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}" scope="request"/>
+<c:set var="isFormOwner" value="${identity.spaceAdmin || TeamsHelper.isFormOwner(identity.user, currentForm)}" scope="request"/>
 
 <c:choose>
     <c:when test="${empty currentKapp}">
@@ -18,6 +20,10 @@
     <c:when test="${empty currentForm}">
         <c:set var="error" value="${i18n.translate('No forms with the slug FORMSLUG exist in the KAPPNAME kapp.')
             .replace('FORMSLUG', '<b>FORMSLUG</b>').replace('FORMSLUG', param.form).replace('KAPPNAME', currentKapp.name)}" />
+    </c:when>
+    <c:when test="${(not isKappOwner && not isFormOwner) || not hasRoleFormDeveloper}">
+        <c:set var="error" value="${i18n.translate('You do not have permission to configure the FORMNAME form in the KAPPNAME kapp.')
+            .replace('FORMNAME', '<b>FORMNAME</b>').replace('FORMNAME', currentForm.name).replace('KAPPNAME', currentKapp.name)}" />
     </c:when>
 </c:choose>
 

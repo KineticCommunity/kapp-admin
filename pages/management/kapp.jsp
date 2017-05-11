@@ -4,13 +4,20 @@
 <c:set var="console" value="${form}" scope="request"/>
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
 <c:set var="isKappOwner" value="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}" scope="request"/>
+<c:set var="isFormOwnerInKapp" value="${identity.spaceAdmin || TeamsHelper.isFormOwnerInKapp(identity.user, currentKapp)}" scope="request"/>
 <c:set var="hasRoleFormDeveloper" value="${identity.spaceAdmin || TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 
-<c:if test="${empty currentKapp}">
-    <c:set var="error" value="${i18n.translate('No kapps with the slug SLUG exist.')
-        .replace('SLUG', '<b>SLUG</b>')
-        .replace('SLUG', param.kapp)}" />
-</c:if>
+<c:choose>
+    <c:when test="${empty currentKapp}">
+        <c:set var="error" value="${i18n.translate('No kapps with the slug SLUG exist.')
+            .replace('SLUG', '<b>SLUG</b>')
+            .replace('SLUG', param.kapp)}" />
+    </c:when>
+    <c:when test="${not isKappOwner && not isFormOwnerInKapp}">
+        <c:set var="error" value="${i18n.translate('You do not have permission to view the KAPPNAME kapp.')
+            .replace('KAPPNAME', '<b>KAPPNAME</b>').replace('KAPPNAME', currentKapp.name)}" />
+    </c:when>
+</c:choose>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <!-- Sets title and imports js and css specific to this console. -->
