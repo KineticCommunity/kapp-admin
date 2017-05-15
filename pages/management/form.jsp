@@ -104,13 +104,13 @@
                     <label>Created</label>
                     <span data-moment-ago="${currentForm.createdAt}" data-toggle="tooltip"></span>
                     by
-                    <a href="${bundle.spaceLocation}?page=user&username=${text.escapeUrlParameter(currentForm.createdBy)}">${currentForm.createdBy}</a>
+                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.createdBy)}">${currentForm.createdBy}</a>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Updated</label>
                     <span data-moment-ago="${currentForm.updatedAt}" data-toggle="tooltip"></span>
                     by 
-                    <a href="${bundle.spaceLocation}?page=user&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentForm.updatedBy}</a>
+                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentForm.updatedBy}</a>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Status</label>
