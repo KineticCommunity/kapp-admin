@@ -89,7 +89,11 @@
             </div>
             
             <div class="row form-activity m-b-4">
-                <div class="col-xs-12">
+                <div class="col-xs-12 col-sm-6">
+                    <label>${i18n.translate('Submission Label')}</label>
+                    <span>${submission.label}</span>
+                </div>
+                <div class="col-xs-12 col-sm-6">
                     <label>${i18n.translate('Submission Id')}</label>
                     <span>${submission.id}</span>
                 </div>
