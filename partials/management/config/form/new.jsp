@@ -99,7 +99,7 @@
                     <c:set var="selectedRadio" value="${dataObject.get('_default')}" />
                 </c:if>
             </c:if>
-            <c:set var="userTeams" value="${TeamsHelper.getUserTeams(identity.user)}" />
+            <c:set var="userTeams" value="${identity.spaceAdmin ? TeamsHelper.getTeams() : TeamsHelper.getUserTeams(identity.user)}" />
             <select multiple aria-labelledby="label-owning-team" name="owning-team">
                 <c:forEach items="${userTeams}" var="team">
                     <option value="${team.name}" ${fn:length(userTeams) == 1 || (not empty currentForm && currentForm.hasAttributeValue('Owning Team', team.name)) ? 'selected' : ''}>${team.name}</option>
