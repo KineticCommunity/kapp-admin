@@ -5,8 +5,8 @@
 <c:set var="currentKapp" value="${space.getKapp(param.kapp)}" scope="request"/>
 <c:set var="currentForm" value="${currentKapp.getForm(param.form)}" scope="request"/>
 <c:set var="taskServerUrl" value="${space.getAttributeValue('Task Server Url')}" />
-<c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
-<c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
+<c:set var="hasRoleFormDeveloper" value="${identity.spaceAdmin || TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
+<c:set var="hasRoleTaskDeveloper" value="${identity.spaceAdmin || TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 <c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
         || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
 <c:set var="isKappOwner" value="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}" scope="request"/>
@@ -63,12 +63,12 @@
                     <span>${text.escape(currentForm.name)}</span>
                     <small>Form Configuration</small>
                     <div class="pull-right">
-                        <c:if test="${not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleTaskDeveloper)}">
+                        <c:if test="${not empty taskServerUrl && hasRoleTaskDeveloper}">
                             <a class="btn btn-tertiary custom-workflow-btn ${hasCustomWorkflow ? '' : 'hide'}" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                 <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                             </a>
                         </c:if>
-                        <c:if test="${identity.isSpaceAdmin() || hasRoleFormDeveloper}">
+                        <c:if test="${hasRoleFormDeveloper}">
                             <a class="btn btn-tertiary" target="_blank" href="${bundle.spaceLocation}/app/#/${currentKapp.slug}/author/form/${currentForm.slug}/builder">
                                 <span class="fa fa-pencil fa-fw"></span> Edit Form
                             </a>
