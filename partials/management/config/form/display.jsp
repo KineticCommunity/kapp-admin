@@ -42,6 +42,30 @@
     <textarea aria-describedby="description-form-description" aria-labelledby="label-form-description" 
               name="form-description" class="form-control">${currentForm.description}</textarea>
 </div>
+<div class="row">
+    <div class="col-sm-6" data-property="status">
+        <label class="field-label">
+            <span id="label-form-status">${i18n.translate('Form Status')}</span>
+        </label>
+        <select aria-labelledby="label-form-status" name="form-status" class="form-control">
+            <option value="New" ${text.equals(currentForm.status, 'New') ? 'selected' : ''}>New</option>
+            <option value="Active" ${text.equals(currentForm.status, 'Active') ? 'selected' : ''}>Active</option>
+            <option value="Inactive" ${text.equals(currentForm.status, 'Inactive') ? 'selected' : ''}>Inactive</option>
+            <option value="Delete" ${text.equals(currentForm.status, 'Delete') ? 'selected' : ''}>Delete</option>
+        </select>
+    </div>
+    <div class="col-sm-6" data-property="type">
+        <label class="field-label">
+            <span id="label-form-type">${i18n.translate('Form Type')}</span>
+        </label>
+        <select aria-labelledby="label-form-type" name="form-type" class="form-control">
+            <option value=""></option>
+            <c:forEach var="type" items="${currentKapp.formTypes}">
+                <option value="${type.name}" ${text.equals(currentForm.type.name, type.name) ? 'selected' : ''}>${type.name}</option>
+            </c:forEach>
+        </select>
+    </div>
+</div>
 
 <c:forEach var="attr" items="${json.parse(tabAttributes)}">
     <c:set var="definitionObject" value="${currentKapp.getFormAttributeDefinition(attr.name)}" scope="request" />
