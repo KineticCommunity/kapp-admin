@@ -28,6 +28,10 @@
             });
 
         });
+        $("head").append("<style type='text/css'>" +
+    		"@media (min-width:768px){ .dt-buttons .dropdown .dropdown-menu { min-width: 560px; } } " +
+    		"@media (max-width:767px){ .dt-buttons .dropdown .dropdown-menu { width: 80vw; } } " +
+    		"</style>");
     });
 
     /*----------------------------------------------------------------------------------------------
@@ -61,14 +65,165 @@
         
         // Build DataTable
         table.DataTable(options);
+
+        // Build filter section if necessary
+        if (table.data("filter-options-id")){
+            console.log("enable filter");
+            sdt.enableFilter(table);
+        }
+    };
+
+    sdt.enableFilter = function(table){
+        var filterData = table.data("filterData") || {};
+        var filterButton = table.siblings(".dt-buttons").find(".filter-options-button")
+            .attr("data-toggle", "dropdown")
+            .wrap("<div class='dropdown pull-right'></div>");
+        var filterDiv = $("<div>", {class: "dropdown-menu"})
+            .insertAfter(filterButton)
+            .on('click', function(e){e.stopPropagation();});
+        var filterDisplay = $("<div>", {class: "filter-display m-y-1 text-right"}).insertAfter(filterButton.parent());        
+        
+        var options = $("#" + table.data("filter-options-id")).clone();
+        var propertiesSelect = options.find("select[data-type=properties]");
+        var valuesSelect = options.find("select[data-type=values]");
+        
+        var createFilterRow = function(select, k, v){
+            var option = select.find("option[value='" + k + "']");
+            if (option.length <= 0) {
+                return null;
+            }
+            if (v) {
+                filterDisplay.append(
+                    $("<span>", {class: "badge m-l-1"}).append(
+                        $("<strong>").text((option.text() || k) + ": "),
+                        $("<span>").text(v),
+                        $("<span>", {
+                            class: "fa fa-times-circle m-l-1", 
+                            role: "button", 
+                            "data-key": k
+                        }).on("click", function(){
+                            var data = table.data("filterData");
+                            delete data[$(this).data("key")];
+                            table.data("filterData", data);
+                            table.data("pageToken", "");
+                            table.data("previousPageTokens", []);
+                            table.DataTable().state.save();
+                            sdt.load(table);
+                        })
+                    )
+                );
+                filterButton.removeClass("btn-subtle").addClass("btn-default");
+            }
+            return $("<tr>", {"data-key": k}).append(
+                $("<td>").append(option.text() || k),
+                $("<td>").append($("<input>", {type: "text", value: v, class: "form-control"})),
+                $("<td>", {class: "text-right"}).append(
+                    $("<button>", {class: "btn btn-link danger"})
+                        .append($("<span>", {class: "fa fa-times"}))
+                        .on("click", function(){$(this).closest("tr").remove()})
+                )
+            );
+        }
+        var createFilterControl = function(select){
+            return $("<tr>").append(
+                $("<td>", {colspan: 2}).append(select.css("width", "100%")),
+                $("<td>", {class: "text-right"}).css("width", "1%").append(
+                    $("<button>", {class: "btn btn-default"}).append($("<span>", {class: "fa fa-plus"}))
+                        .on("click", function(e){
+                            var select = $(this).closest("div").find("select");
+                            if (select.val()){
+                                var row = $(this).closest("tbody").find("tr[data-key='" + select.val() + "']");
+                                if (!row.length){
+                                    var row = createFilterRow(select, select.val());
+                                    $(this).closest("tr").before(row);
+                                }
+                                select.val("");
+                                row.find("input").focus();
+                            } else {
+                                $(this).closest("tr").find("select").focus();
+                            }
+                        })
+                )
+            );
+        }
+        if (propertiesSelect.length){
+            filterDiv.append(
+                $("<div>", {class: "p-x-2 p-b-1"}).append(
+                    $("<table>", {class: "table m-a-0 properties-table"}).append(
+                        $("<thead>").append($("<tr>").append($("<th>", {colspan: 3}).append("Filter By Properties"))),
+                        $("<tbody>").append(
+                            $.map(filterData, function(v, k){return createFilterRow(propertiesSelect, k, v);}),
+                            createFilterControl(propertiesSelect)
+                        )
+                    )
+                )
+            );
+        }
+        if (valuesSelect.length){
+            filterDiv.append(
+                $("<div>", {class: "p-x-2 p-b-1"}).append(
+                    $("<table>", {class: "table m-a-0 values-table"}).append(
+                        $("<thead>").append($("<tr>").append($("<th>", {colspan: 2}).append("Filter By Field Values"))),
+                        $("<tbody>").append(
+                            $.map(filterData, function(v, k){return createFilterRow(valuesSelect, k, v);}),
+                            createFilterControl(valuesSelect)
+                        )
+                    )
+                )
+            );
+        }
+        filterDiv.append(
+            $("<div>", {class: "p-x-2 p-y-1 text-right"}).append(
+                $("<button>", {class: "btn btn-success apply-filter"}).text("Apply")
+                    .on("click", function(e){
+                        var container = $(this).closest("div.dropdown-menu");
+                        var filterData = {};
+                        container.find("table.properties-table tr[data-key]").each(function(){
+                            if ($(this).data("key") && $(this).find("input").val()){
+                                filterData[$(this).data("key")] = $(this).find("input").val().trim();
+                            }
+                        });
+                        container.find("table.values-table tr[data-key]").each(function(){
+                            if ($(this).data("key") && $(this).find("input").val()){
+                                filterData[$(this).data("key")] = $(this).find("input").val().trim();
+                            }
+                        });
+                        if (JSON.stringify(filterData) !== JSON.stringify(table.data("filterData"))){
+                            console.log("filter changed", filterData);
+                            table.data("filterData", filterData);
+                            table.data("pageToken", "");
+                            table.data("previousPageTokens", []);
+                            table.DataTable().state.save();
+                            sdt.load(table);
+                        }
+                        filterButton.dropdown("toggle");
+                    }),
+                $("<button>", {class: "btn btn-link"}).text("Reset")
+                    .on("click", function(e){
+                        $(this).closest("div.dropdown-menu").find("table tr[data-key]").remove();
+                        $(this).siblings("button.apply-filter").trigger("click");
+                    })
+            )
+        )
     };
 
     sdt.buildURL = function(table){
-        return bundle.apiLocation() + table.data("source")
+        var url = bundle.apiLocation() + table.data("source")
             + "?include=" + table.data("source-include")
-            + (table.data("source-query") ? "&" + table.data("source-query") : "")
+            + (table.data("source-params") ? "&" + table.data("source-params") : "")
             + "&limit=" + (table.data("source-limit") || 25)
             + (table.data("pageToken") ? "&pageToken=" + table.data("pageToken") : "");
+        if (table.data("source-query") || table.data("filter-query")) {
+            url += "&q=";
+            if (table.data("source-query-q") && table.data("filter-query")) {
+                url += table.data("source-query") + encodeURIComponent(" AND ") + table.data("filter-query");
+            }
+            else {
+                url += table.data("source-query") || table.data("filter-query");
+            }
+        }
+        console.log(url);
+        return url;
     };
     
     sdt.buildColumns = function(table){
@@ -97,6 +252,7 @@
             stateDuration: 1800, // 30 minute state duration
             // Load the pageToken and previous pageTokens from the state of the table
             stateLoadParams: function (settings, data) {
+                console.log("load state", data.filterData);
                 // If we want the previous page, pop the last pageToken and set as the current pageToken
                 if (previousPage){
                     var previousPages = data.previousPageTokens || [];
@@ -115,30 +271,63 @@
                     table.data("pageToken", data.pageToken || "");
                     table.data("previousPageTokens", data.previousPageTokens || []);
                 }
+                // Build filters
+                table.data("filterData", data.filterData || {});
+                var filterQuery = "";
+                if (data.filterData){
+                    $.each(data.filterData, function(k, v){
+                        if (k && v){
+                            if (filterQuery.length) {
+                                filterQuery += " AND ";
+                            }
+                            filterQuery += k + "=\"" + v + "\"";
+                        }
+                    });
+                }
+                table.data("filter-query", encodeURIComponent(filterQuery));
                 // Rebuild url since pageToken may have changed
                 settings.ajax.url = sdt.buildURL(table);
             },
             // Save the pageToken and previous pageTokens along with the state of the table
             stateSaveParams: function (settings, data) {
+                console.log("save state", table.data("filterData"));
                 data.pageToken = table.data("pageToken") || "";
                 data.previousPageTokens = table.data("previousPageTokens") || [];
+                data.filterData = table.data("filterData") || {};
             },
             initComplete: function(settings, json){
                 table.data("nextPageToken", json.nextPageToken || null);
+                console.log("done");
             }
         };
+        if (table.data("toggle-columns") || table.data("filter-options-id")){
+            options.buttons = {
+                dom: {
+                    container: {
+                        tag: "div",
+                        className: "dt-buttons"
+                    }
+                },
+                buttons: []
+            };
+            if (options.dom.indexOf("B") < 0){
+                options.dom = "B" + options.dom;
+            }
+        }
         if (table.data("toggle-columns")){
-            options.buttons = options.buttons || []; 
-            options.buttons.push({
+            options.buttons.buttons.push({
                 extend: "colvis",
                 text: table.data("toggle-columns") + " <span class='fa fa-caret-down'></span>",
                 collectionLayout: 'column-visibility-layout',
                 className: "column-visibility-button btn-subtle",
                 columns: ".visibility-toggle"
             });
-            if (options.dom.indexOf("B") < 0){
-                options.dom = "B" + options.dom;
-            }
+        }
+        if (table.data("filter-options-id")){
+            options.buttons.buttons.push({
+                text: "<span class='fa fa-filter'></span>",
+                className: "filter-options-button pull-right btn-subtle"
+            });
         }
         return options;
     };

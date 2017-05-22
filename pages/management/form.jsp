@@ -175,10 +175,11 @@
                                     <table data-submissions-data-table
                                            data-source="/kapps/${currentKapp.slug}/forms/${currentForm.slug}/submissions"
                                            data-source-include="details,values,form.attributes,form.kapp.attributes"
-                                           data-source-query="timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
+                                           data-source-params="timeline=submittedAt&direction=DESC&coreState=Submitted&coreState=Closed"
                                            data-source-limit="25"
                                            data-order-column="3" data-order-direction="desc"
                                            data-toggle-columns="Toggle Value Columns"
+                                           data-filter-options-id="filter-options-${currentKapp.slug}-${currentForm.slug}"
                                            style="width:100%" class="table table-hover dt-responsive nowrap" 
                                            id="recent-submissions-table-${currentKapp.slug}-${currentForm.slug}">
                                         <thead>
@@ -206,6 +207,19 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div class="hide" id="filter-options-${currentKapp.slug}-${currentForm.slug}">
+                                        <select class="form-control" data-type="properties">
+                                            <option />
+                                            <option value="handle">Handle</option>
+                                            <option value="submittedBy">Submitted By</option>
+                                        </select>
+                                        <select class="form-control" data-type="values">
+                                            <option />
+                                            <c:forEach var="field" items="${AdminHelper.getFormFieldElements(currentForm)}">
+                                                <option value="values[${field.name}]">${field.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -227,7 +241,8 @@
                                 <table data-submissions-data-table
                                        data-source="/kapps/${kapp.slug}/forms/${feedbackForm.slug}/submissions"
                                        data-source-include="details,values"
-                                       data-source-query="timeline=submittedAt&direction=DESC&q=${text.escapeUrlParameter(feedbackQ)}"
+                                       data-source-params="timeline=submittedAt&direction=DESC"
+                                       data-source-query="${text.escapeUrlParameter(feedbackQ)}"
                                        data-source-limit="25"
                                        data-order-column="2" data-order-direction="desc"
                                        style="width:100%" class="table table-hover dt-responsive nowrap" 
