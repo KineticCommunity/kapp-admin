@@ -24,32 +24,48 @@
     </c:catch>
 </c:if>
 
-<!-- Show page content only if Robot and Execution exist. -->
 <c:choose>
     <c:when test="${empty currentRobot}">
-        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${param.robot}");</script>
+        <c:set var="error" value="${i18n.translate('The selected robot could not be found.')}" />
     </c:when>
     <c:when test="${empty currentExecution}">
-        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${param.robot}#executions");</script>
+        <c:set var="error" value="${i18n.translate('The selected execution could not be found.')}" />
     </c:when>
-    <c:otherwise>
+</c:choose>
+
+<bundle:layout page="${bundle.path}/layouts/layout.jsp">
+    <!-- Sets title and imports js and css specific to this console. -->
+    <bundle:variable name="head">
+        <c:import url="${bundle.path}/partials/robots/head.jsp" charEncoding="UTF-8"/>
+    </bundle:variable>
     
-        <bundle:layout page="${bundle.path}/layouts/layout.jsp">
-            <!-- Sets title and imports js and css specific to this console. -->
-            <bundle:variable name="head">
-                <c:import url="${bundle.path}/partials/robots/head.jsp" charEncoding="UTF-8"/>
-            </bundle:variable>
-            
-            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
-            <bundle:variable name="breadcrumb">
-                <li><a href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
+    <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+    <bundle:variable name="breadcrumb">
+        <li><a href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
+        <c:choose>
+            <c:when test="${not empty currentRobot}">
                 <li><a href="${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${currentRobot.id}#executions">${currentRobot.values['Name']}</a></li>
-                <c:if test="${not empty currentSchedule}">
-                    <li><a href="${bundle.kappLocation}/${form.slug}?page=robots/schedule&schedule=${currentSchedule.id}&robot=${currentRobot.id}#executions">${currentSchedule.values['Schedule Name']}</a></li>
-                </c:if>
-                <li class="active">Execution Details</li>
-            </bundle:variable>
-            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+                <c:choose>
+                    <c:when test="${not empty currentExecution}">
+                        <c:if test="${not empty currentSchedule}">
+                            <li><a href="${bundle.kappLocation}/${form.slug}?page=robots/schedule&schedule=${currentSchedule.id}&robot=${currentRobot.id}#executions">${currentSchedule.values['Schedule Name']}</a></li>
+                        </c:if>
+                        <li class="active">Execution Details</li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="active">Execution Not Found</li>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+            <c:otherwise>
+                <li class="active">Robot Not Found</li>
+            </c:otherwise>
+        </c:choose>
+    </bundle:variable>
+    <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+
+    <c:choose>
+        <c:when test="${empty error}">
         
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
@@ -83,7 +99,12 @@
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
-        </bundle:layout>
-        
-    </c:otherwise>
-</c:choose>
+        </c:when>
+        <c:otherwise>
+            <c:import url="${bundle.path}/partials/error.jsp" charEncoding="UTF-8">
+                <c:param name="message" value="${error}"/>
+            </c:import>
+        </c:otherwise>
+    </c:choose>
+    
+</bundle:layout>

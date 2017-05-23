@@ -19,7 +19,11 @@
         });
 
         $("table#robot-executions-table").each(function(i,table){
-            robot.loadRobotExecutionsList($(table));
+            $(table).on("reload", function(e){
+                robot.loadRobotExecutionsList($(this));
+            });
+            $(table).trigger("reload");
+
         });
         
         $("div.robot-schedule-form-container").each(function(i,container){
@@ -27,11 +31,18 @@
         });
 
         $("table#robot-schedule-executions-table").each(function(i,table){
-            robot.loadRobotScheduleExecutionsList($(table));
+            $(table).on("reload", function(e){
+                robot.loadRobotScheduleExecutionsList($(this));
+            });
+            $(table).trigger("reload");
         });
         
         $("div.robot-execution-form-container").each(function(i,container){
             robot.loadExecutionForm($(container));
+        });
+        
+        $("button.reload-table").on("click", function(e){
+            $("table#" + $(this).data("table-id")).trigger("reload");
         });
 
     });

@@ -37,84 +37,85 @@
         </h2>
     </div>
     
-    <div class="row">
-        <div class="col-xs-12">
+    <div>
+        
+        <c:if test="${not empty currentRobot}"> 
+            <ul class="nav nav-tabs h4 stacked-xs" role="tablist" class="robot-tab-navigation">
+                <li role="presentation" class="active">
+                    <a href="#general" aria-controls="home" role="tab" data-toggle="tab">General</a>
+                </li>
+                <li>
+                    <a href="#schedules" aria-controls="home" role="tab" data-toggle="tab">Schedules</a>
+                </li>
+                <li>
+                    <a href="#executions" aria-controls="home" role="tab" data-toggle="tab">Executions</a>
+                </li>
+            </ul>
+        </c:if>
+        
+        <div class="tab-content robots-tab-content">
+        
+            <div role="tabpanel" class="tab-pane active" id="general">
+                <div class="robot-form-container embedded-form" data-robot-submission-id="${currentRobot.id}" data-has-schedules="${hasSchedules}">
+                    <div class="alert alert-info">
+                        <span class="fa fa-spinner fa-spin"></span>
+                        Loading
+                    </div>
+                </div>
+            </div>
             
             <c:if test="${not empty currentRobot}"> 
-                <div class="robot-tab-navigation">
-                    <ul class="nav nav-pills sub-nav" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#general" aria-controls="home" role="tab" data-toggle="tab">General</a>
-                        </li>
-                        <li>
-                            <a href="#schedules" aria-controls="home" role="tab" data-toggle="tab">Schedules</a>
-                        </li>
-                        <li>
-                            <a href="#executions" aria-controls="home" role="tab" data-toggle="tab">Executions</a>
-                        </li>
-                    </ul>
-                </div>
-            </c:if>
-            
-            <div class="tab-content robots-tab-content">
-            
-                <div role="tabpanel" class="tab-pane active" id="general">
-                    <div class="robot-form-container embedded-form" data-robot-submission-id="${currentRobot.id}" data-has-schedules="${hasSchedules}">
-                        <div class="alert alert-info">
-                            <span class="fa fa-spinner fa-spin"></span>
-                            Loading
-                        </div>
+                <div role="tabpanel" class="tab-pane" id="schedules">
+                    <div class="page-header clearfix">
+                        <h4>
+                            Schedules 
+                            <small> for ${currentRobot.values['Name']} Robot</small>
+                            <div class="pull-right">
+                                <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/schedule&robot=${currentRobot.id}">
+                                    <span class="fa fa-plus fa-fw"></span> Create Schedule
+                                </a>
+                            </div>
+                        </h4>
                     </div>
+                   
+                    <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedules-table"
+                           data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}">
+                        <tr>
+                            <td class="alert alert-info">
+                                <span class="fa fa-spinner fa-spin"></span>
+                                Loading
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 
-                <c:if test="${not empty currentRobot}"> 
-                    <div role="tabpanel" class="tab-pane" id="schedules">
-                        <div class="page-header clearfix">
-                            <h4>
-                                Schedules 
-                                <small> for ${currentRobot.values['Name']} Robot</small>
-                                <div class="pull-right">
-                                    <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=robots/schedule&robot=${currentRobot.id}">
-                                        <span class="fa fa-plus fa-fw"></span> Create Schedule
-                                    </a>
-                                </div>
-                            </h4>
-                        </div>
-                       
-                        <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedules-table"
-                               data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}">
-                            <tr>
-                                <td class="alert alert-info">
-                                    <span class="fa fa-spinner fa-spin"></span>
-                                    Loading
-                                </td>
-                            </tr>
-                        </table>
+                <div role="tabpanel" class="tab-pane" id="executions">
+                    <div class="page-header clearfix">
+                        <h4>
+                            Executions 
+                            <small> of ${currentRobot.values['Name']} Robot</small>
+                            <div class="pull-right">
+                                <button class="btn btn-tertiary reload-table" data-table-id="robot-executions-table">
+                                    <span class="fa fa-refresh fa-fw"></span>
+                                </button>
+                            </div>
+                        </h4>
                     </div>
-                    
-                    <div role="tabpanel" class="tab-pane" id="executions">
-                        <div class="page-header clearfix">
-                            <h4>
-                                Executions 
-                                <small> of ${currentRobot.values['Name']} Robot</small>
-                            </h4>
-                        </div>
-                       
-                        <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-executions-table"
-                               data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}">
-                            <tr>
-                                <td class="alert alert-info">
-                                    <span class="fa fa-spinner fa-spin"></span>
-                                    Loading
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </c:if> 
-            
-            </div>
-
+                   
+                    <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-executions-table"
+                           data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}">
+                        <tr>
+                            <td class="alert alert-info">
+                                <span class="fa fa-spinner fa-spin"></span>
+                                Loading
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </c:if> 
+        
         </div>
+
     </div>
 
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>

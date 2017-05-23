@@ -19,26 +19,33 @@
     </c:catch>
 </c:if>
 
-<!-- Show page content only if Robot exists. -->
-<c:choose>
-    <c:when test="${empty currentRobot}">
-        <script>window.location.replace("${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${param.robot}");</script>
-    </c:when>
-    <c:otherwise>
+<c:if test="${empty currentRobot}">
+    <c:set var="error" value="${i18n.translate('The selected robot could not be found.')}" />
+</c:if>
+
+<bundle:layout page="${bundle.path}/layouts/layout.jsp">
+    <!-- Sets title and imports js and css specific to this console. -->
+    <bundle:variable name="head">
+        <c:import url="${bundle.path}/partials/robots/head.jsp" charEncoding="UTF-8"/>
+    </bundle:variable>
     
-        <bundle:layout page="${bundle.path}/layouts/layout.jsp">
-            <!-- Sets title and imports js and css specific to this console. -->
-            <bundle:variable name="head">
-                <c:import url="${bundle.path}/partials/robots/head.jsp" charEncoding="UTF-8"/>
-            </bundle:variable>
-            
-            <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
-            <bundle:variable name="breadcrumb">
-                <li><a class="return-to-robots-console" href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
+    <!-- BREADCRUMBS START HERE. Remove if not needed. ------------------------------------------->
+    <bundle:variable name="breadcrumb">
+        <li><a class="return-to-robots-console" href="${bundle.kappLocation}/${form.slug}">${form.name}</a></li>
+        <c:choose>
+            <c:when test="${not empty currentRobot}">
                 <li><a class="return-to-robot-definition" href="${bundle.kappLocation}/${form.slug}?page=robots/robot&robot=${currentRobot.id}#schedules">${currentRobot.values['Name']}</a></li>
                 <li class="active">${empty currentSchedule ? 'New Schedule' : currentSchedule.values['Schedule Name']}</li>
-            </bundle:variable>
-            <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+            </c:when>
+            <c:otherwise>
+                <li class="active">Robot Not Found</li>
+            </c:otherwise>
+        </c:choose>
+    </bundle:variable>
+    <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
+
+    <c:choose>
+        <c:when test="${empty error}">
         
             <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
             
@@ -49,58 +56,59 @@
                 </h2>
             </div>
             
-            <div class="row">
-                <div class="col-xs-12">
+            <div>
                     
-                    <c:if test="${not empty currentSchedule}"> 
-                        <div class="robot-schedule-tab-navigation">
-                            <ul class="nav nav-pills sub-nav" role="tablist">
-                                <li role="presentation" class="active">
-                                    <a href="#general" aria-controls="home" role="tab" data-toggle="tab">General</a>
-                                </li>
-                                <li>
-                                    <a href="#executions" aria-controls="home" role="tab" data-toggle="tab">Executions</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </c:if>
-                    
-                    <div class="tab-content robot-schedules-tab-content">
-                    
-                        <div role="tabpanel" class="tab-pane active" id="general">
-                            <div class="robot-schedule-form-container embedded-form" data-robot-schedule-id="${currentSchedule.id}" 
-                                 data-robot-submission-id="${currentRobot.id}" data-robot-id="${currentRobot.values['Robot ID']}">
-                                <div class="alert alert-info">
-                                    <span class="fa fa-spinner fa-spin"></span>
-                                    Loading
-                                </div>
+                <c:if test="${not empty currentSchedule}"> 
+                    <ul class="nav nav-tabs h4 stacked-xs" role="tablist" class="robot-schedule-tab-navigation">
+                        <li role="presentation" class="active">
+                            <a href="#general" aria-controls="home" role="tab" data-toggle="tab">General</a>
+                        </li>
+                        <li>
+                            <a href="#executions" aria-controls="home" role="tab" data-toggle="tab">Executions</a>
+                        </li>
+                    </ul>
+                </c:if>
+                
+                <div class="tab-content robot-schedules-tab-content">
+                
+                    <div role="tabpanel" class="tab-pane active" id="general">
+                        <div class="robot-schedule-form-container embedded-form" data-robot-schedule-id="${currentSchedule.id}" 
+                             data-robot-submission-id="${currentRobot.id}" data-robot-id="${currentRobot.values['Robot ID']}">
+                            <div class="alert alert-info">
+                                <span class="fa fa-spinner fa-spin"></span>
+                                Loading
                             </div>
                         </div>
-                        
-                        <c:if test="${not empty currentSchedule}"> 
-                            <div role="tabpanel" class="tab-pane" id="executions">
-                                <div class="page-header clearfix">
-                                    <h4>
-                                        Executions 
-                                        <small> of ${currentSchedule.values['Schedule Name']} Schedule for ${currentRobot.values['Name']} Robot</small>
-                                    </h4>
-                                </div>
-                               
-                                <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedule-executions-table"
-                                       data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}" data-robot-schedule-id="${currentSchedule.id}">
-                                    <tr>
-                                        <td class="alert alert-info">
-                                            <span class="fa fa-spinner fa-spin"></span>
-                                            Loading
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </c:if> 
-                    
                     </div>
                     
+                    <c:if test="${not empty currentSchedule}"> 
+                        <div role="tabpanel" class="tab-pane" id="executions">
+                            <div class="page-header clearfix">
+                                <h4>
+                                    Executions 
+                                    <small> of ${currentSchedule.values['Schedule Name']} Schedule for ${currentRobot.values['Name']} Robot</small>
+                                    <div class="pull-right">
+                                        <button class="btn btn-tertiary reload-table" data-table-id="robot-schedule-executions-table">
+                                            <span class="fa fa-refresh fa-fw"></span>
+                                        </button>
+                                    </div>
+                                </h4>
+                            </div>
+                           
+                            <table style="width:100%" class="table table-hover dt-responsive nowrap" id="robot-schedule-executions-table"
+                                   data-robot-id="${currentRobot.values['Robot ID']}" data-robot-submission-id="${currentRobot.id}" data-robot-schedule-id="${currentSchedule.id}">
+                                <tr>
+                                    <td class="alert alert-info">
+                                        <span class="fa fa-spinner fa-spin"></span>
+                                        Loading
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </c:if> 
+                
                 </div>
+                
             </div>
         
             <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
@@ -131,7 +139,12 @@
             </bundle:variable>
             <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
             
-        </bundle:layout>
-        
-    </c:otherwise>
-</c:choose>
+        </c:when>
+        <c:otherwise>
+            <c:import url="${bundle.path}/partials/error.jsp" charEncoding="UTF-8">
+                <c:param name="message" value="${error}"/>
+            </c:import>
+        </c:otherwise>
+    </c:choose>
+            
+</bundle:layout>
