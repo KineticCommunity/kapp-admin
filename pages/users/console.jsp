@@ -20,10 +20,11 @@
         <h2>
             ${form.name}
             <div class="pull-right users-table-buttons">
+                <button class="btn btn-tertiary" id="users-import-init">Import CSV</button>
+                <input class="hide" accept=".csv" id="users-import" type="file">
                 <a class="btn btn-tertiary" href="${bundle.kappLocation}/${form.slug}?page=users/user">
                     <span class="fa fa-plus fa-fw"></span> Create User
                 </a>
-                <input class="hide" accept=".csv" id="users-import" type="file">
             </div>
         </h2>
     </div>
@@ -67,15 +68,38 @@
         <p>To create a new user, click the <b class="nowrap"><span class="fa fa-plus"></span> Create User</b> button.</p>
         <p>To update a user, click the edit <b><span class="fa fa-pencil"></span></b> button.</p>
         <p>To clone a user, click the copy <b><span class="fa fa-clone"></span></b> button.</p>
-<!--         <p>To export the list of users to a CSV file, click the <b>Export CSV</b> button.</p> -->
-<!--         <p>To create new users from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p> -->
-<!--         <div class="p-l-2"> -->
-<!--             <p> -->
-<!--                 You may download a template for creating new users via import   -->
-<!--                 <a class="download-import-template" href="javascript:void(0);"><span class="fa fa-download"></span> here</a>.  -->
-<!--                 The template includes the required formatting for the <i>Enabled</i> and <i>Groups</i> columns. -->
-<!--             </p> -->
-<!--         </div> -->
+        <p>To create new users or update existing users from a CSV file, click the <b>Import CSV</b> button and select the file you want to import.</p>
+        <div class="p-l-2">
+            <p>
+                You may download a template for creating or updating users via import  
+                <a class="download-import-template" href="javascript:void(0);"><span class="fa fa-download"></span> here</a>. 
+                The template includes a sample row with the required formats for the various columns.
+            </p>
+            <div id="user-import-options" class="hide">
+                <json:object>
+                    <json:object name="attributes">
+                        <c:forEach var="attribute" items="${space.userAttributeDefinitions}">
+                            <json:property name="${attribute.name}" value="${attribute.allowsMultiple}"/>
+                        </c:forEach>
+                    </json:object>
+                    <json:object name="profileAttributes">
+                        <c:forEach var="attribute" items="${space.userProfileAttributeDefinitions}">
+                            <json:property name="${attribute.name}" value="${attribute.allowsMultiple}"/>
+                        </c:forEach>
+                    </json:object>
+                    <json:object name="teams">
+                        <c:forEach var="team" items="${TeamsHelper.getTeams()}">
+                            <json:property name="${team.name}" value="${team.slug}"/>
+                        </c:forEach>
+                    </json:object>
+                    <json:object name="roles">
+                        <c:forEach var="team" items="${TeamsHelper.getRoles()}">
+                            <json:property name="${team.name}" value="${team.slug}"/>
+                        </c:forEach>
+                    </json:object>
+                </json:object>
+            </div>
+        </div>
     </bundle:variable>
     <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
     
