@@ -30,7 +30,14 @@
       <json:object>
         <json:property name="title" value="${field.title}"/>
         <json:property name="data" value="${field.data}"/>
-        <json:property name="renderType" value="${field.renderType}"/>
+        <c:choose>
+            <c:when test="${text.equalsIgnoreCase(field.data, 'Status')}">
+                <json:property name="renderType" value="statusBadge"/>
+            </c:when>
+            <c:otherwise>
+                <json:property name="renderType" value="${field.renderType}"/>
+            </c:otherwise>
+        </c:choose>
         <json:property name="visible" value="${field.visible}"/>
         <json:property name="searchable" value="${field.searchable}"/>
         <json:property name="orderable" value="${field.orderable}"/>

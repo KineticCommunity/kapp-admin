@@ -49,6 +49,9 @@ div.radio[data-recurrence-radio] label:not(:first-child) {
   margin-bottom: 3px;
   min-width: 62px;
 }
+table span.label + span.label {
+  margin-left: 5px;
+}
 
 @media (max-width : 768px) { 
   div.checkbox[data-recurrence-checkbox] label:not(:first-child),

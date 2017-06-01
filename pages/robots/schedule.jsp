@@ -56,7 +56,7 @@
                 </h2>
             </div>
             
-            <div>
+            <div class="page-content">
                     
                 <c:if test="${not empty currentSchedule}"> 
                     <ul class="nav nav-tabs h4 stacked-xs" role="tablist" class="robot-schedule-tab-navigation">

@@ -87,6 +87,17 @@
                                 .append($("<a>", {href: url, class: "btn btn-xs btn-default"})
                                     .append($("<span>", {class: "fa fa-pencil fa-fw"})))
                                 .get(0).outerHTML;
+                    },
+                    statusBadge: function(d, type, row){
+                        if (d != null && d.length && type === "display"){
+                            if (d.toLowerCase() === "active"){
+                                return "<span class=\"label label-success\">" + d + "</span>";
+                            }
+                            else if (d.toLowerCase() === "inactive"){
+                                return "<span class=\"label label-danger\">" + d + "</span>";
+                            }
+                        }
+                        return d;
                     }
                 });
                 robot.robotsDataTable = table.DataTable(options);
@@ -223,6 +234,22 @@
                                 .append($("<a>", {href: url, class: "btn btn-xs btn-default"})
                                     .append($("<span>", {class: "fa fa-pencil fa-fw"})))
                                 .get(0).outerHTML;
+                    },
+                    statusBadge: function(d, type, row){
+                        var isExpired = "";
+                        if (row["End Date"] && 
+                                moment(row["End Date"], "YYYY-MM-DDTHH:mm:ssZ", bundle.config.userLocale || "en", true).diff(moment()) < 0){
+                            isExpired = "<span class=\"label label-warning\">Expired</span>"
+                        }
+                        if (d != null && d.length && type === "display"){
+                            if (d.toLowerCase() === "active"){
+                                return "<span class=\"label label-success\">" + d + "</span>" + isExpired;
+                            }
+                            else if (d.toLowerCase() === "inactive"){
+                                return "<span class=\"label label-danger\">" + d + "</span>" + isExpired;
+                            }
+                        }
+                        return d + isExpired;
                     }
                 });
                 robot.robotSchedulesDataTable = table.DataTable(options);
@@ -291,6 +318,29 @@
                         // Blur delete button
                         $(this).blur();
                     });
+                    // Add alert if inactive or expired
+                    var alertIfInactiveOrExpired = function(container){
+                        var status = K('field[Status]'), endDate = K('field[End Date]');
+                        var isInactive = status && status.value() && status.value().toLowerCase() === "inactive";
+                        var isExpired = K('field[End Date]') && K('field[End Date]').value() 
+                                && moment(K('field[End Date]').value() , "YYYY-MM-DDTHH:mm:ssZ", bundle.config.userLocale || "en", true).diff(moment()) < 0;
+                        if (isInactive || isExpired){
+                            container.notifie({
+                                anchor: ".page-content",
+                                severity: "warning",
+                                message: "This schedule is " 
+                                    + (isInactive ? "<strong>Inactive</strong>" : (isExpired ? "<strong>Expired</strong>" : ""))
+                                    + (isInactive && isExpired ? " and <strong>Expired</strong>." : ".")
+                            });
+                        }
+                        else {
+                            container.notifie({
+                                anchor: ".page-content",
+                                exit: true
+                            });
+                        }
+                    };
+                    alertIfInactiveOrExpired(container);
                 }
             });
             
@@ -357,7 +407,6 @@
                 }
             },
             success: function(data){
-                console.log(data);
                 var previousPages = robot.robotExecutionsTable.data("previous-page-token-stack");
                 if (!$.isArray(previousPages)){
                     previousPages = new Array();
@@ -380,6 +429,20 @@
                         .append($("<a>", {href: url, class: "btn btn-xs btn-default"})
                                 .append($("<span>", {class: "fa fa-search fa-fw"})))
                                 .get(0).outerHTML;
+                    },
+                    statusBadge: function(d, type, row){
+                        if (d != null && d.length && type === "display"){
+                            if (d.toLowerCase() === "completed"){
+                                return "<span class=\"label label-default\">" + d + "</span>";
+                            }
+                            else if (d.toLowerCase() === "running"){
+                                return "<span class=\"label label-success\">" + d + "</span>";
+                            }
+                            else if (d.toLowerCase() === "queued"){
+                                return "<span class=\"label label-warning\">" + d + "</span>";
+                            }
+                        }
+                        return d;
                     }
                 });
                 robot.robotExecutionsDataTable = table.DataTable(options);
