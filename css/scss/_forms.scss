@@ -135,7 +135,6 @@ section.page {
   form {
     margin: 1.5rem 0;
     font-weight: 400;
-    overflow: hidden;
     padding: 1rem;
     background-color: #f5f5f5;
     @include border-radius();
@@ -162,10 +161,11 @@ section.page {
       }
 
       label {
-        margin-bottom: 0;
-        margin: 0 0 1rem 0;
         font-weight: 600;
-        cursor: pointer;
+        
+        &.field-label {
+          cursor: default;
+        }
 
         &:first-child:not(.field-label) {
           margin-right: 2rem;
@@ -173,6 +173,7 @@ section.page {
         }
 
         &:not(.field-label) {
+          cursor: pointer;
           float: left;
           margin-right: 1.5rem;
           margin-left: .1rem;
