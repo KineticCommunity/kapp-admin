@@ -27,6 +27,7 @@
         private Identity identity;
         
         // File containing the configuration setup
+        private final String SETUP_CONFIGURATION_OVERRIDE_FILE = "setup.override.json";
         private final String SETUP_CONFIGURATION_FILE = "setup.json";
         
         private boolean exists; // Does a configuration exist in the setup configuration file
@@ -83,25 +84,34 @@
             // Map to store parsed configuration file
             LinkedHashMap configuration = new LinkedHashMap();
             // Only check kapp configuration if kapp is not null
-            if (this.kapp != null){                
+            if (this.kapp != null){
+                boolean useStandardConfiguration = false;
                 try { 
-                    // Read and parse the setup configuration data
-                    LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/" + SETUP_CONFIGURATION_FILE)));
-                    // Save configuration as string
-                    String stringConfiguration = Json.toString(parsedConfiguration);
-                    // Replace dynamic value placeholders with the values
-                    stringConfiguration = Text.replace(stringConfiguration, "{{kapp.slug}}", this.kapp.getSlug());
-                    stringConfiguration = Text.replace(stringConfiguration, "{{kapp.name}}", this.kapp.getName());
-                    stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.slug}}", this.adminExists ? this.adminKapp.getSlug() : "");
-                    stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.name}}", this.adminExists ? this.adminKapp.getName() : "");
                     // Parse configuration
-                    configuration = (LinkedHashMap)Json.parse(stringConfiguration);
+                    configuration = parseConfigurationFile(SETUP_CONFIGURATION_OVERRIDE_FILE);
                 }
-                // If file doesn't exist, no configuration exists, no error
-                catch (FileNotFoundException e){/* Configuration is already an empty map */}
+                // If override file doesn't exist, use standard file
+                catch (FileNotFoundException e){
+                    useStandardConfiguration = true;
+                }
                 // If error occurs, throw an exception. This file must contain a valid JSON Object
                 catch (Exception e){
-                    throw new RuntimeException("Failed to read Kapp Configuration Data from file " + SETUP_CONFIGURATION_FILE + ": " + e.getMessage());
+                    throw new RuntimeException("Failed to read Kapp Configuration Data from file " + SETUP_CONFIGURATION_OVERRIDE_FILE + ": " + e.getMessage());
+                }
+                
+                if (useStandardConfiguration){
+                    try { 
+                        // Parse configuration
+                        configuration = parseConfigurationFile(SETUP_CONFIGURATION_FILE);
+                    }
+                    // If override file doesn't exist, use standard file
+                    catch (FileNotFoundException e){
+                        // No configuration. Do not error.
+                    }
+                    // If error occurs, throw an exception. This file must contain a valid JSON Object
+                    catch (Exception e){
+                        throw new RuntimeException("Failed to read Kapp Configuration Data from file " + SETUP_CONFIGURATION_FILE + ": " + e.getMessage());
+                    }
                 }
             
                 /** PROCESS CONFIGURATION FILE AND STORE IN CUSTOM MODELS DEFINED BELOW **/
@@ -359,6 +369,20 @@
                     }
                 }
             }
+        }
+        
+        private LinkedHashMap parseConfigurationFile(String filename) throws FileNotFoundException, Exception {
+            // Read and parse the setup configuration data
+            LinkedHashMap parsedConfiguration = (LinkedHashMap)JsonUtils.parse(new FileReader(request.getServletContext().getRealPath(bundle.getPath() + "/setup/" + filename)));
+            // Save configuration as string
+            String stringConfiguration = Json.toString(parsedConfiguration);
+            // Replace dynamic value placeholders with the values
+            stringConfiguration = Text.replace(stringConfiguration, "{{kapp.slug}}", this.kapp.getSlug());
+            stringConfiguration = Text.replace(stringConfiguration, "{{kapp.name}}", this.kapp.getName());
+            stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.slug}}", this.adminExists ? this.adminKapp.getSlug() : "");
+            stringConfiguration = Text.replace(stringConfiguration, "{{adminKapp.name}}", this.adminExists ? this.adminKapp.getName() : "");
+            // Parse configuration
+            return (LinkedHashMap)Json.parse(stringConfiguration);
         }
         
         /**
