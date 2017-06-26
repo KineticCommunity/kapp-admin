@@ -82,7 +82,7 @@
             {
                 breadcrumbs.addAll(getFormDefinedConsoleBreadcrumbs(this.adminKapp.getForm(form.getAttributeValue("Parent Console Slug"))));
             }
-            breadcrumbs.add(new Link(form.getName(), adminBundle.getKappLocation() + "/" + form.getSlug()));
+            breadcrumbs.add(new Link(form.hasAttribute("Console Breadcrumb") ? form.getAttributeValue("Console Breadcrumb") : form.getName(), adminBundle.getKappLocation() + "/" + form.getSlug()));
             return breadcrumbs;
         }
 

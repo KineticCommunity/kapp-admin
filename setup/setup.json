@@ -103,9 +103,15 @@
             "required": false
         },
         {
-            "name": "Console Slug",
+            "name": "Console Breadcrumb",
             "allowsMultiple": false,
-            "description": null,
+            "description": "Defines the text that should appear as the breadcrumb of this form when using formConsole.jsp to render a form built admin console.",
+            "required": false
+        },
+        {
+            "name": "Console Header Name",
+            "allowsMultiple": false,
+            "description": "Defines the text that should appear in the header of this form when using formConsole.jsp to render a form built admin console.",
             "required": false
         },
         {

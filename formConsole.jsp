@@ -23,16 +23,34 @@
     <!-- BREADCRUMBS END HERE. ------------------------------------------------------------------->
     
     <!-- PAGE CONTENT STARTS HERE ---------------------------------------------------------------->
-    <section class="page" data-page="${page.name}">
-        <div class="page-header">
-            <h3>${text.escape(form.name)}</h3>
-        </div>
-        <c:if test="${param.review != null && pages.size() > 1}">
-            <c:import url="partials/review.jsp" charEncoding="UTF-8"></c:import>
-        </c:if>
-        <div class="errors"></div>
-        <app:bodyContent/>
-    </section>
+    <div class="page-header">
+        <h2>
+            ${text.defaultIfBlank(form.getAttributeValue('Console Header Name'), form.name)}
+            <div class="pull-right console-header-buttons">
+                <script>
+                    if (typeof bundle.admin.populateAdminFormConsoleHeaderButtons === "function") {
+                        document.write(bundle.admin.populateAdminFormConsoleHeaderButtons.call());
+                    }
+                </script>
+            </div>
+        </h2>
+    </div>
+    
+    <app:bodyContent/>
+
     <!-- PAGE CONTENT ENDS HERE ------------------------------------------------------------------>
+    
+    <!-- RIGHT SIDEBAR CONTENT STARTS HERE. Remove if not needed. -------------------------------->
+    <bundle:variable name="aside">
+        <h3>${text.defaultIfBlank(form.getAttributeValue('Console Header Name'), form.name)}</h3>
+        <p>${form.description}</p>
+        <script>
+            if (typeof bundle.admin.populateAdminFormConsoleAside === "function") {
+                document.write("<hr class=\"border-color-white\" />");
+                document.write(bundle.admin.populateAdminFormConsoleAside.call());
+            }
+        </script>
+    </bundle:variable>
+    <!-- RIGHT SIDEBAR CONTENT ENDS HERE. -------------------------------------------------------->
 
 </bundle:layout>
