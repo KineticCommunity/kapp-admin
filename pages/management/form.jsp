@@ -12,6 +12,7 @@
 <c:set var="feedbackForm" value="${kapp.getForm(space.getAttributeValue('Feedback Form Slug'))}" />
 <c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
         || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
+<c:set var="hasSharedWorkflowEngine" value="${space.hasAttributeValue('Shared Workflow Engine', 'true')}" />
 <c:set var="isKappOwner" value="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}" scope="request"/>
 <c:set var="isFormOwner" value="${identity.spaceAdmin || TeamsHelper.isFormOwner(identity.user, currentForm)}" scope="request"/>
 
@@ -74,7 +75,7 @@
                             <span>${text.escape(currentForm.name)}</span>
                             <small>Form</small>
                             <div class="pull-right users-table-buttons">
-                                <c:if test="${hasCustomWorkflow && not empty taskServerUrl && hasRoleTaskDeveloper}">
+                                <c:if test="${hasCustomWorkflow && not empty taskServerUrl && hasRoleTaskDeveloper && not hasSharedWorkflowEngine}">
                                     <a class="btn btn-tertiary" target="_blank" href="${taskServerUrl}/app/trees?sourceGroup=${currentKapp.slug}${text.escapeUrlParameter(' > ')}${currentForm.slug}">
                                         <span class="fa fa-sitemap fa-fw"></span> Edit Workflow
                                     </a>

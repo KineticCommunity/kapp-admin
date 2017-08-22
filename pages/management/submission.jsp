@@ -12,6 +12,7 @@
 <c:set var="hasRoleFormDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Form Developer')}" />
 <c:set var="hasRoleTaskDeveloper" value="${TeamsHelper.isMemberOfTeam(identity.user, 'Role::Task Developer')}" />
 <c:set var="isFormOwner" value="${identity.spaceAdmin || (not empty currentForm && TeamsHelper.isFormOwner(identity.user, currentForm))}" scope="request"/>
+<c:set var="hasSharedWorkflowEngine" value="${space.hasAttributeValue('Shared Workflow Engine', 'true')}" />
 
 <c:choose>
     <c:when test="${empty submission}">
@@ -77,7 +78,7 @@
                         <h3>
                             <span>${text.escape(currentForm.name)} (${text.escape(submission.handle)})</span>
                             <div class="pull-right users-table-buttons">
-                                <c:if test="${not empty taskServerUrl && (identity.isSpaceAdmin() || hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
+                                <c:if test="${not empty taskServerUrl && not hasSharedWorkflowEngine && (identity.isSpaceAdmin() || hasRoleFormDeveloper || hasRoleTaskDeveloper)}">
                                     <a class="btn btn-default" href="${taskServerUrl}/app/runs?sourceId=${submission.id}">
                                         <span class="fa fa-sitemap fa-fw"></span> View Runs
                                     </a>

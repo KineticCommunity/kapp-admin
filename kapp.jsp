@@ -2,6 +2,7 @@
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
 <c:set var="removeBreadcrumb" value="${true}" scope="request"/>
+<c:set var="hasSharedWorkflowEngine" value="${space.hasAttributeValue('Shared Workflow Engine', 'true')}" />
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     
@@ -48,13 +49,15 @@
                         </a>
                         Management Console is for advanced configuration of portals and forms. Most common configurations can be made using the above consoles.
                     </p>
-                    <p>
-                        The
-                        <a target="_blank" href="${space.getAttributeValue('Task Server Url')}" class="btn btn-default btn-xs">
-                          <span class="fa fa-cog fa-fw" aria-hidden="true"></span> Kinetic Task
-                        </a>
-                        Management Console is for advanced configuration workflow and automation functions.
-                    </p>
+                    <c:if test="${not hasSharedWorkflowEngine}">
+                        <p>
+                            The
+                            <a target="_blank" href="${space.getAttributeValue('Task Server Url')}" class="btn btn-default btn-xs">
+                              <span class="fa fa-cog fa-fw" aria-hidden="true"></span> Kinetic Task
+                            </a>
+                            Management Console is for advanced configuration workflow and automation functions.
+                        </p>
+                    </c:if>
                 </div>
             </c:if>
         </div>

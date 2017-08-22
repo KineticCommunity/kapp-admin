@@ -29,7 +29,10 @@
                     <select aria-labelledby="label-clone-form" name="form-status">
                         <option />
                         <c:forEach items="${currentKapp.getFormsByType('Template')}" var="template">
-                            <option value="${template.slug}">${template.name}</option>
+                            <c:if test="${not template.hasAttributeValue('Custom Workflow on Created', 'True') 
+                                    && not template.hasAttributeValue('Custom Workflow on Submitted', 'True')}">
+                                <option value="${template.slug}">${template.name}</option>
+                            </c:if>
                         </c:forEach>
                     </select>
                 </div>

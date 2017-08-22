@@ -8,6 +8,7 @@
 <c:set var="queueKapp" value="${space.getKapp(space.getAttributeValue('Queue Kapp Slug'))}" scope="request" />
 <c:set var="hasCustomWorkflow" value="${currentForm.hasAttributeValue('Custom Workflow on Created', 'True') 
         || currentForm.hasAttributeValue('Custom Workflow on Submitted', 'True')}" />
+<c:set var="hasSharedWorkflowEngine" value="${space.hasAttributeValue('Shared Workflow Engine', 'true')}" />
 
 <script>
     var hasCustomWorkflow = ${hasCustomWorkflow};
@@ -28,27 +29,27 @@
                   For options, the property name is the label to display and the property value is the value to be saved. --%>
 <c:set var="tabAttributes">
     <json:array>
-        <json:object>
-            <json:property name="name" value="Custom Workflow on Created" />
-            <json:property name="partial" value="radioInput.jsp" />
-            <json:object name="data">
-                <json:property name="Use Standard Workflow Process" value="" />
-                <json:property name="Use Custom Workflow Process" value="True" />
-                <json:property name="_default" value="" />
+        <c:if test="${not hasSharedWorkflowEngine}">
+            <json:object>
+                <json:property name="name" value="Custom Workflow on Created" />
+                <json:property name="partial" value="radioInput.jsp" />
+                <json:object name="data">
+                    <json:property name="Use Standard Workflow Process" value="" />
+                    <json:property name="Use Custom Workflow Process" value="True" />
+                    <json:property name="_default" value="" />
+                </json:object>
             </json:object>
-        </json:object>
-        <json:object>
-            <json:property name="name" value="Custom Workflow on Submitted" />
-            <json:property name="partial" value="radioInput.jsp" />
-            <json:object name="data">
-                <json:property name="Use Standard Workflow Process" value="" />
-                <json:property name="Use Custom Workflow Process" value="True" />
-                <json:property name="_default" value="" />
+            <json:object>
+                <json:property name="name" value="Custom Workflow on Submitted" />
+                <json:property name="partial" value="radioInput.jsp" />
+                <json:object name="data">
+                    <json:property name="Use Standard Workflow Process" value="" />
+                    <json:property name="Use Custom Workflow Process" value="True" />
+                    <json:property name="_default" value="" />
+                </json:object>
+                <json:property name="hr" value="true" />
             </json:object>
-            <json:property name="hr" value="true" />
-        </json:object>
-        <json:object>
-        </json:object>
+        </c:if>
         <json:object>
             <json:property name="name" value="Approval Days Due" />
             <json:property name="partial" value="numberInput.jsp" />
