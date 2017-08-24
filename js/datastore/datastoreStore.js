@@ -343,7 +343,16 @@
                 var reader = new FileReader();
                 // Setup onload function which will process the import
                 reader.onload = function(e){
-                    ds.store.processImportRecords($.csv.toObjects(e.target.result), importInput);
+                    try {
+                        ds.store.processImportRecords($.csv.toObjects(e.target.result), importInput);
+                    }
+                    catch (e){
+                        importInput.closest("div.datastore-records-table-buttons").notifie({
+                            anchor: "h2",
+                            message: e,
+                            exitEvents: "mouseup"
+                        });
+                    }
                 }
                 // Read file
                 reader.readAsText(file);
