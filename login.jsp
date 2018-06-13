@@ -29,7 +29,7 @@
                                 <button id="submit" type="submit" class="btn btn-default">${i18n.translate('Login')}</button>
                             </div>
                             <p class="pull-right">
-                                <a href="<c:url value="/${space.slug}/app/reset-password"/>">${i18n.translate('Reset Password')}</a>
+                                <a href="<c:url value="${bundle.spaceLocation}/app/reset-password"/>">${i18n.translate('Reset Password')}</a>
                             </p>
                         </form>
                     </div>

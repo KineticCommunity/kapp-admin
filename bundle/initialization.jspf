@@ -99,6 +99,14 @@
     }
 %>
 
+<%-- ProxyHelper --%>
+<%@include file="ProxyHelper.jspf"%>
+<%
+    if (request.getAttribute("ProxyHelper") == null) {
+        request.setAttribute("ProxyHelper", new ProxyHelper(request));
+    }
+%>
+
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%

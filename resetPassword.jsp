@@ -10,7 +10,7 @@
                     <c:choose>
                         <%-- REQUEST RESET PASSWORD TOKEN --%>
                         <c:when test="${param.token == null && param.confirmation == null}">
-                            <form  class="card-content" action="<c:url value="/${space.slug}/app/reset-password"/>" method="POST">
+                            <form  class="card-content" action="<c:url value="${bundle.spaceLocation}/app/reset-password"/>" method="POST">
                                 <!-- Username field -->
                                 <div class="form-group">
                                     <label for="username">${i18n.translate("Username")}</label>
@@ -21,14 +21,14 @@
                                 <!-- Submit Buttons -->
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-default">${i18n.translate("Submit")}</button>
-                                    <a class="pull-right" href="<c:url value="/${space.slug}/app/reset-password?confirmation"/>">${i18n.translate('I already have a reset code.')}</a>
+                                    <a class="pull-right" href="<c:url value="${bundle.spaceLocation}/app/reset-password?confirmation"/>">${i18n.translate('I already have a reset code.')}</a>
                                 </div>
                             </form>
                         </c:when>
                         <%-- RESET PASSWORD --%>
                         <c:otherwise>
                             <!-- Password reset confirmation -->
-                            <form  class="card-content" action="<c:url value="/${space.slug}/app/reset-password/token"/>" method="POST">
+                            <form  class="card-content" action="<c:url value="${bundle.spaceLocation}/app/reset-password/token"/>" method="POST">
                                 <p>
                                     ${i18n.translate('You will receive an email with a unique code which will enable you to reset your password. Type that password into the token field and enter your new desired password.')}
                                 </p>
@@ -67,7 +67,7 @@
                                 <!-- Submit Buttons -->
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-default">${i18n.translate("Submit")}</button>
-                                    <a class="pull-right" href="<c:url value="/${space.slug}/app/reset-password"/>">${i18n.translate("I don't have a reset code.")}</a>
+                                    <a class="pull-right" href="<c:url value="${bundle.spaceLocation}/app/reset-password"/>">${i18n.translate("I don't have a reset code.")}</a>
                                 </div>
                             </form>
                         </c:otherwise>

@@ -26,6 +26,8 @@
         private Form form;
         private Identity identity;
         
+        private ProxyHelper proxyHelper;
+
         // File containing the configuration setup
         private final String SETUP_CONFIGURATION_OVERRIDE_FILE = "setup.override.json";
         private final String SETUP_CONFIGURATION_FILE = "setup.json";
@@ -68,6 +70,11 @@
             this.kapp = (Kapp)request.getAttribute("kapp");
             this.form = (Form)request.getAttribute("form");
             this.identity = (Identity)request.getAttribute("identity");
+
+            if (request.getAttribute("ProxyHelper") == null) {
+                request.setAttribute("ProxyHelper", new ProxyHelper(request));
+            }
+            this.proxyHelper = (ProxyHelper)request.getAttribute("ProxyHelper");
             
             // If Kapp Configuration Status exists, Kapp has been configured
             this.configured = this.kapp != null && this.kapp.hasAttribute("Kapp Configuration Status");
@@ -1194,33 +1201,12 @@
         }
         
         private Map<String,Object> doApiRequest(String url, Object data, boolean isCreate) throws Exception {
-            // Determine the hostname
-            String host;
-            // If the request is not forwarded from a proxy
-            if (request.getHeader("x-forwarded-host") == null) {
-                // Use the servername
-                host = request.getServerName();
-            }
-            // If the request was forwarded from a proxy
-            else {
-                // Split the hosts header into the array of forwarding proxies
-                String[] hosts = request.getHeader("x-forwarded-host").split(",");
-                // Choose the last one (we are effectively making an internal REST
-                // call, so there is no reason to go back through the proxies) and
-                // remove the protocol, port, and path from the host to obtain the 
-                // hostname.
-                host = hosts[hosts.length-1].trim()
-                    .replaceAll("^https?://", "")
-                    .replaceAll("/.*$", "")
-                    .replaceAll(":\\d+", "");
-            }
-            // Build the URL
-            StringBuilder requestUrl = new StringBuilder();
-            requestUrl.append(request.getScheme()).append("://").append(host);
-            if (request.getServerPort() != 80 && request.getServerPort() != 443) {
-                requestUrl.append(":").append(request.getServerPort());
-            }
-            requestUrl.append(this.bundle.getApiLocation()).append(url);
+            // Build the request Url
+            StringBuilder requestUrl = new StringBuilder()
+                .append(proxyHelper.getScheme()).append("://")
+                .append(proxyHelper.getNormalizedHostAndPort())
+                .append(bundle.getApiLocation())
+                .append(url);
             
             // StringEntity is the raw data that is sent in the request.
             // The Rest endpoint is expecting JSON so we convert the Java Object. 
@@ -1240,7 +1226,7 @@
             for (Cookie cookie : request.getCookies()) {
                 BasicClientCookie basicClientCookie = 
                     new BasicClientCookie(cookie.getName(), cookie.getValue());
-                basicClientCookie.setDomain(host);
+                basicClientCookie.setDomain(proxyHelper.getHost());
                 cookieStore.addCookie(basicClientCookie);
             }
             HttpClient httpClient = HttpClientBuilder.create()

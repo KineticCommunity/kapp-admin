@@ -38,7 +38,7 @@
 
             <%-- Home Link(s) --%>
             <div class="navbar-brand">
-                <a class="space-home-link" href="${bundle.spaceLocation}">
+                <a class="space-home-link" href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}">
                     <span class="hidden-sm hidden-md hidden-lg fa fa-home"></span>
                     <span class="hidden-xs">${text.escape(i18n.translate(AdminHelper.companyName))}</span>
                 </a>

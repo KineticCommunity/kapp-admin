@@ -3,7 +3,7 @@
 <c:set var="adminKapp" value="${space.getKapp(space.getAttributeValue('Admin Kapp Slug'))}" />
 
 <%-- Link to Space Page --%>
-<li><a href="${bundle.spaceLocation}">
+<li><a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}">
     <span class="fa fa-fw fa-home"></span>
     ${i18n.translate(AdminHelper.companyName)}</a>
 </li>

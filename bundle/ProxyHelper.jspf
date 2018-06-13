@@ -1,0 +1,72 @@
+<%@page import="java.net.URI"%>
+<%@page import="java.util.regex.Pattern"%>
+<%!
+    public static class ProxyHelper {
+
+        private String scheme;
+        private String host;
+        private String port;
+        private String normalizedHostAndPort;
+
+        public ProxyHelper(HttpServletRequest request) {
+            // If there is a X-Webpack-Kinetic-Webserver header, indicating that
+            // the request is from a clientside development proxy
+            if (request.getHeader("X-Webpack-Kinetic-Webserver") != null) {
+                URI uri;
+                try {
+                    uri = new URI(request.getHeader("X-Webpack-Kinetic-Webserver"));
+                } catch (Exception e) {
+                    String message = 
+                        "Unable to parse X-Webpack-Kinetic-Webserver header "+
+                        "value: "+request.getHeader("X-Webpack-Kinetic-Webserver");
+                    throw new RuntimeException(message, e);
+                }
+                this.scheme = uri.getScheme();
+                this.host = uri.getHost();
+                this.port = String.valueOf(uri.getPort());
+            }
+            // If the request is not from a client-side development proxy
+            else {
+                this.scheme = (request.getHeader("x-forwarded-proto") == null)
+                    ? request.getScheme()
+                    : request.getHeader("x-forwarded-proto");
+                this.host = (request.getHeader("x-forwarded-host") == null)
+                    ? request.getServerName()
+                    : request.getHeader("x-forwarded-host").split(",")[0].trim()
+                        .replaceAll("^https?://", "")
+                        .replaceAll("/.*$", "")
+                        .replaceAll(":\\d+", "");
+                this.port = (request.getHeader("x-forwarded-port") == null)
+                    ? String.valueOf(request.getServerPort())
+                    : request.getHeader("x-forwarded-port");
+            }
+
+            
+            if (
+                ("http".equals(scheme) && port == "80")
+                || ("https".equals(scheme) && port == "443")
+            ) {
+                normalizedHostAndPort = this.host;
+            } else {
+                normalizedHostAndPort = this.host+":"+this.port;
+            }
+        }
+
+        public String getScheme() {
+            return scheme;
+        }
+
+        public String getHost() {
+            return host;
+        }
+
+        public String getNormalizedHostAndPort() {
+            return normalizedHostAndPort;
+        }
+
+        public String getPort() {
+            return port;
+        }
+
+    }
+%>

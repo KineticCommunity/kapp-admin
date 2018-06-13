@@ -4,6 +4,7 @@
 <%@page import="com.kineticdata.core.authentication.Identity"%>
 <%@page import="com.kineticdata.core.i18n.translations.*"%>
 <%@page import="com.kineticdata.core.models.*"%>
+<%@page import="com.kineticdata.core.web.bundles.Bundle"%>
 <%@page import="java.time.*"%>
 <%@page import="java.util.*"%>
 <%!
@@ -16,7 +17,7 @@
          * CONSTRUCTOR
          *----------------------------------------------------------------------------------------*/
         
-        private String contextPath;
+        private Bundle bundle;
         private Kapp kapp;
         private TranslationManager manager;
         private TranslationLocale locale;
@@ -27,8 +28,8 @@
         }
         
         public I18nHelper(HttpServletRequest request, Locale defaultLocale) throws Exception {
-            // Set the context path
-            this.contextPath = request.getContextPath();
+            // Set the bundle
+            this.bundle = (Bundle)request.getAttribute("bundle");
             
             // Determine the prefered locale of the user
             Identity identity = (Identity)request.getAttribute("identity");
@@ -204,22 +205,24 @@
         
         public String scriptPath(Form form) {
             // Get the bundle pack
-            TranslationBundle bundle = snapshot.getBundle("form."+form.getSlug(), locale.getCode());
+            TranslationBundle translationBundle = 
+                snapshot.getBundle("form."+form.getSlug(), locale.getCode());
             // Return the path
-            return contextPath+"/"+kapp.getSpace().getSlug()+
+            return bundle.getSpaceLocation()+
                 "/app/apis/translations/v1/kapps/"+kapp.getSlug()+
                 "/forms/"+form.getSlug()+
-                "/translations.js?locale="+locale.getCode()+"&v="+bundle.getSignature();
+                "/translations.js?locale="+locale.getCode()+"&v="+translationBundle.getSignature();
         }
         
         public String scriptPath(String contextName) {
             // Get the bundle pack
-            TranslationBundle bundle = snapshot.getBundle(contextName, locale.getCode());
+            TranslationBundle translationBundle = 
+                snapshot.getBundle(contextName, locale.getCode());
             // Return the path
-            return contextPath+"/"+kapp.getSpace().getSlug()+
+            return bundle.getSpaceLocation()+
                 "/app/apis/translations/v1/kapps/"+kapp.getSlug()+
                 "/translationContexts/"+Text.escapeUrlSegment(contextName)+
-                "/translations.js?locale="+locale.getCode()+"&v="+bundle.getSignature();
+                "/translations.js?locale="+locale.getCode()+"&v="+translationBundle.getSignature();
         }
         
         /*------------------------------------------------------------------------------------------
