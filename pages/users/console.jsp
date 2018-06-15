@@ -32,7 +32,7 @@
     <div class="row">
         <c:if test="${space.hasAttribute('Invite Others Form Slug')}">
             <div class="col-xs-12 text-center">
-                <p>You can invite others <a href="${bundle.spaceLocation}?page=form&form=${space.getAttributeValue('Invite Others Form Slug')}">here</a>.</p>
+                <p>You can invite others <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=form&form=${space.getAttributeValue('Invite Others Form Slug')}">here</a>.</p>
             </div>
         </c:if>
         <div class="col-xs-12">

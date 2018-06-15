@@ -105,13 +105,13 @@
                     <label>Created</label>
                     <span data-moment-ago="${currentForm.createdAt}" data-toggle="tooltip"></span>
                     by
-                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.createdBy)}">${currentForm.createdBy}</a>
+                    <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.createdBy)}">${currentForm.createdBy}</a>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Updated</label>
                     <span data-moment-ago="${currentForm.updatedAt}" data-toggle="tooltip"></span>
                     by 
-                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentForm.updatedBy}</a>
+                    <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentForm.updatedBy}</a>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Status</label>
@@ -133,7 +133,7 @@
                     <div class="col-xs-12 col-sm-6 col-md-4 m-t-1 text-right">
                         <c:choose>
                             <c:when test="${not empty responseId}">
-                                <a href="${bundle.spaceLocation}?page=discussion&id=${responseId}" class="btn btn-default">Discuss</a>
+                                <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=discussion&id=${responseId}" class="btn btn-default">Discuss</a>
                             </c:when>
                             <c:otherwise>
                                 <button class="btn btn-default" id="start-discussion">Start Discussion</button>

@@ -77,7 +77,7 @@
                                         <div>${identity.email}</div>
                                     </div>
                                     <div class="actions">
-                                        <a class="" href="${bundle.spaceLocation}?page=profile">
+                                        <a class="" href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile">
                                             <span class="fa fa-user fa-fw"></span>
                                             <span>${i18n.translate('Profile')}</span>
                                         </a>

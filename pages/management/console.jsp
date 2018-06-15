@@ -38,7 +38,7 @@
         <div class="col-xs-12 m-b-2">
             <label>Updated</label>
             <span data-moment-ago="${space.updatedAt}" data-toggle="tooltip"></span>
-            by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(space.updatedBy)}">${space.updatedBy}</a>
+            by <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(space.updatedBy)}">${space.updatedBy}</a>
         </div>
         <div class="col-xs-12">
             <h4 class="m-t-4">Kapps</h4>
@@ -65,7 +65,7 @@
                                 </td>
                                 <td data-order="${currentKapp.updatedAt}">
                                     <span data-moment-ago="${currentKapp.updatedAt}" data-toggle="tooltip"></span>
-                                    by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentKapp.updatedBy)}">${currentKapp.updatedBy}</a>
+                                    by <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentKapp.updatedBy)}">${currentKapp.updatedBy}</a>
                                 </td>
                                 <td class="text-right">
                                     <c:if test="${identity.spaceAdmin || TeamsHelper.isKappOwner(identity.user, currentKapp)}">

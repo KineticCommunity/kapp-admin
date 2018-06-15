@@ -59,7 +59,7 @@
                                 </td>
                                 <td data-order="${currentForm.updatedAt}">
                                     <span data-moment-ago="${currentForm.updatedAt}" data-toggle="tooltip"></span>
-                                    by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentKapp.updatedBy}</a>
+                                    by <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentForm.updatedBy)}">${currentKapp.updatedBy}</a>
                                 </td>
                             </tr>
                     </c:forEach>

@@ -120,7 +120,7 @@
                     <label>Created</label>
                     <span data-moment-ago="${submission.createdAt}" data-toggle="tooltip"></span>
                     by 
-                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.createdBy)}">${submission.createdBy}</a>
+                    <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.createdBy)}">${submission.createdBy}</a>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Submitted</label>
@@ -128,7 +128,7 @@
                         <c:when test="${not empty submission.submittedAt}">
                             <span data-moment-ago="${submission.submittedAt}" data-toggle="tooltip"></span>
                             by 
-                            <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.submittedBy)}">${submission.submittedBy}</a>
+                            <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.submittedBy)}">${submission.submittedBy}</a>
                         </c:when>
                         <c:otherwise>
                             N/A
@@ -139,7 +139,7 @@
                     <label>Updated</label>
                     <span data-moment-ago="${submission.updatedAt}" data-toggle="tooltip"></span>
                     by 
-                    <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.updatedBy)}">${submission.updatedBy}</a>
+                    <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.updatedBy)}">${submission.updatedBy}</a>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <label>Closed</label>
@@ -147,7 +147,7 @@
                         <c:when test="${not empty submission.closedAt}">
                             <span data-moment-ago="${submission.closedAt}" data-toggle="tooltip"></span>
                             by 
-                            <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.closedBy)}">${submission.closedBy}</a>
+                            <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(submission.closedBy)}">${submission.closedBy}</a>
                         </c:when>
                         <c:otherwise>
                             N/A
@@ -204,7 +204,7 @@
                                                     </c:if>
                                                     <c:choose>
                                                         <c:when test="${text.isNotBlank(assignedIndividual)}">
-                                                            <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(assignedIndividual)}">
+                                                            <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(assignedIndividual)}">
                                                                 ${assignedIndividual}
                                                             </a>
                                                         </c:when>

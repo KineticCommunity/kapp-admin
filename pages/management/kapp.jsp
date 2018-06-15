@@ -69,7 +69,7 @@
                 <div class="col-xs-12 m-b-2">
                     <label>Updated</label>
                     <span data-moment-ago="${currentKapp.updatedAt}" data-toggle="tooltip"></span>
-                    by <a href="${bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentKapp.updatedBy)}">${currentKapp.updatedBy}</a>
+                    by <a href="${empty bundle.spaceLocation ? '/' : bundle.spaceLocation}?page=profile&username=${text.escapeUrlParameter(currentKapp.updatedBy)}">${currentKapp.updatedBy}</a>
                 </div>
                 <div class="col-xs-12">
                     <h4 class="m-t-4">Forms</h4>

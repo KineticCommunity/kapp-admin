@@ -520,7 +520,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function(data){
-                        window.location.href = bundle.spaceLocation() + "?page=discussion&id=" + response.guid;
+                        window.location.href = bundle.spaceLocation() + "/?page=discussion&id=" + response.guid;
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         try { 
