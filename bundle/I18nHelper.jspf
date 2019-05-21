@@ -10,18 +10,12 @@
 <%!
     public static class I18nHelper {
     
-        private static final TranslationSnapshot EMPTY_SNAPSHOT = 
-            new TranslationSnapshot(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
-        
         /*------------------------------------------------------------------------------------------
          * CONSTRUCTOR
          *----------------------------------------------------------------------------------------*/
         
         private Bundle bundle;
         private Kapp kapp;
-        private TranslationManager manager;
-        private TranslationLocale locale;
-        private TranslationSnapshot snapshot;
         
         public I18nHelper(HttpServletRequest request) throws Exception {
             this(request, Locale.getDefault());
@@ -37,9 +31,6 @@
                 ? null 
                 : identity.getUser().getPreferredLocale();
             
-            // Obtain a reference to the translation manager
-            this.manager = (TranslationManager)request.getServletContext()
-                .getAttribute("translationManager");
             
             // Obtain a reference to the kapp
             this.kapp = (Kapp)request.getAttribute("kapp");
@@ -54,49 +45,6 @@
                     this.kapp = space.getKapp(space.getAttributeValue("Admin Kapp Slug"));
                 }
             }
-            
-            // Determine the context
-            String contextName;
-            // If the kapp is null (indicating this is a request to render the space page and the space does
-            // not define an admin kapp)
-            if (this.kapp == null) {
-                // Use an empty snapshot to ensure all of the translate methods still work
-                this.snapshot = EMPTY_SNAPSHOT;
-                contextName = "bundle";
-            }
-            // If the kapp is set for the request
-            else {
-                // Obtain the cached snapshot for the kapp
-                this.snapshot = this.manager.getCachedSnapshot(kapp);
-                // If the request is to render the form (rather than the bundle)
-                if (request.getAttribute("form") != null) {
-                    // Build the context name
-                    Form form = (Form)request.getAttribute("form");
-                    contextName = "form."+form.getSlug();
-                }
-                // If there is no form set into the request, set the translations for the bundle context
-                else {
-                    contextName = "bundle";
-                }
-                
-            }
-            
-            // Determine the locale
-            if (request.getParameter("locale") != null) {
-                this.locale = TranslationLocale.get(request.getParameter("locale"));
-            } else if (preferredLocale != null) {
-                this.locale = TranslationLocale.get(preferredLocale);
-            } else if (TranslationLocale.getCode(request.getLocale()) != null) {
-                this.locale = TranslationLocale.get(request.getLocale());
-            } else if (snapshot.getDefaultLocaleCode() != null) {
-                this.locale = TranslationLocale.get(snapshot.getDefaultLocaleCode());
-            } else {
-                this.locale = TranslationLocale.get(Locale.getDefault());
-            }
-            
-            // Set the translations into the request (so that the form renderers can use them)
-            request.setAttribute("translations", 
-                snapshot.getBundlePack(contextName, locale.getCode()).getTranslations());
         }
         
         /*------------------------------------------------------------------------------------------
@@ -104,28 +52,15 @@
          *----------------------------------------------------------------------------------------*/
          
         public List<Locale> getEnabledLocales() {
-            return getEnabledLocales(this.kapp);
+            return Collections.EMPTY_LIST;
         }
         
         public List<Locale> getEnabledLocales(Kapp kapp) {
-            if (kapp == null){
-                return Collections.EMPTY_LIST;
-            }
-            else {
-                return Lists.transform(
-                    this.manager.getEnabledLocales(kapp),
-                    new Function<TranslationLocale, Locale>() {
-                        @Override
-                        public Locale apply(TranslationLocale locale) {
-                            return locale.getLocale();
-                        }
-                    }
-                );    
-            }
+            return Collections.EMPTY_LIST;
         }
         
         public Locale getLocale() {
-            return locale.getLocale();
+            return Locale.getDefault();
         }
         
         public String getLocaleCode(Locale locale) {
@@ -200,29 +135,15 @@
         public boolean hasTranslationJs() {
             // Kapp will not be null if the Admin Kapp is installed and configured for my space (the
             // Admin Kapp translations are what is used to apply space display translations)
-            return kapp != null;
+            return false;
         }
         
         public String scriptPath(Form form) {
-            // Get the bundle pack
-            TranslationBundle translationBundle = 
-                snapshot.getBundle("form."+form.getSlug(), locale.getCode());
-            // Return the path
-            return bundle.getSpaceLocation()+
-                "/app/apis/translations/v1/kapps/"+kapp.getSlug()+
-                "/forms/"+form.getSlug()+
-                "/translations.js?locale="+locale.getCode()+"&v="+translationBundle.getSignature();
+            return "";
         }
         
         public String scriptPath(String contextName) {
-            // Get the bundle pack
-            TranslationBundle translationBundle = 
-                snapshot.getBundle(contextName, locale.getCode());
-            // Return the path
-            return bundle.getSpaceLocation()+
-                "/app/apis/translations/v1/kapps/"+kapp.getSlug()+
-                "/translationContexts/"+Text.escapeUrlSegment(contextName)+
-                "/translations.js?locale="+locale.getCode()+"&v="+translationBundle.getSignature();
+            return "";
         }
         
         /*------------------------------------------------------------------------------------------
@@ -230,30 +151,27 @@
          *----------------------------------------------------------------------------------------*/
         
         public String translate(String key) {
-            return translate(key, Collections.EMPTY_MAP);
+            return key;
         }
         
         public String translate(String key, Map<String,String> substitutions) {
-            return snapshot.getBundlePack("bundle", locale.getCode())
-                .translate(key, substitutions);
+            return key;
         }
         
         public String translate(Form form, String key) {
-            return translate(form, key, Collections.EMPTY_MAP);
+            return key;
         }
         
         public String translate(Form form, String key, Map<String,String> substitutions) {
-            return snapshot.getBundlePack("form."+form.getSlug(), locale.getCode())
-                .translate(key, substitutions);
+            return key;
         }
         
         public String translate(String contextName, String key) {
-            return translate(contextName, key, Collections.EMPTY_MAP);
+            return key;
         }
         
         public String translate(String contextName, String key, Map<String,String> substitutions) {
-            return snapshot.getBundlePack(contextName, locale.getCode())
-                .translate(key, substitutions);
+            return key;
         }
         
         

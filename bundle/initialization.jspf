@@ -5,6 +5,7 @@
 <%@page import="com.kineticdata.core.models.*" %>
 <%@page import="com.kineticdata.core.web.bundles.Bundle" %>
 <%@page import="com.kineticdata.core.web.bundles.BundleSubmissionComponent" %>
+<%@page import="java.time.ZoneId"%>
 <%@page import="java.util.*" %>
 
 <%-- Bundle Java libraries --%>
@@ -27,6 +28,16 @@
     Kapp kapp = (Kapp)request.getAttribute("kapp");
     Form form = (Form)request.getAttribute("form");
     Identity identity = (Identity)request.getAttribute("identity");
+%>
+
+<%-- Initialize the default zoneId and locale --%>
+<%
+    if (request.getAttribute("zoneId") == null) {
+        request.setAttribute("zoneId", ZoneId.systemDefault());
+    }
+    if (request.getAttribute("locale") == null) {
+        request.setAttribute("locale", Locale.US);
+    }
 %>
 
 <%-- Create paths for headers and footers which can be shared. --%>
@@ -91,11 +102,9 @@
 <%-- I18nHelper --%>
 <%@include file="I18nHelper.jspf"%>
 <%
-    if (request.getAttribute("zoneId") == null || request.getAttribute("i18n") == null || request.getAttribute("locale") == null) {
+    if (request.getAttribute("i18n") == null) {
         I18nHelper i18nHelper = new I18nHelper(request);
         request.setAttribute("i18n", i18nHelper);
-        request.setAttribute("locale", i18nHelper.getLocale());
-        request.setAttribute("zoneId", i18nHelper.getZoneId());
     }
 %>
 
